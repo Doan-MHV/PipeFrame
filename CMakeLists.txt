@@ -1,11 +1,16 @@
 cmake_minimum_required(VERSION 4.1)
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
+  set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
+endif()
+
 project(PipeFrame)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(PipeFrame src/main.cpp
-        src/game/game.cpp
-        src/game/game.h)
+
+file(GLOB_RECURSE SOURCES "src/*.cpp" "src/*.h")
+add_executable(PipeFrame ${SOURCES})
 
 find_package(SDL3 CONFIG REQUIRED)
 target_link_libraries(PipeFrame PRIVATE SDL3::SDL3)
