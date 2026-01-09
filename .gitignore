@@ -2,4 +2,6 @@
 .idea
 out/Debug
 WARP.md
-vcpkg
+vcpkg/
+/cmake-build-debug/
+/out/
