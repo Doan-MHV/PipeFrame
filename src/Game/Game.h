@@ -2,7 +2,10 @@
 #define PIPEFRAME_GAME_H
 
 #include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
+#include <glm/glm.hpp>
+
+constexpr int FPS = 60;
+constexpr int MILLISECS_PER_FRAME = 1000 / FPS;
 
 class Game
 {
@@ -27,6 +30,7 @@ private:
 
     int windowWidth;
     int windowHeight;
+    int millisecsPreviousFrame = 0;
 
     SDL_Window* window;
     SDL_Renderer* renderer;

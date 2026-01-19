@@ -1,5 +1,8 @@
 #include "Game.h"
 
+#include <ctime>
+#include <SDL3/SDL_init.h>
+
 Game::Game()
 {
     if (!SDL_Init(SDL_INIT_VIDEO))
@@ -39,8 +42,13 @@ Game::~Game()
     SDL_Quit();
 }
 
+glm::vec2 playerPosition;
+glm::vec2 playerVelocity;
+
 void Game::Setup()
 {
+    playerPosition = glm::vec2(10.0, 20.0);
+    playerVelocity = glm::vec2(100.0, 0.0);
 }
 
 void Game::Run()
@@ -78,10 +86,23 @@ void Game::ProcessInput()
 
 void Game::Update()
 {
+    int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - millisecsPreviousFrame);
+    if (timeToWait > 0 && timeToWait < MILLISECS_PER_FRAME)
+    {
+        SDL_Delay(timeToWait);
+    }
+
+    double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0;
+
+    millisecsPreviousFrame = SDL_GetTicks();
+
+    playerPosition.x += playerVelocity.x * deltaTime;
+    playerPosition.y += playerVelocity.y * deltaTime;
 }
 
 void Game::Render()
 {
+
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);
 
@@ -93,7 +114,7 @@ void Game::Render()
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
 
-    SDL_FRect dstRect = {10, 10, 32, 32};
+    SDL_FRect dstRect = {playerPosition.x, playerPosition.y, 32, 32};
 
     SDL_RenderTexture(renderer, texture, nullptr, &dstRect);
     SDL_DestroyTexture(texture);

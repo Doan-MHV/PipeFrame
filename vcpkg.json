@@ -1,23 +1,19 @@
 {
-  "name": "pipeframe",
-  "version-string": "1.0.0",
-  "builtin-baseline": "544a4c5c297e60e4ac4a5a1810df66748d908869",
-  "dependencies": [
-    {
-      "name": "sdl3",
-      "version>=": "3.4.0"
-    },
-    {
-      "name": "sdl3-image",
-      "features": [
-        "jpeg",
-        "png"
-      ],
-      "version>=": "3.2.6"
-    },
-    {
-      "name": "sdl3-ttf",
-      "version>=": "3.2.2#1"
-    }
-  ]
+  "name" : "pipeframe",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "544a4c5c297e60e4ac4a5a1810df66748d908869",
+  "dependencies" : [ {
+    "name" : "sdl3",
+    "version>=" : "3.4.0"
+  }, {
+    "name" : "sdl3-image",
+    "features" : [ "jpeg", "png" ],
+    "version>=" : "3.2.6"
+  }, {
+    "name" : "sdl3-ttf",
+    "version>=" : "3.2.2#1"
+  }, {
+    "name" : "glm",
+    "version>=" : "1.0.3"
+  } ]
 }

@@ -5,3 +5,4 @@ WARP.md
 vcpkg/
 /cmake-build-debug/
 /out/
+/cmake-build-debug-visual-studio/

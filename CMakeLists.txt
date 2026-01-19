@@ -22,6 +22,9 @@ target_link_libraries(PipeFrame PRIVATE $<IF:$<TARGET_EXISTS:SDL3_image::SDL3_im
 find_package(SDL3_ttf CONFIG REQUIRED)
 target_link_libraries(PipeFrame PRIVATE SDL3_ttf::SDL3_ttf)
 
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(PipeFrame PRIVATE glm::glm)
+
 add_custom_command(TARGET PipeFrame POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:PipeFrame>/assets
