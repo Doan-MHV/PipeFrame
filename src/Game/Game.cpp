@@ -3,11 +3,13 @@
 #include <ctime>
 #include <SDL3/SDL_init.h>
 
+#include "Logger/Logger.h"
+
 Game::Game()
 {
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
-        SDL_Log("Couldn't init sdl: %s\n", SDL_GetError());
+        PF_ERROR(std::format("Couldn't init SDL: {}", SDL_GetError()));
         return;
     }
 
@@ -19,14 +21,14 @@ Game::Game()
                               SDL_WINDOW_BORDERLESS);
     if (!window)
     {
-        SDL_Log("Couldn't create window: %s\n", SDL_GetError());
+        PF_ERROR(std::format("Couldn't create window: %s\n", SDL_GetError()));
         return;
     }
 
-    renderer = SDL_CreateRenderer(window, NULL);
+    renderer = SDL_CreateRenderer(window, nullptr);
     if (!renderer)
     {
-        SDL_Log("Couldn't create renderer: %s\n", SDL_GetError());
+        PF_ERROR(std::format("Couldn't create renderer: %s\n", SDL_GetError()));
         return;
     }
 
@@ -102,7 +104,6 @@ void Game::Update()
 
 void Game::Render()
 {
-
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);
 
