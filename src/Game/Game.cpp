@@ -1,12 +1,15 @@
 #include "Game.h"
 
-#include <ctime>
 #include <SDL3/SDL_init.h>
 
+#include "Components/RigidBodyComponent.h"
+#include "Components/TransformComponent.h"
 #include "Logger/Logger.h"
 
 Game::Game()
 {
+    registry = std::make_unique<Registry>();
+
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
         PF_ERROR(std::format("Couldn't init SDL: {}", SDL_GetError()));
@@ -51,6 +54,16 @@ void Game::Setup()
 {
     playerPosition = glm::vec2(10.0, 20.0);
     playerVelocity = glm::vec2(100.0, 0.0);
+
+    // Create an entity
+    Entity tank = registry->CreateEntity();
+
+    // Add some components to that entity
+    tank.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
+    tank.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
+
+    // Remove a component from the entity
+    tank.RemoveComponent<TransformComponent>();
 }
 
 void Game::Run()

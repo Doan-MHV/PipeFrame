@@ -1,13 +1,11 @@
 #include "Logger.h"
 
 #include <iostream>
-#include <vector>
 #include <mutex>
 #include <thread>
 #include <condition_variable>
 #include <queue>
 #include <format>
-#include <syncstream>
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -33,6 +31,7 @@ struct Logger::Impl
 {
     std::queue<LogMessage> queue;
     std::mutex queueMutex;
+    std::mutex coutMutex;
     std::condition_variable cv;
     std::jthread worker;
     bool isRunning = true;
@@ -68,10 +67,13 @@ struct Logger::Impl
                                               ? "INF"
                                               : (level == LogLevel::Warning ? "WRN" : "ERR");
 
-                std::osyncstream(std::cout) << std::format(
-                    "{}[{}] [{}:{}] {}\033[0m\n",
-                    color, lvlStr, file, line, text
-                );
+                {
+                    std::lock_guard coutLock(coutMutex);
+                    std::cout << std::format(
+                        "{}[{}] [{}:{}] {}\033[0m\n",
+                        color, lvlStr, file, line, text
+                    );
+                }
 
                 lock.lock();
             }
