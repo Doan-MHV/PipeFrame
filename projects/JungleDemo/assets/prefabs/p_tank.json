@@ -1,0 +1,52 @@
+{
+    "components": {
+        "boxcollider": {
+            "height": 18,
+            "offset": {
+                "x": 7.0,
+                "y": 10.0
+            },
+            "width": 17
+        },
+        "health": {
+            "health_percentage": 100
+        },
+        "movement": {
+            "type": "land"
+        },
+        "projectile_emitter": {
+            "friendly": false,
+            "hit_percentage_damage": 10,
+            "projectile_duration": 4,
+            "projectile_velocity": {
+                "x": 0.0,
+                "y": -50.0
+            },
+            "repeat_frequency": 2
+        },
+        "sprite": {
+            "fixed": false,
+            "height": 32,
+            "src_rect_h": 32.0,
+            "src_rect_w": 32.0,
+            "src_rect_x": 0.0,
+            "src_rect_y": 0.0,
+            "texture_asset_id": "tank-panther-up-texture",
+            "width": 32,
+            "z_index": 1
+        },
+        "transform": {
+            "position": {
+                "x": 785.0,
+                "y": 170.0
+            },
+            "rotation": 0.0,
+            "scale": {
+                "x": 1.0,
+                "y": 1.0
+            }
+        }
+    },
+    "group": "enemies",
+    "id": "p_tank"
+}

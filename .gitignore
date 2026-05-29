@@ -1,0 +1,12 @@
+.cache/clangd
+.idea/
+.build/
+out/Debug
+vcpkg
+compile_commands.json
+node_modules/
+AntSimulator-master/
+CurrentPlan.md
+AntPezzaSource/
+/AntPezzaSource/
+**/LiveModules/

@@ -1,0 +1,39 @@
+{
+  "id": "food",
+  "group": "food",
+  "components": {
+    "attributes": {
+      "food_amount": 25
+    },
+    "transform": {
+      "position": {
+        "x": 200.0,
+        "y": 200.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "rotation": 0.0
+    },
+    "sprite": {
+      "texture_asset_id": "marker-texture",
+      "width": 24,
+      "height": 24,
+      "z_index": 1,
+      "fixed": false,
+      "src_rect_x": 0.0,
+      "src_rect_y": 0.0,
+      "src_rect_w": 100.0,
+      "src_rect_h": 100.0
+    },
+    "boxcollider": {
+      "width": 24,
+      "height": 24,
+      "offset": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    }
+  }
+}

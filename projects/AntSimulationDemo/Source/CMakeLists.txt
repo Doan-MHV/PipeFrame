@@ -1,0 +1,35 @@
+file(GLOB_RECURSE PIPEFRAME_ANT_SIMULATION_SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
+)
+
+set(PIPEFRAME_ANT_SIMULATION_GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/Generated")
+set(PIPEFRAME_ANT_SIMULATION_GENERATED_HEADER
+    "${PIPEFRAME_ANT_SIMULATION_GENERATED_DIR}/ProjectComponents.generated.h"
+)
+
+add_custom_command(
+    OUTPUT "${PIPEFRAME_ANT_SIMULATION_GENERATED_HEADER}"
+    COMMAND PipeFrameHeaderTool
+        "${CMAKE_CURRENT_SOURCE_DIR}"
+        "${PIPEFRAME_ANT_SIMULATION_GENERATED_HEADER}"
+    DEPENDS
+        PipeFrameHeaderTool
+        ${PIPEFRAME_ANT_SIMULATION_SOURCES}
+    COMMENT "Generating AntSimulation component metadata"
+    VERBATIM
+)
+
+add_library(PipeFrameAntSimulation SHARED
+    ${PIPEFRAME_ANT_SIMULATION_SOURCES}
+    "${PIPEFRAME_ANT_SIMULATION_GENERATED_HEADER}"
+)
+
+target_include_directories(PipeFrameAntSimulation PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+    "${CMAKE_CURRENT_BINARY_DIR}"
+)
+
+target_link_libraries(PipeFrameAntSimulation PRIVATE
+    PipeFrameEngine
+)
