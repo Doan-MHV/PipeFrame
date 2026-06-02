@@ -9,20 +9,21 @@
 #include "Components/SpriteComponent.h"
 #include "Components/TransformComponent.h"
 #include "ECS/ECS.h"
+#include "EventBus/EventBus.h"
 #include "Events/KeyPressedEvent.h"
 
 class ProjectileEmitSystem : public EntitySystem
 {
 public:
-    ProjectileEmitSystem()
+    void Loaded() override
     {
         RequireComponent<ProjectileEmitterComponent>();
         RequireComponent<TransformComponent>();
     }
 
-    void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
+    void SubscribeToEvents(EntitySystemContext& context) override
     {
-        eventBus->SubscribeToEvent<KeyPressedEvent>(this, &ProjectileEmitSystem::OnKeyPressed);
+        Listen<KeyPressedEvent>(context, &ProjectileEmitSystem::OnKeyPressed);
     }
 
     void OnKeyPressed(KeyPressedEvent& event)
@@ -98,7 +99,7 @@ public:
         }
     }
 
-    void Update(std::unique_ptr<Registry>& registry)
+    void Update(EntitySystemContext& context) override
     {
         for (auto entity : GetSystemEntities())
         {
@@ -120,7 +121,7 @@ public:
                     projectilePosition.y += (transform.scale.y * sprite.height / 2);
                 }
 
-                Entity projectile = registry->CreateEntity();
+                Entity projectile = context.registry.CreateEntity();
                 projectile.Group("projectiles");
                 projectile.AddComponent<TransformComponent>(projectilePosition, glm::vec2(3.0, 3.0), 0.0);
                 projectile.AddComponent<RigidBodyComponent>(projectileEmitter.projectileVelocity);

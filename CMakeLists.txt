@@ -8,13 +8,13 @@ project(PipeFrame)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+option(PIPEFRAME_BUILD_QT_EDITOR "Build the experimental Qt editor" OFF)
 
 find_package(SDL3 CONFIG REQUIRED)
 find_package(SDL3_image CONFIG REQUIRED)
 find_package(SDL3_ttf CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
-find_package(imgui CONFIG REQUIRED)
 
 add_subdirectory(tools/PipeFrameHeaderTool)
 add_subdirectory(engine)
@@ -31,4 +31,7 @@ foreach(PIPEFRAME_PROJECT_SOURCE_DIR ${PIPEFRAME_PROJECT_SOURCE_DIRS})
 endforeach()
 
 add_subdirectory(apps/PipeFrameEditor)
-add_subdirectory(apps/PipeFrameQtEditor)
+
+if (PIPEFRAME_BUILD_QT_EDITOR)
+    add_subdirectory(apps/PipeFrameQtEditor)
+endif()

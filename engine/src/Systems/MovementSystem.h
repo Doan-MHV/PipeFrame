@@ -18,16 +18,16 @@
 class MovementSystem : public EntitySystem
 {
 public:
-    MovementSystem()
+    void Loaded() override
     {
         RequireComponent<TransformComponent>();
         RequireComponent<RigidBodyComponent>();
         // RequireComponent<MovementTypeComponent>();
     }
 
-    void SubscribeToEvents(const std::unique_ptr<EventBus>& eventBus)
+    void SubscribeToEvents(EntitySystemContext& context) override
     {
-        eventBus->SubscribeToEvent<CollisionEvent>(this, &MovementSystem::OnCollision);
+        Listen<CollisionEvent>(context, &MovementSystem::OnCollision);
     }
 
     void OnCollision(CollisionEvent& collisionEvent)
@@ -106,7 +106,7 @@ public:
     }
 
 
-    void Update(double deltaTime, const TileMap& tileMap)
+    void Update(EntitySystemContext& context) override
     {
         for (auto entity : GetSystemEntities())
         {
@@ -124,10 +124,10 @@ public:
             movementStatus.blockedY = false;
             movementStatus.blockedByCollision = false;
 
-            const float nextX = transform.position.x + rigidbody.velocity.x * deltaTime;
-            const float nextY = transform.position.y + rigidbody.velocity.y * deltaTime;
+            const float nextX = transform.position.x + rigidbody.velocity.x * context.deltaTime;
+            const float nextY = transform.position.y + rigidbody.velocity.y * context.deltaTime;
 
-            if (CanOccupyTerrain(entity, transform, tileMap, nextX, transform.position.y))
+            if (CanOccupyTerrain(entity, transform, context.tileMap, nextX, transform.position.y))
             {
                 transform.position.x = nextX;
             }
@@ -136,7 +136,7 @@ public:
                 movementStatus.blockedX = true;
             }
 
-            if (CanOccupyTerrain(entity, transform, tileMap, transform.position.x, nextY))
+            if (CanOccupyTerrain(entity, transform, context.tileMap, transform.position.x, nextY))
             {
                 transform.position.y = nextY;
             }
@@ -151,8 +151,8 @@ public:
 
             if (entity.HasTag("player"))
             {
-                const int mapWidth = tileMap.GetWorldWidth();
-                const int mapHeight = tileMap.GetWorldHeight();
+                const int mapWidth = context.tileMap.GetWorldWidth();
+                const int mapHeight = context.tileMap.GetWorldHeight();
                 int paddingLeft = 10;
                 int paddingRight = 50;
                 int paddingTop = 10;
@@ -169,8 +169,8 @@ public:
             }
 
             int cullingMargin = 100;
-            const int mapWidth = tileMap.GetWorldWidth();
-            const int mapHeight = tileMap.GetWorldHeight();
+            const int mapWidth = context.tileMap.GetWorldWidth();
+            const int mapHeight = context.tileMap.GetWorldHeight();
 
             bool isEntityOutsideMap = (
                 transform.position.x < -cullingMargin ||

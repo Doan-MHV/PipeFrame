@@ -12,14 +12,14 @@
 class DamageSystem : public EntitySystem
 {
 public:
-    DamageSystem()
+    void Loaded() override
     {
         RequireComponent<BoxColliderComponent>();
     }
 
-    void SubscribeToEvents(std::unique_ptr<EventBus>& eventBus)
+    void SubscribeToEvents(EntitySystemContext& context) override
     {
-        eventBus->SubscribeToEvent<CollisionEvent>(this, &DamageSystem::OnCollision);
+        Listen<CollisionEvent>(context, &DamageSystem::OnCollision);
     }
 
     void OnCollision(CollisionEvent& collisionEvent)

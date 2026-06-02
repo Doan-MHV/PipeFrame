@@ -19,6 +19,46 @@ std::vector<Entity> Registry::GetAllEntities() const
     return std::vector<Entity>(entities.begin(), entities.end());
 }
 
+void Registry::LoadedSystems()
+{
+    for (auto& system : systems)
+    {
+        system.second->Loaded();
+    }
+}
+
+void Registry::StartSystems(EntitySystemContext& context)
+{
+    for (auto& system : systems)
+    {
+        system.second->Start(context);
+    }
+}
+
+void Registry::SubscribeSystems(EntitySystemContext& context)
+{
+    for (auto& system : systems)
+    {
+        system.second->SubscribeToEvents(context);
+    }
+}
+
+void Registry::StopSystems(EntitySystemContext& context)
+{
+    for (auto& system : systems)
+    {
+        system.second->Stop(context);
+    }
+}
+
+void Registry::UnloadedSystems(EntitySystemContext& context)
+{
+    for (auto& system : systems)
+    {
+        system.second->Unloaded(context);
+    }
+}
+
 Entity Registry::CreateEntity()
 {
     int entityId;

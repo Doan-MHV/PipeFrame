@@ -12,6 +12,10 @@ const char* GetKindHint(int selectedKind)
             return "Editable ECS data attached to an entity.";
         case CppClassKind::ProjectSystem:
             return "Project-owned update logic that runs during native simulation.";
+        case CppClassKind::EntitySystem:
+            return "ECS system that updates entities matching required components.";
+        case CppClassKind::Event:
+            return "Message sent between systems for something that happened this frame.";
         case CppClassKind::EntityClass:
             return "Spawnable entity recipe that adds default components.";
         case CppClassKind::DenseAgentSimulation:
@@ -44,6 +48,8 @@ CreateCppClassResult CreateCppClassDialog::Draw()
     const char* classKinds[] = {
         "Component",
         "Project System",
+        "Entity System",
+        "Event",
         "Entity Class",
         "Dense Agent Simulation",
         "Physics Scenario"

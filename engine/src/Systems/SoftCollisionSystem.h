@@ -18,20 +18,20 @@
 class SoftCollisionSystem : public EntitySystem
 {
 public:
-    SoftCollisionSystem()
+    void Loaded() override
     {
         RequireComponent<TransformComponent>();
         RequireComponent<SoftCollisionComponent>();
     }
 
-    void Update(const TileMap& tileMap)
+    void Update(EntitySystemContext& context) override
     {
         const auto entities = GetSystemEntities();
         for (std::size_t i = 0; i < entities.size(); i++)
         {
             for (std::size_t j = i + 1; j < entities.size(); j++)
             {
-                ResolvePair(entities[i], entities[j], tileMap);
+                ResolvePair(entities[i], entities[j], context.tileMap);
             }
         }
     }

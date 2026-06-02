@@ -31,8 +31,11 @@ class ProjectSystem
 {
 public:
     virtual ~ProjectSystem() = default;
-    virtual void OnWorldLoaded(Registry& registry) { (void)registry; }
-    virtual void Update(ProjectRuntimeContext& context) = 0;
+    virtual void Loaded(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Start(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Update(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Stop(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Unloaded(ProjectRuntimeContext& context) { (void)context; }
 };
 
 template <typename TSimulation>
@@ -40,12 +43,31 @@ class SimulationSystem
 {
 public:
     virtual ~SimulationSystem() = default;
-    virtual void OnWorldLoaded(TSimulation& simulation, Registry& registry)
+    virtual void Loaded(TSimulation& simulation, ProjectRuntimeContext& context)
     {
         (void)simulation;
-        (void)registry;
+        (void)context;
     }
-    virtual void Update(TSimulation& simulation, ProjectRuntimeContext& context) = 0;
+    virtual void Start(TSimulation& simulation, ProjectRuntimeContext& context)
+    {
+        (void)simulation;
+        (void)context;
+    }
+    virtual void Update(TSimulation& simulation, ProjectRuntimeContext& context)
+    {
+        (void)simulation;
+        (void)context;
+    }
+    virtual void Stop(TSimulation& simulation, ProjectRuntimeContext& context)
+    {
+        (void)simulation;
+        (void)context;
+    }
+    virtual void Unloaded(TSimulation& simulation, ProjectRuntimeContext& context)
+    {
+        (void)simulation;
+        (void)context;
+    }
 };
 
 template <typename TSimulation>
@@ -65,8 +87,11 @@ class ProjectSimulation
 {
 public:
     virtual ~ProjectSimulation() = default;
-    virtual void Reset() = 0;
-    virtual void Update(ProjectRuntimeContext& context) = 0;
+    virtual void Loaded(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Start(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Update(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Stop(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Unloaded(ProjectRuntimeContext& context) { (void)context; }
     virtual void Render(
         SDL_Renderer* renderer,
         AssetRegistry& assetRegistry,

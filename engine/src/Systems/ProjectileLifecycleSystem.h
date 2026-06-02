@@ -8,13 +8,15 @@
 class ProjectileLifecycleSystem : public EntitySystem
 {
 public:
-    ProjectileLifecycleSystem()
+    void Loaded() override
     {
         RequireComponent<ProjectileComponent>();
     }
 
-    void Update()
+    void Update(EntitySystemContext& context) override
     {
+        (void)context;
+
         for (auto entity : GetSystemEntities())
         {
             auto projectile = entity.GetComponent<ProjectileComponent>();

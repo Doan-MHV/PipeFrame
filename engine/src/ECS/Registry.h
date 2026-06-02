@@ -85,6 +85,12 @@ public:
     template <typename TSystem>
     TSystem& GetSystem() const;
 
+    void LoadedSystems();
+    void StartSystems(EntitySystemContext& context);
+    void SubscribeSystems(EntitySystemContext& context);
+    void StopSystems(EntitySystemContext& context);
+    void UnloadedSystems(EntitySystemContext& context);
+
     void AddEntityToSystems(Entity entity);
     void RemoveEntityFromSystems(Entity entity);
 };

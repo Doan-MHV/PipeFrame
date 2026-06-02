@@ -10,13 +10,13 @@
 class SpriteRenderSystem : public EntitySystem
 {
 public:
-    SpriteRenderSystem()
+    void Loaded() override
     {
         RequireComponent<TransformComponent>();
         RequireComponent<SpriteComponent>();
     }
 
-    void Update(SDL_Renderer* renderer, std::unique_ptr<AssetRegistry>& assetRegistry, const SDL_FRect& camera)
+    void Update(EntitySystemContext& context) override
     {
         // Create a vector with both Sprite and Transform component of all entities
         struct RenderableEntity
@@ -34,11 +34,11 @@ public:
             // Check if the entity sprite is outside the camera view
             bool isOutsideCameraView = (
                 renderableEntity.transformComponent.position.x + (renderableEntity.transformComponent.scale.x *
-                    renderableEntity.spriteComponent.width) < camera.x ||
-                renderableEntity.transformComponent.position.x > camera.x + camera.w ||
+                    renderableEntity.spriteComponent.width) < context.camera.x ||
+                renderableEntity.transformComponent.position.x > context.camera.x + context.camera.w ||
                 renderableEntity.transformComponent.position.y + (renderableEntity.transformComponent.scale.y *
-                    renderableEntity.spriteComponent.height) < camera.y ||
-                renderableEntity.transformComponent.position.y > camera.y + camera.h
+                    renderableEntity.spriteComponent.height) < context.camera.y ||
+                renderableEntity.transformComponent.position.y > context.camera.y + context.camera.h
             );
 
             // Cull sprites that are outside the camera view (and are not fixed)
@@ -67,7 +67,7 @@ public:
                 continue;
             }
 
-            SDL_Texture* texture = assetRegistry->GetTexture(sprite.assetId);
+            SDL_Texture* texture = context.assetRegistry.GetTexture(sprite.assetId);
             if (!texture)
             {
                 continue;
@@ -94,14 +94,14 @@ public:
             }
 
             SDL_FRect dstRect = {
-                transform.position.x - (sprite.isFixed ? 0 : camera.x),
-                transform.position.y - (sprite.isFixed ? 0 : camera.y),
+                transform.position.x - (sprite.isFixed ? 0 : context.camera.x),
+                transform.position.y - (sprite.isFixed ? 0 : context.camera.y),
                 sprite.width * transform.scale.x,
                 sprite.height * transform.scale.y
             };
 
             SDL_RenderTextureRotated(
-                renderer,
+                context.renderer,
                 texture,
                 &srcRect,
                 &dstRect,

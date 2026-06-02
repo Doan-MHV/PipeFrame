@@ -4,6 +4,7 @@
 #define PIPEFRAME_EVENTBUS_H
 #include "Event.h"
 #include <map>
+#include <memory>
 #include <typeindex>
 #include <functional>
 #include <list>

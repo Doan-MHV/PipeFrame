@@ -14,6 +14,9 @@ struct AntColonyComponent
     PF_PROPERTY(PF::ReadOnly, PF::RuntimeOnly, 0, 10000, 1)
     int spawnedAnts = 0;
 
+    PF_PROPERTY(PF::ReadOnly, PF::RuntimeOnly, 0, 100000, 1)
+    int storedFood = 0;
+
     PF_PROPERTY(PF::Edit, PF::Save, 0.0, 10.0, 0.01)
     double spawnInterval = 0.05;
 

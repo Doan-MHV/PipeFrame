@@ -9,14 +9,16 @@
 class AnimationSystem : public EntitySystem
 {
 public:
-    AnimationSystem()
+    void Loaded() override
     {
         RequireComponent<SpriteComponent>();
         RequireComponent<AnimationComponent>();
     }
 
-    void Update()
+    void Update(EntitySystemContext& context) override
     {
+        (void)context;
+
         for (auto entity : GetSystemEntities())
         {
             auto& animation = entity.GetComponent<AnimationComponent>();

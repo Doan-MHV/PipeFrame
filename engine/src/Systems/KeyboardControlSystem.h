@@ -14,19 +14,17 @@
 class KeyboardControlSystem : public EntitySystem
 {
 public:
-    KeyboardControlSystem()
+    void Loaded() override
     {
         RequireComponent<KeyboardControlledComponent>();
         RequireComponent<SpriteComponent>();
         RequireComponent<RigidBodyComponent>();
     }
 
-    void SubscribeToEvents(std::unique_ptr<EventBus>&)
+    void Update(EntitySystemContext& context) override
     {
-    }
+        (void)context;
 
-    void Update()
-    {
         const bool* keys = SDL_GetKeyboardState(nullptr);
 
         for (auto entity : GetSystemEntities())

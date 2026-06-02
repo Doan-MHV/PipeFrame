@@ -14,29 +14,29 @@
 class CameraMovementSystem : public EntitySystem
 {
 public:
-    CameraMovementSystem()
+    void Loaded() override
     {
         RequireComponent<CameraFollowComponent>();
         RequireComponent<TransformComponent>();
     }
 
-    void Update(SDL_FRect& camera, const TileMap& tileMap)
+    void Update(EntitySystemContext& context) override
     {
         for (auto entity : GetSystemEntities())
         {
             auto transform = entity.GetComponent<TransformComponent>();
 
             // Center camera on the followed entity
-            camera.x = transform.position.x - (camera.w / 2.0f);
-            camera.y = transform.position.y - (camera.h / 2.0f);
+            context.camera.x = transform.position.x - (context.camera.w / 2.0f);
+            context.camera.y = transform.position.y - (context.camera.h / 2.0f);
 
             // Maximum valid camera positions
-            float maxCameraX = std::max(0.0f, static_cast<float>(tileMap.GetWorldWidth()) - camera.w);
-            float maxCameraY = std::max(0.0f, static_cast<float>(tileMap.GetWorldHeight()) - camera.h);
+            float maxCameraX = std::max(0.0f, static_cast<float>(context.tileMap.GetWorldWidth()) - context.camera.w);
+            float maxCameraY = std::max(0.0f, static_cast<float>(context.tileMap.GetWorldHeight()) - context.camera.h);
 
             // Clamp camera inside map bounds
-            camera.x = std::max(0.0f, std::min(camera.x, maxCameraX));
-            camera.y = std::max(0.0f, std::min(camera.y, maxCameraY));
+            context.camera.x = std::max(0.0f, std::min(context.camera.x, maxCameraX));
+            context.camera.y = std::max(0.0f, std::min(context.camera.y, maxCameraY));
         }
     }
 };

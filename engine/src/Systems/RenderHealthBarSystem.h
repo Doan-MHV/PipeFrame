@@ -11,14 +11,14 @@
 class RenderHealthBarSystem : public EntitySystem
 {
 public:
-    RenderHealthBarSystem()
+    void Loaded() override
     {
         RequireComponent<TransformComponent>();
         RequireComponent<SpriteComponent>();
         RequireComponent<HealthComponent>();
-    };
+    }
 
-    void Update(SDL_Renderer* renderer, const std::unique_ptr<AssetRegistry>& assetRegistry, const SDL_FRect& camera)
+    void Update(EntitySystemContext& context) override
     {
         for (auto entity : GetSystemEntities())
         {
@@ -46,8 +46,8 @@ public:
 
             float healthBarWidth = 15;
             float healthBarHeight = 3;
-            float healthBarPosX = (transform.position.x + (sprite.width * transform.scale.x)) - camera.x;
-            float healthBarPosY = (transform.position.y) - camera.y;
+            float healthBarPosX = (transform.position.x + (sprite.width * transform.scale.x)) - context.camera.x;
+            float healthBarPosY = (transform.position.y) - context.camera.y;
 
             SDL_FRect healthBarRectangle = {
                 healthBarPosX,
@@ -56,23 +56,23 @@ public:
                 healthBarHeight
             };
             SDL_SetRenderDrawColor(
-                renderer,
+                context.renderer,
                 healthBarColor.r,
                 healthBarColor.g,
                 healthBarColor.b,
                 healthBarColor.a
             );
-            SDL_RenderFillRect(renderer, &healthBarRectangle);
+            SDL_RenderFillRect(context.renderer, &healthBarRectangle);
 
             std::string healthText = std::to_string(health.healthPercentage);
             SDL_Surface* surface = TTF_RenderText_Blended(
-                assetRegistry->GetFont("pico8-font-5"),
+                context.assetRegistry.GetFont("pico8-font-5"),
                 healthText.c_str(),
                 healthText.size(),
                 healthBarColor
             );
 
-            SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+            SDL_Texture* texture = SDL_CreateTextureFromSurface(context.renderer, surface);
             SDL_DestroySurface(surface);
 
             float labelWidth = 0;
@@ -86,7 +86,7 @@ public:
                 labelHeight
             };
 
-            SDL_RenderTexture(renderer, texture, nullptr, &healthBarTextRectangle);
+            SDL_RenderTexture(context.renderer, texture, nullptr, &healthBarTextRectangle);
 
             SDL_DestroyTexture(texture);
         }

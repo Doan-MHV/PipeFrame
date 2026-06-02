@@ -8,92 +8,17 @@
 #include "imgui.h"
 #include "Components/EditorEntityComponent.h"
 #include "Components/PersistentIdComponent.h"
+#include "Core/EditorEntityActions.h"
+#include "Core/EditorViewModels.h"
 #include "Components/TransformComponent.h"
 #include "ECS/ECS.h"
-#include "Game/EntitySerializer.h"
-#include "Game/LevelLoader.h"
 #include "Prefabs/PrefabRegistry.h"
 
 namespace
 {
-Entity FindEntityById(const std::unique_ptr<Registry>& registry, int entityId)
-{
-    for (auto entity : registry->GetAllEntities())
-    {
-        if (entity.GetId() == entityId)
-        {
-            return entity;
-        }
-    }
-
-    return Entity(-1);
-}
-
-bool IsPersistentIdUnique(
-    const std::unique_ptr<Registry>& registry,
-    const std::string& persistentId
-)
-{
-    for (auto entity : registry->GetAllEntities())
-    {
-        if (!entity.HasComponent<PersistentIdComponent>())
-        {
-            continue;
-        }
-
-        if (entity.GetComponent<PersistentIdComponent>().value == persistentId)
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-std::string BuildUniquePersistentId(
-    const std::unique_ptr<Registry>& registry,
-    const std::string& baseName
-)
-{
-    if (IsPersistentIdUnique(registry, baseName))
-    {
-        return baseName;
-    }
-
-    int index = 1;
-    std::string candidate;
-
-    do
-    {
-        candidate = baseName + "_" + std::to_string(index);
-        index++;
-    }
-    while (!IsPersistentIdUnique(registry, candidate));
-
-    return candidate;
-}
-
-std::string GetEntityDisplayName(Entity entity)
-{
-    if (entity.HasComponent<PersistentIdComponent>())
-    {
-        return entity.GetComponent<PersistentIdComponent>().value;
-    }
-
-    return "entity_" + std::to_string(entity.GetId());
-}
-
 void CopyToBuffer(char* buffer, std::size_t bufferSize, const std::string& value)
 {
     std::snprintf(buffer, bufferSize, "%s", value.c_str());
-}
-
-glm::vec2 GetViewportCenterWorldPosition(const SDL_FRect& camera)
-{
-    return glm::vec2(
-        camera.x + camera.w * 0.5f,
-        camera.y + camera.h * 0.5f
-    );
 }
 }
 
@@ -112,12 +37,7 @@ EditorHierarchyResult EditorHierarchyPanel::Draw(
 
     if (ImGui::Button("Create Entity"))
     {
-        Entity entity = registry->CreateEntity();
-        entity.AddComponent<EditorEntityComponent>();
-        entity.AddComponent<PersistentIdComponent>(
-            BuildUniquePersistentId(registry, "entity_" + std::to_string(entity.GetId()))
-        );
-        entity.AddComponent<TransformComponent>(GetViewportCenterWorldPosition(camera));
+        Entity entity = CreateEditorEntity(registry, camera);
 
         state.selectedEntityId = entity.GetId();
         state.hasSelectedTile = false;
@@ -135,25 +55,12 @@ EditorHierarchyResult EditorHierarchyPanel::Draw(
 
     if (ImGui::Button("Duplicate"))
     {
-        nlohmann::json entityJson = EntitySerializer::SerializeEntity(
+        Entity duplicatedEntity = DuplicateEditorEntity(
+            registry,
             selectedEntity,
-            &componentRegistry
+            componentRegistry,
+            camera
         );
-        const std::string baseName = entityJson.value("id", GetEntityDisplayName(selectedEntity)) + "_copy";
-        entityJson["id"] = BuildUniquePersistentId(registry, baseName);
-
-        if (entityJson.contains("components") &&
-            entityJson["components"].contains("transform") &&
-            entityJson["components"]["transform"].is_object())
-        {
-            auto& transform = entityJson["components"]["transform"];
-            const glm::vec2 viewportCenter = GetViewportCenterWorldPosition(camera);
-            transform["position"]["x"] = viewportCenter.x;
-            transform["position"]["y"] = viewportCenter.y;
-        }
-
-        LevelLoader loader;
-        Entity duplicatedEntity = loader.LoadEntityFromJson(entityJson, registry, &componentRegistry);
         state.selectedEntityId = duplicatedEntity.GetId();
         state.hasSelectedTile = false;
     }
@@ -162,7 +69,7 @@ EditorHierarchyResult EditorHierarchyPanel::Draw(
 
     if (ImGui::Button("Delete"))
     {
-        selectedEntity.Kill();
+        DeleteEditorEntity(selectedEntity);
         state.selectedEntityId = -1;
         state.hasSelectedTile = false;
     }
@@ -277,19 +184,13 @@ EditorHierarchyResult EditorHierarchyPanel::Draw(
 
         if (ImGui::Button("Create From Prefab"))
         {
-            const std::string persistentId = BuildUniquePersistentId(registry, selectedPrefabId);
-            Entity entity = prefabRegistry.InstantiatePrefab(
-                selectedPrefabId,
+            Entity entity = CreateEntityFromPrefab(
                 registry,
-                persistentId,
-                &componentRegistry
+                prefabRegistry,
+                componentRegistry,
+                selectedPrefabId,
+                camera
             );
-
-            if (entity.GetId() >= 0 && entity.HasComponent<TransformComponent>())
-            {
-                auto& transform = entity.GetComponent<TransformComponent>();
-                transform.position = GetViewportCenterWorldPosition(camera);
-            }
 
             state.selectedEntityId = entity.GetId();
             state.hasSelectedTile = false;
@@ -352,10 +253,11 @@ EditorHierarchyResult EditorHierarchyPanel::Draw(
 
         if (ImGui::Button("Create From Class"))
         {
-            Entity entity = classRegistry.CreateEntity(
+            Entity entity = CreateEntityFromProjectClass(
+                registry,
+                classRegistry,
                 selectedClass.typeName,
-                *registry,
-                GetViewportCenterWorldPosition(camera)
+                camera
             );
 
             state.selectedEntityId = entity.GetId();

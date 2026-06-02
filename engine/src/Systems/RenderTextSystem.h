@@ -11,21 +11,21 @@
 class RenderTextSystem : public EntitySystem
 {
 public:
-    RenderTextSystem()
+    void Loaded() override
     {
         RequireComponent<TextLabelComponent>();
     }
 
-    void Update(SDL_Renderer* renderer, std::unique_ptr<AssetRegistry>& assetRegistry, const SDL_FRect& camera)
+    void Update(EntitySystemContext& context) override
     {
         for (auto entity : GetSystemEntities())
         {
             const auto textLabel = entity.GetComponent<TextLabelComponent>();
 
-            SDL_Surface* surface = TTF_RenderText_Blended(assetRegistry->GetFont(textLabel.assetId),
+            SDL_Surface* surface = TTF_RenderText_Blended(context.assetRegistry.GetFont(textLabel.assetId),
                                                           textLabel.text.c_str(), textLabel.text.size(),
                                                           textLabel.color);
-            SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+            SDL_Texture* texture = SDL_CreateTextureFromSurface(context.renderer, surface);
             SDL_DestroySurface(surface);
 
             float labelWidth = 0.0f;
@@ -34,13 +34,13 @@ public:
             SDL_GetTextureSize(texture, &labelWidth, &labelHeight);
 
             SDL_FRect dstRect = {
-                textLabel.position.x - (textLabel.isFixed ? 0.0f : camera.x),
-                textLabel.position.y - (textLabel.isFixed ? 0.0f : camera.y),
+                textLabel.position.x - (textLabel.isFixed ? 0.0f : context.camera.x),
+                textLabel.position.y - (textLabel.isFixed ? 0.0f : context.camera.y),
                 labelWidth,
                 labelHeight
             };
 
-            SDL_RenderTexture(renderer, texture, nullptr, &dstRect);
+            SDL_RenderTexture(context.renderer, texture, nullptr, &dstRect);
 
             SDL_DestroyTexture(texture);
         }

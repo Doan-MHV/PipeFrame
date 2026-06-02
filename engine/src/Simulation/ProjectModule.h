@@ -25,9 +25,11 @@ public:
     virtual void RegisterComponents(ComponentRegistry& registry) { (void)registry; }
     virtual void RegisterEntityClasses(ClassRegistry& registry) { (void)registry; }
     virtual void RegisterEntitySystems(Registry& registry) = 0;
-    virtual void OnWorldLoaded(Registry& registry) { (void)registry; }
-    virtual void ResetProjectSimulation() {}
-    virtual void UpdateProjectSimulation(ProjectRuntimeContext& context) = 0;
+    virtual void Loaded(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Start(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Update(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Stop(ProjectRuntimeContext& context) { (void)context; }
+    virtual void Unloaded(ProjectRuntimeContext& context) { (void)context; }
     virtual void RenderProjectSimulation(
         SDL_Renderer* renderer,
         AssetRegistry& assetRegistry,

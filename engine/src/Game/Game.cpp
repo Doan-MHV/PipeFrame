@@ -12,6 +12,7 @@
 #include <glm/glm.hpp>
 #include <algorithm>
 #include <cctype>
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <set>
@@ -169,10 +170,14 @@ void Game::EnterPlayMode()
     mode = EngineMode::Play;
     elapsedTime = 0;
     millisecsPreviousFrame = SDL_GetTicks();
+    NotifyEngineSystemsStart();
+    NotifyProjectStart();
 }
 
 void Game::EnterEditMode()
 {
+    NotifyProjectStop();
+    NotifyEngineSystemsStop();
     RestoreWorldSnapshot();
 
     mode = EngineMode::Edit;
@@ -197,7 +202,104 @@ void Game::SetPlaySpeed(float speed)
     playSpeed = std::clamp(speed, 0.0f, 8.0f);
 }
 
-void Game::ResetWorldRuntime()
+EntitySystemContext Game::CreateEntitySystemContext(double deltaTime)
+{
+    return EntitySystemContext{
+        *registry,
+        *eventBus,
+        *tileMap,
+        *assetRegistry,
+        renderer,
+        camera,
+        deltaTime,
+        elapsedTime
+    };
+}
+
+ProjectRuntimeContext Game::CreateProjectRuntimeContext(double deltaTime)
+{
+    return ProjectRuntimeContext{
+        *registry,
+        *tileMap,
+        prefabRegistry,
+        projectConfig,
+        deltaTime,
+        elapsedTime
+    };
+}
+
+void Game::NotifyEngineSystemsLoaded()
+{
+    if (registry)
+    {
+        registry->LoadedSystems();
+    }
+}
+
+void Game::NotifyEngineSystemsStart()
+{
+    if (registry && eventBus && tileMap && assetRegistry)
+    {
+        EntitySystemContext context = CreateEntitySystemContext();
+        registry->StartSystems(context);
+    }
+}
+
+void Game::NotifyEngineSystemsStop()
+{
+    if (registry && eventBus && tileMap && assetRegistry)
+    {
+        EntitySystemContext context = CreateEntitySystemContext();
+        registry->StopSystems(context);
+    }
+}
+
+void Game::NotifyEngineSystemsUnloaded()
+{
+    if (registry && eventBus && tileMap && assetRegistry)
+    {
+        EntitySystemContext context = CreateEntitySystemContext();
+        registry->UnloadedSystems(context);
+    }
+}
+
+void Game::NotifyProjectLoaded()
+{
+    if (projectModule && registry && tileMap)
+    {
+        ProjectRuntimeContext context = CreateProjectRuntimeContext();
+        projectModule->Loaded(context);
+    }
+}
+
+void Game::NotifyProjectStart()
+{
+    if (projectModule && registry && tileMap)
+    {
+        ProjectRuntimeContext context = CreateProjectRuntimeContext();
+        projectModule->Start(context);
+    }
+}
+
+void Game::NotifyProjectStop()
+{
+    if (projectModule && registry && tileMap)
+    {
+        ProjectRuntimeContext context = CreateProjectRuntimeContext();
+        projectModule->Stop(context);
+    }
+}
+
+void Game::NotifyProjectUnloaded()
+{
+    if (projectModule && registry && tileMap)
+    {
+        ProjectRuntimeContext context = CreateProjectRuntimeContext();
+        projectModule->Unloaded(context);
+    }
+}
+
+void Game::ResetWorldRuntime(bool registerProjectSystems)
 {
     registry = std::make_unique<Registry>();
     eventBus = std::make_unique<EventBus>();
@@ -215,15 +317,18 @@ void Game::ResetWorldRuntime()
     registry->AddSystem<RenderTextSystem>();
     registry->AddSystem<RenderHealthBarSystem>();
 
-    if (projectModule)
+    if (projectModule && registerProjectSystems)
     {
         projectModule->RegisterEntitySystems(*registry);
-        projectModule->ResetProjectSimulation();
     }
+
+    NotifyEngineSystemsLoaded();
 }
 
 void Game::RebuildWorld()
 {
+    NotifyEngineSystemsUnloaded();
+    NotifyProjectUnloaded();
     ResetWorldRuntime();
 
     LevelLoader loader;
@@ -236,10 +341,7 @@ void Game::RebuildWorld()
         &componentRegistry,
         &currentLevelFilePaths
     );
-    if (projectModule)
-    {
-        projectModule->OnWorldLoaded(*registry);
-    }
+    NotifyProjectLoaded();
 }
 
 void Game::CaptureWorldSnapshot()
@@ -282,6 +384,8 @@ void Game::RestoreWorldSnapshot()
         return;
     }
 
+    NotifyEngineSystemsUnloaded();
+    NotifyProjectUnloaded();
     ResetWorldRuntime();
 
     const WorldSnapshot& snapshot = *authoredSnapshot;
@@ -306,10 +410,7 @@ void Game::RestoreWorldSnapshot()
 
     LevelLoader loader;
     loader.LoadEntitiesFromJson(snapshot.entitiesJson, registry, &componentRegistry);
-    if (projectModule)
-    {
-        projectModule->OnWorldLoaded(*registry);
-    }
+    NotifyProjectLoaded();
 
     Logger::Log("Restored world from authored snapshot");
 }
@@ -366,9 +467,10 @@ void Game::RenderSceneToViewportTexture()
         );
     }
 
-    registry->GetSystem<SpriteRenderSystem>().Update(renderer, assetRegistry, camera);
-    registry->GetSystem<RenderTextSystem>().Update(renderer, assetRegistry, camera);
-    registry->GetSystem<RenderHealthBarSystem>().Update(renderer, assetRegistry, camera);
+    EntitySystemContext context = CreateEntitySystemContext();
+    registry->GetSystem<SpriteRenderSystem>().Update(context);
+    registry->GetSystem<RenderTextSystem>().Update(context);
+    registry->GetSystem<RenderHealthBarSystem>().Update(context);
 
     if (projectModule)
     {
@@ -479,10 +581,7 @@ void Game::SetProjectModule(std::shared_ptr<ProjectModule> module)
 
 void Game::AttachProjectModuleToCurrentWorld()
 {
-    if (projectModule && registry)
-    {
-        projectModule->OnWorldLoaded(*registry);
-    }
+    NotifyProjectLoaded();
 }
 
 void Game::PrepareForProjectModuleUnload(bool preserveCurrentWorld)
@@ -497,7 +596,11 @@ void Game::PrepareForProjectModuleUnload(bool preserveCurrentWorld)
         CaptureWorldSnapshot();
     }
 
-    ResetWorldRuntime();
+    NotifyProjectStop();
+    NotifyEngineSystemsStop();
+    NotifyEngineSystemsUnloaded();
+    NotifyProjectUnloaded();
+    ResetWorldRuntime(false);
 }
 
 void Game::RestoreWorldAfterProjectModuleReload()
@@ -744,10 +847,8 @@ void Game::Update()
 
     if (mode == EngineMode::Play)
     {
-        registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
-        registry->GetSystem<KeyboardControlSystem>().SubscribeToEvents(eventBus);
-        registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
-        registry->GetSystem<MovementSystem>().SubscribeToEvents(eventBus);
+        EntitySystemContext context = CreateEntitySystemContext(simulationDeltaTime);
+        registry->SubscribeSystems(context);
     }
 
     // Update the registry to process the entities that are waiting to be created/deleted
@@ -789,55 +890,50 @@ void Game::Update()
 
 void Game::UpdatePlaySimulation(double deltaTime)
 {
+    EntitySystemContext entitySystemContext = CreateEntitySystemContext(deltaTime);
+
     for (SimulationUpdatePhase phase : PlaySimulationUpdateOrder)
     {
         switch (phase)
         {
         case SimulationUpdatePhase::Input:
-            registry->GetSystem<KeyboardControlSystem>().Update();
+            registry->GetSystem<KeyboardControlSystem>().Update(entitySystemContext);
             break;
 
         case SimulationUpdatePhase::ProjectSimulation:
             if (projectModule && tileMap)
             {
-                ProjectRuntimeContext context{
-                    *registry,
-                    *tileMap,
-                    prefabRegistry,
-                    projectConfig,
-                    deltaTime,
-                    elapsedTime
-                };
-                projectModule->UpdateProjectSimulation(context);
+                ProjectRuntimeContext context = CreateProjectRuntimeContext(deltaTime);
+                projectModule->Update(context);
             }
             break;
 
         case SimulationUpdatePhase::Movement:
-            registry->GetSystem<MovementSystem>().Update(deltaTime, *tileMap);
+            registry->GetSystem<MovementSystem>().Update(entitySystemContext);
             break;
 
         case SimulationUpdatePhase::SoftCollision:
-            registry->GetSystem<SoftCollisionSystem>().Update(*tileMap);
+            registry->GetSystem<SoftCollisionSystem>().Update(entitySystemContext);
             break;
 
         case SimulationUpdatePhase::Collision:
-            registry->GetSystem<CollisionSystem>().Update(eventBus);
+            registry->GetSystem<CollisionSystem>().Update(entitySystemContext);
             break;
 
         case SimulationUpdatePhase::ProjectileEmission:
-            registry->GetSystem<ProjectileEmitSystem>().Update(registry);
+            registry->GetSystem<ProjectileEmitSystem>().Update(entitySystemContext);
             break;
 
         case SimulationUpdatePhase::ProjectileLifecycle:
-            registry->GetSystem<ProjectileLifecycleSystem>().Update();
+            registry->GetSystem<ProjectileLifecycleSystem>().Update(entitySystemContext);
             break;
 
         case SimulationUpdatePhase::Animation:
-            registry->GetSystem<AnimationSystem>().Update();
+            registry->GetSystem<AnimationSystem>().Update(entitySystemContext);
             break;
 
         case SimulationUpdatePhase::Camera:
-            registry->GetSystem<CameraMovementSystem>().Update(camera, *tileMap);
+            registry->GetSystem<CameraMovementSystem>().Update(entitySystemContext);
             break;
         }
     }
@@ -847,6 +943,95 @@ void Game::RenderSceneToViewport(int width, int height)
 {
     EnsureViewportTexture(width, height);
     RenderSceneToViewportTexture();
+}
+
+void Game::RenderSceneToWindow(int width, int height)
+{
+    if (!renderer || width <= 0 || height <= 0)
+    {
+        return;
+    }
+
+    camera.w = static_cast<float>(width);
+    camera.h = static_cast<float>(height);
+
+    SDL_SetRenderTarget(renderer, nullptr);
+    SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
+    SDL_RenderClear(renderer);
+
+    if (tileMap && tileMapRenderer)
+    {
+        tileMapRenderer->Render(
+            renderer,
+            assetRegistry->GetTexture(tileMap->GetTextureAssetId()),
+            *tileMap,
+            camera
+        );
+    }
+
+    EntitySystemContext context = CreateEntitySystemContext();
+    registry->GetSystem<SpriteRenderSystem>().Update(context);
+    registry->GetSystem<RenderTextSystem>().Update(context);
+    registry->GetSystem<RenderHealthBarSystem>().Update(context);
+
+    if (projectModule)
+    {
+        projectModule->RenderProjectSimulation(renderer, *assetRegistry, camera);
+    }
+}
+
+bool Game::RenderSceneToPixels(int width, int height, std::vector<std::uint32_t>& pixels)
+{
+    if (!renderer)
+    {
+        return false;
+    }
+
+    RenderSceneToViewport(width, height);
+    if (!viewportTexture)
+    {
+        return false;
+    }
+
+    SDL_SetRenderTarget(renderer, viewportTexture);
+    SDL_Surface* readbackSurface = SDL_RenderReadPixels(renderer, nullptr);
+    SDL_SetRenderTarget(renderer, nullptr);
+
+    if (!readbackSurface)
+    {
+        Logger::Err("Failed to read viewport pixels: " + std::string(SDL_GetError()));
+        return false;
+    }
+
+    SDL_Surface* argbSurface = SDL_ConvertSurface(readbackSurface, SDL_PIXELFORMAT_ARGB8888);
+    SDL_DestroySurface(readbackSurface);
+
+    if (!argbSurface)
+    {
+        Logger::Err("Failed to convert viewport pixels: " + std::string(SDL_GetError()));
+        return false;
+    }
+
+    pixels.resize(static_cast<std::size_t>(width) * static_cast<std::size_t>(height));
+
+    const int sourceWidth = std::min(width, argbSurface->w);
+    const int sourceHeight = std::min(height, argbSurface->h);
+    const auto* sourcePixels = static_cast<const std::uint8_t*>(argbSurface->pixels);
+    auto* destinationPixels = reinterpret_cast<std::uint8_t*>(pixels.data());
+    const int destinationPitch = width * static_cast<int>(sizeof(std::uint32_t));
+    const int copyBytes = sourceWidth * static_cast<int>(sizeof(std::uint32_t));
+
+    for (int row = 0; row < sourceHeight; ++row)
+    {
+        std::memcpy(
+            destinationPixels + row * destinationPitch,
+            sourcePixels + row * argbSurface->pitch,
+            copyBytes
+        );
+    }
+
+    SDL_DestroySurface(argbSurface);
+    return true;
 }
 
 SDL_Texture* Game::GetTilePaletteTexture() const

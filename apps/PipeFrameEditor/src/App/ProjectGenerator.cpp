@@ -454,20 +454,19 @@ std::string BuildProjectModuleHeader(const std::string& projectIdentifier)
 {
     return "#ifndef " + projectIdentifier + "_MODULE_H\n"
            "#define " + projectIdentifier + "_MODULE_H\n\n"
-           "#include \"Simulation/ProjectModule.h\"\n"
-           "#include \"Systems/ExampleProjectSystem.h\"\n\n"
+           "#include \"Simulation/ProjectModule.h\"\n\n"
            "class " + projectIdentifier + "Module : public ProjectModule\n"
            "{\n"
-           "private:\n"
-           "    ExampleProjectSystem exampleProjectSystem;\n\n"
            "public:\n"
            "    std::string GetName() const override;\n"
            "    void RegisterComponents(ComponentRegistry& registry) override;\n"
            "    void RegisterEntityClasses(ClassRegistry& registry) override;\n"
            "    void RegisterEntitySystems(Registry& registry) override;\n"
-           "    void OnWorldLoaded(Registry& registry) override;\n"
-           "    void ResetProjectSimulation() override;\n"
-           "    void UpdateProjectSimulation(ProjectRuntimeContext& context) override;\n"
+           "    void Loaded(ProjectRuntimeContext& context) override;\n"
+           "    void Start(ProjectRuntimeContext& context) override;\n"
+           "    void Update(ProjectRuntimeContext& context) override;\n"
+           "    void Stop(ProjectRuntimeContext& context) override;\n"
+           "    void Unloaded(ProjectRuntimeContext& context) override;\n"
            "    void RenderProjectSimulation(\n"
            "        SDL_Renderer* renderer,\n"
            "        AssetRegistry& assetRegistry,\n"
@@ -482,6 +481,7 @@ std::string BuildProjectModuleCpp(const std::string& projectName, const std::str
     return "#include \"" + projectIdentifier + "Module.h\"\n\n"
            "#include \"Entity/ExampleEntity.h\"\n"
            "#include \"Generated/ProjectComponents.generated.h\"\n"
+           "#include \"Systems/ExampleEntitySystem.h\"\n"
            "#include \"Reflection/EditorMetadata.h\"\n"
            "#include \"ECS/Registry.h\"\n\n"
            "std::string " + projectIdentifier + "Module::GetName() const\n"
@@ -503,18 +503,27 @@ std::string BuildProjectModuleCpp(const std::string& projectName, const std::str
            "}\n\n"
            "void " + projectIdentifier + "Module::RegisterEntitySystems(Registry& registry)\n"
            "{\n"
-           "    (void)registry;\n"
+           "    registry.AddSystem<ExampleEntitySystem>();\n"
            "}\n\n"
-           "void " + projectIdentifier + "Module::OnWorldLoaded(Registry& registry)\n"
+           "void " + projectIdentifier + "Module::Loaded(ProjectRuntimeContext& context)\n"
            "{\n"
-           "    (void)registry;\n"
+           "    (void)context;\n"
            "}\n\n"
-           "void " + projectIdentifier + "Module::ResetProjectSimulation()\n"
+           "void " + projectIdentifier + "Module::Start(ProjectRuntimeContext& context)\n"
            "{\n"
+           "    (void)context;\n"
            "}\n\n"
-           "void " + projectIdentifier + "Module::UpdateProjectSimulation(ProjectRuntimeContext& context)\n"
+           "void " + projectIdentifier + "Module::Update(ProjectRuntimeContext& context)\n"
            "{\n"
-           "    exampleProjectSystem.Update(context);\n"
+           "    (void)context;\n"
+           "}\n\n"
+           "void " + projectIdentifier + "Module::Stop(ProjectRuntimeContext& context)\n"
+           "{\n"
+           "    (void)context;\n"
+           "}\n\n"
+           "void " + projectIdentifier + "Module::Unloaded(ProjectRuntimeContext& context)\n"
+           "{\n"
+           "    (void)context;\n"
            "}\n\n"
            "void " + projectIdentifier + "Module::RenderProjectSimulation(\n"
            "    SDL_Renderer* renderer,\n"
@@ -550,20 +559,65 @@ std::string BuildExampleComponentHeader()
            "#endif // PIPEFRAME_EXAMPLECOMPONENT_H\n";
 }
 
-std::string BuildExampleProjectSystemHeader()
+std::string BuildExampleEntitySystemHeader()
 {
-    return "#ifndef PIPEFRAME_EXAMPLEPROJECTSYSTEM_H\n"
-           "#define PIPEFRAME_EXAMPLEPROJECTSYSTEM_H\n\n"
-           "#include \"Simulation/ProjectRuntime.h\"\n\n"
-           "class ExampleProjectSystem : public ProjectSystem\n"
+    return "#ifndef PIPEFRAME_EXAMPLEENTITYSYSTEM_H\n"
+           "#define PIPEFRAME_EXAMPLEENTITYSYSTEM_H\n\n"
+           "#include \"Components/ExampleComponent.h\"\n"
+           "#include \"Components/TransformComponent.h\"\n"
+           "#include \"ECS/ECS.h\"\n\n"
+           "#include \"Events/ExampleEvent.h\"\n\n"
+           "class ExampleEntitySystem : public EntitySystem\n"
            "{\n"
            "public:\n"
-           "    void Update(ProjectRuntimeContext& context) override\n"
+           "    void Loaded() override\n"
            "    {\n"
-           "        (void)context;\n"
+           "        RequireComponent<TransformComponent>();\n"
+           "        RequireComponent<ExampleComponent>();\n"
+           "    }\n\n"
+           "    void SubscribeToEvents(EntitySystemContext& context) override\n"
+           "    {\n"
+           "        Listen<ExampleEvent>(context, &ExampleEntitySystem::OnExampleEvent);\n"
+           "    }\n\n"
+           "    void Update(EntitySystemContext& context) override\n"
+           "    {\n"
+           "        for (Entity entity : GetSystemEntities())\n"
+           "        {\n"
+           "            auto& transform = entity.GetComponent<TransformComponent>();\n"
+           "            const auto& example = entity.GetComponent<ExampleComponent>();\n"
+           "            transform.rotation += example.value * static_cast<float>(context.deltaTime);\n"
+           "            // Emit<ExampleEvent>(context, entity, \"Example entity updated\");\n"
+           "        }\n"
+           "    }\n"
+           "\n"
+           "private:\n"
+           "    void OnExampleEvent(ExampleEvent& event)\n"
+           "    {\n"
+           "        (void)event;\n"
            "    }\n"
            "};\n\n"
-           "#endif // PIPEFRAME_EXAMPLEPROJECTSYSTEM_H\n";
+           "#endif // PIPEFRAME_EXAMPLEENTITYSYSTEM_H\n";
+}
+
+std::string BuildExampleEventHeader()
+{
+    return "#ifndef PIPEFRAME_EXAMPLEEVENT_H\n"
+           "#define PIPEFRAME_EXAMPLEEVENT_H\n\n"
+           "#include <string>\n"
+           "#include <utility>\n\n"
+           "#include \"ECS/Entity.h\"\n"
+           "#include \"EventBus/Event.h\"\n\n"
+           "class ExampleEvent : public Event\n"
+           "{\n"
+           "public:\n"
+           "    Entity entity;\n"
+           "    std::string message;\n\n"
+           "    ExampleEvent(Entity entity, std::string message)\n"
+           "        : entity(entity), message(std::move(message))\n"
+           "    {\n"
+           "    }\n"
+           "};\n\n"
+           "#endif // PIPEFRAME_EXAMPLEEVENT_H\n";
 }
 
 std::string BuildExampleEntityHeader()
@@ -606,8 +660,9 @@ std::string BuildExampleDenseSimulationHeader()
            "class ExampleDenseSimulation : public DenseAgentSimulation<ExampleAgent>, public ProjectSimulation\n"
            "{\n"
            "public:\n"
-           "    void Reset() override\n"
+           "    void Start(ProjectRuntimeContext& context) override\n"
            "    {\n"
+           "        (void)context;\n"
            "        Clear();\n"
            "    }\n\n"
            "    void Update(ProjectRuntimeContext& context) override\n"
@@ -672,6 +727,7 @@ bool GeneratePipeFrameProject(
         std::filesystem::create_directories(projectRoot / "assets" / "tilemaps");
         std::filesystem::create_directories(projectRoot / "Source" / "Components");
         std::filesystem::create_directories(projectRoot / "Source" / "Systems");
+        std::filesystem::create_directories(projectRoot / "Source" / "Events");
         std::filesystem::create_directories(projectRoot / "Source" / "Entity");
         std::filesystem::create_directories(projectRoot / "Source" / "Simulations");
 
@@ -714,7 +770,8 @@ bool GeneratePipeFrameProject(
             !WriteTextFile(projectRoot / "Source" / (projectIdentifier + "Module.h"), BuildProjectModuleHeader(projectIdentifier), outError) ||
             !WriteTextFile(projectRoot / "Source" / (projectIdentifier + "Module.cpp"), BuildProjectModuleCpp(projectName, projectIdentifier), outError) ||
             !WriteTextFile(projectRoot / "Source" / "Components" / "ExampleComponent.h", BuildExampleComponentHeader(), outError) ||
-            !WriteTextFile(projectRoot / "Source" / "Systems" / "ExampleProjectSystem.h", BuildExampleProjectSystemHeader(), outError) ||
+            !WriteTextFile(projectRoot / "Source" / "Events" / "ExampleEvent.h", BuildExampleEventHeader(), outError) ||
+            !WriteTextFile(projectRoot / "Source" / "Systems" / "ExampleEntitySystem.h", BuildExampleEntitySystemHeader(), outError) ||
             !WriteTextFile(projectRoot / "Source" / "Entity" / "ExampleEntity.h", BuildExampleEntityHeader(), outError) ||
             !WriteTextFile(projectRoot / "Source" / "Simulations" / "ExampleDenseSimulation.h", BuildExampleDenseSimulationHeader(), outError))
         {

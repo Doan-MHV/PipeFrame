@@ -28,15 +28,14 @@
 class AntSwarmSimulationSystem : public SimulationSystem<AntSwarmSimulation>
 {
 public:
-    void OnWorldLoaded(AntSwarmSimulation& simulation, Registry& registry) override
+    void Loaded(AntSwarmSimulation& simulation, ProjectRuntimeContext& context) override
     {
         (void)simulation;
-        EnsureProjectComponents(registry);
+        (void)context;
     }
 
     void Update(AntSwarmSimulation& simulation, ProjectRuntimeContext& context) override
     {
-        EnsureProjectComponents(context.registry);
         ApplySettingsFromSwarm(simulation, context.registry);
         HideDepletedFoodSources(context.registry);
         EnsureFields(simulation, context.tileMap, context.projectConfig);
@@ -90,33 +89,6 @@ private:
         float intensity = 0.0f;
         bool foundFood = false;
     };
-
-    void EnsureProjectComponents(Registry& registry)
-    {
-        for (Entity entity : registry.GetAllEntities())
-        {
-            if (entity.BelongsToGroup("colonies") && !entity.HasComponent<AntColonyComponent>())
-            {
-                entity.AddComponent<AntColonyComponent>();
-            }
-
-            if (entity.BelongsToGroup("food") && !entity.HasComponent<FoodSourceComponent>())
-            {
-                entity.AddComponent<FoodSourceComponent>();
-            }
-
-            if (entity.BelongsToGroup("swarms") && !entity.HasComponent<AntSwarmComponent>())
-            {
-                entity.AddComponent<AntSwarmComponent>();
-            }
-
-            if ((entity.BelongsToGroup("colonies") || entity.BelongsToGroup("food")) &&
-                !entity.HasComponent<AttributesComponent>())
-            {
-                entity.AddComponent<AttributesComponent>();
-            }
-        }
-    }
 
     void ApplySettingsFromSwarm(AntSwarmSimulation& simulation, Registry& registry)
     {
@@ -641,13 +613,8 @@ private:
         {
             if (ant.state == AntState::ToHomeWithFood)
             {
-                if (!colony.HasComponent<AttributesComponent>())
-                {
-                    colony.AddComponent<AttributesComponent>();
-                }
-
-                auto& attributes = colony.GetComponent<AttributesComponent>().values;
-                attributes["stored_food"] = attributes.value("stored_food", 0) + 1;
+                auto& colonyComponent = colony.GetComponent<AntColonyComponent>();
+                colonyComponent.storedFood++;
                 ant.collectedFood++;
             }
 

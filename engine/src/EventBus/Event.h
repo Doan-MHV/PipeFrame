@@ -7,6 +7,7 @@ class Event
 {
 public:
     Event() = default;
+    virtual ~Event() = default;
 };
 
 #endif //PIPEFRAME_EVENT_H

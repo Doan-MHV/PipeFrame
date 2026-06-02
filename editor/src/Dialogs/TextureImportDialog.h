@@ -3,11 +3,7 @@
 
 #include <string>
 
-enum class TextureImportMode
-{
-    SingleImage,
-    SpriteSheet
-};
+#include "Core/EditorCommands.h"
 
 struct TextureImportResult
 {

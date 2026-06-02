@@ -335,9 +335,21 @@ void UpdateProjectModuleForGeneratedClass(
         );
         InsertTextBefore(
             moduleSourcePath,
-            "\n}\n\nvoid " + moduleClassName + "::RenderProjectSimulation",
+            "\n}\n\nvoid " + moduleClassName + "::Stop",
             "    " + className + "Instance.Update(context);\n"
         );
+        break;
+    case CppClassKind::EntitySystem:
+        InsertIncludeIfMissing(moduleSourcePath, "#include \"Systems/" + className + ".h\"");
+        InsertTextBefore(
+            moduleSourcePath,
+            "\n}\n\nvoid " + moduleClassName + "::Loaded",
+            "    registry.AddSystem<" + className + ">();\n"
+        );
+        break;
+    case CppClassKind::Event:
+        (void)moduleClassName;
+        Logger::Log("Event class created. Include it from systems that emit or listen to it.");
         break;
     case CppClassKind::EntityClass:
         InsertIncludeIfMissing(moduleSourcePath, "#include \"Entity/" + className + ".h\"");
@@ -361,12 +373,12 @@ void UpdateProjectModuleForGeneratedClass(
         );
         InsertTextBefore(
             moduleSourcePath,
-            "\n}\n\nvoid " + moduleClassName + "::UpdateProjectSimulation",
-            "    " + className + "Instance.Reset();\n"
+            "\n}\n\nvoid " + moduleClassName + "::Update",
+            "    " + className + "Instance.Start(context);\n"
         );
         InsertTextBefore(
             moduleSourcePath,
-            "\n}\n\nvoid " + moduleClassName + "::RenderProjectSimulation",
+            "\n}\n\nvoid " + moduleClassName + "::Stop",
             "    " + className + "Instance.Update(context);\n"
         );
         if (!InsertTextBefore(
@@ -410,9 +422,69 @@ std::string BuildProjectSystemTemplate(const std::string& className)
            "class " + className + " : public ProjectSystem\n"
            "{\n"
            "public:\n"
+           "    void Start(ProjectRuntimeContext& context) override\n"
+           "    {\n"
+           "        (void)context;\n"
+           "    }\n\n"
            "    void Update(ProjectRuntimeContext& context) override\n"
            "    {\n"
            "        (void)context;\n"
+           "    }\n"
+           "};\n\n"
+           "#endif // " + className + "_H\n";
+}
+
+std::string BuildEntitySystemTemplate(const std::string& className)
+{
+    return "#ifndef " + className + "_H\n"
+           "#define " + className + "_H\n\n"
+           "#include \"Components/TransformComponent.h\"\n"
+           "#include \"ECS/ECS.h\"\n\n"
+           "class " + className + " : public EntitySystem\n"
+           "{\n"
+           "public:\n"
+           "    void Loaded() override\n"
+           "    {\n"
+           "        RequireComponent<TransformComponent>();\n"
+           "    }\n\n"
+           "    void Start(EntitySystemContext& context) override\n"
+           "    {\n"
+           "        (void)context;\n"
+           "    }\n\n"
+           "    void SubscribeToEvents(EntitySystemContext& context) override\n"
+           "    {\n"
+           "        (void)context;\n"
+           "        // Listen<MyEvent>(context, &" + className + "::OnMyEvent);\n"
+           "    }\n\n"
+           "    void Update(EntitySystemContext& context) override\n"
+           "    {\n"
+           "        for (Entity entity : GetSystemEntities())\n"
+           "        {\n"
+           "            auto& transform = entity.GetComponent<TransformComponent>();\n"
+           "            transform.position.x += 0.0f * static_cast<float>(context.deltaTime);\n"
+           "        }\n"
+           "    }\n\n"
+           "    void Stop(EntitySystemContext& context) override\n"
+           "    {\n"
+           "        (void)context;\n"
+           "    }\n"
+           "};\n\n"
+           "#endif // " + className + "_H\n";
+}
+
+std::string BuildEventTemplate(const std::string& className)
+{
+    return "#ifndef " + className + "_H\n"
+           "#define " + className + "_H\n\n"
+           "#include \"ECS/Entity.h\"\n"
+           "#include \"EventBus/Event.h\"\n\n"
+           "struct " + className + " : public Event\n"
+           "{\n"
+           "    Entity entity{-1};\n\n"
+           "    " + className + "() = default;\n\n"
+           "    explicit " + className + "(Entity entity)\n"
+           "        : entity(entity)\n"
+           "    {\n"
            "    }\n"
            "};\n\n"
            "#endif // " + className + "_H\n";
@@ -460,8 +532,9 @@ std::string BuildDenseSimulationTemplate(const std::string& className)
            "class " + className + " : public DenseAgentSimulation<" + className + "Agent>, public ProjectSimulation\n"
            "{\n"
            "public:\n"
-           "    void Reset() override\n"
+           "    void Start(ProjectRuntimeContext& context) override\n"
            "    {\n"
+           "        (void)context;\n"
            "        Clear();\n"
            "    }\n\n"
            "    void Update(ProjectRuntimeContext& context) override\n"
@@ -1023,6 +1096,14 @@ void PipeFrameApplication::CreateCppClass(CppClassKind kind, const std::string& 
         case CppClassKind::ProjectSystem:
             outputPath = sourceRoot / "Systems" / (identifier + ".h");
             content = BuildProjectSystemTemplate(identifier);
+            break;
+        case CppClassKind::EntitySystem:
+            outputPath = sourceRoot / "Systems" / (identifier + ".h");
+            content = BuildEntitySystemTemplate(identifier);
+            break;
+        case CppClassKind::Event:
+            outputPath = sourceRoot / "Events" / (identifier + ".h");
+            content = BuildEventTemplate(identifier);
             break;
         case CppClassKind::EntityClass:
             outputPath = sourceRoot / "Entity" / (identifier + ".h");

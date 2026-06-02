@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <optional>
+#include <cstdint>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -85,7 +86,7 @@ private:
     void EnsureViewportTexture(int width, int height);
     void RenderSceneToViewportTexture();
 
-    void ResetWorldRuntime();
+    void ResetWorldRuntime(bool registerProjectSystems = true);
     void RebuildWorld();
     void CaptureWorldSnapshot();
     void RestoreWorldSnapshot();
@@ -93,6 +94,16 @@ private:
     void EnterPlayMode();
     void EnterEditMode();
     void UpdatePlaySimulation(double deltaTime);
+    EntitySystemContext CreateEntitySystemContext(double deltaTime = 0.0);
+    ProjectRuntimeContext CreateProjectRuntimeContext(double deltaTime = 0.0);
+    void NotifyEngineSystemsLoaded();
+    void NotifyEngineSystemsStart();
+    void NotifyEngineSystemsStop();
+    void NotifyEngineSystemsUnloaded();
+    void NotifyProjectLoaded();
+    void NotifyProjectStart();
+    void NotifyProjectStop();
+    void NotifyProjectUnloaded();
 
 public:
     explicit Game(ProjectConfig projectConfig = CreateDefaultProjectConfig());
@@ -102,6 +113,8 @@ public:
     void HandleEvent(const SDL_Event& event, bool& shouldQuit);
     void Update();
     void RenderSceneToViewport(int width, int height);
+    void RenderSceneToWindow(int width, int height);
+    bool RenderSceneToPixels(int width, int height, std::vector<std::uint32_t>& pixels);
     void Shutdown();
 
     bool LoadProject(ProjectConfig newProjectConfig);

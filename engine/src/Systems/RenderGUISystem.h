@@ -18,8 +18,9 @@ class RenderGUISystem : public EntitySystem
 public:
     RenderGUISystem() = default;
 
-    void Update(SDL_Renderer* renderer, const std::unique_ptr<Registry>& registry, const SDL_FRect& camera)
+    void Update(EntitySystemContext& context) override
     {
+        (void)context;
     }
 };
 

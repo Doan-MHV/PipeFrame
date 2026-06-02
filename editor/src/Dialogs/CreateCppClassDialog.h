@@ -3,14 +3,7 @@
 
 #include <string>
 
-enum class CppClassKind
-{
-    Component,
-    ProjectSystem,
-    EntityClass,
-    DenseAgentSimulation,
-    PhysicsScenario
-};
+#include "Core/EditorCommands.h"
 
 struct CreateCppClassResult
 {

@@ -20,9 +20,9 @@ void AntSimulationModule::RegisterEntitySystems(Registry& registry)
     (void)registry;
 }
 
-void AntSimulationModule::OnWorldLoaded(Registry& registry)
+void AntSimulationModule::Loaded(ProjectRuntimeContext& context)
 {
-    antSwarmSystem.OnWorldLoaded(antSwarmSimulation, registry);
+    antSwarmSystem.Loaded(antSwarmSimulation, context);
 }
 
 void AntSimulationModule::RegisterComponents(ComponentRegistry& registry)
@@ -52,14 +52,27 @@ void AntSimulationModule::RegisterEntityClasses(ClassRegistry& registry)
     });
 }
 
-void AntSimulationModule::ResetProjectSimulation()
+void AntSimulationModule::Start(ProjectRuntimeContext& context)
 {
+    antSwarmSimulation.Reset();
+    antSwarmSystem.Start(antSwarmSimulation, context);
+}
+
+void AntSimulationModule::Update(ProjectRuntimeContext& context)
+{
+    antSwarmSystem.Update(antSwarmSimulation, context);
+}
+
+void AntSimulationModule::Stop(ProjectRuntimeContext& context)
+{
+    antSwarmSystem.Stop(antSwarmSimulation, context);
     antSwarmSimulation.Reset();
 }
 
-void AntSimulationModule::UpdateProjectSimulation(ProjectRuntimeContext& context)
+void AntSimulationModule::Unloaded(ProjectRuntimeContext& context)
 {
-    antSwarmSystem.Update(antSwarmSimulation, context);
+    antSwarmSystem.Unloaded(antSwarmSimulation, context);
+    antSwarmSimulation.Reset();
 }
 
 void AntSimulationModule::RenderProjectSimulation(

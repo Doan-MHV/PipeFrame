@@ -11,13 +11,13 @@
 class CollisionSystem : public EntitySystem
 {
 public:
-    CollisionSystem()
+    void Loaded() override
     {
         RequireComponent<TransformComponent>();
         RequireComponent<BoxColliderComponent>();
     }
 
-    void Update(std::unique_ptr<EventBus>& eventBus)
+    void Update(EntitySystemContext& context) override
     {
         auto entities = GetSystemEntities();
 
@@ -40,7 +40,7 @@ public:
                     bTransform.position.y + bCollider.offset.y,
                     bCollider.width * bTransform.scale.x, bCollider.height * bTransform.scale.y))
                 {
-                    eventBus->EmitEvent<CollisionEvent>(entityA, entityB);
+                    Emit<CollisionEvent>(context, entityA, entityB);
                 }
             }
         }

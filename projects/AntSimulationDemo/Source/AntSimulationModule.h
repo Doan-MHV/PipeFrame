@@ -18,9 +18,11 @@ public:
     void RegisterComponents(ComponentRegistry& registry) override;
     void RegisterEntityClasses(ClassRegistry& registry) override;
     void RegisterEntitySystems(Registry& registry) override;
-    void OnWorldLoaded(Registry& registry) override;
-    void ResetProjectSimulation() override;
-    void UpdateProjectSimulation(ProjectRuntimeContext& context) override;
+    void Loaded(ProjectRuntimeContext& context) override;
+    void Start(ProjectRuntimeContext& context) override;
+    void Update(ProjectRuntimeContext& context) override;
+    void Stop(ProjectRuntimeContext& context) override;
+    void Unloaded(ProjectRuntimeContext& context) override;
     void RenderProjectSimulation(
         SDL_Renderer* renderer,
         AssetRegistry& assetRegistry,
