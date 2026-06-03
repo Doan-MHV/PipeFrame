@@ -60,6 +60,43 @@ std::vector<std::string> ReadStringArray(
     return values;
 }
 
+std::vector<std::string> ReadDisabledEngineSystemsConfig(
+    const nlohmann::json& json,
+    const std::vector<std::string>& fallback
+)
+{
+    std::vector<std::string> disabledSystems = ReadStringArray(
+        json,
+        "disabled_engine_systems",
+        fallback
+    );
+
+    if (!json.contains("engine_systems") || !json["engine_systems"].is_object())
+    {
+        return disabledSystems;
+    }
+
+    for (const auto& [name, value] : json["engine_systems"].items())
+    {
+        if (!value.is_boolean())
+        {
+            continue;
+        }
+
+        const auto disabledSystem = std::find(disabledSystems.begin(), disabledSystems.end(), name);
+        if (!value.get<bool>() && disabledSystem == disabledSystems.end())
+        {
+            disabledSystems.push_back(name);
+        }
+        else if (value.get<bool>() && disabledSystem != disabledSystems.end())
+        {
+            disabledSystems.erase(disabledSystem);
+        }
+    }
+
+    return disabledSystems;
+}
+
 SimulationConfig ReadSimulationConfig(const nlohmann::json& json, const SimulationConfig& fallback)
 {
     SimulationConfig simulation = fallback;
@@ -101,6 +138,7 @@ ProjectConfig CreateFallbackProjectConfig(const std::filesystem::path& projectFi
     config.prefabDirectory = config.assetsRoot / "prefabs";
     config.startupLevelPath = config.assetsRoot / "levels" / "Level1.json";
     config.simulation = {};
+    config.disabledEngineSystems = {};
     config.tags = {"player"};
     config.groups = {"enemies", "projectiles", "obstacles"};
 
@@ -153,6 +191,10 @@ ProjectConfig LoadProjectConfig(const std::filesystem::path& projectFilePath)
         projectJson.value("startup_level", std::string("assets/levels/Level1.json"))
     );
     config.simulation = ReadSimulationConfig(projectJson, config.simulation);
+    config.disabledEngineSystems = ReadDisabledEngineSystemsConfig(
+        projectJson,
+        config.disabledEngineSystems
+    );
     config.tags = ReadStringArray(projectJson, "tags", config.tags);
     config.groups = ReadStringArray(projectJson, "groups", config.groups);
 
@@ -162,4 +204,13 @@ ProjectConfig LoadProjectConfig(const std::filesystem::path& projectFilePath)
 ProjectConfig CreateDefaultProjectConfig()
 {
     return LoadProjectConfig("projects/JungleDemo/PipeFrameProject.json");
+}
+
+bool IsEngineSystemEnabled(const ProjectConfig& config, const std::string& systemName)
+{
+    return std::find(
+        config.disabledEngineSystems.begin(),
+        config.disabledEngineSystems.end(),
+        systemName
+    ) == config.disabledEngineSystems.end();
 }

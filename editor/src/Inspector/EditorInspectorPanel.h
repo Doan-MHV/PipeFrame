@@ -35,7 +35,7 @@ public:
         EngineMode mode,
         const ProjectConfig& projectConfig,
         const ComponentRegistry& componentRegistry,
-        const TileMap* tileMap,
+        TileMap* tileMap,
         std::unique_ptr<AssetRegistry>& assetRegistry,
         const std::unordered_map<std::string, FieldGrid>& fieldGrids,
         ProjectModule* projectModule,

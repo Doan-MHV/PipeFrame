@@ -1,0 +1,49 @@
+{
+    "entities": [
+        {
+            "components": {
+                "BirdComponent": {
+                    "gravity": 900.0,
+                    "isAlive": true,
+                    "jumpVelocity": -360.0,
+                    "maxFallSpeed": 520.0,
+                    "rotationStrength": 0.05000000074505806
+                },
+                "movement_control": {
+                    "enabled": true
+                },
+                "rigidbody": {
+                    "velocity": {
+                        "x": 0.0,
+                        "y": 0.0
+                    }
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 48,
+                    "src_rect_h": 32.0,
+                    "src_rect_w": 32.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-bird-texture",
+                    "width": 48,
+                    "z_index": 10
+                },
+                "transform": {
+                    "position": {
+                        "x": 54.5,
+                        "y": 230.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "player",
+            "id": "Bird"
+        }
+    ]
+}

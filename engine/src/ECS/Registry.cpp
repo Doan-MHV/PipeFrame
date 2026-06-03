@@ -43,6 +43,17 @@ void Registry::SubscribeSystems(EntitySystemContext& context)
     }
 }
 
+void Registry::UpdateAutomaticSystems(EntitySystemContext& context)
+{
+    for (auto& system : systems)
+    {
+        if (automaticSystemTypes.contains(system.first))
+        {
+            system.second->Update(context);
+        }
+    }
+}
+
 void Registry::StopSystems(EntitySystemContext& context)
 {
     for (auto& system : systems)

@@ -19,6 +19,7 @@
 #include "Components/SpriteComponent.h"
 #include "Components/TransformComponent.h"
 #include "Logger/Logger.h"
+#include "Map/TileMapSerializer.h"
 #include "Reflection/EditorMetadata.h"
 
 static std::string ResolvePathRelativeTo(
@@ -516,128 +517,161 @@ void LevelLoader::LoadLevel(
         return;
     }
 
-    if (!levelJson.contains("tilemap") || !levelJson["tilemap"].is_object())
-    {
-        Logger::Err("Level file missing 'tilemap' object: " + levelFilePath);
-        return;
-    }
-
-    const nlohmann::json& map = levelJson["tilemap"];
-
-    std::string mapFilePath = map.value("map_file", "");
-    std::string mapTextureAssetId = map.value("texture_asset_id", "");
-    int mapNumRows = map.value("num_rows", 0);
-    int mapNumCols = map.value("num_cols", 0);
-    int tileSize = map.value("tile_size", 0);
-    float mapScale = map.value("scale", 1.0f);
-
+    std::string tileMapFilePath = levelJson.value("tilemap_file", "");
     std::string terrainFilePath = levelJson.value("terrain_file", "");
     std::string entitiesFilePath = levelJson.value("entities_file", "");
     const std::filesystem::path levelDirectory = std::filesystem::path(levelFilePath).parent_path();
 
-    mapFilePath = ResolvePathRelativeTo(levelDirectory, mapFilePath);
+    tileMapFilePath = ResolvePathRelativeTo(levelDirectory, tileMapFilePath);
     terrainFilePath = ResolvePathRelativeTo(levelDirectory, terrainFilePath);
     entitiesFilePath = ResolvePathRelativeTo(levelDirectory, entitiesFilePath);
+
+    bool usesLegacyTileMap = false;
+
+    if (tileMapFilePath.empty())
+    {
+        if (!levelJson.contains("tilemap") || !levelJson["tilemap"].is_object())
+        {
+            Logger::Err("Level file missing tilemap_file: " + levelFilePath);
+            return;
+        }
+
+        usesLegacyTileMap = true;
+        const nlohmann::json& map = levelJson["tilemap"];
+        tileMapFilePath = ResolvePathRelativeTo(levelDirectory, map.value("map_file", std::string()));
+    }
 
     if (outLevelFilePaths)
     {
         outLevelFilePaths->levelPath = levelFilePath;
-        outLevelFilePaths->mapPath = mapFilePath;
-        outLevelFilePaths->terrainPath = terrainFilePath;
+        outLevelFilePaths->tileMapPath = tileMapFilePath;
         outLevelFilePaths->entitiesPath = entitiesFilePath;
     }
 
-    if (mapFilePath.empty() || mapTextureAssetId.empty() || mapNumRows <= 0 || mapNumCols <= 0 || tileSize <= 0)
+    if (tileMapFilePath.empty())
     {
-        Logger::Err("Level file has invalid tilemap config: " + levelFilePath);
+        Logger::Err("Level file has invalid tilemap path: " + levelFilePath);
         return;
     }
 
-    tileMap = std::make_unique<TileMap>(mapNumRows, mapNumCols, tileSize, mapScale);
-    tileMap->SetTextureAssetId(mapTextureAssetId);
-
-    std::fstream mapFile;
-    mapFile.open(mapFilePath);
-
-    for (int y = 0; y < mapNumRows; y++)
+    if (!usesLegacyTileMap)
     {
-        for (int x = 0; x < mapNumCols; x++)
+        if (!TileMapSerializer::LoadTileMap(tileMapFilePath, tileMap))
         {
-            char ch;
-
-            mapFile.get(ch);
-            int tilesetRow = ch - '0';
-
-            mapFile.get(ch);
-            int tilesetColumn = ch - '0';
-
-            mapFile.ignore();
-
-            TileCell& tile = tileMap->GetTile(y, x);
-            tile.tilesetRow = tilesetRow;
-            tile.tilesetColumn = tilesetColumn;
-        }
-    }
-
-    mapFile.close();
-
-    std::ifstream terrainFile(terrainFilePath);
-
-    if (terrainFile.is_open())
-    {
-        bool terrainLoadOk = true;
-
-        for (int row = 0; row < tileMap->GetRows() && terrainLoadOk; row++)
-        {
-            for (int col = 0; col < tileMap->GetCols(); col++)
-            {
-                char ch;
-                terrainFile.get(ch);
-
-                if (!terrainFile.good())
-                {
-                    terrainLoadOk = false;
-                    break;
-                }
-
-                int terrainValue = ch - '0';
-
-                if (terrainValue < static_cast<int>(TerrainType::Land) ||
-                    terrainValue > static_cast<int>(TerrainType::Blocked))
-                {
-                    terrainLoadOk = false;
-                    break;
-                }
-
-                tileMap->GetTile(row, col).terrain = static_cast<TerrainType>(terrainValue);
-
-                if (col < tileMap->GetCols() - 1)
-                {
-                    terrainFile.ignore(); // skip comma
-                }
-            }
-
-            if (row < tileMap->GetRows() - 1)
-            {
-                terrainFile.ignore(); // skip newline
-            }
+            Logger::Err("Failed to load tilemap json: " + tileMapFilePath);
+            return;
         }
 
-        terrainFile.close();
-
-        if (terrainLoadOk)
-        {
-            Logger::Log("Loaded terrain map from " + terrainFilePath);
-        }
-        else
-        {
-            Logger::Err("Terrain file format error in " + terrainFilePath + ". Using inferred terrain defaults.");
-            ApplyFallbackTerrain(*tileMap);
-        }
+        Logger::Log("Loaded tilemap json from " + tileMapFilePath);
     }
     else
     {
-        Logger::Log("No terrain file found. Using inferred terrain defaults.");
+        const nlohmann::json& map = levelJson["tilemap"];
+        std::string mapTextureAssetId = map.value("texture_asset_id", "");
+        int mapNumRows = map.value("num_rows", 0);
+        int mapNumCols = map.value("num_cols", 0);
+        int tileSize = map.value("tile_size", 0);
+        float mapScale = map.value("scale", 1.0f);
+
+        if (mapTextureAssetId.empty() || mapNumRows <= 0 || mapNumCols <= 0 || tileSize <= 0)
+        {
+            Logger::Err("Level file has invalid legacy tilemap config: " + levelFilePath);
+            return;
+        }
+
+        tileMap = std::make_unique<TileMap>(mapNumRows, mapNumCols, tileSize, mapScale);
+        tileMap->SetTextureAssetId(mapTextureAssetId);
+
+        std::fstream mapFile;
+        mapFile.open(tileMapFilePath);
+
+        if (!mapFile.is_open())
+        {
+            Logger::Err("Failed to open legacy visual tile map: " + tileMapFilePath);
+            return;
+        }
+
+        for (int y = 0; y < mapNumRows; y++)
+        {
+            for (int x = 0; x < mapNumCols; x++)
+            {
+                char ch;
+
+                mapFile.get(ch);
+                int tilesetRow = ch - '0';
+
+                mapFile.get(ch);
+                int tilesetColumn = ch - '0';
+
+                mapFile.ignore();
+
+                TileCell& tile = tileMap->GetTile(y, x);
+                tile.tilesetRow = tilesetRow;
+                tile.tilesetColumn = tilesetColumn;
+            }
+        }
+
+        mapFile.close();
+
+        std::ifstream terrainFile(terrainFilePath);
+
+        if (terrainFile.is_open())
+        {
+            bool terrainLoadOk = true;
+
+            for (int row = 0; row < tileMap->GetRows() && terrainLoadOk; row++)
+            {
+                for (int col = 0; col < tileMap->GetCols(); col++)
+                {
+                    char ch;
+                    terrainFile.get(ch);
+
+                    if (!terrainFile.good())
+                    {
+                        terrainLoadOk = false;
+                        break;
+                    }
+
+                    int terrainValue = ch - '0';
+
+                    if (terrainValue < static_cast<int>(TerrainType::Land) ||
+                        terrainValue > static_cast<int>(TerrainType::Blocked))
+                    {
+                        terrainLoadOk = false;
+                        break;
+                    }
+
+                    tileMap->GetTile(row, col).terrain = static_cast<TerrainType>(terrainValue);
+
+                    if (col < tileMap->GetCols() - 1)
+                    {
+                        terrainFile.ignore(); // skip comma
+                    }
+                }
+
+                if (row < tileMap->GetRows() - 1)
+                {
+                    terrainFile.ignore(); // skip newline
+                }
+            }
+
+            terrainFile.close();
+
+            if (terrainLoadOk)
+            {
+                Logger::Log("Loaded legacy terrain map from " + terrainFilePath);
+            }
+            else
+            {
+                Logger::Err("Terrain file format error in " + terrainFilePath + ". Using inferred terrain defaults.");
+                ApplyFallbackTerrain(*tileMap);
+            }
+        }
+        else
+        {
+            Logger::Log("No legacy terrain file found. Using inferred terrain defaults.");
+            ApplyFallbackTerrain(*tileMap);
+        }
     }
 
     if (entitiesFilePath.empty())

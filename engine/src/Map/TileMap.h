@@ -21,6 +21,9 @@ public:
     float GetScale() const;
     const std::string& GetTextureAssetId() const;
     void SetTextureAssetId(const std::string& textureAssetId);
+    void Resize(int newRows, int newCols);
+    void SetTileSize(int newTileSize);
+    void SetScale(float newScale);
     TileCell& GetTile(int row, int col);
     const TileCell& GetTile(int row, int col) const;
 

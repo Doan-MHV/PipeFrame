@@ -1,12 +1,4 @@
 {
-  "entities_file": "starter.entities.json",
-  "terrain_file": "starter.terrain",
-  "tilemap": {
-    "map_file": "starter.map",
-    "num_cols": 16,
-    "num_rows": 16,
-    "scale": 2.0,
-    "texture_asset_id": "starter-tilemap-texture",
-    "tile_size": 32
-  }
+  "tilemap_file": "starter.tilemap.json",
+  "entities_file": "starter.entities.json"
 }

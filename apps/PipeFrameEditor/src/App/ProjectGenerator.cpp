@@ -2,7 +2,6 @@
 
 #include <cctype>
 #include <fstream>
-#include <sstream>
 
 #include <nlohmann/json.hpp>
 
@@ -143,29 +142,42 @@ bool CopyDirectoryIfExists(
     return true;
 }
 
-std::string BuildCsvGrid(int rows, int cols, const std::string& value)
+nlohmann::json BuildTileMapJson(
+    int rows,
+    int cols,
+    const std::string& textureAssetId,
+    int tileSize,
+    float scale
+)
 {
-    std::ostringstream stream;
+    nlohmann::json tileMapJson;
+    tileMapJson["version"] = 1;
+    tileMapJson["texture_asset_id"] = textureAssetId;
+    tileMapJson["rows"] = rows;
+    tileMapJson["cols"] = cols;
+    tileMapJson["tile_size"] = tileSize;
+    tileMapJson["scale"] = scale;
+    tileMapJson["tiles"] = nlohmann::json::array();
 
     for (int row = 0; row < rows; row++)
     {
+        nlohmann::json tileRow = nlohmann::json::array();
+
         for (int col = 0; col < cols; col++)
         {
-            if (col > 0)
-            {
-                stream << ",";
-            }
-
-            stream << value;
+            tileRow.push_back({
+                {"tile", {
+                    {"row", 0},
+                    {"col", 0}
+                }},
+                {"terrain", "Land"}
+            });
         }
 
-        if (row < rows - 1)
-        {
-            stream << "\n";
-        }
+        tileMapJson["tiles"].push_back(tileRow);
     }
 
-    return stream.str();
+    return tileMapJson;
 }
 
 std::string BuildProjectJson(const std::string& projectName, bool includeSampleAntTaxonomy)
@@ -180,6 +192,7 @@ std::string BuildProjectJson(const std::string& projectName, bool includeSampleA
         {"field_cell_size", 16},
         {"field_decay_per_second", 0.35}
     };
+    projectJson["disabled_engine_systems"] = nlohmann::json::array();
     projectJson["tags"] = nlohmann::json::array();
     projectJson["groups"] = includeSampleAntTaxonomy
         ? nlohmann::json::array({"agents", "swarms", "colonies", "food", "obstacles"})
@@ -191,15 +204,7 @@ std::string BuildProjectJson(const std::string& projectName, bool includeSampleA
 nlohmann::json BuildLevelJson()
 {
     nlohmann::json levelJson;
-    levelJson["tilemap"] = {
-        {"map_file", "starter.map"},
-        {"texture_asset_id", "starter-tilemap-texture"},
-        {"num_rows", StarterRows},
-        {"num_cols", StarterCols},
-        {"tile_size", 32},
-        {"scale", 2.0},
-    };
-    levelJson["terrain_file"] = "starter.terrain";
+    levelJson["tilemap_file"] = "starter.tilemap.json";
     levelJson["entities_file"] = "starter.entities.json";
 
     return levelJson;
@@ -732,7 +737,7 @@ bool GeneratePipeFrameProject(
         std::filesystem::create_directories(projectRoot / "Source" / "Simulations");
 
         const std::filesystem::path starterTileset =
-            options.templateProjectRoot / "assets" / "tilemaps" / "jungle.png";
+            options.templateProjectRoot / "Tilemaps" / "universal.png";
         if (!CopyFileIfExists(
                 starterTileset,
                 projectRoot / "assets" / "tilemaps" / "starter.png",
@@ -763,8 +768,7 @@ bool GeneratePipeFrameProject(
             ) ||
             !WriteTextFile(projectRoot / "assets" / "AssetManifest.json", BuildAssetManifestJson(copiedAnt, copiedMarker).dump(2) + "\n", outError) ||
             !WriteTextFile(projectRoot / "assets" / "levels" / "Level1.json", BuildLevelJson().dump(2) + "\n", outError) ||
-            !WriteTextFile(projectRoot / "assets" / "levels" / "starter.map", BuildCsvGrid(StarterRows, StarterCols, "00"), outError) ||
-            !WriteTextFile(projectRoot / "assets" / "levels" / "starter.terrain", BuildCsvGrid(StarterRows, StarterCols, "0"), outError) ||
+            !WriteTextFile(projectRoot / "assets" / "levels" / "starter.tilemap.json", BuildTileMapJson(StarterRows, StarterCols, "starter-tilemap-texture", 32, 2.0f).dump(2) + "\n", outError) ||
             !WriteTextFile(projectRoot / "assets" / "levels" / "starter.entities.json", BuildEntitiesJson(copiedAnt, copiedMarker).dump(2) + "\n", outError) ||
             !WriteTextFile(projectRoot / "Source" / "CMakeLists.txt", BuildSourceCMake(projectIdentifier), outError) ||
             !WriteTextFile(projectRoot / "Source" / (projectIdentifier + "Module.h"), BuildProjectModuleHeader(projectIdentifier), outError) ||

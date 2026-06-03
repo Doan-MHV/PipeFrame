@@ -1,0 +1,106 @@
+{
+  "assets": [
+    {
+      "file": "tilemaps/starter.png",
+      "id": "starter-tilemap-texture",
+      "sprite": {
+        "default_display_size": {
+          "h": 32,
+          "w": 32
+        },
+        "mode": "image"
+      },
+      "type": "texture"
+    },
+    {
+      "file": "tilemaps/flappy_tiles.png",
+      "id": "flappy-tiles-texture",
+      "sprite": {
+        "default_display_size": {
+          "h": 32,
+          "w": 32
+        },
+        "mode": "sheet",
+        "frame_width": 32,
+        "frame_height": 32,
+        "default_frame": 0
+      },
+      "type": "texture"
+    },
+    {
+      "file": "images/bird_sheet.png",
+      "id": "flappy-bird-texture",
+      "sprite": {
+        "default_display_size": {
+          "h": 48,
+          "w": 48
+        },
+        "mode": "sheet",
+        "frame_width": 32,
+        "frame_height": 32,
+        "default_frame": 0
+      },
+      "type": "texture"
+    },
+    {
+      "file": "images/pipe.png",
+      "id": "flappy-pipe-texture",
+      "sprite": {
+        "default_display_size": {
+          "h": 256,
+          "w": 64
+        },
+        "mode": "image"
+      },
+      "type": "texture"
+    },
+    {
+      "file": "images/ground.png",
+      "id": "flappy-ground-texture",
+      "sprite": {
+        "default_display_size": {
+          "h": 64,
+          "w": 256
+        },
+        "mode": "image"
+      },
+      "type": "texture"
+    },
+    {
+      "file": "images/sky.png",
+      "id": "flappy-sky-texture",
+      "sprite": {
+        "default_display_size": {
+          "h": 576,
+          "w": 1024
+        },
+        "mode": "image"
+      },
+      "type": "texture"
+    },
+    {
+      "file": "images/cloud.png",
+      "id": "flappy-cloud-texture",
+      "sprite": {
+        "default_display_size": {
+          "h": 48,
+          "w": 96
+        },
+        "mode": "image"
+      },
+      "type": "texture"
+    },
+    {
+      "file": "images/panel.png",
+      "id": "flappy-panel-texture",
+      "sprite": {
+        "default_display_size": {
+          "h": 64,
+          "w": 192
+        },
+        "mode": "image"
+      },
+      "type": "texture"
+    }
+  ]
+}

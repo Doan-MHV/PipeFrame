@@ -11,6 +11,7 @@
 #include <set>
 #include <typeindex>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "Entity.h"
@@ -27,6 +28,7 @@ private:
     std::vector<std::shared_ptr<IPool>> componentPools;
     std::vector<Signature> entityComponentSignatures;
     std::unordered_map<std::type_index, std::shared_ptr<EntitySystem>> systems;
+    std::unordered_set<std::type_index> automaticSystemTypes;
 
     std::set<Entity> entitiesToBeAdded;
     std::set<Entity> entitiesToBeKilled;
@@ -76,6 +78,9 @@ public:
     template <typename TSystem, typename... TArgs>
     void AddSystem(TArgs&&... args);
 
+    template <typename TSystem, typename... TArgs>
+    void AddManualSystem(TArgs&&... args);
+
     template <typename TSystem>
     void RemoveSystem();
 
@@ -88,6 +93,7 @@ public:
     void LoadedSystems();
     void StartSystems(EntitySystemContext& context);
     void SubscribeSystems(EntitySystemContext& context);
+    void UpdateAutomaticSystems(EntitySystemContext& context);
     void StopSystems(EntitySystemContext& context);
     void UnloadedSystems(EntitySystemContext& context);
 
@@ -98,15 +104,28 @@ public:
 template <typename TSystem, typename... TArgs>
 void Registry::AddSystem(TArgs&&... args)
 {
+    const std::type_index systemType(typeid(TSystem));
     std::shared_ptr<TSystem> newSystem = std::make_shared<TSystem>(std::forward<TArgs>(args)...);
-    systems.insert(std::make_pair(std::type_index(typeid(TSystem)), newSystem));
+    systems.insert_or_assign(systemType, newSystem);
+    automaticSystemTypes.insert(systemType);
+}
+
+template <typename TSystem, typename... TArgs>
+void Registry::AddManualSystem(TArgs&&... args)
+{
+    const std::type_index systemType(typeid(TSystem));
+    std::shared_ptr<TSystem> newSystem = std::make_shared<TSystem>(std::forward<TArgs>(args)...);
+    systems.insert_or_assign(systemType, newSystem);
+    automaticSystemTypes.erase(systemType);
 }
 
 template <typename TSystem>
 void Registry::RemoveSystem()
 {
-    auto system = systems.find(std::type_index(typeid(TSystem)));
+    const std::type_index systemType(typeid(TSystem));
+    auto system = systems.find(systemType);
     systems.erase(system);
+    automaticSystemTypes.erase(systemType);
 }
 
 template <typename TSystem>

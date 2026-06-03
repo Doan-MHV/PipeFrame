@@ -3,6 +3,7 @@
 #ifndef PIPEFRAME_PROJECTILEEMITSYSTEM_H
 #define PIPEFRAME_PROJECTILEEMITSYSTEM_H
 #include "Components/BoxColliderComponent.h"
+#include "Components/MovementComponent.h"
 #include "Components/ProjectileComponent.h"
 #include "Components/ProjectileEmitterComponent.h"
 #include "Components/RigidBodyComponent.h"
@@ -89,6 +90,7 @@ public:
                     projectile.Group("projectiles");
                     projectile.AddComponent<TransformComponent>(projectilePosition, glm::vec2(3.0, 3.0), 0.0);
                     projectile.AddComponent<RigidBodyComponent>(projectileVelocity);
+                    projectile.AddComponent<MovementComponent>();
                     projectile.AddComponent<SpriteComponent>("bullet-texture", 4, 4, 4);
                     projectile.AddComponent<BoxColliderComponent>(4, 4);
                     projectile.AddComponent<ProjectileComponent>(projectileEmitter.isFriendly,
@@ -125,6 +127,7 @@ public:
                 projectile.Group("projectiles");
                 projectile.AddComponent<TransformComponent>(projectilePosition, glm::vec2(3.0, 3.0), 0.0);
                 projectile.AddComponent<RigidBodyComponent>(projectileEmitter.projectileVelocity);
+                projectile.AddComponent<MovementComponent>();
                 projectile.AddComponent<SpriteComponent>("bullet-texture", 4, 4, 4);
                 projectile.AddComponent<BoxColliderComponent>(4, 4);
                 projectile.AddComponent<ProjectileComponent>(projectileEmitter.isFriendly,

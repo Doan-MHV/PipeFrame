@@ -12,6 +12,7 @@
 struct SDL_FRect;
 struct SDL_Renderer;
 class AssetRegistry;
+class ComponentRegistry;
 class PrefabRegistry;
 class ProjectConfig;
 class Registry;
@@ -20,6 +21,7 @@ class TileMap;
 struct ProjectRuntimeContext
 {
     Registry& registry;
+    const ComponentRegistry& componentRegistry;
     TileMap& tileMap;
     const PrefabRegistry& prefabRegistry;
     const ProjectConfig& projectConfig;

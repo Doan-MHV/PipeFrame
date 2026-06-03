@@ -27,12 +27,14 @@
 #include "Systems/CameraMovementSystem.h"
 #include "Systems/CollisionSystem.h"
 #include "Systems/DamageSystem.h"
+#include "Systems/DestroyWhenOffscreenSystem.h"
 #include "Systems/KeyboardControlSystem.h"
 #include "Systems/ProjectileEmitSystem.h"
 #include "Systems/ProjectileLifecycleSystem.h"
 #include "Systems/RenderHealthBarSystem.h"
 #include "Systems/RenderTextSystem.h"
 #include "Systems/SoftCollisionSystem.h"
+#include "Systems/TerrainConstraintSystem.h"
 
 namespace
 {
@@ -220,6 +222,7 @@ ProjectRuntimeContext Game::CreateProjectRuntimeContext(double deltaTime)
 {
     return ProjectRuntimeContext{
         *registry,
+        componentRegistry,
         *tileMap,
         prefabRegistry,
         projectConfig,
@@ -241,6 +244,7 @@ void Game::NotifyEngineSystemsStart()
     if (registry && eventBus && tileMap && assetRegistry)
     {
         EntitySystemContext context = CreateEntitySystemContext();
+        registry->SubscribeSystems(context);
         registry->StartSystems(context);
     }
 }
@@ -304,18 +308,20 @@ void Game::ResetWorldRuntime(bool registerProjectSystems)
     registry = std::make_unique<Registry>();
     eventBus = std::make_unique<EventBus>();
 
-    registry->AddSystem<MovementSystem>();
-    registry->AddSystem<SoftCollisionSystem>();
-    registry->AddSystem<SpriteRenderSystem>();
-    registry->AddSystem<AnimationSystem>();
-    registry->AddSystem<CollisionSystem>();
-    registry->AddSystem<DamageSystem>();
-    registry->AddSystem<KeyboardControlSystem>();
-    registry->AddSystem<CameraMovementSystem>();
-    registry->AddSystem<ProjectileEmitSystem>();
-    registry->AddSystem<ProjectileLifecycleSystem>();
-    registry->AddSystem<RenderTextSystem>();
-    registry->AddSystem<RenderHealthBarSystem>();
+    registry->AddManualSystem<MovementSystem>();
+    registry->AddManualSystem<TerrainConstraintSystem>();
+    registry->AddManualSystem<SoftCollisionSystem>();
+    registry->AddManualSystem<SpriteRenderSystem>();
+    registry->AddManualSystem<AnimationSystem>();
+    registry->AddManualSystem<CollisionSystem>();
+    registry->AddManualSystem<DamageSystem>();
+    registry->AddManualSystem<KeyboardControlSystem>();
+    registry->AddManualSystem<CameraMovementSystem>();
+    registry->AddManualSystem<ProjectileEmitSystem>();
+    registry->AddManualSystem<ProjectileLifecycleSystem>();
+    registry->AddManualSystem<DestroyWhenOffscreenSystem>();
+    registry->AddManualSystem<RenderTextSystem>();
+    registry->AddManualSystem<RenderHealthBarSystem>();
 
     if (projectModule && registerProjectSystems)
     {
@@ -457,6 +463,9 @@ void Game::RenderSceneToViewportTexture()
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);
 
+    EntitySystemContext context = CreateEntitySystemContext();
+    registry->GetSystem<SpriteRenderSystem>().RenderLayerPass(context, true);
+
     if (tileMap && tileMapRenderer)
     {
         tileMapRenderer->Render(
@@ -467,7 +476,6 @@ void Game::RenderSceneToViewportTexture()
         );
     }
 
-    EntitySystemContext context = CreateEntitySystemContext();
     registry->GetSystem<SpriteRenderSystem>().Update(context);
     registry->GetSystem<RenderTextSystem>().Update(context);
     registry->GetSystem<RenderHealthBarSystem>().Update(context);
@@ -843,14 +851,6 @@ void Game::Update()
 
     elapsedTime += static_cast<int>(simulationDeltaTime * 1000.0);
 
-    eventBus->Reset();
-
-    if (mode == EngineMode::Play)
-    {
-        EntitySystemContext context = CreateEntitySystemContext(simulationDeltaTime);
-        registry->SubscribeSystems(context);
-    }
-
     // Update the registry to process the entities that are waiting to be created/deleted
     registry->Update();
 
@@ -891,13 +891,20 @@ void Game::Update()
 void Game::UpdatePlaySimulation(double deltaTime)
 {
     EntitySystemContext entitySystemContext = CreateEntitySystemContext(deltaTime);
+    const auto engineSystemEnabled = [this](const std::string& name)
+    {
+        return IsEngineSystemEnabled(projectConfig, name);
+    };
 
     for (SimulationUpdatePhase phase : PlaySimulationUpdateOrder)
     {
         switch (phase)
         {
         case SimulationUpdatePhase::Input:
-            registry->GetSystem<KeyboardControlSystem>().Update(entitySystemContext);
+            if (engineSystemEnabled("input"))
+            {
+                registry->GetSystem<KeyboardControlSystem>().Update(entitySystemContext);
+            }
             break;
 
         case SimulationUpdatePhase::ProjectSimulation:
@@ -908,32 +915,71 @@ void Game::UpdatePlaySimulation(double deltaTime)
             }
             break;
 
+        case SimulationUpdatePhase::ProjectEntitySystems:
+            registry->UpdateAutomaticSystems(entitySystemContext);
+            break;
+
         case SimulationUpdatePhase::Movement:
-            registry->GetSystem<MovementSystem>().Update(entitySystemContext);
+            if (engineSystemEnabled("movement"))
+            {
+                registry->GetSystem<MovementSystem>().Update(entitySystemContext);
+            }
+            break;
+
+        case SimulationUpdatePhase::TerrainConstraint:
+            if (engineSystemEnabled("terrain_constraint"))
+            {
+                registry->GetSystem<TerrainConstraintSystem>().Update(entitySystemContext);
+            }
             break;
 
         case SimulationUpdatePhase::SoftCollision:
-            registry->GetSystem<SoftCollisionSystem>().Update(entitySystemContext);
+            if (engineSystemEnabled("soft_collision"))
+            {
+                registry->GetSystem<SoftCollisionSystem>().Update(entitySystemContext);
+            }
             break;
 
         case SimulationUpdatePhase::Collision:
-            registry->GetSystem<CollisionSystem>().Update(entitySystemContext);
+            if (engineSystemEnabled("collision"))
+            {
+                registry->GetSystem<CollisionSystem>().Update(entitySystemContext);
+            }
             break;
 
         case SimulationUpdatePhase::ProjectileEmission:
-            registry->GetSystem<ProjectileEmitSystem>().Update(entitySystemContext);
+            if (engineSystemEnabled("projectile_emission"))
+            {
+                registry->GetSystem<ProjectileEmitSystem>().Update(entitySystemContext);
+            }
             break;
 
         case SimulationUpdatePhase::ProjectileLifecycle:
-            registry->GetSystem<ProjectileLifecycleSystem>().Update(entitySystemContext);
+            if (engineSystemEnabled("projectile_lifecycle"))
+            {
+                registry->GetSystem<ProjectileLifecycleSystem>().Update(entitySystemContext);
+            }
+            break;
+
+        case SimulationUpdatePhase::OffscreenLifecycle:
+            if (engineSystemEnabled("offscreen_lifecycle"))
+            {
+                registry->GetSystem<DestroyWhenOffscreenSystem>().Update(entitySystemContext);
+            }
             break;
 
         case SimulationUpdatePhase::Animation:
-            registry->GetSystem<AnimationSystem>().Update(entitySystemContext);
+            if (engineSystemEnabled("animation"))
+            {
+                registry->GetSystem<AnimationSystem>().Update(entitySystemContext);
+            }
             break;
 
         case SimulationUpdatePhase::Camera:
-            registry->GetSystem<CameraMovementSystem>().Update(entitySystemContext);
+            if (engineSystemEnabled("camera"))
+            {
+                registry->GetSystem<CameraMovementSystem>().Update(entitySystemContext);
+            }
             break;
         }
     }
@@ -959,6 +1005,9 @@ void Game::RenderSceneToWindow(int width, int height)
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);
 
+    EntitySystemContext context = CreateEntitySystemContext();
+    registry->GetSystem<SpriteRenderSystem>().RenderLayerPass(context, true);
+
     if (tileMap && tileMapRenderer)
     {
         tileMapRenderer->Render(
@@ -969,7 +1018,6 @@ void Game::RenderSceneToWindow(int width, int height)
         );
     }
 
-    EntitySystemContext context = CreateEntitySystemContext();
     registry->GetSystem<SpriteRenderSystem>().Update(context);
     registry->GetSystem<RenderTextSystem>().Update(context);
     registry->GetSystem<RenderHealthBarSystem>().Update(context);

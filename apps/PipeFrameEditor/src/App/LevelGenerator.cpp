@@ -2,7 +2,6 @@
 
 #include <cctype>
 #include <fstream>
-#include <sstream>
 
 #include <nlohmann/json.hpp>
 
@@ -59,52 +58,51 @@ bool WriteTextFile(const std::filesystem::path& path, const std::string& text, s
     return true;
 }
 
-std::string BuildCsvGrid(int rows, int cols, const std::string& value)
-{
-    std::ostringstream stream;
-
-    for (int row = 0; row < rows; row++)
-    {
-        for (int col = 0; col < cols; col++)
-        {
-            if (col > 0)
-            {
-                stream << ",";
-            }
-
-            stream << value;
-        }
-
-        if (row < rows - 1)
-        {
-            stream << "\n";
-        }
-    }
-
-    return stream.str();
-}
-
-nlohmann::json BuildLevelJson(
-    const std::string& mapFileName,
-    const std::string& terrainFileName,
-    const std::string& entitiesFileName,
-    const std::string& textureAssetId,
+nlohmann::json BuildTileMapJson(
     int rows,
     int cols,
+    const std::string& textureAssetId,
     int tileSize,
     float scale
 )
 {
+    nlohmann::json tileMapJson;
+    tileMapJson["version"] = 1;
+    tileMapJson["texture_asset_id"] = textureAssetId;
+    tileMapJson["rows"] = rows;
+    tileMapJson["cols"] = cols;
+    tileMapJson["tile_size"] = tileSize;
+    tileMapJson["scale"] = scale;
+    tileMapJson["tiles"] = nlohmann::json::array();
+
+    for (int row = 0; row < rows; row++)
+    {
+        nlohmann::json tileRow = nlohmann::json::array();
+
+        for (int col = 0; col < cols; col++)
+        {
+            tileRow.push_back({
+                {"tile", {
+                    {"row", 0},
+                    {"col", 0}
+                }},
+                {"terrain", "Land"}
+            });
+        }
+
+        tileMapJson["tiles"].push_back(tileRow);
+    }
+
+    return tileMapJson;
+}
+
+nlohmann::json BuildLevelJson(
+    const std::string& tileMapFileName,
+    const std::string& entitiesFileName
+)
+{
     nlohmann::json levelJson;
-    levelJson["tilemap"] = {
-        {"map_file", mapFileName},
-        {"texture_asset_id", textureAssetId},
-        {"num_rows", rows},
-        {"num_cols", cols},
-        {"tile_size", tileSize},
-        {"scale", scale},
-    };
-    levelJson["terrain_file"] = terrainFileName;
+    levelJson["tilemap_file"] = tileMapFileName;
     levelJson["entities_file"] = entitiesFileName;
 
     return levelJson;
@@ -173,13 +171,11 @@ bool GeneratePipeFrameLevel(
 
         const std::filesystem::path levelsDirectory = options.projectConfig.assetsRoot / "levels";
         const std::filesystem::path levelFilePath = levelsDirectory / (fileStem + ".json");
-        const std::filesystem::path mapFilePath = levelsDirectory / (fileStem + ".map");
-        const std::filesystem::path terrainFilePath = levelsDirectory / (fileStem + ".terrain");
+        const std::filesystem::path tileMapFilePath = levelsDirectory / (fileStem + ".tilemap.json");
         const std::filesystem::path entitiesFilePath = levelsDirectory / (fileStem + ".entities.json");
 
         if (std::filesystem::exists(levelFilePath) ||
-            std::filesystem::exists(mapFilePath) ||
-            std::filesystem::exists(terrainFilePath) ||
+            std::filesystem::exists(tileMapFilePath) ||
             std::filesystem::exists(entitiesFilePath))
         {
             outError = "Level files already exist for: " + fileStem;
@@ -191,19 +187,22 @@ bool GeneratePipeFrameLevel(
         if (!WriteTextFile(
                 levelFilePath,
                 BuildLevelJson(
-                    mapFilePath.filename().string(),
-                    terrainFilePath.filename().string(),
-                    entitiesFilePath.filename().string(),
-                    textureAssetId,
+                    tileMapFilePath.filename().string(),
+                    entitiesFilePath.filename().string()
+                ).dump(2) + "\n",
+                outError
+            ) ||
+            !WriteTextFile(
+                tileMapFilePath,
+                BuildTileMapJson(
                     options.rows,
                     options.cols,
+                    textureAssetId,
                     options.tileSize,
                     options.scale
                 ).dump(2) + "\n",
                 outError
             ) ||
-            !WriteTextFile(mapFilePath, BuildCsvGrid(options.rows, options.cols, "00"), outError) ||
-            !WriteTextFile(terrainFilePath, BuildCsvGrid(options.rows, options.cols, "0"), outError) ||
             !WriteTextFile(entitiesFilePath, entitiesJson.dump(2) + "\n", outError) ||
             !UpdateProjectStartupLevel(options.projectConfig, levelFilePath, outError))
         {

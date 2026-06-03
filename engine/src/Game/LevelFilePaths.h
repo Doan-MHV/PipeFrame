@@ -6,8 +6,7 @@
 struct LevelFilePaths
 {
     std::filesystem::path levelPath;
-    std::filesystem::path mapPath;
-    std::filesystem::path terrainPath;
+    std::filesystem::path tileMapPath;
     std::filesystem::path entitiesPath;
 };
 

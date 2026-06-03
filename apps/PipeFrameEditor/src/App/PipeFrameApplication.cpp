@@ -26,7 +26,7 @@
 #endif
 
 #ifndef PIPEFRAME_TEMPLATE_PROJECT_ROOT
-#define PIPEFRAME_TEMPLATE_PROJECT_ROOT "projects/JungleDemo"
+#define PIPEFRAME_TEMPLATE_PROJECT_ROOT "apps/PipeFrameEditor/templates"
 #endif
 
 #ifndef PIPEFRAME_SAMPLE_ASSET_ROOT

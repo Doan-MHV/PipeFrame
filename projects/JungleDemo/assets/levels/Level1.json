@@ -1,12 +1,4 @@
 {
-  "tilemap": {
-    "map_file": "jungle.map",
-    "texture_asset_id": "tilemap-texture-day",
-    "num_rows": 20,
-    "num_cols": 25,
-    "tile_size": 32,
-    "scale": 2.0
-  },
-  "terrain_file": "jungle.terrain",
+  "tilemap_file": "jungle.tilemap.json",
   "entities_file": "jungle.entities.json"
 }

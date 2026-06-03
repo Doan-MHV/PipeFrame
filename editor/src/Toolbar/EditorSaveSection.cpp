@@ -21,10 +21,10 @@ std::string EditorSaveSection::BuildSaveAsPath(const std::string& originalPath) 
     return originalPath.substr(0, dotPos) + originalPath.substr(dotPos);
 }
 
-std::string EditorSaveSection::BuildEntitiesPath(const std::string& mapPath) const
+std::string EditorSaveSection::BuildEntitiesPath(const std::string& tileMapPath) const
 {
-    std::size_t slashPos = mapPath.find_last_of("/\\");
-    std::size_t dotPos = mapPath.find_last_of('.');
+    std::size_t slashPos = tileMapPath.find_last_of("/\\");
+    std::size_t dotPos = tileMapPath.find_last_of('.');
 
     std::string directory;
     std::string baseName;
@@ -32,20 +32,27 @@ std::string EditorSaveSection::BuildEntitiesPath(const std::string& mapPath) con
     if (slashPos == std::string::npos)
     {
         directory = "";
-        baseName = (dotPos == std::string::npos) ? mapPath : mapPath.substr(0, dotPos);
+        baseName = (dotPos == std::string::npos) ? tileMapPath : tileMapPath.substr(0, dotPos);
     }
     else
     {
-        directory = mapPath.substr(0, slashPos + 1);
+        directory = tileMapPath.substr(0, slashPos + 1);
 
         if (dotPos == std::string::npos || dotPos < slashPos)
         {
-            baseName = mapPath.substr(slashPos + 1);
+            baseName = tileMapPath.substr(slashPos + 1);
         }
         else
         {
-            baseName = mapPath.substr(slashPos + 1, dotPos - slashPos - 1);
+            baseName = tileMapPath.substr(slashPos + 1, dotPos - slashPos - 1);
         }
+    }
+
+    const std::string tileMapSuffix = ".tilemap";
+    if (baseName.size() >= tileMapSuffix.size() &&
+        baseName.substr(baseName.size() - tileMapSuffix.size()) == tileMapSuffix)
+    {
+        baseName = baseName.substr(0, baseName.size() - tileMapSuffix.size());
     }
 
     return directory + baseName + ".entities.json";
@@ -58,7 +65,7 @@ std::string EditorSaveSection::GetEntitiesSavePath(const LevelFilePaths& levelFi
         return levelFilePaths.entitiesPath.string();
     }
 
-    return BuildEntitiesPath(levelFilePaths.mapPath.string());
+    return BuildEntitiesPath(levelFilePaths.tileMapPath.string());
 }
 
 void EditorSaveSection::Draw(
@@ -74,22 +81,22 @@ void EditorSaveSection::Draw(
 
     if (ImGui::Button("Save Map"))
     {
-        if (!tileMap || levelFilePaths.mapPath.empty())
+        if (!tileMap || levelFilePaths.tileMapPath.empty())
         {
-            Logger::Err("Tile map source path is empty");
+            Logger::Err("Tilemap source path is empty");
         }
         else
         {
-            const std::string mapPath = levelFilePaths.mapPath.string();
-            const bool success = TileMapSerializer::SaveVisualMap(*tileMap, mapPath);
+            const std::string tileMapPath = levelFilePaths.tileMapPath.string();
+            const bool success = TileMapSerializer::SaveTileMap(*tileMap, tileMapPath);
 
             if (success)
             {
-                Logger::Log("Saved visual tile map to " + mapPath);
+                Logger::Log("Saved tilemap to " + tileMapPath);
             }
             else
             {
-                Logger::Err("Failed to save visual tile map " + mapPath);
+                Logger::Err("Failed to save tilemap " + tileMapPath);
             }
         }
     }
@@ -100,7 +107,7 @@ void EditorSaveSection::Draw(
     {
         if (tileMap)
         {
-            std::string defaultPath = BuildSaveAsPath(levelFilePaths.mapPath.string());
+            std::string defaultPath = BuildSaveAsPath(levelFilePaths.tileMapPath.string());
             std::snprintf(state.saveAsPathBuffer, sizeof(state.saveAsPathBuffer), "%s", defaultPath.c_str());
             ImGui::OpenPopup("Save Map As");
         }
@@ -123,16 +130,16 @@ void EditorSaveSection::Draw(
                 }
                 else
                 {
-                    bool success = TileMapSerializer::SaveVisualMap(*tileMap, savePath);
+                    bool success = TileMapSerializer::SaveTileMap(*tileMap, savePath);
 
                     if (success)
                     {
-                        levelFilePaths.mapPath = savePath;
-                        Logger::Log("Saved visual tile map to " + savePath);
+                        levelFilePaths.tileMapPath = savePath;
+                        Logger::Log("Saved tilemap to " + savePath);
                     }
                     else
                     {
-                        Logger::Err("Failed to save visual tile map to " + savePath);
+                        Logger::Err("Failed to save tilemap to " + savePath);
                     }
                 }
             }
@@ -156,23 +163,23 @@ void EditorSaveSection::Draw(
     {
         if (tileMap)
         {
-            const std::string path = levelFilePaths.terrainPath.string();
+            const std::string path = levelFilePaths.tileMapPath.string();
 
             if (path.empty())
             {
-                Logger::Err("Cannot save terrain: source path is empty");
+                Logger::Err("Cannot save terrain: tilemap source path is empty");
             }
             else
             {
-                bool success = TileMapSerializer::SaveTerrainMap(*tileMap, path);
+                bool success = TileMapSerializer::SaveTileMap(*tileMap, path);
 
                 if (success)
                 {
-                    Logger::Log("Saved terrain map to " + path);
+                    Logger::Log("Saved terrain into tilemap " + path);
                 }
                 else
                 {
-                    Logger::Err("Failed to save terrain map to " + path);
+                    Logger::Err("Failed to save terrain into tilemap " + path);
                 }
             }
         }
@@ -213,8 +220,8 @@ void EditorSaveSection::Draw(
     if (tileMap && ImGui::IsItemHovered())
     {
         ImGui::SetTooltip(
-            "Map: %s\nEntities: %s",
-            levelFilePaths.mapPath.string().c_str(),
+            "Tilemap: %s\nEntities: %s",
+            levelFilePaths.tileMapPath.string().c_str(),
             GetEntitiesSavePath(levelFilePaths).c_str()
         );
     }

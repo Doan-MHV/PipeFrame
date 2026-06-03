@@ -73,6 +73,7 @@ private:
         const SDL_FRect& camera,
         int selectedEntityId
     );
+    void DrawWorldBounds(const TileMap* tileMap, const SDL_FRect& camera);
     void DrawTerrainOverlay(
         const TileMap* tileMap,
         const SDL_FRect& camera,

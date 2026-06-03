@@ -2,10 +2,13 @@
 #define SPRITERENDERSYSTEM_H
 
 #include "Assets/AssetRegistry.h"
+#include "Components/LayerComponent.h"
 #include "Components/SpriteComponent.h"
 #include "Components/TransformComponent.h"
 #include "ECS/ECS.h"
+#include "Game/CameraHelpers.h"
 #include <SDL3/SDL.h>
+#include <cmath>
 
 class SpriteRenderSystem : public EntitySystem
 {
@@ -18,11 +21,18 @@ public:
 
     void Update(EntitySystemContext& context) override
     {
+        RenderLayerPass(context, false);
+    }
+
+    void RenderLayerPass(EntitySystemContext& context, bool drawBeforeTileMap)
+    {
         // Create a vector with both Sprite and Transform component of all entities
         struct RenderableEntity
         {
             TransformComponent transformComponent;
             SpriteComponent spriteComponent;
+            LayerComponent layerComponent;
+            bool hasLayerComponent = false;
         };
         std::vector<RenderableEntity> renderableEntities;
         for (auto entity : GetSystemEntities())
@@ -30,19 +40,14 @@ public:
             RenderableEntity renderableEntity;
             renderableEntity.spriteComponent = entity.GetComponent<SpriteComponent>();
             renderableEntity.transformComponent = entity.GetComponent<TransformComponent>();
+            renderableEntity.hasLayerComponent = entity.HasComponent<LayerComponent>();
 
-            // Check if the entity sprite is outside the camera view
-            bool isOutsideCameraView = (
-                renderableEntity.transformComponent.position.x + (renderableEntity.transformComponent.scale.x *
-                    renderableEntity.spriteComponent.width) < context.camera.x ||
-                renderableEntity.transformComponent.position.x > context.camera.x + context.camera.w ||
-                renderableEntity.transformComponent.position.y + (renderableEntity.transformComponent.scale.y *
-                    renderableEntity.spriteComponent.height) < context.camera.y ||
-                renderableEntity.transformComponent.position.y > context.camera.y + context.camera.h
-            );
+            if (renderableEntity.hasLayerComponent)
+            {
+                renderableEntity.layerComponent = entity.GetComponent<LayerComponent>();
+            }
 
-            // Cull sprites that are outside the camera view (and are not fixed)
-            if (isOutsideCameraView && !renderableEntity.spriteComponent.isFixed)
+            if (renderableEntity.layerComponent.drawBeforeTileMap != drawBeforeTileMap)
             {
                 continue;
             }
@@ -54,6 +59,11 @@ public:
         std::sort(renderableEntities.begin(), renderableEntities.end(),
                   [](const RenderableEntity& a, const RenderableEntity& b)
                   {
+                      if (a.layerComponent.order != b.layerComponent.order)
+                      {
+                          return a.layerComponent.order < b.layerComponent.order;
+                      }
+
                       return a.spriteComponent.zIndex < b.spriteComponent.zIndex;
                   });
 
@@ -93,12 +103,45 @@ public:
                 }
             }
 
+            DrawSprite(context, texture, srcRect, transform, sprite, entity.layerComponent);
+        }
+    }
+
+private:
+    void DrawSprite(
+        EntitySystemContext& context,
+        SDL_Texture* texture,
+        const SDL_FRect& srcRect,
+        const TransformComponent& transform,
+        const SpriteComponent& sprite,
+        const LayerComponent& layer
+    ) const
+    {
+        const float width = sprite.width * transform.scale.x;
+        const float height = sprite.height * transform.scale.y;
+
+        if (width <= 0.0f || height <= 0.0f)
+        {
+            return;
+        }
+
+        const float screenX = transform.position.x - (sprite.isFixed ? 0.0f : context.camera.x * layer.parallaxX);
+        const float screenY = transform.position.y - (sprite.isFixed ? 0.0f : context.camera.y * layer.parallaxY);
+
+        if (!layer.repeatX && !layer.repeatY)
+        {
             SDL_FRect dstRect = {
-                transform.position.x - (sprite.isFixed ? 0 : context.camera.x),
-                transform.position.y - (sprite.isFixed ? 0 : context.camera.y),
-                sprite.width * transform.scale.x,
-                sprite.height * transform.scale.y
+                screenX,
+                screenY,
+                width,
+                height
             };
+
+            const SDL_FRect screenBounds = {0.0f, 0.0f, context.camera.w, context.camera.h};
+            if (!sprite.isFixed && IsRectOutside(dstRect, screenBounds))
+            {
+                return;
+            }
 
             SDL_RenderTextureRotated(
                 context.renderer,
@@ -109,7 +152,56 @@ public:
                 nullptr,
                 sprite.flip
             );
+            return;
         }
+
+        const float startX = layer.repeatX ? GetRepeatStart(screenX, width) : screenX;
+        const float startY = layer.repeatY ? GetRepeatStart(screenY, height) : screenY;
+        const float endX = layer.repeatX ? context.camera.w : screenX + width;
+        const float endY = layer.repeatY ? context.camera.h : screenY + height;
+
+        for (float y = startY; y < endY; y += height)
+        {
+            for (float x = startX; x < endX; x += width)
+            {
+                SDL_FRect dstRect = {x, y, width, height};
+                SDL_RenderTextureRotated(
+                    context.renderer,
+                    texture,
+                    &srcRect,
+                    &dstRect,
+                    transform.rotation,
+                    nullptr,
+                    sprite.flip
+                );
+
+                if (!layer.repeatX)
+                {
+                    break;
+                }
+            }
+
+            if (!layer.repeatY)
+            {
+                break;
+            }
+        }
+    }
+
+    float GetRepeatStart(float screenPosition, float size) const
+    {
+        if (size <= 0.0f)
+        {
+            return screenPosition;
+        }
+
+        float start = std::fmod(screenPosition, size);
+        if (start > 0.0f)
+        {
+            start -= size;
+        }
+
+        return start;
     }
 };
 

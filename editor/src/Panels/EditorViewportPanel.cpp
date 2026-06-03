@@ -246,6 +246,34 @@ void EditorViewportPanel::DrawSelectedEntityOutline(
     drawList->AddRect(rectMin, rectMax, IM_COL32(255, 225, 80, 255), 0.0f, 0, 2.0f);
 }
 
+void EditorViewportPanel::DrawWorldBounds(const TileMap* tileMap, const SDL_FRect& camera)
+{
+    if (!tileMap)
+    {
+        return;
+    }
+
+    const float screenLeft = viewportPos.x - camera.x;
+    const float screenTop = viewportPos.y - camera.y;
+    const float screenRight = screenLeft + static_cast<float>(tileMap->GetWorldWidth());
+    const float screenBottom = screenTop + static_cast<float>(tileMap->GetWorldHeight());
+
+    const ImVec2 clipMin = viewportPos;
+    const ImVec2 clipMax(viewportPos.x + viewportSize.x, viewportPos.y + viewportSize.y);
+
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    drawList->PushClipRect(clipMin, clipMax, true);
+    drawList->AddRect(
+        ImVec2(screenLeft, screenTop),
+        ImVec2(screenRight, screenBottom),
+        IM_COL32(120, 190, 190, 190),
+        0.0f,
+        0,
+        2.0f
+    );
+    drawList->PopClipRect();
+}
+
 ImU32 EditorViewportPanel::GetTerrainOverlayColor(TerrainType terrain) const
 {
     switch (terrain)
@@ -876,6 +904,7 @@ void EditorViewportPanel::Draw(
         DrawTerrainOverlay(tileMap, camera, state.showTerrainOverlay);
         DrawFieldOverlay(fieldGrids, camera, state.showFieldOverlay);
         DrawColliderOverlay(registry, camera, state.showColliderOverlay);
+        DrawWorldBounds(tileMap, camera);
         DrawHoveredTileOutline(tileMap, camera);
         DrawSelectedEntityOutline(registry, camera, state.selectedEntityId);
         DrawSelectedTileOutline(tileMap, camera, state.hasSelectedTile, state.selectedTileRow, state.selectedTileCol);

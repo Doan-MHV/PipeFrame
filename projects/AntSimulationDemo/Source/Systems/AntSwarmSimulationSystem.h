@@ -173,7 +173,7 @@ private:
                 continue;
             }
 
-            const glm::vec2 position = colony.GetComponent<TransformComponent>().position;
+            const glm::vec2 position = GetEntityPosition(colony);
             FieldDepositCommand command;
             command.fieldName = "home";
             command.x = position.x;
@@ -214,7 +214,7 @@ private:
                 simulation.SpawnTimer() >= spawnInterval)
             {
                 simulation.SpawnTimer() -= spawnInterval;
-                const glm::vec2 colonyPosition = colony.GetComponent<TransformComponent>().position;
+                const glm::vec2 colonyPosition = GetEntityPosition(colony);
                 glm::vec2 spawnDirection = RandomOpenDirection(simulation, tileMap, colonyPosition);
 
                 AntAgent ant;
@@ -794,7 +794,17 @@ private:
 
     static glm::vec2 GetEntityPosition(Entity entity)
     {
-        return entity.GetComponent<TransformComponent>().position;
+        const auto& transform = entity.GetComponent<TransformComponent>();
+        glm::vec2 position = transform.position;
+
+        if (entity.HasComponent<SpriteComponent>())
+        {
+            const auto& sprite = entity.GetComponent<SpriteComponent>();
+            position.x += static_cast<float>(sprite.width) * transform.scale.x * 0.5f;
+            position.y += static_cast<float>(sprite.height) * transform.scale.y * 0.5f;
+        }
+
+        return position;
     }
 
     static int GetFoodAmount(Entity food)

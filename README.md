@@ -71,8 +71,7 @@ Today, the project is still in the foundation stage. The editor, ECS, serializat
   - `projects/JungleDemo/PipeFrameProject.json`
   - `projects/JungleDemo/assets/AssetManifest.json`
   - `projects/JungleDemo/assets/levels/Level1.json`
-  - `.map`
-  - `.terrain`
+  - `.tilemap.json`
   - `.entities.json`
 - Tilemap editing and terrain painting inside the editor.
 - Stable authored entity ids through `PersistentIdComponent`.
@@ -86,7 +85,7 @@ Implemented and working now:
 - SDL3 + ImGui editor shell
 - Play/Edit mode flow
 - JSON level loading
-- Separate tile visual map and terrain map
+- JSON tilemap files containing tile visuals and terrain data together
 - Entity save/load through `.entities.json`
 - In-memory authored world snapshot capture/restore work in progress
 - Native Play-mode simulation update phases

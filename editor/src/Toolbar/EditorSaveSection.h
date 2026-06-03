@@ -24,7 +24,7 @@ public:
 
 private:
     std::string BuildSaveAsPath(const std::string& originalPath) const;
-    std::string BuildEntitiesPath(const std::string& mapPath) const;
+    std::string BuildEntitiesPath(const std::string& tileMapPath) const;
     std::string GetEntitiesSavePath(const LevelFilePaths& levelFilePaths) const;
 };
 

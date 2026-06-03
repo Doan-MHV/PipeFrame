@@ -1,4 +1,6 @@
 #include "TileMap.h"
+
+#include <algorithm>
 #include <stdexcept>
 
 TileMap::TileMap(int rows, int cols, int tileSize, float scale)
@@ -14,6 +16,52 @@ const std::string& TileMap::GetTextureAssetId() const
 void TileMap::SetTextureAssetId(const std::string& textureAssetId)
 {
     this->textureAssetId = textureAssetId;
+}
+
+void TileMap::Resize(int newRows, int newCols)
+{
+    if (newRows <= 0 || newCols <= 0)
+    {
+        throw std::invalid_argument("TileMap::Resize requires positive rows and columns");
+    }
+
+    std::vector<TileCell> resizedTiles(static_cast<std::size_t>(newRows * newCols));
+
+    const int rowsToCopy = std::min(rows, newRows);
+    const int colsToCopy = std::min(cols, newCols);
+
+    for (int row = 0; row < rowsToCopy; row++)
+    {
+        for (int col = 0; col < colsToCopy; col++)
+        {
+            resizedTiles[static_cast<std::size_t>(row * newCols + col)] =
+                tiles[static_cast<std::size_t>(row * cols + col)];
+        }
+    }
+
+    rows = newRows;
+    cols = newCols;
+    tiles = std::move(resizedTiles);
+}
+
+void TileMap::SetTileSize(int newTileSize)
+{
+    if (newTileSize <= 0)
+    {
+        throw std::invalid_argument("TileMap::SetTileSize requires a positive tile size");
+    }
+
+    tileSize = newTileSize;
+}
+
+void TileMap::SetScale(float newScale)
+{
+    if (newScale <= 0.0f)
+    {
+        throw std::invalid_argument("TileMap::SetScale requires a positive scale");
+    }
+
+    scale = newScale;
 }
 
 int TileMap::GetRows() const
