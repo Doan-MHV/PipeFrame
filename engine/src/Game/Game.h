@@ -16,6 +16,7 @@
 #include "EventBus/EventBus.h"
 #include "Game/EngineMode.h"
 #include "Game/LevelFilePaths.h"
+#include "Game/LevelLoadRequests.h"
 #include "Map/TileMap.h"
 #include "Map/TileMapRenderer.h"
 #include "Prefabs/PrefabRegistry.h"
@@ -81,10 +82,12 @@ private:
     ComponentRegistry componentRegistry;
     ClassRegistry classRegistry;
     LevelFilePaths currentLevelFilePaths;
+    LevelLoadRequests levelLoadRequests;
 
 private:
     void EnsureViewportTexture(int width, int height);
     void RenderSceneToViewportTexture();
+    void RenderProjectHud(int width, int height);
 
     void ResetWorldRuntime(bool registerProjectSystems = true);
     void RebuildWorld();
@@ -94,6 +97,8 @@ private:
     void EnterPlayMode();
     void EnterEditMode();
     void UpdatePlaySimulation(double deltaTime);
+    bool ProcessPendingLevelLoad();
+    std::filesystem::path ResolveLevelLoadPath(const std::filesystem::path& levelPath) const;
     EntitySystemContext CreateEntitySystemContext(double deltaTime = 0.0);
     ProjectRuntimeContext CreateProjectRuntimeContext(double deltaTime = 0.0);
     void NotifyEngineSystemsLoaded();

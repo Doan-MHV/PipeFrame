@@ -1,6 +1,7 @@
 #ifndef PIPEFRAME_DESTROYWHENOFFSCREENSYSTEM_H
 #define PIPEFRAME_DESTROYWHENOFFSCREENSYSTEM_H
 
+#include "Collision/BoxColliderGeometry.h"
 #include "Components/BoxColliderComponent.h"
 #include "Components/DestroyWhenOffscreenComponent.h"
 #include "Components/SpriteComponent.h"
@@ -63,11 +64,7 @@ private:
 
         if (entity.HasComponent<BoxColliderComponent>())
         {
-            const auto& collider = entity.GetComponent<BoxColliderComponent>();
-            bounds.x += collider.offset.x;
-            bounds.y += collider.offset.y;
-            bounds.w = collider.width * transform.scale.x;
-            bounds.h = collider.height * transform.scale.y;
+            bounds = GetBoxColliderAABB(GetBoxColliderGeometry(entity));
         }
         else if (entity.HasComponent<SpriteComponent>())
         {

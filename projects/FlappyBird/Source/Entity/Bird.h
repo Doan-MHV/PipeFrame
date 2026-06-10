@@ -4,11 +4,13 @@
 #include <glm/glm.hpp>
 
 #include "Components/BirdComponent.h"
+#include "Components/BoxColliderComponent.h"
 #include "Components/TransformComponent.h"
 #include "Components/EditorEntityComponent.h"
 #include "Components/MovementComponent.h"
 #include "Components/PersistentIdComponent.h"
 #include "Components/RigidBodyComponent.h"
+#include "Components/ScoreComponent.h"
 #include "Components/SpriteComponent.h"
 #include "ECS/ECS.h"
 #include "Project/EntityIdGenerator.h"
@@ -24,6 +26,8 @@ struct Bird
         entity.AddComponent<RigidBodyComponent>();
         entity.AddComponent<MovementComponent>();
         entity.AddComponent<BirdComponent>();
+        entity.AddComponent<ScoreComponent>();
+        entity.AddComponent<BoxColliderComponent>(32, 32, glm::vec2(7.0f, 6.0f), false, true);
         entity.AddComponent<SpriteComponent>("flappy-bird-texture", 48, 48, 10, false, 0, 0, 32, 32);
 
         entity.Group("player");

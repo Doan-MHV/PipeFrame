@@ -1,5 +1,6 @@
 #include "Core/CppClassGenerator.h"
 
+#include <array>
 #include <cctype>
 #include <fstream>
 #include <sstream>
@@ -276,6 +277,91 @@ std::string BuildEntityClassTemplate(const std::string& className)
            "#endif // " + guard + "\n";
 }
 
+std::string BuildGameplayEntityComponentTemplate(const std::string& className)
+{
+    const std::string guard = ToIncludeGuard(className);
+    return "#ifndef " + guard + "\n"
+           "#define " + guard + "\n\n"
+           "#include \"Reflection/ComponentAnnotations.h\"\n\n"
+           "PF_COMPONENT()\n"
+           "struct " + className + "\n"
+           "{\n"
+           "    PF_PROPERTY(PF::Edit, PF::Save)\n"
+           "    bool enabled = true;\n"
+           "};\n\n"
+           "#endif // " + guard + "\n";
+}
+
+std::string BuildGameplayEntityClassTemplate(
+    const std::string& className,
+    const std::string& componentName
+)
+{
+    const std::string guard = ToIncludeGuard(className);
+    return "#ifndef " + guard + "\n"
+           "#define " + guard + "\n\n"
+           "#include <glm/glm.hpp>\n\n"
+           "#include \"Components/" + componentName + ".h\"\n"
+           "#include \"Components/EditorEntityComponent.h\"\n"
+           "#include \"Components/PersistentIdComponent.h\"\n"
+           "#include \"Components/TransformComponent.h\"\n"
+           "#include \"ECS/ECS.h\"\n"
+           "#include \"Project/EntityIdGenerator.h\"\n\n"
+           "struct " + className + "\n"
+           "{\n"
+           "    static Entity Create(Registry& registry, glm::vec2 position)\n"
+           "    {\n"
+           "        Entity entity = registry.CreateEntity();\n"
+           "        entity.AddComponent<EditorEntityComponent>();\n"
+           "        entity.AddComponent<PersistentIdComponent>(BuildUniqueEntityId(registry, \"" + className + "\"));\n"
+           "        entity.AddComponent<TransformComponent>(position);\n"
+           "        entity.AddComponent<" + componentName + ">();\n"
+           "        return entity;\n"
+           "    }\n"
+           "};\n\n"
+           "#endif // " + guard + "\n";
+}
+
+std::string BuildGameplayEntitySystemTemplate(
+    const std::string& className,
+    const std::string& componentName
+)
+{
+    const std::string guard = ToIncludeGuard(className);
+    return "#ifndef " + guard + "\n"
+           "#define " + guard + "\n\n"
+           "#include \"Components/" + componentName + ".h\"\n"
+           "#include \"Components/TransformComponent.h\"\n"
+           "#include \"ECS/ECS.h\"\n\n"
+           "class " + className + " : public EntitySystem\n"
+           "{\n"
+           "public:\n"
+           "    void Loaded() override\n"
+           "    {\n"
+           "        RequireComponent<TransformComponent>();\n"
+           "        RequireComponent<" + componentName + ">();\n"
+           "    }\n\n"
+           "    void Start(EntitySystemContext& context) override { (void)context; }\n"
+           "    void SubscribeToEvents(EntitySystemContext& context) override { (void)context; }\n\n"
+           "    void Update(EntitySystemContext& context) override\n"
+           "    {\n"
+           "        (void)context;\n"
+           "        for (Entity entity : GetSystemEntities())\n"
+           "        {\n"
+           "            auto& component = entity.GetComponent<" + componentName + ">();\n"
+           "            if (!component.enabled)\n"
+           "            {\n"
+           "                continue;\n"
+           "            }\n\n"
+           "            auto& transform = entity.GetComponent<TransformComponent>();\n"
+           "            (void)transform;\n"
+           "        }\n"
+           "    }\n\n"
+           "    void Stop(EntitySystemContext& context) override { (void)context; }\n"
+           "};\n\n"
+           "#endif // " + guard + "\n";
+}
+
 std::string BuildDenseSimulationTemplate(const std::string& className)
 {
     const std::string guard = ToIncludeGuard(className);
@@ -335,6 +421,7 @@ bool UpdateProjectModuleForGeneratedClass(
     {
     case CppClassKind::Component:
     case CppClassKind::Event:
+    case CppClassKind::GameplayEntity:
     case CppClassKind::PhysicsScenario:
         return true;
     case CppClassKind::ProjectSystem:
@@ -385,6 +472,48 @@ CppClassGenerationResult GenerateProjectCppClass(
     const std::filesystem::path sourceRoot = projectConfig.projectRoot / "Source";
     std::string content;
 
+    if (kind == CppClassKind::GameplayEntity)
+    {
+        const std::string componentName = className + "Component";
+        const std::string systemName = className + "System";
+        const std::filesystem::path componentPath = sourceRoot / "Components" / (componentName + ".h");
+        const std::filesystem::path entityPath = sourceRoot / "Entity" / (className + ".h");
+        const std::filesystem::path systemPath = sourceRoot / "Systems" / (systemName + ".h");
+        const std::array<std::filesystem::path, 3> paths = {
+            componentPath,
+            entityPath,
+            systemPath
+        };
+
+        for (const auto& path : paths)
+        {
+            if (std::filesystem::exists(path))
+            {
+                result.message = "File already exists: " + path.string();
+                return result;
+            }
+        }
+
+        if (!WriteNewFile(componentPath, BuildGameplayEntityComponentTemplate(componentName), result.message) ||
+            !WriteNewFile(entityPath, BuildGameplayEntityClassTemplate(className, componentName), result.message) ||
+            !WriteNewFile(systemPath, BuildGameplayEntitySystemTemplate(systemName, componentName), result.message))
+        {
+            return result;
+        }
+
+        if (!UpdateProjectModuleForGeneratedClass(projectConfig, CppClassKind::Component, componentName, result.message) ||
+            !UpdateProjectModuleForGeneratedClass(projectConfig, CppClassKind::EntityClass, className, result.message) ||
+            !UpdateProjectModuleForGeneratedClass(projectConfig, CppClassKind::EntitySystem, systemName, result.message))
+        {
+            return result;
+        }
+
+        result.success = true;
+        result.generatedFilePath = sourceRoot;
+        result.message = "Created gameplay entity bundle: " + className;
+        return result;
+    }
+
     switch (kind)
     {
     case CppClassKind::Component:
@@ -407,6 +536,9 @@ CppClassGenerationResult GenerateProjectCppClass(
         result.generatedFilePath = sourceRoot / "Entity" / (className + ".h");
         content = BuildEntityClassTemplate(className);
         break;
+    case CppClassKind::GameplayEntity:
+        result.message = "Gameplay entity bundles are handled before individual class generation.";
+        return result;
     case CppClassKind::DenseAgentSimulation:
         result.generatedFilePath = sourceRoot / "Simulations" / (className + ".h");
         content = BuildDenseSimulationTemplate(className);

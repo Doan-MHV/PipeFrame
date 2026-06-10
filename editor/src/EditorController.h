@@ -68,6 +68,7 @@ public:
             state,
             registry,
             componentRegistry,
+            projectConfig,
             levelFilePaths,
             tileMap
         );

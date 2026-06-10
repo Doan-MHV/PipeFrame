@@ -343,14 +343,17 @@ Entity LevelLoader::LoadEntityFromJson(
     if (components.contains("boxcollider") && components["boxcollider"].is_object())
     {
         const auto& collider = components["boxcollider"];
+        const auto offset = collider.value("offset", nlohmann::json::object());
 
         newEntity.AddComponent<BoxColliderComponent>(
             collider.value("width", 0),
             collider.value("height", 0),
             glm::vec2(
-                collider["offset"].value("x", 0.0f),
-                collider["offset"].value("y", 0.0f)
-            )
+                offset.value("x", 0.0f),
+                offset.value("y", 0.0f)
+            ),
+            collider.value("match_sprite_size", false),
+            collider.value("rotate_with_transform", false)
         );
     }
 

@@ -7,6 +7,7 @@
 #include <glm/geometric.hpp>
 #include <glm/glm.hpp>
 
+#include "Collision/BoxColliderGeometry.h"
 #include "Components/BoxColliderComponent.h"
 #include "Components/MovementTypeComponent.h"
 #include "Components/SoftCollisionComponent.h"
@@ -146,11 +147,15 @@ private:
 
         if (entity.HasComponent<BoxColliderComponent>())
         {
-            const auto& collider = entity.GetComponent<BoxColliderComponent>();
-            footprint.left = positionX + collider.offset.x;
-            footprint.top = positionY + collider.offset.y;
-            footprint.width = collider.width * transform.scale.x;
-            footprint.height = collider.height * transform.scale.y;
+            TransformComponent footprintTransform = transform;
+            footprintTransform.position = {positionX, positionY};
+
+            const SDL_FRect bounds = GetBoxColliderAABB(GetBoxColliderGeometry(entity, footprintTransform));
+
+            footprint.left = bounds.x;
+            footprint.top = bounds.y;
+            footprint.width = bounds.w;
+            footprint.height = bounds.h;
         }
         else if (entity.HasComponent<SpriteComponent>())
         {

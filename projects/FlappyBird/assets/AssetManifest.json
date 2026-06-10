@@ -101,6 +101,30 @@
         "mode": "image"
       },
       "type": "texture"
+    },
+    {
+      "file": "images/level_exit.png",
+      "id": "level-exit-texture",
+      "sprite": {
+        "default_display_size": {
+          "h": 96,
+          "w": 64
+        },
+        "mode": "image"
+      },
+      "type": "texture"
+    },
+    {
+      "file": "fonts/pico8.ttf",
+      "font_size": 10,
+      "id": "pico8-font-10",
+      "type": "font"
+    },
+    {
+      "file": "fonts/pico8.ttf",
+      "font_size": 24,
+      "id": "pico8-font-24",
+      "type": "font"
     }
   ]
 }

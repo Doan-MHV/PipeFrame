@@ -10,6 +10,7 @@ enum class CppClassKind
     EntitySystem,
     Event,
     EntityClass,
+    GameplayEntity,
     DenseAgentSimulation,
     PhysicsScenario
 };
@@ -26,6 +27,8 @@ struct EditorToolbarResult
     bool requestedProjectCreate = false;
     bool requestedProjectOpen = false;
     bool requestedLevelCreate = false;
+    bool requestedLevelOpen = false;
+    bool requestedStartupLevelSet = false;
     bool requestedCppCompile = false;
     bool requestedCppClassCreate = false;
     bool requestedPrefabSave = false;
@@ -38,6 +41,7 @@ struct EditorToolbarResult
     std::string projectName;
     std::string projectParentDirectory;
     std::string projectFilePath;
+    std::string levelFilePath;
 
     std::string prefabName;
 

@@ -4,10 +4,10 @@
 
 namespace
 {
-const char* GetKindHint(int selectedKind)
-{
-    switch (static_cast<CppClassKind>(selectedKind))
+    const char* GetKindHint(int selectedKind)
     {
+        switch (static_cast<CppClassKind>(selectedKind))
+        {
         case CppClassKind::Component:
             return "Editable ECS data attached to an entity.";
         case CppClassKind::ProjectSystem:
@@ -18,14 +18,16 @@ const char* GetKindHint(int selectedKind)
             return "Message sent between systems for something that happened this frame.";
         case CppClassKind::EntityClass:
             return "Spawnable entity recipe that adds default components.";
+        case CppClassKind::GameplayEntity:
+            return "Creates Component + Entity + System for one gameplay object.";
         case CppClassKind::DenseAgentSimulation:
             return "Dense array simulation for thousands of similar agents.";
         case CppClassKind::PhysicsScenario:
             return "Project-owned physics setup, reset, and debug scenario.";
-    }
+        }
 
-    return "";
-}
+        return "";
+    }
 }
 
 void CreateCppClassDialog::Open()
@@ -48,9 +50,10 @@ CreateCppClassResult CreateCppClassDialog::Draw()
     const char* classKinds[] = {
         "Component",
         "Project System",
-        "Entity System",
+        "System",
         "Event",
-        "Entity Class",
+        "Entity",
+        "Gameplay Entity",
         "Dense Agent Simulation",
         "Physics Scenario"
     };

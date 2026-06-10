@@ -1,14 +1,40 @@
 #include "EditorViewportPanel.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 
 #include "imgui.h"
+#include "Collision/BoxColliderGeometry.h"
 #include "Components/BoxColliderComponent.h"
 #include "Components/SpriteComponent.h"
 #include "Components/TransformComponent.h"
 #include "ECS/ECS.h"
 #include "Simulation/ProjectModule.h"
+
+namespace
+{
+void DrawWorldRectangle(
+    ImDrawList* drawList,
+    const std::array<glm::vec2, 4>& corners,
+    const ImVec2& viewportPos,
+    const SDL_FRect& camera,
+    ImU32 color,
+    float thickness
+)
+{
+    ImVec2 points[5];
+    for (std::size_t i = 0; i < corners.size(); i++)
+    {
+        points[i] = ImVec2(
+            viewportPos.x + corners[i].x - camera.x,
+            viewportPos.y + corners[i].y - camera.y
+        );
+    }
+    points[4] = points[0];
+    drawList->AddPolyline(points, 5, color, 0, thickness);
+}
+}
 
 void EditorViewportPanel::ClampCamera(SDL_FRect& camera, const TileMap* tileMap)
 {
@@ -206,44 +232,46 @@ void EditorViewportPanel::DrawSelectedEntityOutline(
     }
 
     const auto& transform = selectedEntity.GetComponent<TransformComponent>();
-
-    float left = 0.0f;
-    float top = 0.0f;
-    float width = 0.0f;
-    float height = 0.0f;
-    bool hasBounds = false;
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
 
     if (selectedEntity.HasComponent<SpriteComponent>())
     {
         const auto& sprite = selectedEntity.GetComponent<SpriteComponent>();
 
-        left = transform.position.x - (sprite.isFixed ? 0.0f : camera.x);
-        top = transform.position.y - (sprite.isFixed ? 0.0f : camera.y);
-        width = sprite.width * transform.scale.x;
-        height = sprite.height * transform.scale.y;
-        hasBounds = true;
-    }
-    else if (selectedEntity.HasComponent<BoxColliderComponent>())
-    {
-        const auto& collider = selectedEntity.GetComponent<BoxColliderComponent>();
+        const SDL_FRect spriteCamera = sprite.isFixed
+            ? SDL_FRect{0.0f, 0.0f, camera.w, camera.h}
+            : camera;
 
-        left = transform.position.x + collider.offset.x - camera.x;
-        top = transform.position.y + collider.offset.y - camera.y;
-        width = collider.width * transform.scale.x;
-        height = collider.height * transform.scale.y;
-        hasBounds = true;
-    }
+        BoxColliderGeometry spriteGeometry;
+        spriteGeometry.x = transform.position.x;
+        spriteGeometry.y = transform.position.y;
+        spriteGeometry.width = std::max(1.0f, static_cast<float>(sprite.width) * transform.scale.x);
+        spriteGeometry.height = std::max(1.0f, static_cast<float>(sprite.height) * transform.scale.y);
+        spriteGeometry.rotationDegrees = static_cast<float>(transform.rotation);
+        spriteGeometry.rotated = std::abs(spriteGeometry.rotationDegrees) > 0.001f;
 
-    if (!hasBounds)
-    {
+        DrawWorldRectangle(
+            drawList,
+            GetBoxColliderCorners(spriteGeometry),
+            viewportPos,
+            spriteCamera,
+            IM_COL32(255, 225, 80, 255),
+            2.0f
+        );
         return;
     }
 
-    ImVec2 rectMin(viewportPos.x + left, viewportPos.y + top);
-    ImVec2 rectMax(viewportPos.x + left + width, viewportPos.y + top + height);
-
-    ImDrawList* drawList = ImGui::GetWindowDrawList();
-    drawList->AddRect(rectMin, rectMax, IM_COL32(255, 225, 80, 255), 0.0f, 0, 2.0f);
+    if (selectedEntity.HasComponent<BoxColliderComponent>())
+    {
+        DrawWorldRectangle(
+            drawList,
+            GetBoxColliderCorners(GetBoxColliderGeometry(selectedEntity)),
+            viewportPos,
+            camera,
+            IM_COL32(255, 225, 80, 255),
+            2.0f
+        );
+    }
 }
 
 void EditorViewportPanel::DrawWorldBounds(const TileMap* tileMap, const SDL_FRect& camera)
@@ -485,20 +513,12 @@ void EditorViewportPanel::DrawColliderOverlay(
             continue;
         }
 
-        const auto& transform = entity.GetComponent<TransformComponent>();
-        const auto& collider = entity.GetComponent<BoxColliderComponent>();
-
-        const float left = viewportPos.x + (transform.position.x + collider.offset.x - camera.x);
-        const float top = viewportPos.y + (transform.position.y + collider.offset.y - camera.y);
-        const float width = collider.width * transform.scale.x;
-        const float height = collider.height * transform.scale.y;
-
-        drawList->AddRect(
-            ImVec2(left, top),
-            ImVec2(left + width, top + height),
+        DrawWorldRectangle(
+            drawList,
+            GetBoxColliderCorners(GetBoxColliderGeometry(entity)),
+            viewportPos,
+            camera,
             IM_COL32(255, 95, 95, 190),
-            0.0f,
-            0,
             1.5f
         );
     }

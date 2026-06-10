@@ -13,14 +13,14 @@
 
 class IEventCallback
 {
-    virtual void Call(Event& e) = 0;
+    virtual void Call(Event& e, void* context) = 0;
 
 public:
     virtual ~IEventCallback() = default;
 
-    void Execute(Event& e)
+    void Execute(Event& e, void* context = nullptr)
     {
-        Call(e);
+        Call(e, context);
     }
 };
 
@@ -31,8 +31,9 @@ class EventCallback : public IEventCallback
     TOwner* ownerInstance;
     CallbackFunction callbackFunction;
 
-    virtual void Call(Event& e) override
+    virtual void Call(Event& e, void* context) override
     {
+        (void)context;
         std::invoke(callbackFunction, ownerInstance, static_cast<TEvent&>(e));
     }
 
@@ -44,6 +45,38 @@ public:
     }
 
     virtual ~EventCallback() override = default;
+};
+
+template <typename TOwner, typename TContext, typename TEvent>
+class ContextEventCallback : public IEventCallback
+{
+    typedef void (TOwner::*CallbackFunction)(TContext&, TEvent&);
+    TOwner* ownerInstance;
+    CallbackFunction callbackFunction;
+
+    virtual void Call(Event& e, void* context) override
+    {
+        if (!context)
+        {
+            return;
+        }
+
+        std::invoke(
+            callbackFunction,
+            ownerInstance,
+            *static_cast<TContext*>(context),
+            static_cast<TEvent&>(e)
+        );
+    }
+
+public:
+    ContextEventCallback(TOwner* ownerInstance, CallbackFunction callbackFunction)
+    {
+        this->ownerInstance = ownerInstance;
+        this->callbackFunction = callbackFunction;
+    }
+
+    virtual ~ContextEventCallback() override = default;
 };
 
 typedef std::list<std::unique_ptr<IEventCallback>> HandlerList;
@@ -79,6 +112,20 @@ public:
         subscribers[typeid(TEvent)]->push_back(std::move(subscriber));
     }
 
+    template <typename TEvent, typename TOwner, typename TContext>
+    void SubscribeToEvent(TOwner* ownerInstance, void (TOwner::*callbackFunction)(TContext&, TEvent&))
+    {
+        if (!subscribers[typeid(TEvent)].get())
+        {
+            subscribers[typeid(TEvent)] = std::make_unique<HandlerList>();
+        }
+        auto subscriber = std::make_unique<ContextEventCallback<TOwner, TContext, TEvent>>(
+            ownerInstance,
+            callbackFunction
+        );
+        subscribers[typeid(TEvent)]->push_back(std::move(subscriber));
+    }
+
     template <typename TEvent, typename... TArgs>
     void EmitEvent(TArgs&&... args)
     {
@@ -90,6 +137,21 @@ public:
                 auto handler = it->get();
                 TEvent event(std::forward<TArgs>(args)...);
                 handler->Execute(event);
+            }
+        }
+    }
+
+    template <typename TEvent, typename TContext, typename... TArgs>
+    void EmitEventWithContext(TContext& context, TArgs&&... args)
+    {
+        auto handlers = subscribers[typeid(TEvent)].get();
+        if (handlers)
+        {
+            for (auto it = handlers->begin(); it != handlers->end(); ++it)
+            {
+                auto handler = it->get();
+                TEvent event(std::forward<TArgs>(args)...);
+                handler->Execute(event, &context);
             }
         }
     }

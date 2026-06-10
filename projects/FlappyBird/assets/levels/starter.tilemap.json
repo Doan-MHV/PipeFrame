@@ -1,5 +1,5 @@
 {
-  "cols": 24,
+  "cols": 40,
   "rows": 8,
   "scale": 2.0,
   "texture_asset_id": "starter-tilemap-texture",
@@ -173,234 +173,6 @@
           "col": 0,
           "row": 0
         }
-      }
-    ],
-    [
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      }
-    ],
-    [
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
       },
       {
         "terrain": "Land",
@@ -628,64 +400,6 @@
           "row": 0
         }
       },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      },
-      {
-        "terrain": "Land",
-        "tile": {
-          "col": 0,
-          "row": 0
-        }
-      }
-    ],
-    [
       {
         "terrain": "Land",
         "tile": {
@@ -1023,6 +737,118 @@
           "col": 0,
           "row": 0
         }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
       }
     ],
     [
@@ -1193,9 +1019,1079 @@
           "col": 0,
           "row": 0
         }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
       }
     ],
     [
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      }
+    ],
+    [
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      }
+    ],
+    [
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      }
+    ],
+    [
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
+      {
+        "terrain": "Land",
+        "tile": {
+          "col": 0,
+          "row": 0
+        }
+      },
       {
         "terrain": "Land",
         "tile": {

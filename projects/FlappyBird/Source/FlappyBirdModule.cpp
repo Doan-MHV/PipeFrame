@@ -1,12 +1,22 @@
 #include "FlappyBirdModule.h"
 #include "Entity/Bird.h"
 #include "Systems/BirdSystem.h"
+#include "Systems/FlappyBoundsSystem.h"
+#include "Systems/FlappyDeathSystem.h"
+#include "Entity/Pipe.h"
+#include "Entity/PipeSpawner.h"
+#include "Systems/PipeSpawnerSystem.h"
+#include "Systems/LevelExitSystem.h"
+#include "Entity/LevelExit.h"
+#include "Entity/ScoreZone.h"
 
-#include "Entity/ExampleEntity.h"
+#include "Components/BirdComponent.h"
+#include "Components/ScoreComponent.h"
 #include "Generated/ProjectComponents.generated.h"
-#include "Systems/ExampleEntitySystem.h"
 #include "Reflection/EditorMetadata.h"
 #include "ECS/Registry.h"
+#include "Systems/ScoreSystem.h"
+#include "UI/HudContext.h"
 
 std::string FlappyBirdModule::GetName() const
 {
@@ -21,23 +31,45 @@ void FlappyBirdModule::RegisterComponents(ComponentRegistry& registry)
 void FlappyBirdModule::RegisterEntityClasses(ClassRegistry& registry)
 {
     registry.RegisterEntityClass({
-        .typeName = "ExampleEntity",
-        .displayName = "Example Entity",
-        .category = "Entities",
-        .create = ExampleEntity::Create
-    });
-    registry.RegisterEntityClass({
         .typeName = "Bird",
         .displayName = "Bird",
         .category = "Project",
         .create = Bird::Create
     });
+    registry.RegisterEntityClass({
+        .typeName = "Pipe",
+        .displayName = "Pipe",
+        .category = "Project",
+        .create = Pipe::Create
+    });
+    registry.RegisterEntityClass({
+        .typeName = "PipeSpawner",
+        .displayName = "PipeSpawner",
+        .category = "Project",
+        .create = PipeSpawner::Create
+    });
+    registry.RegisterEntityClass({
+        .typeName = "LevelExit",
+        .displayName = "LevelExit",
+        .category = "Project",
+        .create = LevelExit::Create
+    });
+    registry.RegisterEntityClass({
+        .typeName = "ScoreZone",
+        .displayName = "Score Zone",
+        .category = "Project",
+        .create = ScoreZone::Create
+    });
 }
 
 void FlappyBirdModule::RegisterEntitySystems(Registry& registry)
 {
-    registry.AddSystem<ExampleEntitySystem>();
     registry.AddSystem<BirdSystem>();
+    registry.AddSystem<FlappyBoundsSystem>();
+    registry.AddSystem<FlappyDeathSystem>();
+    registry.AddSystem<PipeSpawnerSystem>();
+    registry.AddSystem<ScoreSystem>();
+    registry.AddSystem<LevelExitSystem>();
 }
 
 void FlappyBirdModule::Loaded(ProjectRuntimeContext& context)
@@ -52,7 +84,24 @@ void FlappyBirdModule::Start(ProjectRuntimeContext& context)
 
 void FlappyBirdModule::Update(ProjectRuntimeContext& context)
 {
-    (void)context;
+    gameState.score = 0;
+    gameState.gameOver = false;
+
+    for (const auto entity : context.registry.GetAllEntities())
+    {
+        if (!entity.HasComponent<BirdComponent>() || !entity.HasComponent<ScoreComponent>())
+        {
+            continue;
+        }
+
+        const auto& bird = entity.GetComponent<BirdComponent>();
+        const auto& score = entity.GetComponent<ScoreComponent>();
+
+        gameState.score = score.score;
+        gameState.bestScore = score.bestScore;
+        gameState.gameOver = !bird.isAlive;
+        return;
+    }
 }
 
 void FlappyBirdModule::Stop(ProjectRuntimeContext& context)
@@ -74,6 +123,11 @@ void FlappyBirdModule::RenderProjectSimulation(
     (void)renderer;
     (void)assetRegistry;
     (void)camera;
+}
+
+void FlappyBirdModule::RenderHud(HudContext& context)
+{
+    hud.Render(context, gameState);
 }
 
 extern "C" ProjectModule* CreateProjectModule()

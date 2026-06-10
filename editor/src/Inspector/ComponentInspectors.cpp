@@ -577,14 +577,46 @@ void EditorInspector::DrawBoxCollider(Entity selectedEntity)
 
     int size[2] = {boxCollider.width, boxCollider.height};
     glm::vec2 offset = boxCollider.offset;
+    bool matchSpriteSize = boxCollider.matchSpriteSize;
+    bool rotateWithTransform = boxCollider.rotateWithTransform;
 
     ImGui::SeparatorText("BoxCollider");
-    if (ImGui::DragInt2("Size", size, 1.0f, 10, 0))
+
+    if (ImGui::Checkbox("Match Sprite Size", &matchSpriteSize))
     {
-        size[0] = std::max(10, size[0]);
-        size[1] = std::max(10, size[1]);
+        boxCollider.matchSpriteSize = matchSpriteSize;
+    }
+
+    if (boxCollider.matchSpriteSize && selectedEntity.HasComponent<SpriteComponent>())
+    {
+        const auto& sprite = selectedEntity.GetComponent<SpriteComponent>();
+        boxCollider.width = std::max(1, sprite.width);
+        boxCollider.height = std::max(1, sprite.height);
+        size[0] = boxCollider.width;
+        size[1] = boxCollider.height;
+    }
+
+    if (boxCollider.matchSpriteSize)
+    {
+        ImGui::BeginDisabled();
+    }
+
+    if (ImGui::DragInt2("Size", size, 1.0f, 1, 4096))
+    {
+        size[0] = std::max(1, size[0]);
+        size[1] = std::max(1, size[1]);
         boxCollider.width = size[0];
         boxCollider.height = size[1];
+    }
+
+    if (boxCollider.matchSpriteSize)
+    {
+        ImGui::EndDisabled();
+    }
+
+    if (ImGui::Checkbox("Rotate With Transform", &rotateWithTransform))
+    {
+        boxCollider.rotateWithTransform = rotateWithTransform;
     }
 
     if (ImGui::DragFloat2("Offset", &offset.x, 1.0f, 0.0f, 0.0f, "%.3f"))

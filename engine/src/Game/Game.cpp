@@ -35,6 +35,7 @@
 #include "Systems/RenderTextSystem.h"
 #include "Systems/SoftCollisionSystem.h"
 #include "Systems/TerrainConstraintSystem.h"
+#include "UI/HudContext.h"
 
 namespace
 {
@@ -213,6 +214,7 @@ EntitySystemContext Game::CreateEntitySystemContext(double deltaTime)
         *assetRegistry,
         renderer,
         camera,
+        levelLoadRequests,
         deltaTime,
         elapsedTime
     };
@@ -226,6 +228,7 @@ ProjectRuntimeContext Game::CreateProjectRuntimeContext(double deltaTime)
         *tileMap,
         prefabRegistry,
         projectConfig,
+        levelLoadRequests,
         deltaTime,
         elapsedTime
     };
@@ -439,7 +442,8 @@ void Game::HandleEvent(const SDL_Event& event, bool& shouldQuit)
         }
         if (mode == EngineMode::Play)
         {
-            eventBus->EmitEvent<KeyPressedEvent>(event.key.key);
+            EntitySystemContext context = CreateEntitySystemContext();
+            eventBus->EmitEventWithContext<KeyPressedEvent>(context, event.key.key);
         }
         break;
     default:
@@ -484,6 +488,8 @@ void Game::RenderSceneToViewportTexture()
     {
         projectModule->RenderProjectSimulation(renderer, *assetRegistry, camera);
     }
+
+    RenderProjectHud(viewportTextureWidth, viewportTextureHeight);
 
     SDL_SetRenderTarget(renderer, nullptr);
 }
@@ -858,6 +864,7 @@ void Game::Update()
     if (mode == EngineMode::Play)
     {
         UpdatePlaySimulation(simulationDeltaTime);
+        ProcessPendingLevelLoad();
     }
     else
     {
@@ -886,6 +893,63 @@ void Game::Update()
 
         ClampCameraToTileMap(camera, tileMap.get());
     }
+}
+
+std::filesystem::path Game::ResolveLevelLoadPath(const std::filesystem::path& levelPath) const
+{
+    if (levelPath.is_absolute())
+    {
+        return levelPath;
+    }
+
+    if (levelPath.has_parent_path())
+    {
+        return projectConfig.projectRoot / levelPath;
+    }
+
+    return projectConfig.assetsRoot / "levels" / levelPath;
+}
+
+bool Game::ProcessPendingLevelLoad()
+{
+    std::optional<std::filesystem::path> requestedLevel = levelLoadRequests.ConsumePendingLoad();
+    if (!requestedLevel.has_value())
+    {
+        return false;
+    }
+
+    const std::filesystem::path resolvedLevelPath = ResolveLevelLoadPath(*requestedLevel);
+    if (!std::filesystem::exists(resolvedLevelPath))
+    {
+        Logger::Err("Cannot load requested level: file does not exist: " + resolvedLevelPath.string());
+        return false;
+    }
+
+    if (mode != EngineMode::Play)
+    {
+        return LoadLevel(resolvedLevelPath);
+    }
+
+    Logger::Log("Loading gameplay level: " + resolvedLevelPath.string());
+
+    NotifyProjectStop();
+    NotifyEngineSystemsStop();
+
+    const std::filesystem::path previousStartupLevelPath = projectConfig.startupLevelPath;
+    projectConfig.startupLevelPath = resolvedLevelPath;
+
+    camera.x = 0.0f;
+    camera.y = 0.0f;
+    elapsedTime = 0;
+
+    RebuildWorld();
+
+    projectConfig.startupLevelPath = previousStartupLevelPath;
+
+    NotifyEngineSystemsStart();
+    NotifyProjectStart();
+
+    return tileMap != nullptr;
 }
 
 void Game::UpdatePlaySimulation(double deltaTime)
@@ -1026,6 +1090,19 @@ void Game::RenderSceneToWindow(int width, int height)
     {
         projectModule->RenderProjectSimulation(renderer, *assetRegistry, camera);
     }
+
+    RenderProjectHud(width, height);
+}
+
+void Game::RenderProjectHud(int width, int height)
+{
+    if (!projectModule || !renderer || !assetRegistry || width <= 0 || height <= 0)
+    {
+        return;
+    }
+
+    HudContext context(renderer, *assetRegistry, width, height);
+    projectModule->RenderHud(context);
 }
 
 bool Game::RenderSceneToPixels(int width, int height, std::vector<std::uint32_t>& pixels)

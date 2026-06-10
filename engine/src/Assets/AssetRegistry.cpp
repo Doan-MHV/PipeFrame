@@ -21,7 +21,13 @@ void AssetRegistry::ClearAssets()
     }
     textures.clear();
     textureInfos.clear();
+    for (auto font : fonts)
+    {
+        TTF_CloseFont(font.second);
+    }
+    fonts.clear();
     missingTextureWarnings.clear();
+    missingFontWarnings.clear();
 }
 
 void AssetRegistry::AddTexture(
@@ -147,11 +153,46 @@ std::vector<std::string> AssetRegistry::GetTextureIds() const
 
 void AssetRegistry::AddFont(const std::string& assetId, const std::string& filePath, int fontSize)
 {
-    fonts.emplace(assetId, TTF_OpenFont(filePath.c_str(), fontSize));
-    Logger::Log("AssetRegistry added to the AssetRegistry with id " + assetId);
+    TTF_Font* font = TTF_OpenFont(filePath.c_str(), fontSize);
+    if (!font)
+    {
+        Logger::Err("Failed to load font " + assetId + " from " + filePath + ": " + SDL_GetError());
+        return;
+    }
+
+    const auto existingFont = fonts.find(assetId);
+    if (existingFont != fonts.end())
+    {
+        TTF_CloseFont(existingFont->second);
+        existingFont->second = font;
+    }
+    else
+    {
+        fonts.emplace(assetId, font);
+    }
+
+    missingFontWarnings.erase(assetId);
+    Logger::Log("Font added to the AssetRegistry with id " + assetId);
 }
 
 TTF_Font* AssetRegistry::GetFont(const std::string& assetId)
 {
-    return fonts[assetId];
+    if (assetId.empty())
+    {
+        return nullptr;
+    }
+
+    const auto font = fonts.find(assetId);
+    if (font == fonts.end() || !font->second)
+    {
+        if (!missingFontWarnings.contains(assetId))
+        {
+            Logger::Err("Font not found in AssetRegistry: " + assetId);
+            missingFontWarnings.insert(assetId);
+        }
+
+        return nullptr;
+    }
+
+    return font->second;
 }

@@ -54,6 +54,8 @@ private:
         int tileSize,
         float scale
     );
+    void OpenLevel(const std::filesystem::path& levelFilePath);
+    void SetStartupLevel(const std::filesystem::path& levelFilePath);
     void SaveEntityAsPrefab(int entityId, const std::string& prefabName);
     void ImportTextureAsset(const EditorToolbarResult& editorResult);
     void InstallProjectModule(const ProjectConfig& projectConfig, bool restoreCurrentWorld = false);

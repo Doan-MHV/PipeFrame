@@ -1,7 +1,9 @@
 #ifndef FlappyBird_MODULE_H
 #define FlappyBird_MODULE_H
 
+#include "HUD/FlappyHud.h"
 #include "Simulation/ProjectModule.h"
+#include "State/FlappyGameState.h"
 
 class FlappyBirdModule : public ProjectModule
 {
@@ -20,6 +22,12 @@ public:
         AssetRegistry& assetRegistry,
         const SDL_FRect& camera
     ) override;
+
+    void RenderHud(HudContext& context) override;
+
+private:
+    FlappyGameState gameState;
+    FlappyHud hud;
 };
 
 #endif // FlappyBird_MODULE_H

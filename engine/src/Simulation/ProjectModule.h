@@ -13,6 +13,7 @@ struct SDL_Renderer;
 class AssetRegistry;
 class ClassRegistry;
 class ComponentRegistry;
+class HudContext;
 class ProjectConfig;
 class Registry;
 
@@ -39,6 +40,10 @@ public:
         (void)renderer;
         (void)assetRegistry;
         (void)camera;
+    }
+    virtual void RenderHud(HudContext& context)
+    {
+        (void)context;
     }
     virtual const std::unordered_map<std::string, FieldGrid>& GetFieldGrids() const
     {

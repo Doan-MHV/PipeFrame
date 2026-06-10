@@ -3,102 +3,69 @@
 #include <cmath>
 #include <cstdio>
 
+#include "ECS/Registry.h"
 #include "Entity/AntSwarm.h"
 #include "Entity/Colony.h"
 #include "Entity/FoodSource.h"
 #include "Generated/ProjectComponents.generated.h"
 #include "Reflection/EditorMetadata.h"
-#include "ECS/Registry.h"
 
-std::string AntSimulationModule::GetName() const
-{
-    return "AntSimulationDemo";
-}
+std::string AntSimulationModule::GetName() const { return "AntSimulationDemo"; }
 
-void AntSimulationModule::RegisterEntitySystems(Registry& registry)
-{
-    (void)registry;
-}
+void AntSimulationModule::RegisterEntitySystems(Registry &registry) {}
 
-void AntSimulationModule::Loaded(ProjectRuntimeContext& context)
-{
-    antSwarmSystem.Loaded(antSwarmSimulation, context);
-}
+void AntSimulationModule::Loaded(ProjectRuntimeContext &context) { antSwarmSystem.Loaded(antSwarmSimulation, context); }
 
-void AntSimulationModule::RegisterComponents(ComponentRegistry& registry)
-{
+void AntSimulationModule::RegisterComponents(ComponentRegistry &registry) {
     RegisterGeneratedProjectComponents(registry);
 }
 
-void AntSimulationModule::RegisterEntityClasses(ClassRegistry& registry)
-{
-    registry.RegisterEntityClass({
-        .typeName = "Colony",
-        .displayName = "Colony",
-        .category = "Ant Simulation",
-        .create = CreateColonyEntity
-    });
-    registry.RegisterEntityClass({
-        .typeName = "FoodSource",
-        .displayName = "Food Source",
-        .category = "Ant Simulation",
-        .create = CreateFoodSourceEntity
-    });
-    registry.RegisterEntityClass({
-        .typeName = "AntSwarm",
-        .displayName = "Ant Swarm",
-        .category = "Ant Simulation",
-        .create = CreateAntSwarmEntity
-    });
+void AntSimulationModule::RegisterEntityClasses(ClassRegistry &registry) {
+    registry.RegisterEntityClass(
+        {.typeName = "Colony", .displayName = "Colony", .category = "Ant Simulation", .create = CreateColonyEntity});
+    registry.RegisterEntityClass({.typeName = "FoodSource",
+                                  .displayName = "Food Source",
+                                  .category = "Ant Simulation",
+                                  .create = CreateFoodSourceEntity});
+    registry.RegisterEntityClass({.typeName = "AntSwarm",
+                                  .displayName = "Ant Swarm",
+                                  .category = "Ant Simulation",
+                                  .create = CreateAntSwarmEntity});
 }
 
-void AntSimulationModule::Start(ProjectRuntimeContext& context)
-{
+void AntSimulationModule::Start(ProjectRuntimeContext &context) {
     antSwarmSimulation.Reset();
     antSwarmSystem.Start(antSwarmSimulation, context);
 }
 
-void AntSimulationModule::Update(ProjectRuntimeContext& context)
-{
-    antSwarmSystem.Update(antSwarmSimulation, context);
-}
+void AntSimulationModule::Update(ProjectRuntimeContext &context) { antSwarmSystem.Update(antSwarmSimulation, context); }
 
-void AntSimulationModule::Stop(ProjectRuntimeContext& context)
-{
+void AntSimulationModule::Stop(ProjectRuntimeContext &context) {
     antSwarmSystem.Stop(antSwarmSimulation, context);
     antSwarmSimulation.Reset();
 }
 
-void AntSimulationModule::Unloaded(ProjectRuntimeContext& context)
-{
+void AntSimulationModule::Unloaded(ProjectRuntimeContext &context) {
     antSwarmSystem.Unloaded(antSwarmSimulation, context);
     antSwarmSimulation.Reset();
 }
 
-void AntSimulationModule::RenderProjectSimulation(
-    SDL_Renderer* renderer,
-    AssetRegistry& assetRegistry,
-    const SDL_FRect& camera
-)
-{
+void AntSimulationModule::RenderProjectSimulation(SDL_Renderer *renderer, AssetRegistry &assetRegistry,
+                                                  const SDL_FRect &camera) {
     antSwarmRenderPass.Render(antSwarmSimulation, renderer, assetRegistry, camera);
 }
 
-const std::unordered_map<std::string, FieldGrid>& AntSimulationModule::GetFieldGrids() const
-{
+const std::unordered_map<std::string, FieldGrid> &AntSimulationModule::GetFieldGrids() const {
     return antSwarmSimulation.GetFields();
 }
 
-int AntSimulationModule::PickProjectObject(glm::vec2 worldPosition, float radius)
-{
+int AntSimulationModule::PickProjectObject(glm::vec2 worldPosition, float radius) {
     int selectedId = -1;
     float bestDistance = radius;
 
-    for (const AntAgent& ant : antSwarmSimulation.Agents())
-    {
+    for (const AntAgent &ant : antSwarmSimulation.Agents()) {
         const float distance = glm::length(ant.position - worldPosition);
-        if (distance <= bestDistance)
-        {
+        if (distance <= bestDistance) {
             bestDistance = distance;
             selectedId = ant.id;
         }
@@ -107,32 +74,23 @@ int AntSimulationModule::PickProjectObject(glm::vec2 worldPosition, float radius
     return selectedId;
 }
 
-void AntSimulationModule::SetSelectedProjectObject(int id)
-{
-    antSwarmSimulation.SetSelectedAgentId(id);
-}
+void AntSimulationModule::SetSelectedProjectObject(int id) { antSwarmSimulation.SetSelectedAgentId(id); }
 
-ProjectObjectInspector AntSimulationModule::GetSelectedProjectObjectInspector() const
-{
+ProjectObjectInspector AntSimulationModule::GetSelectedProjectObjectInspector() const {
     const int selectedId = antSwarmSimulation.GetSelectedAgentId();
-    for (const AntAgent& ant : antSwarmSimulation.Agents())
-    {
-        if (ant.id != selectedId)
-        {
+    for (const AntAgent &ant : antSwarmSimulation.Agents()) {
+        if (ant.id != selectedId) {
             continue;
         }
 
-        auto formatFloat = [](float value)
-        {
+        auto formatFloat = [](float value) {
             char buffer[64] = {};
             std::snprintf(buffer, sizeof(buffer), "%.2f", value);
             return std::string(buffer);
         };
 
-        auto stateName = [](AntState state)
-        {
-            switch (state)
-            {
+        auto stateName = [](AntState state) {
+            switch (state) {
             case AntState::ToFood:
                 return "To Food";
             case AntState::ToHomeWithFood:
@@ -147,27 +105,19 @@ ProjectObjectInspector AntSimulationModule::GetSelectedProjectObjectInspector() 
         inspector.id = ant.id;
         inspector.typeName = "AntAgent";
         inspector.displayName = "Ant Agent";
-        inspector.properties = {
-            {"State", stateName(ant.state)},
-            {"Role", ant.role == AntRole::Explorer ? "Explorer" : "Follower"},
-            {"Speed", formatFloat(ant.currentSpeed)},
-            {"Energy", formatFloat(ant.energy)},
-            {"Blocked", ant.blocked ? "true" : "false"},
-            {"Collected Food", std::to_string(ant.collectedFood)},
-            {"Total Distance", formatFloat(ant.totalTravelDistance)}
-        };
+        inspector.properties = {{"State", stateName(ant.state)},
+                                {"Role", ant.role == AntRole::Explorer ? "Explorer" : "Follower"},
+                                {"Speed", formatFloat(ant.currentSpeed)},
+                                {"Energy", formatFloat(ant.energy)},
+                                {"Blocked", ant.blocked ? "true" : "false"},
+                                {"Collected Food", std::to_string(ant.collectedFood)},
+                                {"Total Distance", formatFloat(ant.totalTravelDistance)}};
         return inspector;
     }
 
     return {};
 }
 
-extern "C" ProjectModule* CreateProjectModule()
-{
-    return new AntSimulationModule();
-}
+extern "C" ProjectModule *CreateProjectModule() { return new AntSimulationModule(); }
 
-extern "C" void DestroyProjectModule(ProjectModule* module)
-{
-    delete module;
-}
+extern "C" void DestroyProjectModule(ProjectModule *module) { delete module; }

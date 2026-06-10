@@ -6,71 +6,65 @@
 #include "Components/RigidBodyComponent.h"
 #include "Components/TransformComponent.h"
 #include "ECS/EntitySystem.h"
+#include "Events/GameOverEvent.h"
 #include "Events/KeyPressedEvent.h"
 
-class BirdSystem : public EntitySystem
-{
-public:
-    void Loaded() override
-    {
-        RequireComponent<BirdComponent>();
-        RequireComponent<TransformComponent>();
-        RequireComponent<RigidBodyComponent>();
-        RequireComponent<MovementComponent>();
-    }
+class BirdSystem : public EntitySystem {
+    PF_SYSTEM_QUERY(PF_QUERY_FIELD(BirdComponent, bird), PF_QUERY_FIELD(TransformComponent, transform),
+                    PF_QUERY_FIELD(RigidBodyComponent, rigidBody), PF_QUERY_FIELD(MovementComponent, movement))
 
-    void SubscribeToEvents(EntitySystemContext& context) override
-    {
+  public:
+    void Loaded() override { RequireSystemQuery(); }
+
+    void SubscribeToEvents(EntitySystemContext &context) override {
         Listen<KeyPressedEvent>(context, &BirdSystem::OnKeyPressed);
+        Listen<GameOverEvent>(context, &BirdSystem::OnGameOver);
     }
 
-    void Update(EntitySystemContext& context) override
-    {
+    void Update(EntitySystemContext &context) override {
         const float deltaTime = static_cast<float>(context.deltaTime);
 
-        for (auto entity : GetSystemEntities())
-        {
-            auto& bird = entity.GetComponent<BirdComponent>();
-            auto& rigidBody = entity.GetComponent<RigidBodyComponent>();
-            auto& transform = entity.GetComponent<TransformComponent>();
-
-            if (!bird.isAlive)
-            {
-                rigidBody.velocity.y = 0.0f;
-                continue;
+        ForEachSystemQuery([deltaTime](Query q) {
+            if (!q.bird.isAlive) {
+                q.rigidBody.velocity.y = 0.0f;
+                return;
             }
 
-            rigidBody.velocity.y += bird.gravity * deltaTime;
+            q.rigidBody.velocity.y += q.bird.gravity * deltaTime;
 
-            if (rigidBody.velocity.y > bird.maxFallSpeed)
-            {
-                rigidBody.velocity.y = bird.maxFallSpeed;
+            if (q.rigidBody.velocity.y > q.bird.maxFallSpeed) {
+                q.rigidBody.velocity.y = q.bird.maxFallSpeed;
             }
 
-            transform.rotation = rigidBody.velocity.y * bird.rotationStrength;
-        }
+            q.transform.rotation = q.rigidBody.velocity.y * q.bird.rotationStrength;
+        });
     }
 
-private:
-    void OnKeyPressed(KeyPressedEvent& event)
-    {
-        if (event.symbol != SDLK_SPACE)
-        {
+  private:
+    void OnKeyPressed(KeyPressedEvent &event) {
+        if (event.symbol != SDLK_SPACE) {
             return;
         }
 
-        for (auto entity : GetSystemEntities())
-        {
-            auto& bird = entity.GetComponent<BirdComponent>();
-            auto& rigidBody = entity.GetComponent<RigidBodyComponent>();
-
-            if (!bird.isAlive)
-            {
-                continue;
+        ForEachSystemQuery([](Query q) {
+            if (!q.bird.isAlive) {
+                return;
             }
 
-            rigidBody.velocity.y = bird.jumpVelocity;
+            q.rigidBody.velocity.y = q.bird.jumpVelocity;
+        });
+    }
+
+    void OnGameOver(GameOverEvent &event) {
+        if (!HasEntity(event.entity)) {
+            return;
         }
+
+        Query q = GetSystemQuery(event.entity);
+        q.bird.isAlive = false;
+        q.rigidBody.velocity = glm::vec2(0.0f);
+
+        Logger::Log("Game over: " + event.reason);
     }
 };
 

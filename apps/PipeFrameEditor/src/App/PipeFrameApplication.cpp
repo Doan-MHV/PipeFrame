@@ -12,6 +12,7 @@
 #include <string>
 
 #include <SDL3_ttf/SDL_ttf.h>
+#include <nlohmann/json.hpp>
 
 #include "App/EditorSettings.h"
 #include "App/LevelGenerator.h"
@@ -310,6 +311,44 @@ std::filesystem::path GetProjectModuleSourcePath(const ProjectConfig& projectCon
     return projectConfig.projectRoot / "Source" / (GetProjectModuleClassName(projectConfig) + ".cpp");
 }
 
+bool WriteProjectStartupLevel(
+    const ProjectConfig& projectConfig,
+    const std::filesystem::path& levelFilePath
+)
+{
+    std::ifstream input(projectConfig.projectFilePath);
+    if (!input)
+    {
+        Logger::Err("Cannot read project config: " + projectConfig.projectFilePath.string());
+        return false;
+    }
+
+    nlohmann::json projectJson;
+    try
+    {
+        input >> projectJson;
+    }
+    catch (const std::exception& exception)
+    {
+        Logger::Err("Cannot parse project config: " + std::string(exception.what()));
+        return false;
+    }
+
+    const std::filesystem::path relativeLevelPath =
+        std::filesystem::relative(levelFilePath, projectConfig.projectRoot);
+    projectJson["startup_level"] = relativeLevelPath.generic_string();
+
+    std::ofstream output(projectConfig.projectFilePath);
+    if (!output)
+    {
+        Logger::Err("Cannot write project config: " + projectConfig.projectFilePath.string());
+        return false;
+    }
+
+    output << projectJson.dump(2) << "\n";
+    return true;
+}
+
 void UpdateProjectModuleForGeneratedClass(
     const ProjectConfig& projectConfig,
     CppClassKind kind,
@@ -363,6 +402,9 @@ void UpdateProjectModuleForGeneratedClass(
             "        .create = " + className + "::Create\n"
             "    });\n"
         );
+        break;
+    case CppClassKind::GameplayEntity:
+        Logger::Log("Gameplay entity bundle updates component, entity, and system registration separately.");
         break;
     case CppClassKind::DenseAgentSimulation:
         InsertIncludeIfMissing(moduleHeaderPath, "#include \"Simulations/" + className + ".h\"");
@@ -514,6 +556,98 @@ std::string BuildEntityClassTemplate(const std::string& className)
            "#endif // " + className + "_H\n";
 }
 
+std::string BuildGameplayEntityComponentTemplate(const std::string& className)
+{
+    return "#ifndef " + className + "_H\n"
+           "#define " + className + "_H\n\n"
+           "#include \"Reflection/ComponentAnnotations.h\"\n\n"
+           "PF_COMPONENT()\n"
+           "struct " + className + "\n"
+           "{\n"
+           "    PF_PROPERTY(PF::Edit, PF::Save)\n"
+           "    bool enabled = true;\n"
+           "};\n\n"
+           "#endif // " + className + "_H\n";
+}
+
+std::string BuildGameplayEntityClassTemplate(
+    const std::string& className,
+    const std::string& componentName
+)
+{
+    return "#ifndef " + className + "_H\n"
+           "#define " + className + "_H\n\n"
+           "#include <glm/glm.hpp>\n\n"
+           "#include \"Components/" + componentName + ".h\"\n"
+           "#include \"Components/EditorEntityComponent.h\"\n"
+           "#include \"Components/PersistentIdComponent.h\"\n"
+           "#include \"Components/TransformComponent.h\"\n"
+           "#include \"ECS/ECS.h\"\n"
+           "#include \"Project/EntityIdGenerator.h\"\n\n"
+           "struct " + className + "\n"
+           "{\n"
+           "    static Entity Create(Registry& registry, glm::vec2 position)\n"
+           "    {\n"
+           "        Entity entity = registry.CreateEntity();\n"
+           "        entity.AddComponent<EditorEntityComponent>();\n"
+           "        entity.AddComponent<PersistentIdComponent>(BuildUniqueEntityId(registry, \"" + className + "\"));\n"
+           "        entity.AddComponent<TransformComponent>(position);\n"
+           "        entity.AddComponent<" + componentName + ">();\n"
+           "        return entity;\n"
+           "    }\n"
+           "};\n\n"
+           "#endif // " + className + "_H\n";
+}
+
+std::string BuildGameplayEntitySystemTemplate(
+    const std::string& className,
+    const std::string& componentName
+)
+{
+    return "#ifndef " + className + "_H\n"
+           "#define " + className + "_H\n\n"
+           "#include \"Components/" + componentName + ".h\"\n"
+           "#include \"Components/TransformComponent.h\"\n"
+           "#include \"ECS/ECS.h\"\n\n"
+           "class " + className + " : public EntitySystem\n"
+           "{\n"
+           "public:\n"
+           "    void Loaded() override\n"
+           "    {\n"
+           "        RequireComponent<TransformComponent>();\n"
+           "        RequireComponent<" + componentName + ">();\n"
+           "    }\n\n"
+           "    void Start(EntitySystemContext& context) override\n"
+           "    {\n"
+           "        (void)context;\n"
+           "    }\n\n"
+           "    void SubscribeToEvents(EntitySystemContext& context) override\n"
+           "    {\n"
+           "        (void)context;\n"
+           "        // Listen<MyEvent>(context, &" + className + "::OnMyEvent);\n"
+           "    }\n\n"
+           "    void Update(EntitySystemContext& context) override\n"
+           "    {\n"
+           "        (void)context;\n"
+           "        for (Entity entity : GetSystemEntities())\n"
+           "        {\n"
+           "            auto& component = entity.GetComponent<" + componentName + ">();\n"
+           "            if (!component.enabled)\n"
+           "            {\n"
+           "                continue;\n"
+           "            }\n\n"
+           "            auto& transform = entity.GetComponent<TransformComponent>();\n"
+           "            (void)transform;\n"
+           "        }\n"
+           "    }\n\n"
+           "    void Stop(EntitySystemContext& context) override\n"
+           "    {\n"
+           "        (void)context;\n"
+           "    }\n"
+           "};\n\n"
+           "#endif // " + className + "_H\n";
+}
+
 std::string BuildDenseSimulationTemplate(const std::string& className)
 {
     return "#ifndef " + className + "_H\n"
@@ -570,6 +704,71 @@ std::string BuildPhysicsScenarioTemplate(const std::string& className)
            "    }\n"
            "};\n\n"
            "#endif // " + className + "_H\n";
+}
+
+bool CanCreateGeneratedFiles(const std::array<std::filesystem::path, 3>& paths)
+{
+    for (const auto& path : paths)
+    {
+        if (std::filesystem::exists(path))
+        {
+            Logger::Err("Cannot create gameplay entity: file already exists: " + path.string());
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CreateGameplayEntityBundle(
+    const ProjectConfig& projectConfig,
+    const std::filesystem::path& sourceRoot,
+    const std::string& entityName
+)
+{
+    const std::string componentName = entityName + "Component";
+    const std::string systemName = entityName + "System";
+
+    const std::filesystem::path componentPath = sourceRoot / "Components" / (componentName + ".h");
+    const std::filesystem::path entityPath = sourceRoot / "Entity" / (entityName + ".h");
+    const std::filesystem::path systemPath = sourceRoot / "Systems" / (systemName + ".h");
+
+    const std::array<std::filesystem::path, 3> paths = {
+        componentPath,
+        entityPath,
+        systemPath
+    };
+
+    if (!CanCreateGeneratedFiles(paths))
+    {
+        return false;
+    }
+
+    if (!WriteGeneratedFile(componentPath, BuildGameplayEntityComponentTemplate(componentName)))
+    {
+        return false;
+    }
+
+    if (!WriteGeneratedFile(entityPath, BuildGameplayEntityClassTemplate(entityName, componentName)))
+    {
+        return false;
+    }
+
+    if (!WriteGeneratedFile(systemPath, BuildGameplayEntitySystemTemplate(systemName, componentName)))
+    {
+        return false;
+    }
+
+    UpdateProjectModuleForGeneratedClass(projectConfig, CppClassKind::Component, componentName);
+    UpdateProjectModuleForGeneratedClass(projectConfig, CppClassKind::EntityClass, entityName);
+    UpdateProjectModuleForGeneratedClass(projectConfig, CppClassKind::EntitySystem, systemName);
+
+    Logger::Log("Created gameplay entity bundle:");
+    Logger::Log("  Component: " + componentPath.string());
+    Logger::Log("  Entity: " + entityPath.string());
+    Logger::Log("  System: " + systemPath.string());
+    Logger::Log("Updated project module registration. Press Compile C++ to build and hot reload.");
+    return true;
 }
 }
 
@@ -714,6 +913,16 @@ void PipeFrameApplication::Render()
             editorResult.levelTileSize,
             editorResult.levelScale
         );
+    }
+
+    if (editorResult.requestedLevelOpen)
+    {
+        OpenLevel(editorResult.levelFilePath);
+    }
+
+    if (editorResult.requestedStartupLevelSet)
+    {
+        SetStartupLevel(editorResult.levelFilePath);
     }
 
     if (editorResult.requestedPrefabSave)
@@ -1109,6 +1318,9 @@ void PipeFrameApplication::CreateCppClass(CppClassKind kind, const std::string& 
             outputPath = sourceRoot / "Entity" / (identifier + ".h");
             content = BuildEntityClassTemplate(identifier);
             break;
+        case CppClassKind::GameplayEntity:
+            CreateGameplayEntityBundle(game.GetProjectConfig(), sourceRoot, identifier);
+            return;
         case CppClassKind::DenseAgentSimulation:
             outputPath = sourceRoot / "Simulations" / (identifier + ".h");
             content = BuildDenseSimulationTemplate(identifier);
@@ -1171,6 +1383,45 @@ void PipeFrameApplication::CreateNewLevel(
     {
         Logger::Err("Level was created, but loading it failed: " + levelFilePath.string());
     }
+}
+
+void PipeFrameApplication::OpenLevel(const std::filesystem::path& levelFilePath)
+{
+    if (game.GetMode() != EngineMode::Edit)
+    {
+        Logger::Err("Cannot open a level while Play mode is running");
+        return;
+    }
+
+    if (levelFilePath.empty() || !std::filesystem::exists(levelFilePath))
+    {
+        Logger::Err("Cannot open level: file does not exist: " + levelFilePath.string());
+        return;
+    }
+
+    if (!game.LoadLevel(levelFilePath))
+    {
+        Logger::Err("Failed to open level: " + levelFilePath.string());
+        return;
+    }
+
+    Logger::Log("Opened level: " + levelFilePath.string());
+}
+
+void PipeFrameApplication::SetStartupLevel(const std::filesystem::path& levelFilePath)
+{
+    if (levelFilePath.empty() || !std::filesystem::exists(levelFilePath))
+    {
+        Logger::Err("Cannot set default level: file does not exist: " + levelFilePath.string());
+        return;
+    }
+
+    if (!WriteProjectStartupLevel(game.GetProjectConfig(), levelFilePath))
+    {
+        return;
+    }
+
+    Logger::Log("Default level set to: " + levelFilePath.string());
 }
 
 void PipeFrameApplication::SaveEntityAsPrefab(int entityId, const std::string& prefabName)

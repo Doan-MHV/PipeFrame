@@ -20,6 +20,7 @@
 
 class Registry;
 class ComponentRegistry;
+struct ProjectConfig;
 
 class EditorToolbar
 {
@@ -30,6 +31,8 @@ private:
     CreateCppClassDialog createCppClassDialog;
     TextureImportDialog textureImportDialog;
     EditorSaveSection saveSection;
+    std::string selectedLevelPath;
+    std::string lastCurrentLevelPath;
 
 public:
     EditorToolbarResult Draw(
@@ -38,6 +41,7 @@ public:
         EditorSessionState& state,
         const std::unique_ptr<Registry>& registry,
         const ComponentRegistry& componentRegistry,
+        const ProjectConfig& projectConfig,
         LevelFilePaths& levelFilePaths,
         TileMap* tileMap
     );

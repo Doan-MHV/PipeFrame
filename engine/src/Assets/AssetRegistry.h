@@ -41,6 +41,7 @@ private:
     std::map<std::string, TextureInfo> textureInfos;
     std::map<std::string, TTF_Font*> fonts;
     std::unordered_set<std::string> missingTextureWarnings;
+    std::unordered_set<std::string> missingFontWarnings;
     // TODO: create a map for fonts
     // TODO: create a map for audio
 

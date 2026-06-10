@@ -226,6 +226,8 @@ nlohmann::json EntitySerializer::SerializeEntity(
         componentsJson["boxcollider"] = {
             {"width", collider.width},
             {"height", collider.height},
+            {"match_sprite_size", collider.matchSpriteSize},
+            {"rotate_with_transform", collider.rotateWithTransform},
             {
                 "offset",
                 {

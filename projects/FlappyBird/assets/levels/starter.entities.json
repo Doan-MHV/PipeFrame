@@ -9,14 +9,33 @@
                     "maxFallSpeed": 520.0,
                     "rotationStrength": 0.05000000074505806
                 },
+                "ScoreComponent": {
+                    "bestScore": 0,
+                    "score": 0
+                },
+                "boxcollider": {
+                    "height": 32,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 7.0,
+                        "y": 6.0
+                    },
+                    "rotate_with_transform": false,
+                    "width": 32
+                },
+                "camera_follow": {},
                 "movement_control": {
                     "enabled": true
                 },
                 "rigidbody": {
                     "velocity": {
-                        "x": 0.0,
+                        "x": 200.0,
                         "y": 0.0
                     }
+                },
+                "ScoreComponent": {
+                    "bestScore": 0,
+                    "score": 0
                 },
                 "sprite": {
                     "fixed": false,
@@ -44,6 +63,756 @@
             },
             "group": "player",
             "id": "Bird"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 256,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 9.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 47
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 256,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 435.5,
+                        "y": 265.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 130,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 8.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 49
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 133,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 436.5,
+                        "y": -7.5
+                    },
+                    "rotation": 180.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe_copy"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 256,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 9.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 47
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 256,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 691.5014038085938,
+                        "y": -0.5
+                    },
+                    "rotation": 180.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe_copy_1"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 130,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 8.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 49
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 133,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 690.5014038085938,
+                        "y": 377.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe_copy_copy"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 130,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 8.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 49
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 133,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 898.5014038085938,
+                        "y": 382.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe_copy_copy_copy"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 200,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 8.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 49
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 200,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 1014.50146484375,
+                        "y": 311.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe_copy_copy_copy_copy"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 250,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 8.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 49
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 250,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 1145.50146484375,
+                        "y": 261.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe_copy_copy_copy_copy_copy"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 300,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 8.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 49
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 300,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 1265.50146484375,
+                        "y": 211.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe_copy_copy_copy_copy_copy_copy"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 350,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 8.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 49
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 350,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 1400.50146484375,
+                        "y": 162.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe_copy_copy_copy_copy_copy_copy_copy"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 350,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 8.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 49
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 350,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 1808.5,
+                        "y": -171.5
+                    },
+                    "rotation": 220.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe_copy_copy_copy_copy_copy_copy_copy_copy"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 350,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 8.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 49
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 350,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 1869.5,
+                        "y": -62.5
+                    },
+                    "rotation": 220.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe_copy_copy_copy_copy_copy_copy_copy_copy_copy"
+        },
+        {
+            "components": {
+                "PipeComponent": {
+                    "deadly": true
+                },
+                "boxcollider": {
+                    "height": 450,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 8.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 49
+                },
+                "hazard": {
+                    "deadly": true
+                },
+                "sprite": {
+                    "fixed": false,
+                    "flip": "None",
+                    "height": 450,
+                    "src_rect_h": 256.0,
+                    "src_rect_w": 64.0,
+                    "src_rect_x": 0.0,
+                    "src_rect_y": 0.0,
+                    "texture_asset_id": "flappy-pipe-texture",
+                    "width": 64,
+                    "z_index": 5
+                },
+                "transform": {
+                    "position": {
+                        "x": 1979.5,
+                        "y": -64.5
+                    },
+                    "rotation": 220.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                }
+            },
+            "group": "pipe",
+            "id": "Pipe_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy"
+        },
+        {
+            "components": {
+                "ScoreZoneComponent": {
+                    "scoreValue": 1,
+                    "scored": false
+                },
+                "boxcollider": {
+                    "height": 124,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 48
+                },
+                "transform": {
+                    "position": {
+                        "x": 445.5,
+                        "y": 133.0
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                },
+                "trigger": {
+                    "action": "score",
+                    "once": true
+                }
+            },
+            "group": "score_zones",
+            "id": "ScoreZone"
+        },
+        {
+            "components": {
+                "ScoreZoneComponent": {
+                    "scoreValue": 1,
+                    "scored": false
+                },
+                "boxcollider": {
+                    "height": 75,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 48
+                },
+                "transform": {
+                    "position": {
+                        "x": 700.106689453125,
+                        "y": 278.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                },
+                "trigger": {
+                    "action": "score",
+                    "once": true
+                }
+            },
+            "group": "score_zones",
+            "id": "ScoreZone_copy"
+        },
+        {
+            "components": {
+                "ScoreZoneComponent": {
+                    "scoreValue": 1,
+                    "scored": false
+                },
+                "boxcollider": {
+                    "height": 369,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 48
+                },
+                "transform": {
+                    "position": {
+                        "x": 905.106689453125,
+                        "y": 7.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                },
+                "trigger": {
+                    "action": "score",
+                    "once": true
+                }
+            },
+            "group": "score_zones",
+            "id": "ScoreZone_copy_copy"
+        },
+        {
+            "components": {
+                "ScoreZoneComponent": {
+                    "scoreValue": 1,
+                    "scored": false
+                },
+                "boxcollider": {
+                    "height": 304,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 48
+                },
+                "transform": {
+                    "position": {
+                        "x": 1024.106689453125,
+                        "y": 1.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                },
+                "trigger": {
+                    "action": "score",
+                    "once": true
+                }
+            },
+            "group": "score_zones",
+            "id": "ScoreZone_copy_copy_copy"
+        },
+        {
+            "components": {
+                "ScoreZoneComponent": {
+                    "scoreValue": 1,
+                    "scored": false
+                },
+                "boxcollider": {
+                    "height": 251,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 48
+                },
+                "transform": {
+                    "position": {
+                        "x": 1157.106689453125,
+                        "y": 4.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                },
+                "trigger": {
+                    "action": "score",
+                    "once": true
+                }
+            },
+            "group": "score_zones",
+            "id": "ScoreZone_copy_copy_copy_copy"
+        },
+        {
+            "components": {
+                "ScoreZoneComponent": {
+                    "scoreValue": 1,
+                    "scored": false
+                },
+                "boxcollider": {
+                    "height": 203,
+                    "match_sprite_size": false,
+                    "offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "rotate_with_transform": true,
+                    "width": 48
+                },
+                "transform": {
+                    "position": {
+                        "x": 1274.106689453125,
+                        "y": 3.5
+                    },
+                    "rotation": 0.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                },
+                "trigger": {
+                    "action": "score",
+                    "once": true
+                }
+            },
+            "group": "score_zones",
+            "id": "ScoreZone_copy_copy_copy_copy_copy"
         }
     ]
 }

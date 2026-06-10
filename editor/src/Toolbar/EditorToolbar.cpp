@@ -1,8 +1,12 @@
 #include "EditorToolbar.h"
 
+#include <algorithm>
 #include <cmath>
+#include <filesystem>
+#include <vector>
 
 #include "imgui.h"
+#include "Project/ProjectConfig.h"
 
 namespace
 {
@@ -15,6 +19,43 @@ void DrawToolbarDivider()
 {
     ImGui::TextDisabled("|");
 }
+
+bool IsLevelDocumentFile(const std::filesystem::path& path)
+{
+    if (!path.has_extension() || path.extension() != ".json")
+    {
+        return false;
+    }
+
+    const std::string filename = path.filename().string();
+    return filename.find(".tilemap.") == std::string::npos &&
+        filename.find(".entities.") == std::string::npos &&
+        filename.find(".terrain.") == std::string::npos;
+}
+
+std::vector<std::filesystem::path> FindProjectLevelFiles(const ProjectConfig& projectConfig)
+{
+    std::vector<std::filesystem::path> levels;
+    const std::filesystem::path levelsDirectory = projectConfig.assetsRoot / "levels";
+
+    if (!std::filesystem::exists(levelsDirectory))
+    {
+        return levels;
+    }
+
+    for (const auto& entry : std::filesystem::directory_iterator(levelsDirectory))
+    {
+        if (!entry.is_regular_file() || !IsLevelDocumentFile(entry.path()))
+        {
+            continue;
+        }
+
+        levels.push_back(entry.path());
+    }
+
+    std::sort(levels.begin(), levels.end());
+    return levels;
+}
 }
 
 EditorToolbarResult EditorToolbar::Draw(
@@ -23,6 +64,7 @@ EditorToolbarResult EditorToolbar::Draw(
     EditorSessionState& state,
     const std::unique_ptr<Registry>& registry,
     const ComponentRegistry& componentRegistry,
+    const ProjectConfig& projectConfig,
     LevelFilePaths& levelFilePaths,
     TileMap* tileMap
 )
@@ -59,6 +101,94 @@ EditorToolbarResult EditorToolbar::Draw(
     if (ImGui::Button("New Level"))
     {
         newLevelDialog.Open();
+    }
+
+    SameLineWithSpacing();
+
+    const std::vector<std::filesystem::path> levels = FindProjectLevelFiles(projectConfig);
+    const std::string currentLevelPath = levelFilePaths.levelPath.string();
+    if (!currentLevelPath.empty() && currentLevelPath != lastCurrentLevelPath)
+    {
+        lastCurrentLevelPath = currentLevelPath;
+        selectedLevelPath = currentLevelPath;
+    }
+
+    const bool selectedLevelStillExists = std::find_if(
+        levels.begin(),
+        levels.end(),
+        [this](const std::filesystem::path& level)
+        {
+            return level.string() == selectedLevelPath;
+        }
+    ) != levels.end();
+
+    if (selectedLevelPath.empty() || (!levels.empty() && !selectedLevelStillExists))
+    {
+        if (!levelFilePaths.levelPath.empty())
+        {
+            selectedLevelPath = levelFilePaths.levelPath.string();
+        }
+        else if (!levels.empty())
+        {
+            selectedLevelPath = levels.front().string();
+        }
+    }
+
+    std::string selectedLevelLabel = "<no levels>";
+    for (const auto& level : levels)
+    {
+        if (selectedLevelPath == level.string())
+        {
+            selectedLevelLabel = level.filename().string();
+            break;
+        }
+    }
+
+    ImGui::SetNextItemWidth(160.0f);
+    if (ImGui::BeginCombo("##LevelPicker", selectedLevelLabel.c_str()))
+    {
+        for (const auto& level : levels)
+        {
+            const std::string levelPath = level.string();
+            const bool isSelected = selectedLevelPath == levelPath;
+            if (ImGui::Selectable(level.filename().string().c_str(), isSelected))
+            {
+                selectedLevelPath = levelPath;
+            }
+
+            if (isSelected)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+
+        ImGui::EndCombo();
+    }
+
+    SameLineWithSpacing();
+
+    if (levels.empty())
+    {
+        ImGui::BeginDisabled();
+    }
+
+    if (ImGui::Button("Open Level"))
+    {
+        result.requestedLevelOpen = true;
+        result.levelFilePath = selectedLevelPath;
+    }
+
+    SameLineWithSpacing();
+
+    if (ImGui::Button("Set Default"))
+    {
+        result.requestedStartupLevelSet = true;
+        result.levelFilePath = selectedLevelPath;
+    }
+
+    if (levels.empty())
+    {
+        ImGui::EndDisabled();
     }
 
     SameLineWithSpacing();
