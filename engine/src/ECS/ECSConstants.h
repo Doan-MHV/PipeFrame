@@ -1,8 +1,0 @@
-
-
-#ifndef PIPEFRAME_ECSCONSTANTS_H
-#define PIPEFRAME_ECSCONSTANTS_H
-
-constexpr unsigned int MAX_COMPONENTS = 32;
-
-#endif //PIPEFRAME_ECSCONSTANTS_H

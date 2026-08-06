@@ -2,33 +2,6 @@
   "name": "pipeframe",
   "version-string": "1.0.0",
   "dependencies": [
-    "sdl3",
-    {
-      "name": "sdl3-image",
-      "features": [
-        "jpeg",
-        "png"
-      ]
-    },
-    "sdl3-ttf",
-    "glm",
-    {
-      "name": "qtbase",
-      "default-features": false,
-      "features": [
-        "widgets"
-      ]
-    },
-    "qtsvg",
-    "nlohmann-json",
-    {
-      "name": "imgui",
-      "features": [
-        "sdl3-binding",
-        "sdl3-renderer-binding",
-        "sdlgpu3-binding",
-        "docking-experimental"
-      ]
-    }
+    "sfml"
   ]
 }
