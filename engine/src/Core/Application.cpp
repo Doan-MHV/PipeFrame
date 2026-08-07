@@ -1,6 +1,7 @@
 #include "Core/Application.h"
 
 #include <SFML/System/Clock.hpp>
+#include <Platform/Input.h>
 
 Application::Application(int width, int height, const std::string& title)
     : window(sf::VideoMode({static_cast<unsigned int>(width), static_cast<unsigned int>(height)}), title),
@@ -36,13 +37,25 @@ void Application::Run()
 
     while (window.isOpen())
     {
+        Input::BeginFrame();
+
         const float deltaTime = clock.restart().asSeconds();
 
         while (const auto event = window.pollEvent())
         {
+            Input::HandleEvent(*event);
+
             if (event->is<sf::Event::Closed>())
             {
                 window.close();
+            }
+
+            if (const auto* resized = event->getIf<sf::Event::Resized>())
+            {
+                renderContext.GetCamera().SetSize({
+                    static_cast<float>(resized->size.x),
+                    static_cast<float>(resized->size.y)
+                });
             }
 
             if (activeScene)

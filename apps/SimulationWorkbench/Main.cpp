@@ -6,6 +6,7 @@
 #include "Core/Application.h"
 #include "Core/Scene.h"
 #include "Render/RenderContext.h"
+#include "Platform/Input.h"
 
 class TestScene final : public Scene
 {
@@ -29,6 +30,38 @@ public:
     {
         rotation += 90.0f * deltaTime;
         circle.setRotation(sf::degrees(rotation));
+
+        const float moveSpeed = 300.0f;
+
+        if (Input::IsKeyDown(Key::W))
+        {
+            circle.move({0.0f, -moveSpeed * deltaTime});
+        }
+
+        if (Input::IsKeyDown(Key::S))
+        {
+            circle.move({0.0f, moveSpeed * deltaTime});
+        }
+
+        if (Input::IsKeyDown(Key::A))
+        {
+            circle.move({-moveSpeed * deltaTime, 0.0f});
+        }
+
+        if (Input::IsKeyDown(Key::D))
+        {
+            circle.move({moveSpeed * deltaTime, 0.0f});
+        }
+
+        if (Input::WasKeyPressed(Key::Space))
+        {
+            circle.setFillColor(sf::Color(252, 211, 94));
+        }
+
+        if (Input::WasKeyReleased(Key::Space))
+        {
+            circle.setFillColor(sf::Color(232, 91, 116));
+        }
     }
 
     void Render(RenderContext& context) override
