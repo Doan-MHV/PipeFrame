@@ -4,8 +4,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include "Platform/Key.h"
-#include "Platform/MouseButton.h"
+#include "PipeFrame/Input/Key.h"
+#include "PipeFrame/Input/MouseButton.h"
 
 class Input
 {

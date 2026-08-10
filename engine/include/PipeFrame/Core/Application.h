@@ -6,8 +6,8 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#include "Core/Scene.h"
-#include "Render/RenderContext.h"
+#include "PipeFrame/Core/Scene.h"
+#include "PipeFrame/Render/RenderContext.h"
 
 class Application
 {
