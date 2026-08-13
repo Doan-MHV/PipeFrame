@@ -1,8 +1,10 @@
 #include "PipeFrame/Core/Application.h"
 
 #include <PipeFrame/Core/Scene.h>
+#include <PipeFrame/Core/Time.h>
 #include <PipeFrame/Input/Input.h>
 #include <SFML/System/Clock.hpp>
+#include <algorithm>
 
 Application::Application(int width, int height, const std::string &title)
     : window(sf::VideoMode({static_cast<unsigned int>(width), static_cast<unsigned int>(height)}), title),
@@ -27,11 +29,12 @@ void Application::SetScene(std::unique_ptr<Scene> scene) {
 
 void Application::Run() {
     sf::Clock clock;
+    float fixedTimeAccumulator = 0.0f;
 
     while (window.isOpen()) {
         Input::BeginFrame();
 
-        const float deltaTime = clock.restart().asSeconds();
+        const float frameDeltaTime = std::min(clock.restart().asSeconds(), Time::MaximumFrameDeltaTime);
 
         while (const auto event = window.pollEvent()) {
             Input::HandleEvent(*event);
@@ -50,8 +53,18 @@ void Application::Run() {
             }
         }
 
+        fixedTimeAccumulator += frameDeltaTime;
+
+        while (fixedTimeAccumulator >= Time::FixedDeltaTime) {
+            if (activeScene) {
+                activeScene->FixedUpdate(Time::FixedDeltaTime);
+            }
+
+            fixedTimeAccumulator -= Time::FixedDeltaTime;
+        }
+
         if (activeScene) {
-            activeScene->Update(deltaTime);
+            activeScene->Update(frameDeltaTime);
         }
 
         window.clear(sf::Color(35, 35, 35));

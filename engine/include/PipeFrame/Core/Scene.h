@@ -18,6 +18,8 @@ class Scene {
         (void)context;
     }
 
+    virtual void FixedUpdate(float fixedDeltaTime) { (void)fixedDeltaTime; }
+
     virtual void Update(float deltaTime) { (void)deltaTime; }
 
     virtual void Render(RenderContext &context) { (void)context; }

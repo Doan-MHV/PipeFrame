@@ -10,6 +10,8 @@
 #include <PipeFrame/Input/Input.h>
 #include <PipeFrame/Render/RenderContext.h>
 
+#include <PipeFrame/Simulation/SimulationController.h>
+
 class TestScene final : public Scene {
   public:
     void Load() override {
@@ -32,34 +34,50 @@ class TestScene final : public Scene {
         panel.setOutlineColor(sf::Color(245, 179, 103));
     }
 
-    void Update(float deltaTime) override {
-        rotation += 90.0f * deltaTime;
+    void FixedUpdate(float fixedDeltaTime) override {
+        if (!simulationController.ConsumeTick()) {
+            return;
+        }
+
+        rotation += 90.0f * fixedDeltaTime;
         panel.setRotation(sf::degrees(rotation));
 
-        const float moveSpeed = 300.0f;
+        constexpr float MoveSpeed = 300.0f;
+
+        sf::Vector2f movement{0.0f, 0.0f};
 
         if (Input::IsKeyDown(Key::W)) {
-            circle.move({0.0f, -moveSpeed * deltaTime});
+            movement.y -= MoveSpeed * fixedDeltaTime;
         }
 
         if (Input::IsKeyDown(Key::S)) {
-            circle.move({0.0f, moveSpeed * deltaTime});
+            movement.y += MoveSpeed * fixedDeltaTime;
         }
 
         if (Input::IsKeyDown(Key::A)) {
-            circle.move({-moveSpeed * deltaTime, 0.0f});
+            movement.x -= MoveSpeed * fixedDeltaTime;
         }
 
         if (Input::IsKeyDown(Key::D)) {
-            circle.move({moveSpeed * deltaTime, 0.0f});
+            movement.x += MoveSpeed * fixedDeltaTime;
         }
 
-        if (Input::WasKeyPressed(Key::Space)) {
-            circle.setFillColor(sf::Color(252, 211, 94));
+        circle.move(movement);
+    }
+
+    void Update(float deltaTime) override {
+        if (Input::WasKeyPressed(Key::P)) {
+            simulationController.TogglePlayPause();
         }
 
-        if (Input::WasKeyReleased(Key::Space)) {
-            circle.setFillColor(sf::Color(232, 91, 116));
+        if (Input::WasKeyPressed(Key::Period)) {
+            simulationController.RequestSingleStep();
+        }
+
+        if (simulationController.IsPlaying()) {
+            panel.setFillColor(sf::Color(55, 55, 55));
+        } else {
+            panel.setFillColor(sf::Color(45, 70, 110));
         }
     }
 
@@ -87,6 +105,7 @@ class TestScene final : public Scene {
     }
 
   private:
+    SimulationController simulationController;
     EditorCameraController cameraController;
 
     sf::CircleShape circle;

@@ -1,12 +1,13 @@
 #ifndef PIPEFRAME_KEY_H
 #define PIPEFRAME_KEY_H
 
-enum class Key
-{
+enum class Key {
     Unknown,
 
     A,
     D,
+    N,
+    P,
     S,
     W,
 
@@ -16,7 +17,10 @@ enum class Key
     Down,
 
     Space,
-    Escape
+    Period,
+    Escape,
+
+    Count
 };
 
 #endif
