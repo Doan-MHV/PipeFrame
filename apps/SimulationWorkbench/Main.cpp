@@ -1,4 +1,7 @@
+#include <iostream>
 #include <memory>
+
+#include "DiagnosticsOverlay.h"
 
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -15,6 +18,13 @@
 class TestScene final : public Scene {
   public:
     void Load() override {
+        const std::filesystem::path fontPath =
+            std::filesystem::path(PIPEFRAME_WORKBENCH_RESOURCE_DIR) / "fonts/roboto_mono_semi.ttf";
+
+        if (!diagnosticsOverlay.Load(fontPath)) {
+            std::cerr << "Unable to load diagnostics font: " << fontPath << '\n';
+        }
+
         worldCursor.setRadius(8.0f);
         worldCursor.setOrigin({8.0f, 8.0f});
         worldCursor.setFillColor(sf::Color::Transparent);
@@ -79,6 +89,8 @@ class TestScene final : public Scene {
         } else {
             panel.setFillColor(sf::Color(45, 70, 110));
         }
+
+        diagnosticsOverlay.Update(deltaTime);
     }
 
     void Render(RenderContext &context) override {
@@ -90,6 +102,8 @@ class TestScene final : public Scene {
         window.draw(worldCursor);
 
         context.BeginScreen();
+
+        diagnosticsOverlay.Render(window, simulationController, context.GetCamera(), worldCursor.getPosition());
     }
 
     void HandleEvent(const sf::Event &event, RenderContext &context) override {
@@ -107,6 +121,7 @@ class TestScene final : public Scene {
   private:
     SimulationController simulationController;
     EditorCameraController cameraController;
+    DiagnosticsOverlay diagnosticsOverlay;
 
     sf::CircleShape circle;
     sf::CircleShape worldCursor;
