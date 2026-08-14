@@ -8,11 +8,11 @@ void AntPopulation::Initialize(std::size_t antCount, std::uint32_t seed) {
 
     std::mt19937 randomGenerator(seed);
 
-    std::uniform_real_distribution<float> positionX(-WorldHalfWidth, WorldHalfWidth);
+    std::uniform_real_distribution positionX(-WorldHalfWidth, WorldHalfWidth);
 
-    std::uniform_real_distribution<float> positionY(-WorldHalfHeight, WorldHalfHeight);
+    std::uniform_real_distribution positionY(-WorldHalfHeight, WorldHalfHeight);
 
-    std::uniform_real_distribution<float> velocity(-120.0f, 120.0f);
+    std::uniform_real_distribution velocity(-120.0f, 120.0f);
 
     for (std::size_t index = 0; index < antCount; ++index) {
         Ant ant;

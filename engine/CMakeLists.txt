@@ -9,6 +9,7 @@ add_library(PipeFrameEngine
         src/Input/Input.cpp
         src/Render/Camera2D.cpp
         src/Simulation/SimulationController.cpp
+        src/Render/CameraController2D.cpp
 )
 
 add_library(PipeFrame::Engine ALIAS PipeFrameEngine)

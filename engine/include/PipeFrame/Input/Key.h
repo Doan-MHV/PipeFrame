@@ -8,7 +8,9 @@ enum class Key {
     D,
     N,
     P,
+    R,
     S,
+    L,
     W,
 
     Left,

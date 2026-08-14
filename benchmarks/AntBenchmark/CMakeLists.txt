@@ -3,6 +3,7 @@ add_executable(AntBenchmark
         AntPopulation.cpp
         AntBatchRenderer.cpp
         AntBenchmarkScene.cpp
+        AntSpatialGrid.cpp
 )
 
 target_link_libraries(AntBenchmark

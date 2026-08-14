@@ -3,7 +3,7 @@
 #include <array>
 
 namespace {
-constexpr int KeyCount = static_cast<std::size_t>(Key::Count);
+constexpr std::size_t KeyCount = static_cast<std::size_t>(Key::Count);
 constexpr int MouseButtonCount = 4;
 
 std::array<bool, KeyCount> keysDown{};
@@ -44,6 +44,11 @@ Key FromSfmlKey(sf::Keyboard::Key key) {
         return Key::P;
     case sf::Keyboard::Key::Period:
         return Key::Period;
+    case sf::Keyboard::Key::R:
+        return Key::R;
+    case sf::Keyboard::Key::L:
+        return Key::L;
+
     default:
         return Key::Unknown;
     }

@@ -6,7 +6,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
-#include "EditorCameraController.h"
+#include <PipeFrame/Render/CameraController2D.h>
 
 #include <PipeFrame/Core/Application.h>
 #include <PipeFrame/Core/Scene.h>
@@ -120,7 +120,7 @@ class TestScene final : public Scene {
 
   private:
     SimulationController simulationController;
-    EditorCameraController cameraController;
+    CameraController2D cameraController;
     DiagnosticsOverlay diagnosticsOverlay;
 
     sf::CircleShape circle;

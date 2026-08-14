@@ -1,6 +1,5 @@
 add_executable(SimulationWorkbench
         Main.cpp
-        EditorCameraController.cpp
         DiagnosticsOverlay.cpp
 )
 

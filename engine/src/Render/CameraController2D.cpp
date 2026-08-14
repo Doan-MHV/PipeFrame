@@ -1,13 +1,15 @@
-#include "EditorCameraController.h"
+
+#include "PipeFrame/Render/CameraController2D.h"
 
 #include <algorithm>
 #include <cmath>
 
 #include <PipeFrame/Input/Input.h>
 #include <PipeFrame/Input/Key.h>
+#include <PipeFrame/Render/Camera2D.h>
 #include <PipeFrame/Render/RenderContext.h>
 
-void EditorCameraController::HandleEvent(const sf::Event &event, RenderContext &context) {
+void CameraController2D::HandleEvent(const sf::Event &event, RenderContext &context) {
     if (const auto *pressed = event.getIf<sf::Event::MouseButtonPressed>()) {
         const bool middleMousePan = pressed->button == sf::Mouse::Button::Middle;
 
