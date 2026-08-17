@@ -12,8 +12,109 @@
 #include <PipeFrame/Core/Scene.h>
 #include <PipeFrame/Input/Input.h>
 #include <PipeFrame/Render/RenderContext.h>
-
 #include <PipeFrame/Simulation/SimulationController.h>
+#include <PipeFrame/UI/Panel.h>
+#include <PipeFrame/UI/UIManager.h>
+
+class ClickablePanel final : public Panel {
+  protected:
+    void OnPointerEntered() override {
+        pointerInside = true;
+
+        if (!pressed) {
+            RefreshColor();
+        }
+    }
+
+    void OnPointerExited() override {
+        pointerInside = false;
+
+        if (!pressed) {
+            RefreshColor();
+        }
+    }
+
+    bool OnEvent(const sf::Event &event) override {
+        if (const auto *mousePressed = event.getIf<sf::Event::MouseButtonPressed>()) {
+            if (mousePressed->button != sf::Mouse::Button::Left) {
+                return false;
+            }
+
+            pressed = true;
+            SetFillColor(PressedColor);
+
+            return true;
+        }
+
+        if (const auto *mouseMoved = event.getIf<sf::Event::MouseMoved>()) {
+            if (!pressed) {
+                return false;
+            }
+
+            const sf::Vector2f mousePosition{static_cast<float>(mouseMoved->position.x),
+                                             static_cast<float>(mouseMoved->position.y)};
+
+            pointerInside = Contains(mousePosition);
+
+            if (pointerInside) {
+                SetFillColor(PressedColor);
+            } else {
+                RefreshColor();
+            }
+
+            return true;
+        }
+
+        if (const auto *mouseReleased = event.getIf<sf::Event::MouseButtonReleased>()) {
+            if (mouseReleased->button != sf::Mouse::Button::Left || !pressed) {
+                return false;
+            }
+
+            const sf::Vector2f mousePosition{static_cast<float>(mouseReleased->position.x),
+                                             static_cast<float>(mouseReleased->position.y)};
+
+            pointerInside = Contains(mousePosition);
+            pressed = false;
+
+            // A click only happens when press and release are both
+            // associated with this panel.
+            if (pointerInside) {
+                selected = !selected;
+            }
+
+            RefreshColor();
+
+            return true;
+        }
+
+        return false;
+    }
+
+  private:
+    void RefreshColor() {
+        if (selected) {
+            SetFillColor(pointerInside ? SelectedHoverColor : SelectedColor);
+
+            return;
+        }
+
+        SetFillColor(pointerInside ? HoverColor : NormalColor);
+    }
+
+    inline static const sf::Color NormalColor{37, 41, 51};
+
+    inline static const sf::Color HoverColor{52, 59, 74};
+
+    inline static const sf::Color PressedColor{82, 96, 128};
+
+    inline static const sf::Color SelectedColor{62, 75, 108};
+
+    inline static const sf::Color SelectedHoverColor{74, 89, 126};
+
+    bool pointerInside = false;
+    bool pressed = false;
+    bool selected = false;
+};
 
 class TestScene final : public Scene {
   public:
@@ -42,6 +143,38 @@ class TestScene final : public Scene {
         panel.setFillColor(sf::Color(55, 55, 55));
         panel.setOutlineThickness(4.0f);
         panel.setOutlineColor(sf::Color(245, 179, 103));
+
+        Panel &editorPanel = uiManager.CreateRoot<Panel>();
+
+        editorPanel.SetPosition({900.0f, 80.0f});
+        editorPanel.SetSize({300.0f, 560.0f});
+        editorPanel.SetFillColor(sf::Color(24, 27, 34, 245));
+        editorPanel.SetOutlineColor(sf::Color(78, 86, 104));
+        editorPanel.SetOutlineThickness(1.0f);
+
+        Panel &headerPanel = editorPanel.CreateChild<Panel>();
+
+        headerPanel.SetPosition({12.0f, 12.0f});
+        headerPanel.SetSize({276.0f, 48.0f});
+        headerPanel.SetFillColor(sf::Color(42, 47, 59));
+        headerPanel.SetOutlineColor(sf::Color(90, 100, 120));
+        headerPanel.SetOutlineThickness(1.0f);
+
+        Panel &contentPanel = editorPanel.CreateChild<Panel>();
+
+        contentPanel.SetPosition({12.0f, 72.0f});
+        contentPanel.SetSize({276.0f, 476.0f});
+        contentPanel.SetFillColor(sf::Color(31, 34, 43));
+        contentPanel.SetOutlineColor(sf::Color(65, 72, 88));
+        contentPanel.SetOutlineThickness(1.0f);
+
+        ClickablePanel &propertyGroup = contentPanel.CreateChild<ClickablePanel>();
+
+        propertyGroup.SetPosition({12.0f, 12.0f});
+        propertyGroup.SetSize({252.0f, 100.0f});
+        propertyGroup.SetFillColor(sf::Color(37, 41, 51));
+        propertyGroup.SetOutlineColor(sf::Color(76, 84, 102));
+        propertyGroup.SetOutlineThickness(1.0f);
     }
 
     void FixedUpdate(float fixedDeltaTime) override {
@@ -103,10 +236,24 @@ class TestScene final : public Scene {
 
         context.BeginScreen();
 
+        uiManager.Render(window);
+
         diagnosticsOverlay.Render(window, simulationController, context.GetCamera(), worldCursor.getPosition());
     }
 
     void HandleEvent(const sf::Event &event, RenderContext &context) override {
+        const bool uiConsumedEvent = uiManager.HandleEvent(event);
+
+        if (uiConsumedEvent) {
+            // Always allow the camera to observe releases so an existing
+            // drag cannot become stuck when released over the UI.
+            if (event.is<sf::Event::MouseButtonReleased>()) {
+                cameraController.HandleEvent(event, context);
+            }
+
+            return;
+        }
+
         cameraController.HandleEvent(event, context);
 
         if (const auto *moved = event.getIf<sf::Event::MouseMoved>()) {
@@ -126,6 +273,8 @@ class TestScene final : public Scene {
     sf::CircleShape circle;
     sf::CircleShape worldCursor;
     sf::RectangleShape panel;
+
+    UIManager uiManager;
 
     float rotation = 0.0f;
 };

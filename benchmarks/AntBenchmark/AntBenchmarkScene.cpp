@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include <PipeFrame/Core/Time.h>
 #include <PipeFrame/Input/Input.h>
 #include <PipeFrame/Input/Key.h>
 #include <PipeFrame/Render/RenderContext.h>
@@ -166,6 +165,22 @@ void AntBenchmarkScene::FixedUpdate(float fixedDeltaTime) {
 }
 
 void AntBenchmarkScene::Update(float deltaTime) {
+    if (Input::WasKeyPressed(Key::Num1)) {
+        ResetPopulation(AntCount10K);
+    }
+
+    if (Input::WasKeyPressed(Key::Num2)) {
+        ResetPopulation(AntCount100K);
+    }
+
+    if (Input::WasKeyPressed(Key::Num3)) {
+        ResetPopulation(AntCount250K);
+    }
+
+    if (Input::WasKeyPressed(Key::Num4)) {
+        ResetPopulation(AntCount1M);
+    }
+
     if (Input::WasKeyPressed(Key::A)) {
         automaticLodEnabled = !automaticLodEnabled;
     }
@@ -442,4 +457,42 @@ void AntBenchmarkScene::CycleBehaviorSliceCount() {
         behaviorSliceCount = 64;
         break;
     }
+}
+
+void AntBenchmarkScene::ResetPopulation(std::size_t antCount) {
+    const AntRenderMode currentRenderMode = antRenderer.GetMode();
+
+    population.Initialize(antCount, InitialSeed);
+
+    const sf::Vector2f worldMinimum{-AntPopulation::WorldHalfWidth, -AntPopulation::WorldHalfHeight};
+
+    const sf::Vector2f worldSize{AntPopulation::WorldHalfWidth * 2.0f, AntPopulation::WorldHalfHeight * 2.0f};
+
+    renderGrid.Initialize(worldMinimum, worldSize, RenderCellSize, antCount);
+
+    interactionGrid.Initialize(worldMinimum, worldSize, InteractionCellSize, antCount);
+
+    renderGrid.Rebuild(population);
+    interactionGrid.Rebuild(population);
+
+    antRenderer.Initialize(antCount, currentRenderMode);
+
+    selectedAntIndex.reset();
+    lastPickCandidateCount = 0;
+    selectedNeighborCandidateCount = 0;
+    selectedNeighborCount = 0;
+
+    separationStats = {};
+    lastBehaviorTimeMs = 0.0f;
+
+    simulationController.ResetTickCount();
+
+    previousSampleTickCount = 0;
+    ticksPerSecond = 0.0f;
+
+    metricsElapsedTime = 0.0f;
+    metricsFrameCount = 0;
+    framesPerSecond = 0.0f;
+
+    overlayUpdateRequested = true;
 }

@@ -39,14 +39,20 @@ class AntBenchmarkScene final : public Scene {
 
     void CycleBehaviorSliceCount();
 
+    void ResetPopulation(std::size_t antCount);
+
     std::optional<std::uint32_t> selectedAntIndex;
 
     sf::CircleShape selectionMarker;
 
     std::size_t lastPickCandidateCount = 0;
 
+    static constexpr std::size_t AntCount10K = 10'000;
+    static constexpr std::size_t AntCount100K = 100'000;
+    static constexpr std::size_t AntCount250K = 250'000;
+    static constexpr std::size_t AntCount1M = 1'000'000;
     static constexpr float SelectionRadiusPixels = 10.0f;
-    static constexpr std::size_t InitialAntCount = 1'000'000;
+    static constexpr std::size_t InitialAntCount = AntCount10K;
     static constexpr std::uint32_t InitialSeed = 42;
     static constexpr float RenderCellSize = 32.0f;
     static constexpr float InteractionCellSize = 2.0f;

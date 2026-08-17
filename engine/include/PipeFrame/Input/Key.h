@@ -4,6 +4,11 @@
 enum class Key {
     Unknown,
 
+    Num1,
+    Num2,
+    Num3,
+    Num4,
+
     A,
     B,
     D,

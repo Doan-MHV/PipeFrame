@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <sstream>
 
-AntBenchmarkOverlay::AntBenchmarkOverlay() : text(font, "", 14) {
+AntBenchmarkOverlay::AntBenchmarkOverlay() : text(font, "", 12) {
     background.setPosition({12.0f, 12.0f});
     background.setSize({390.0f, 100.0f});
     background.setFillColor(sf::Color(18, 20, 26, 225));
@@ -62,8 +62,15 @@ void AntBenchmarkOverlay::Update(const AntBenchmarkMetrics &metrics) {
            << "Processed:        " << metrics.behaviorProcessedAntCount << '\n'
            << "Candidate checks: " << metrics.behaviorCandidateCheckCount << '\n'
            << "Interactions:     " << metrics.behaviorNeighborInteractionCount << '\n'
-           << "Slices:            " << metrics.behaviorSliceCount << '\n'
-           << "Agent rate:        " << metrics.behaviorAgentUpdateRateHz << " Hz\n";
+           << "Slices:           " << metrics.behaviorSliceCount << '\n'
+           << "Agent rate:       " << metrics.behaviorAgentUpdateRateHz << " Hz\n"
+
+           << "\nCONTROLS\n"
+           << "1: 10K   2: 100K   3: 250K   4: 1M\n"
+           << "B: separation     N: behavior slices\n"
+           << "A: automatic LOD  L: points/quads\n"
+           << "R: rendering      P: pause\n"
+           << ".: single step    H: hide overlay\n";
 
     text.setString(stream.str());
 
