@@ -1,8 +1,8 @@
 #include "AntBenchmarkScene.h"
 
-#include <iomanip>
-#include <sstream>
+#include <iostream>
 
+#include <PipeFrame/Core/Time.h>
 #include <PipeFrame/Input/Input.h>
 #include <PipeFrame/Input/Key.h>
 #include <PipeFrame/Render/RenderContext.h>
@@ -20,11 +20,16 @@ const char *GetRenderModeName(AntRenderMode mode) {
 void AntBenchmarkScene::Load() {
     population.Initialize(InitialAntCount, InitialSeed);
 
-    spatialGrid.Initialize({-AntPopulation::WorldHalfWidth, -AntPopulation::WorldHalfHeight},
-                           {AntPopulation::WorldHalfWidth * 2.0f, AntPopulation::WorldHalfHeight * 2.0f},
-                           SpatialCellSize, population.GetCount());
+    const sf::Vector2f worldMinimum{-AntPopulation::WorldHalfWidth, -AntPopulation::WorldHalfHeight};
 
-    spatialGrid.Rebuild(population);
+    const sf::Vector2f worldSize{AntPopulation::WorldHalfWidth * 2.0f, AntPopulation::WorldHalfHeight * 2.0f};
+
+    renderGrid.Initialize(worldMinimum, worldSize, RenderCellSize, population.GetCount());
+
+    interactionGrid.Initialize(worldMinimum, worldSize, InteractionCellSize, population.GetCount());
+
+    renderGrid.Rebuild(population);
+    interactionGrid.Rebuild(population);
 
     antRenderer.Initialize(population.GetCount(), AntRenderMode::Points);
 
@@ -35,15 +40,108 @@ void AntBenchmarkScene::Load() {
     worldBounds.setFillColor(sf::Color::Transparent);
     worldBounds.setOutlineColor(sf::Color(90, 100, 120));
     worldBounds.setOutlineThickness(2.0f);
+
+    selectionMarker.setFillColor(sf::Color::Transparent);
+    selectionMarker.setOutlineColor(sf::Color::Yellow);
+    selectionMarker.setPointCount(32);
+
+    neighborhoodMarker.setFillColor(sf::Color::Transparent);
+    neighborhoodMarker.setOutlineColor(sf::Color::Cyan);
+    neighborhoodMarker.setPointCount(48);
+
+    const std::filesystem::path fontPath = std::filesystem::path(PIPEFRAME_ASSET_DIR) / "fonts/roboto_mono_semi.ttf";
+
+    if (!benchmarkOverlay.Load(fontPath)) {
+        std::cerr << "Unable to load benchmark font: " << fontPath << '\n';
+    }
 }
 
 void AntBenchmarkScene::HandleEvent(const sf::Event &event, RenderContext &context) {
     cameraController.HandleEvent(event, context);
+
+    if (const auto *pressed = event.getIf<sf::Event::MouseButtonPressed>()) {
+        const bool selectionClick = pressed->button == sf::Mouse::Button::Left && !Input::IsKeyDown(Key::Space);
+
+        if (selectionClick) {
+            const sf::Vector2f worldPosition = context.ScreenToWorld(pressed->position);
+
+            SelectNearestAnt(worldPosition, context.GetCamera().GetZoom());
+        }
+    }
+}
+
+void AntBenchmarkScene::UpdateSelectedNeighborhood() {
+    selectedNeighborCandidateCount = 0;
+    selectedNeighborCount = 0;
+
+    if (!selectedAntIndex) {
+        return;
+    }
+
+    const std::vector<Ant> &ants = population.GetAnts();
+
+    if (*selectedAntIndex >= ants.size()) {
+        selectedAntIndex.reset();
+        return;
+    }
+
+    const sf::Vector2f selectedPosition = ants[*selectedAntIndex].position;
+
+    const sf::FloatRect queryArea{{selectedPosition.x - NeighborRadius, selectedPosition.y - NeighborRadius},
+                                  {NeighborRadius * 2.0f, NeighborRadius * 2.0f}};
+
+    const AntSpatialGrid::CellRange cellRange = interactionGrid.GetCellsOverlapping(queryArea);
+
+    if (cellRange.IsEmpty()) {
+        return;
+    }
+
+    const float neighborRadiusSquared = NeighborRadius * NeighborRadius;
+
+    for (int row = cellRange.minimumRow; row <= cellRange.maximumRow; ++row) {
+        for (int column = cellRange.minimumColumn; column <= cellRange.maximumColumn; ++column) {
+            const std::span<const std::uint32_t> antIndices = interactionGrid.GetAgentIndices(column, row);
+
+            selectedNeighborCandidateCount += antIndices.size();
+
+            for (const std::uint32_t antIndex : antIndices) {
+                if (antIndex == *selectedAntIndex) {
+                    continue;
+                }
+
+                const sf::Vector2f difference = ants[antIndex].position - selectedPosition;
+
+                const float distanceSquared = difference.x * difference.x + difference.y * difference.y;
+
+                if (distanceSquared <= neighborRadiusSquared) {
+                    ++selectedNeighborCount;
+                }
+            }
+        }
+    }
 }
 
 void AntBenchmarkScene::FixedUpdate(float fixedDeltaTime) {
     if (!simulationController.ConsumeTick()) {
         return;
+    }
+
+    if (separationEnabled) {
+        behaviorClock.restart();
+
+        const std::uint64_t tickCount = simulationController.GetTickCount();
+
+        const std::size_t sliceIndex = static_cast<std::size_t>((tickCount - 1) % behaviorSliceCount);
+
+        const float behaviorDeltaTime = fixedDeltaTime * static_cast<float>(behaviorSliceCount);
+
+        separationStats =
+            separationSystem.Update(population, interactionGrid, behaviorDeltaTime, sliceIndex, behaviorSliceCount);
+
+        lastBehaviorTimeMs = behaviorClock.getElapsedTime().asSeconds() * 1000.0f;
+    } else {
+        separationStats = {};
+        lastBehaviorTimeMs = 0.0f;
     }
 
     updateClock.restart();
@@ -52,18 +150,44 @@ void AntBenchmarkScene::FixedUpdate(float fixedDeltaTime) {
 
     lastUpdateTimeMs = updateClock.getElapsedTime().asSeconds() * 1000.0f;
 
-    gridBuildClock.restart();
+    renderGridBuildClock.restart();
 
-    spatialGrid.Rebuild(population);
+    renderGrid.Rebuild(population);
 
-    lastGridBuildTimeMs = gridBuildClock.getElapsedTime().asSeconds() * 1000.0f;
+    lastRenderGridBuildTimeMs = renderGridBuildClock.getElapsedTime().asSeconds() * 1000.0f;
 
-    // lastUpdateTimeMs = updateClock.getElapsedTime().asSeconds() * 1000.0f;
+    interactionGridBuildClock.restart();
+
+    interactionGrid.Rebuild(population);
+
+    lastInteractionGridBuildTimeMs = interactionGridBuildClock.getElapsedTime().asSeconds() * 1000.0f;
+
+    UpdateSelectedNeighborhood();
 }
 
 void AntBenchmarkScene::Update(float deltaTime) {
     if (Input::WasKeyPressed(Key::A)) {
         automaticLodEnabled = !automaticLodEnabled;
+    }
+
+    if (Input::WasKeyPressed(Key::H)) {
+        benchmarkOverlay.ToggleVisible();
+    }
+
+    if (Input::WasKeyPressed(Key::B)) {
+        separationEnabled = !separationEnabled;
+
+        if (!separationEnabled) {
+            separationStats = {};
+            lastBehaviorTimeMs = 0.0f;
+        }
+
+        overlayUpdateRequested = true;
+    }
+
+    if (Input::WasKeyPressed(Key::N)) {
+        CycleBehaviorSliceCount();
+        overlayUpdateRequested = true;
     }
 
     if (Input::WasKeyPressed(Key::L)) {
@@ -95,9 +219,17 @@ void AntBenchmarkScene::Update(float deltaTime) {
     if (metricsElapsedTime >= MetricsSamplePeriod) {
         framesPerSecond = static_cast<float>(metricsFrameCount) / metricsElapsedTime;
 
+        const std::uint64_t currentTickCount = simulationController.GetTickCount();
+
+        const std::uint64_t completedTicks = currentTickCount - previousSampleTickCount;
+
+        ticksPerSecond = static_cast<float>(completedTicks) / metricsElapsedTime;
+
+        previousSampleTickCount = currentTickCount;
+
         metricsElapsedTime = 0.0f;
         metricsFrameCount = 0;
-        titleUpdateRequested = true;
+        overlayUpdateRequested = true;
     }
 }
 
@@ -119,7 +251,7 @@ void AntBenchmarkScene::Render(RenderContext &context) {
 
         const sf::FloatRect viewport{viewportPosition, cameraSize};
 
-        antRenderer.UpdateGeometry(population, spatialGrid, viewport);
+        antRenderer.UpdateGeometry(population, renderGrid, viewport);
 
         lastGeometryTimeMs = geometryClock.getElapsedTime().asSeconds() * 1000.0f;
 
@@ -127,6 +259,34 @@ void AntBenchmarkScene::Render(RenderContext &context) {
 
         window.draw(worldBounds);
         antRenderer.Draw(window);
+
+        if (selectedAntIndex) {
+            const std::vector<Ant> &ants = population.GetAnts();
+
+            if (*selectedAntIndex < ants.size()) {
+                const float markerRadius = SelectionRadiusPixels * camera.GetZoom();
+
+                selectionMarker.setRadius(markerRadius);
+
+                selectionMarker.setOrigin({markerRadius, markerRadius});
+
+                selectionMarker.setOutlineThickness(2.0f * camera.GetZoom());
+
+                selectionMarker.setPosition(ants[*selectedAntIndex].position);
+
+                window.draw(selectionMarker);
+
+                neighborhoodMarker.setRadius(NeighborRadius);
+
+                neighborhoodMarker.setOrigin({NeighborRadius, NeighborRadius});
+
+                neighborhoodMarker.setOutlineThickness(camera.GetZoom());
+
+                neighborhoodMarker.setPosition(ants[*selectedAntIndex].position);
+
+                window.draw(neighborhoodMarker);
+            }
+        }
 
         lastDrawTimeMs = drawClock.getElapsedTime().asSeconds() * 1000.0f;
     } else {
@@ -136,10 +296,56 @@ void AntBenchmarkScene::Render(RenderContext &context) {
 
     context.BeginScreen();
 
-    if (titleUpdateRequested) {
-        UpdateWindowTitle(window, camera);
-        titleUpdateRequested = false;
+    if (overlayUpdateRequested) {
+        UpdateOverlay(camera);
+        overlayUpdateRequested = false;
     }
+
+    benchmarkOverlay.Render(window);
+}
+
+void AntBenchmarkScene::SelectNearestAnt(sf::Vector2f worldPosition, float cameraZoom) {
+    selectedAntIndex.reset();
+    lastPickCandidateCount = 0;
+    selectedNeighborCandidateCount = 0;
+    selectedNeighborCount = 0;
+
+    // Convert a 10-pixel selection radius into world units.
+    const float selectionRadius = SelectionRadiusPixels * cameraZoom;
+
+    const sf::FloatRect queryArea{{worldPosition.x - selectionRadius, worldPosition.y - selectionRadius},
+                                  {selectionRadius * 2.0f, selectionRadius * 2.0f}};
+
+    const AntSpatialGrid::CellRange cellRange = interactionGrid.GetCellsOverlapping(queryArea);
+
+    if (cellRange.IsEmpty()) {
+        return;
+    }
+
+    const std::vector<Ant> &ants = population.GetAnts();
+
+    float nearestDistanceSquared = selectionRadius * selectionRadius;
+
+    for (int row = cellRange.minimumRow; row <= cellRange.maximumRow; ++row) {
+        for (int column = cellRange.minimumColumn; column <= cellRange.maximumColumn; ++column) {
+            const std::span<const std::uint32_t> antIndices = interactionGrid.GetAgentIndices(column, row);
+
+            lastPickCandidateCount += antIndices.size();
+
+            for (const std::uint32_t antIndex : antIndices) {
+                const sf::Vector2f difference = ants[antIndex].position - worldPosition;
+
+                const float distanceSquared = difference.x * difference.x + difference.y * difference.y;
+
+                if (distanceSquared <= nearestDistanceSquared) {
+                    nearestDistanceSquared = distanceSquared;
+                    selectedAntIndex = antIndex;
+                }
+            }
+        }
+    }
+
+    UpdateSelectedNeighborhood();
 }
 
 void AntBenchmarkScene::UpdateAutomaticLod(float cameraZoom) {
@@ -160,22 +366,80 @@ void AntBenchmarkScene::UpdateAutomaticLod(float cameraZoom) {
     }
 }
 
-void AntBenchmarkScene::UpdateWindowTitle(sf::RenderWindow &window, const Camera2D &camera) {
-    std::ostringstream title;
+void AntBenchmarkScene::UpdateOverlay(const Camera2D &camera) {
+    AntBenchmarkMetrics metrics;
 
-    title << std::fixed << std::setprecision(3);
+    metrics.playing = simulationController.IsPlaying();
 
-    title << "PipeFrame Ant Benchmark"
-          << " | " << (simulationController.IsPlaying() ? "PLAYING" : "PAUSED") << " | Ants: " << population.GetCount()
-          << " | FPS: " << framesPerSecond << " | Tick update: " << lastUpdateTimeMs << " ms"
-          << " | Grid build: " << lastGridBuildTimeMs << " ms"
-          << " | Render: " << (renderingEnabled ? "ON" : "OFF")
-          << " | LOD: " << (automaticLodEnabled ? "AUTO/" : "MANUAL/") << GetRenderModeName(antRenderer.GetMode())
-          << " | Zoom: " << camera.GetZoom() << " | Candidates: " << antRenderer.GetCandidateAntCount()
-          << " | Visible: " << antRenderer.GetVisibleAntCount() << " | Vertices: " << antRenderer.GetVertexCount()
-          << " | Geometry: " << lastGeometryTimeMs << " ms"
-          << " | Draw: " << lastDrawTimeMs << " ms"
-          << " | Tick: " << simulationController.GetTickCount();
+    metrics.renderingEnabled = renderingEnabled;
+    metrics.antCount = population.GetCount();
+    metrics.tickCount = simulationController.GetTickCount();
 
-    window.setTitle(title.str());
+    metrics.framesPerSecond = framesPerSecond;
+    metrics.tickUpdateTimeMs = lastUpdateTimeMs;
+    metrics.renderGridTimeMs = lastRenderGridBuildTimeMs;
+
+    metrics.interactionGridTimeMs = lastInteractionGridBuildTimeMs;
+
+    metrics.geometryTimeMs = lastGeometryTimeMs;
+    metrics.drawTimeMs = lastDrawTimeMs;
+    metrics.zoom = camera.GetZoom();
+
+    metrics.lodMode = automaticLodEnabled ? "AUTO/" : "MANUAL/";
+
+    metrics.lodMode += GetRenderModeName(antRenderer.GetMode());
+
+    metrics.renderCandidateCount = antRenderer.GetCandidateAntCount();
+
+    metrics.visibleAntCount = antRenderer.GetVisibleAntCount();
+
+    metrics.vertexCount = antRenderer.GetVertexCount();
+
+    metrics.selectedAntIndex = selectedAntIndex;
+    metrics.pickCandidateCount = lastPickCandidateCount;
+
+    metrics.neighborCount = selectedNeighborCount;
+
+    metrics.neighborCandidateCount = selectedNeighborCandidateCount;
+
+    metrics.separationEnabled = separationEnabled;
+
+    metrics.behaviorTimeMs = lastBehaviorTimeMs;
+
+    metrics.behaviorProcessedAntCount = separationStats.processedAntCount;
+
+    metrics.behaviorCandidateCheckCount = separationStats.candidateCheckCount;
+
+    metrics.behaviorNeighborInteractionCount = separationStats.neighborInteractionCount;
+
+    metrics.behaviorSliceCount = behaviorSliceCount;
+
+    metrics.ticksPerSecond = ticksPerSecond;
+
+    metrics.behaviorAgentUpdateRateHz = ticksPerSecond / static_cast<float>(behaviorSliceCount);
+
+    benchmarkOverlay.Update(metrics);
+}
+
+void AntBenchmarkScene::CycleBehaviorSliceCount() {
+    switch (behaviorSliceCount) {
+    case 64:
+        behaviorSliceCount = 32;
+        break;
+    case 32:
+        behaviorSliceCount = 16;
+        break;
+
+    case 16:
+        behaviorSliceCount = 8;
+        break;
+
+    case 8:
+        behaviorSliceCount = 1;
+        break;
+
+    default:
+        behaviorSliceCount = 64;
+        break;
+    }
 }

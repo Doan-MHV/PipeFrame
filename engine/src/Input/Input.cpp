@@ -48,6 +48,10 @@ Key FromSfmlKey(sf::Keyboard::Key key) {
         return Key::R;
     case sf::Keyboard::Key::L:
         return Key::L;
+    case sf::Keyboard::Key::H:
+        return Key::H;
+    case sf::Keyboard::Key::B:
+        return Key::B;
 
     default:
         return Key::Unknown;

@@ -5,6 +5,7 @@
 #include <PipeFrame/Input/Input.h>
 #include <SFML/System/Clock.hpp>
 #include <algorithm>
+#include <cmath>
 
 Application::Application(int width, int height, const std::string &title)
     : window(sf::VideoMode({static_cast<unsigned int>(width), static_cast<unsigned int>(height)}), title),
@@ -55,12 +56,21 @@ void Application::Run() {
 
         fixedTimeAccumulator += frameDeltaTime;
 
-        while (fixedTimeAccumulator >= Time::FixedDeltaTime) {
+        unsigned int fixedStepCount = 0;
+
+        while (fixedTimeAccumulator >= Time::FixedDeltaTime && fixedStepCount < Time::MaximumFixedStepsPerFrame) {
             if (activeScene) {
                 activeScene->FixedUpdate(Time::FixedDeltaTime);
             }
 
             fixedTimeAccumulator -= Time::FixedDeltaTime;
+            ++fixedStepCount;
+        }
+
+        // The simulation cannot catch up. Keep only the fractional
+        // remainder so input and rendering remain responsive.
+        if (fixedTimeAccumulator >= Time::FixedDeltaTime) {
+            fixedTimeAccumulator = std::fmod(fixedTimeAccumulator, Time::FixedDeltaTime);
         }
 
         if (activeScene) {

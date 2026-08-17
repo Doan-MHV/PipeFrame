@@ -10,5 +10,5 @@ target_link_libraries(SimulationWorkbench
 
 target_compile_definitions(SimulationWorkbench
         PRIVATE
-        PIPEFRAME_WORKBENCH_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/resources"
+        PIPEFRAME_ASSET_DIR="${CMAKE_SOURCE_DIR}/assets"
 )

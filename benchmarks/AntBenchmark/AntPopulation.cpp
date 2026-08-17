@@ -47,6 +47,8 @@ void AntPopulation::Update(float fixedDeltaTime) {
     }
 }
 
+std::vector<Ant> &AntPopulation::GetAnts() { return ants; }
+
 const std::vector<Ant> &AntPopulation::GetAnts() const { return ants; }
 
 std::size_t AntPopulation::GetCount() const { return ants.size(); }

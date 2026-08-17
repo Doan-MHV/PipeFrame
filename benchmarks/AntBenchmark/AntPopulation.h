@@ -18,6 +18,7 @@ class AntPopulation {
 
     void Update(float fixedDeltaTime);
 
+    std::vector<Ant> &GetAnts();
     const std::vector<Ant> &GetAnts() const;
     std::size_t GetCount() const;
 

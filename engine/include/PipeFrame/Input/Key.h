@@ -5,6 +5,7 @@ enum class Key {
     Unknown,
 
     A,
+    B,
     D,
     N,
     P,
@@ -12,6 +13,7 @@ enum class Key {
     S,
     L,
     W,
+    H,
 
     Left,
     Right,

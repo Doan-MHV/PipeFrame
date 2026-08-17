@@ -19,7 +19,7 @@ class TestScene final : public Scene {
   public:
     void Load() override {
         const std::filesystem::path fontPath =
-            std::filesystem::path(PIPEFRAME_WORKBENCH_RESOURCE_DIR) / "fonts/roboto_mono_semi.ttf";
+            std::filesystem::path(PIPEFRAME_ASSET_DIR) / "fonts/roboto_mono_semi.ttf";
 
         if (!diagnosticsOverlay.Load(fontPath)) {
             std::cerr << "Unable to load diagnostics font: " << fontPath << '\n';
