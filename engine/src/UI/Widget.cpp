@@ -1,11 +1,19 @@
 #include <PipeFrame/UI/Widget.h>
 
 void Widget::SetPosition(sf::Vector2f newPosition) {
+    if (position.x == newPosition.x && position.y == newPosition.y) {
+        return;
+    }
+
     position = newPosition;
     NotifyGeometryChanged();
 }
 
 void Widget::SetSize(sf::Vector2f newSize) {
+    if (size.x == newSize.x && size.y == newSize.y) {
+        return;
+    }
+
     size = newSize;
     NotifyGeometryChanged();
 }
@@ -30,7 +38,16 @@ void Widget::SetVisible(bool newVisible) { visible = newVisible; }
 
 bool Widget::IsVisible() const { return visible; }
 
-void Widget::SetEnabled(bool newEnabled) { enabled = newEnabled; }
+void Widget::SetEnabled(bool newEnabled) {
+    if (enabled == newEnabled) {
+        return;
+    }
+
+    enabled = newEnabled;
+    OnEnabledChanged();
+}
+
+void Widget::OnEnabledChanged() {}
 
 bool Widget::IsEnabled() const { return enabled; }
 
@@ -39,6 +56,24 @@ Widget *Widget::GetParent() { return parent; }
 const Widget *Widget::GetParent() const { return parent; }
 
 std::size_t Widget::GetChildCount() const { return children.size(); }
+
+Widget *Widget::GetChild(std::size_t index) {
+    if (index >= children.size()) {
+        return nullptr;
+    }
+
+    return children[index].get();
+}
+
+const Widget *Widget::GetChild(std::size_t index) const {
+    if (index >= children.size()) {
+        return nullptr;
+    }
+
+    return children[index].get();
+}
+
+void Widget::OnChildGeometryChanged(Widget &child) { (void)child; }
 
 void Widget::Render(sf::RenderTarget &target) const {
     if (!visible) {
@@ -65,14 +100,22 @@ void Widget::AttachChild(std::unique_ptr<Widget> child) {
 
     children.push_back(std::move(child));
 
-    childReference.NotifyGeometryChanged();
+    childReference.NotifyGeometryChanged(false);
+
+    OnChildGeometryChanged(childReference);
 }
 
-void Widget::NotifyGeometryChanged() {
+void Widget::NotifyGeometryChanged(bool notifyParent) {
     OnGeometryChanged();
 
+    if (notifyParent && parent != nullptr) {
+        parent->OnChildGeometryChanged(*this);
+    }
+
+    // A parent movement changes every descendant's screen position.
+    // Do not notify the parent again during this downward propagation.
     for (const std::unique_ptr<Widget> &child : children) {
-        child->NotifyGeometryChanged();
+        child->NotifyGeometryChanged(false);
     }
 }
 
@@ -90,7 +133,8 @@ Widget *Widget::FindTopmostAt(sf::Vector2f screenPoint) {
         return nullptr;
     }
 
-    // Children created later are drawn later, so they are on top.
+    // Search children first because they render above their parent.
+    // Search in reverse because the last-created child is on top.
     for (auto iterator = children.rbegin(); iterator != children.rend(); ++iterator) {
         Widget *hitWidget = (*iterator)->FindTopmostAt(screenPoint);
 
@@ -99,9 +143,14 @@ Widget *Widget::FindTopmostAt(sf::Vector2f screenPoint) {
         }
     }
 
-    if (Contains(screenPoint)) {
+    // Only return this widget if it participates in pointer input.
+    if (hitTestVisible && Contains(screenPoint)) {
         return this;
     }
 
     return nullptr;
 }
+
+void Widget::SetHitTestVisible(bool newHitTestVisible) { hitTestVisible = newHitTestVisible; }
+
+bool Widget::IsHitTestVisible() const { return hitTestVisible; }

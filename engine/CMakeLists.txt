@@ -13,6 +13,9 @@ add_library(PipeFrameEngine
         src/UI/Widget.cpp
         src/UI/Panel.cpp
         src/UI/UIManager.cpp
+        src/UI/Button.cpp
+        src/UI/Label.cpp
+        src/UI/StackPanel.cpp
 )
 
 add_library(PipeFrame::Engine ALIAS PipeFrameEngine)

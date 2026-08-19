@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <memory>
 
@@ -13,117 +14,46 @@
 #include <PipeFrame/Input/Input.h>
 #include <PipeFrame/Render/RenderContext.h>
 #include <PipeFrame/Simulation/SimulationController.h>
+#include <PipeFrame/UI/Button.h>
+#include <PipeFrame/UI/Label.h>
 #include <PipeFrame/UI/Panel.h>
+#include <PipeFrame/UI/StackPanel.h>
 #include <PipeFrame/UI/UIManager.h>
-
-class ClickablePanel final : public Panel {
-  protected:
-    void OnPointerEntered() override {
-        pointerInside = true;
-
-        if (!pressed) {
-            RefreshColor();
-        }
-    }
-
-    void OnPointerExited() override {
-        pointerInside = false;
-
-        if (!pressed) {
-            RefreshColor();
-        }
-    }
-
-    bool OnEvent(const sf::Event &event) override {
-        if (const auto *mousePressed = event.getIf<sf::Event::MouseButtonPressed>()) {
-            if (mousePressed->button != sf::Mouse::Button::Left) {
-                return false;
-            }
-
-            pressed = true;
-            SetFillColor(PressedColor);
-
-            return true;
-        }
-
-        if (const auto *mouseMoved = event.getIf<sf::Event::MouseMoved>()) {
-            if (!pressed) {
-                return false;
-            }
-
-            const sf::Vector2f mousePosition{static_cast<float>(mouseMoved->position.x),
-                                             static_cast<float>(mouseMoved->position.y)};
-
-            pointerInside = Contains(mousePosition);
-
-            if (pointerInside) {
-                SetFillColor(PressedColor);
-            } else {
-                RefreshColor();
-            }
-
-            return true;
-        }
-
-        if (const auto *mouseReleased = event.getIf<sf::Event::MouseButtonReleased>()) {
-            if (mouseReleased->button != sf::Mouse::Button::Left || !pressed) {
-                return false;
-            }
-
-            const sf::Vector2f mousePosition{static_cast<float>(mouseReleased->position.x),
-                                             static_cast<float>(mouseReleased->position.y)};
-
-            pointerInside = Contains(mousePosition);
-            pressed = false;
-
-            // A click only happens when press and release are both
-            // associated with this panel.
-            if (pointerInside) {
-                selected = !selected;
-            }
-
-            RefreshColor();
-
-            return true;
-        }
-
-        return false;
-    }
-
-  private:
-    void RefreshColor() {
-        if (selected) {
-            SetFillColor(pointerInside ? SelectedHoverColor : SelectedColor);
-
-            return;
-        }
-
-        SetFillColor(pointerInside ? HoverColor : NormalColor);
-    }
-
-    inline static const sf::Color NormalColor{37, 41, 51};
-
-    inline static const sf::Color HoverColor{52, 59, 74};
-
-    inline static const sf::Color PressedColor{82, 96, 128};
-
-    inline static const sf::Color SelectedColor{62, 75, 108};
-
-    inline static const sf::Color SelectedHoverColor{74, 89, 126};
-
-    bool pointerInside = false;
-    bool pressed = false;
-    bool selected = false;
-};
 
 class TestScene final : public Scene {
   public:
+    void LayoutEditor(sf::Vector2u windowSize) {
+        if (editorPanel == nullptr) {
+            return;
+        }
+
+        constexpr float PanelWidth = 300.0f;
+        constexpr float RightMargin = 80.0f;
+        constexpr float MinimumLeftMargin = 12.0f;
+        constexpr float TopMargin = 80.0f;
+
+        const float windowWidth = static_cast<float>(windowSize.x);
+
+        const float panelX = std::max(MinimumLeftMargin, windowWidth - PanelWidth - RightMargin);
+
+        editorPanel->SetPosition({panelX, TopMargin});
+    }
+
+    void OnResize(sf::Vector2u newSize, RenderContext &context) override {
+        (void)context;
+        LayoutEditor(newSize);
+    }
+
     void Load() override {
         const std::filesystem::path fontPath =
             std::filesystem::path(PIPEFRAME_ASSET_DIR) / "fonts/roboto_mono_semi.ttf";
 
         if (!diagnosticsOverlay.Load(fontPath)) {
             std::cerr << "Unable to load diagnostics font: " << fontPath << '\n';
+        }
+
+        if (!uiManager.LoadDefaultFont(fontPath)) {
+            std::cerr << "Unable to load UI font: " << fontPath << '\n';
         }
 
         worldCursor.setRadius(8.0f);
@@ -144,15 +74,15 @@ class TestScene final : public Scene {
         panel.setOutlineThickness(4.0f);
         panel.setOutlineColor(sf::Color(245, 179, 103));
 
-        Panel &editorPanel = uiManager.CreateRoot<Panel>();
+        editorPanel = &uiManager.CreateRoot<Panel>();
 
-        editorPanel.SetPosition({900.0f, 80.0f});
-        editorPanel.SetSize({300.0f, 560.0f});
-        editorPanel.SetFillColor(sf::Color(24, 27, 34, 245));
-        editorPanel.SetOutlineColor(sf::Color(78, 86, 104));
-        editorPanel.SetOutlineThickness(1.0f);
+        editorPanel->SetPosition({900.0f, 80.0f});
+        editorPanel->SetSize({300.0f, 560.0f});
+        editorPanel->SetFillColor(sf::Color(24, 27, 34, 245));
+        editorPanel->SetOutlineColor(sf::Color(78, 86, 104));
+        editorPanel->SetOutlineThickness(1.0f);
 
-        Panel &headerPanel = editorPanel.CreateChild<Panel>();
+        Panel &headerPanel = editorPanel->CreateChild<Panel>();
 
         headerPanel.SetPosition({12.0f, 12.0f});
         headerPanel.SetSize({276.0f, 48.0f});
@@ -160,7 +90,16 @@ class TestScene final : public Scene {
         headerPanel.SetOutlineColor(sf::Color(90, 100, 120));
         headerPanel.SetOutlineThickness(1.0f);
 
-        Panel &contentPanel = editorPanel.CreateChild<Panel>();
+        Label &headerLabel = headerPanel.CreateChild<Label>(uiManager.GetDefaultFont());
+
+        headerLabel.SetPosition({0.0f, 0.0f});
+        headerLabel.SetSize(headerPanel.GetSize());
+        headerLabel.SetText("SIMULATION");
+        headerLabel.SetCharacterSize(15);
+        headerLabel.SetAlignment(LabelAlignment::Left);
+        headerLabel.SetHorizontalPadding(12.0f);
+
+        StackPanel &contentPanel = editorPanel->CreateChild<StackPanel>();
 
         contentPanel.SetPosition({12.0f, 72.0f});
         contentPanel.SetSize({276.0f, 476.0f});
@@ -168,13 +107,37 @@ class TestScene final : public Scene {
         contentPanel.SetOutlineColor(sf::Color(65, 72, 88));
         contentPanel.SetOutlineThickness(1.0f);
 
-        ClickablePanel &propertyGroup = contentPanel.CreateChild<ClickablePanel>();
+        contentPanel.SetOrientation(StackOrientation::Vertical);
+        contentPanel.SetPadding(Thickness{12.0f});
+        contentPanel.SetSpacing(8.0f);
 
-        propertyGroup.SetPosition({12.0f, 12.0f});
-        propertyGroup.SetSize({252.0f, 100.0f});
-        propertyGroup.SetFillColor(sf::Color(37, 41, 51));
-        propertyGroup.SetOutlineColor(sf::Color(76, 84, 102));
-        propertyGroup.SetOutlineThickness(1.0f);
+        Button &pauseButton = contentPanel.CreateChild<Button>();
+
+        pauseButton.SetSize({0.0f, 44.0f});
+        pauseButton.SetOnClick([this]() { simulationController.TogglePlayPause(); });
+
+        playPauseLabel = &pauseButton.CreateChild<Label>(uiManager.GetDefaultFont());
+
+        playPauseLabel->SetPosition({0.0f, 0.0f});
+        playPauseLabel->SetSize(pauseButton.GetSize());
+        playPauseLabel->SetCharacterSize(14);
+        playPauseLabel->SetAlignment(LabelAlignment::Center);
+
+        singleStepButton = &contentPanel.CreateChild<Button>();
+
+        singleStepButton->SetSize({0.0f, 44.0f});
+
+        singleStepButton->SetOnClick([this]() { simulationController.RequestSingleStep(); });
+
+        Label &stepLabel = singleStepButton->CreateChild<Label>(uiManager.GetDefaultFont());
+
+        stepLabel.SetPosition({0.0f, 0.0f});
+        stepLabel.SetSize(singleStepButton->GetSize());
+        stepLabel.SetText("SINGLE STEP");
+        stepLabel.SetCharacterSize(14);
+        stepLabel.SetAlignment(LabelAlignment::Center);
+
+        RefreshSimulationControls();
     }
 
     void FixedUpdate(float fixedDeltaTime) override {
@@ -216,6 +179,8 @@ class TestScene final : public Scene {
         if (Input::WasKeyPressed(Key::Period)) {
             simulationController.RequestSingleStep();
         }
+
+        RefreshSimulationControls();
 
         if (simulationController.IsPlaying()) {
             panel.setFillColor(sf::Color(55, 55, 55));
@@ -266,6 +231,25 @@ class TestScene final : public Scene {
     }
 
   private:
+    void RefreshSimulationControls() {
+        if (playPauseLabel == nullptr || singleStepButton == nullptr) {
+            return;
+        }
+
+        const bool playing = simulationController.IsPlaying();
+
+        if (controlsInitialized && displayedPlayingState == playing) {
+            return;
+        }
+
+        controlsInitialized = true;
+        displayedPlayingState = playing;
+
+        playPauseLabel->SetText(playing ? "PAUSE" : "PLAY");
+
+        singleStepButton->SetEnabled(!playing);
+    }
+
     SimulationController simulationController;
     CameraController2D cameraController;
     DiagnosticsOverlay diagnosticsOverlay;
@@ -275,6 +259,13 @@ class TestScene final : public Scene {
     sf::RectangleShape panel;
 
     UIManager uiManager;
+
+    Panel *editorPanel = nullptr;
+    Label *playPauseLabel = nullptr;
+    Button *singleStepButton = nullptr;
+
+    bool controlsInitialized = false;
+    bool displayedPlayingState = false;
 
     float rotation = 0.0f;
 };

@@ -133,3 +133,12 @@ Widget *UIManager::FindTopmostAt(sf::Vector2f screenPoint) {
 
     return nullptr;
 }
+
+bool UIManager::LoadDefaultFont(const std::filesystem::path &fontPath) {
+    defaultFontLoaded = defaultFont.openFromFile(fontPath);
+    return defaultFontLoaded;
+}
+
+bool UIManager::HasDefaultFont() const { return defaultFontLoaded; }
+
+const sf::Font &UIManager::GetDefaultFont() const { return defaultFont; }

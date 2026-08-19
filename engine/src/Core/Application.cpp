@@ -24,6 +24,7 @@ void Application::SetScene(std::unique_ptr<Scene> scene) {
 
     if (activeScene) {
         activeScene->Load();
+        activeScene->OnResize(window.getSize(), renderContext);
         activeScene->Start();
     }
 }
@@ -45,8 +46,14 @@ void Application::Run() {
             }
 
             if (const auto *resized = event->getIf<sf::Event::Resized>()) {
-                renderContext.GetCamera().SetSize(
-                    {static_cast<float>(resized->size.x), static_cast<float>(resized->size.y)});
+                const sf::Vector2f newSize{static_cast<float>(resized->size.x), static_cast<float>(resized->size.y)};
+
+                renderContext.GetCamera().SetSize(newSize);
+                renderContext.SetScreenSize(resized->size);
+
+                if (activeScene) {
+                    activeScene->OnResize(resized->size, renderContext);
+                }
             }
 
             if (activeScene) {

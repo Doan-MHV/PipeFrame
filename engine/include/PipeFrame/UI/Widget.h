@@ -65,20 +65,30 @@ class Widget {
 
     void Render(sf::RenderTarget &target) const;
 
+    void SetHitTestVisible(bool newHitTestVisible);
+    bool IsHitTestVisible() const;
+
+    Widget *GetChild(std::size_t index);
+    const Widget *GetChild(std::size_t index) const;
+
   protected:
     virtual void OnRender(sf::RenderTarget &target) const = 0;
     virtual void OnGeometryChanged();
     virtual bool OnEvent(const sf::Event &event);
-    
+
     virtual void OnPointerEntered();
     virtual void OnPointerExited();
+
+    virtual void OnEnabledChanged();
+
+    virtual void OnChildGeometryChanged(Widget &child);
 
   private:
     friend class UIManager;
 
     Widget *FindTopmostAt(sf::Vector2f screenPoint);
     void AttachChild(std::unique_ptr<Widget> child);
-    void NotifyGeometryChanged();
+    void NotifyGeometryChanged(bool notifyParent = true);
 
     Widget *parent = nullptr;
     std::vector<std::unique_ptr<Widget>> children;
@@ -88,6 +98,8 @@ class Widget {
 
     bool visible = true;
     bool enabled = true;
+
+    bool hitTestVisible = true;
 };
 
 #endif

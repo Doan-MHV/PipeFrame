@@ -2,12 +2,14 @@
 #define PIPEFRAME_UI_MANAGER_H
 
 #include <cstddef>
+#include <filesystem>
 #include <memory>
 #include <optional>
 #include <type_traits>
 #include <utility>
 #include <vector>
 
+#include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
@@ -37,6 +39,12 @@ class UIManager {
 
     void Render(sf::RenderTarget &target) const;
 
+    bool LoadDefaultFont(const std::filesystem::path &fontPath);
+
+    bool HasDefaultFont() const;
+
+    const sf::Font &GetDefaultFont() const;
+
     std::size_t GetRootCount() const;
 
   private:
@@ -47,8 +55,11 @@ class UIManager {
 
     Widget *FindTopmostAt(sf::Vector2f screenPoint);
 
+    sf::Font defaultFont;
+    bool defaultFontLoaded = false;
+
     std::vector<std::unique_ptr<Widget>> roots;
-    
+
     Widget *hoveredWidget = nullptr;
     Widget *capturedWidget = nullptr;
 };
