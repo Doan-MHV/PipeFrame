@@ -2,6 +2,7 @@
 #define PIPEFRAME_RENDER_CONTEXT_H
 
 #include "PipeFrame/Render/Camera2D.h"
+#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
 
@@ -34,6 +35,12 @@ class RenderContext {
 
         screenView.setSize(screenSize);
         screenView.setCenter(screenSize * 0.5f);
+    }
+
+    sf::IntRect GetWorldViewportBounds() const { return window.getViewport(camera.GetView()); }
+
+    bool IsInsideWorldViewport(sf::Vector2i pixelPosition) const {
+        return GetWorldViewportBounds().contains(pixelPosition);
     }
 
   private:

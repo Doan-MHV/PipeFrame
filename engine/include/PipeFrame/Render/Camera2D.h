@@ -1,12 +1,12 @@
 #ifndef PIPEFRAME_CAMERA2D_H
 #define PIPEFRAME_CAMERA2D_H
 
+#include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/View.hpp>
 #include <SFML/System/Vector2.hpp>
 
-class Camera2D
-{
-public:
+class Camera2D {
+  public:
     Camera2D();
 
     void SetCenter(sf::Vector2f center);
@@ -19,9 +19,11 @@ public:
     sf::Vector2f GetSize() const;
     float GetZoom() const;
 
-    const sf::View& GetView() const;
+    void SetViewport(sf::FloatRect normalizedViewport);
 
-private:
+    const sf::View &GetView() const;
+
+  private:
     void RefreshView();
 
     sf::View view;
@@ -31,4 +33,4 @@ private:
     float zoom = 1.0f;
 };
 
-#endif //PIPEFRAME_CAMERA2D_H
+#endif // PIPEFRAME_CAMERA2D_H

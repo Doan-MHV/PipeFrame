@@ -23,10 +23,18 @@ class DiagnosticsOverlay {
     void Render(sf::RenderTarget &target, const SimulationController &simulation, const Camera2D &camera,
                 sf::Vector2f mouseWorldPosition);
 
+    void SetVisible(bool newVisible);
+    bool IsVisible() const;
+
+    void SetPosition(sf::Vector2f position);
+    sf::Vector2f GetSize() const;
+
   private:
     sf::Font font;
     sf::Text text;
     sf::RectangleShape background;
+
+    bool visible = false;
 
     float sampleElapsedTime = 0.0f;
     unsigned int sampleFrameCount = 0;

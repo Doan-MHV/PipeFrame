@@ -1,32 +1,24 @@
 #include "PipeFrame/Render/Camera2D.h"
 
-Camera2D::Camera2D()
-{
-    RefreshView();
-}
+Camera2D::Camera2D() { RefreshView(); }
 
-void Camera2D::SetCenter(sf::Vector2f newCenter)
-{
+void Camera2D::SetCenter(sf::Vector2f newCenter) {
     center = newCenter;
     RefreshView();
 }
 
-void Camera2D::Move(sf::Vector2f offset)
-{
+void Camera2D::Move(sf::Vector2f offset) {
     center += offset;
     RefreshView();
 }
 
-void Camera2D::SetSize(sf::Vector2f size)
-{
+void Camera2D::SetSize(sf::Vector2f size) {
     baseSize = size;
     RefreshView();
 }
 
-void Camera2D::SetZoom(float newZoom)
-{
-    if (newZoom <= 0.0f)
-    {
+void Camera2D::SetZoom(float newZoom) {
+    if (newZoom <= 0.0f) {
         return;
     }
 
@@ -34,28 +26,17 @@ void Camera2D::SetZoom(float newZoom)
     RefreshView();
 }
 
-sf::Vector2f Camera2D::GetCenter() const
-{
-    return center;
-}
+void Camera2D::SetViewport(sf::FloatRect normalizedViewport) { view.setViewport(normalizedViewport); }
 
-sf::Vector2f Camera2D::GetSize() const
-{
-    return baseSize * zoom;
-}
+sf::Vector2f Camera2D::GetCenter() const { return center; }
 
-float Camera2D::GetZoom() const
-{
-    return zoom;
-}
+sf::Vector2f Camera2D::GetSize() const { return baseSize * zoom; }
 
-const sf::View& Camera2D::GetView() const
-{
-    return view;
-}
+float Camera2D::GetZoom() const { return zoom; }
 
-void Camera2D::RefreshView()
-{
+const sf::View &Camera2D::GetView() const { return view; }
+
+void Camera2D::RefreshView() {
     view.setCenter(center);
     view.setSize(baseSize * zoom);
 }

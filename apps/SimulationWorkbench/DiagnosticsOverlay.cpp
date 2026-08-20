@@ -38,6 +38,10 @@ void DiagnosticsOverlay::Update(float frameDeltaTime) {
 
 void DiagnosticsOverlay::Render(sf::RenderTarget &target, const SimulationController &simulation,
                                 const Camera2D &camera, sf::Vector2f mouseWorldPosition) {
+    if (!visible) {
+        return;
+    }
+    
     const sf::Vector2f cameraPosition = camera.GetCenter();
 
     std::ostringstream stream;
@@ -56,3 +60,15 @@ void DiagnosticsOverlay::Render(sf::RenderTarget &target, const SimulationContro
     target.draw(background);
     target.draw(text);
 }
+
+void DiagnosticsOverlay::SetVisible(bool newVisible) { visible = newVisible; }
+
+bool DiagnosticsOverlay::IsVisible() const { return visible; }
+
+void DiagnosticsOverlay::SetPosition(sf::Vector2f position) {
+    background.setPosition(position);
+
+    text.setPosition(position + sf::Vector2f{12.0f, 10.0f});
+}
+
+sf::Vector2f DiagnosticsOverlay::GetSize() const { return background.getSize(); }
