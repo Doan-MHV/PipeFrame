@@ -16,6 +16,7 @@ add_library(PipeFrameEngine
         src/UI/Button.cpp
         src/UI/Label.cpp
         src/UI/StackPanel.cpp
+        src/UI/NumericField.cpp
 )
 
 add_library(PipeFrame::Engine ALIAS PipeFrameEngine)

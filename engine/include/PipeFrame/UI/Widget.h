@@ -71,6 +71,10 @@ class Widget {
     Widget *GetChild(std::size_t index);
     const Widget *GetChild(std::size_t index) const;
 
+    void SetFocusable(bool newFocusable);
+    bool IsFocusable() const;
+    bool HasKeyboardFocus() const;
+
   protected:
     virtual void OnRender(sf::RenderTarget &target) const = 0;
     virtual void OnGeometryChanged();
@@ -82,6 +86,9 @@ class Widget {
     virtual void OnEnabledChanged();
 
     virtual void OnChildGeometryChanged(Widget &child);
+
+    virtual void OnKeyboardFocusGained();
+    virtual void OnKeyboardFocusLost();
 
   private:
     friend class UIManager;
@@ -100,6 +107,9 @@ class Widget {
     bool enabled = true;
 
     bool hitTestVisible = true;
+
+    bool focusable = false;
+    bool keyboardFocused = false;
 };
 
 #endif

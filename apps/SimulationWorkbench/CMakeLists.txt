@@ -1,6 +1,7 @@
 add_executable(SimulationWorkbench
         Main.cpp
         DiagnosticsOverlay.cpp
+        DemoAgent.cpp
 )
 
 target_link_libraries(SimulationWorkbench

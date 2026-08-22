@@ -154,3 +154,13 @@ Widget *Widget::FindTopmostAt(sf::Vector2f screenPoint) {
 void Widget::SetHitTestVisible(bool newHitTestVisible) { hitTestVisible = newHitTestVisible; }
 
 bool Widget::IsHitTestVisible() const { return hitTestVisible; }
+
+void Widget::SetFocusable(bool newFocusable) { focusable = newFocusable; }
+
+bool Widget::IsFocusable() const { return focusable; }
+
+bool Widget::HasKeyboardFocus() const { return keyboardFocused; }
+
+void Widget::OnKeyboardFocusGained() {}
+
+void Widget::OnKeyboardFocusLost() {}

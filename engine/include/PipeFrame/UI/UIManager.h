@@ -47,6 +47,8 @@ class UIManager {
 
     std::size_t GetRootCount() const;
 
+    bool HasKeyboardFocus() const;
+
   private:
     static std::optional<sf::Vector2f> GetPointerPosition(const sf::Event &event);
     void UpdateHoveredWidget(Widget *newHoveredWidget);
@@ -62,6 +64,10 @@ class UIManager {
 
     Widget *hoveredWidget = nullptr;
     Widget *capturedWidget = nullptr;
+    Widget *focusedWidget = nullptr;
+
+    static Widget *FindFocusableAncestor(Widget *widget);
+    void SetKeyboardFocus(Widget *widget);
 };
 
 #endif

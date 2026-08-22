@@ -1,11 +1,27 @@
 #include <PipeFrame/UI/UIManager.h>
 
 bool UIManager::HandleEvent(const sf::Event &event) {
+    if (event.is<sf::Event::FocusLost>()) {
+        SetKeyboardFocus(nullptr);
+        return false;
+    }
+
     const std::optional<sf::Vector2f> pointerPosition = GetPointerPosition(event);
 
-    // Keyboard focus will be implemented later.
     if (!pointerPosition) {
-        return false;
+        if (focusedWidget == nullptr) {
+            return false;
+        }
+
+        const bool keyboardEvent = event.is<sf::Event::TextEntered>() || event.is<sf::Event::KeyPressed>() ||
+                                   event.is<sf::Event::KeyReleased>();
+
+        if (!keyboardEvent) {
+            return false;
+        }
+
+        DispatchEvent(focusedWidget, event);
+        return true;
     }
 
     Widget *hitWidget = FindTopmostAt(*pointerPosition);
@@ -26,11 +42,12 @@ bool UIManager::HandleEvent(const sf::Event &event) {
     if (event.is<sf::Event::MouseButtonPressed>()) {
         UpdateHoveredWidget(hitWidget);
 
+        SetKeyboardFocus(FindFocusableAncestor(hitWidget));
+
         if (hitWidget == nullptr) {
             return false;
         }
 
-        // Future movement and release events go back to this widget.
         capturedWidget = hitWidget;
 
         DispatchEvent(capturedWidget, event);
@@ -49,7 +66,6 @@ bool UIManager::HandleEvent(const sf::Event &event) {
         DispatchEvent(target, event);
 
         capturedWidget = nullptr;
-
         return true;
     }
 
@@ -142,3 +158,37 @@ bool UIManager::LoadDefaultFont(const std::filesystem::path &fontPath) {
 bool UIManager::HasDefaultFont() const { return defaultFontLoaded; }
 
 const sf::Font &UIManager::GetDefaultFont() const { return defaultFont; }
+
+Widget *UIManager::FindFocusableAncestor(Widget *widget) {
+    Widget *current = widget;
+
+    while (current != nullptr) {
+        if (current->IsFocusable()) {
+            return current;
+        }
+
+        current = current->GetParent();
+    }
+
+    return nullptr;
+}
+
+void UIManager::SetKeyboardFocus(Widget *widget) {
+    if (focusedWidget == widget) {
+        return;
+    }
+
+    if (focusedWidget != nullptr) {
+        focusedWidget->keyboardFocused = false;
+        focusedWidget->OnKeyboardFocusLost();
+    }
+
+    focusedWidget = widget;
+
+    if (focusedWidget != nullptr) {
+        focusedWidget->keyboardFocused = true;
+        focusedWidget->OnKeyboardFocusGained();
+    }
+}
+
+bool UIManager::HasKeyboardFocus() const { return focusedWidget != nullptr; }
