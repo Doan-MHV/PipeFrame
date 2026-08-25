@@ -8,9 +8,9 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System/Vector2.hpp>
 
-#include <cstdint>
+#include "Editor/SceneTypes.h"
 
-using DemoAgentId = std::uint32_t;
+using DemoAgentId = pipeframe::editor::SceneObjectId;
 
 class DemoAgent {
   public:

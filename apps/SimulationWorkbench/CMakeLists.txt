@@ -2,6 +2,10 @@ add_executable(SimulationWorkbench
         Main.cpp
         DiagnosticsOverlay.cpp
         DemoAgent.cpp
+        WorkbenchScene.cpp
+        Editor/SceneDocument.cpp
+        Editor/SceneSerializer.cpp
+        Editor/SimulationPanel.cpp
 )
 
 target_link_libraries(SimulationWorkbench

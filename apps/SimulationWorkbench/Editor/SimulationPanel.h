@@ -1,0 +1,8 @@
+
+
+#ifndef PIPEFRAME_SIMULATIONPANEL_H
+#define PIPEFRAME_SIMULATIONPANEL_H
+
+class SimulationPanel {};
+
+#endif // PIPEFRAME_SIMULATIONPANEL_H
