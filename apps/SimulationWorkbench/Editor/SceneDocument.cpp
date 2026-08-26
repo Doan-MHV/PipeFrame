@@ -30,6 +30,30 @@ SceneObjectId SceneDocument::CreateObject(std::string name, SceneObjectType type
     return objectId;
 }
 
+SceneObjectId SceneDocument::CreatePopulation(std::string name, SceneTransform transform,
+                                              AgentPopulationSettings settings) {
+
+    settings.agentCount = std::max(std::uint32_t{1}, settings.agentCount);
+
+    settings.spawnAreaSize.x = std::max(1.0f, settings.spawnAreaSize.x);
+
+    settings.spawnAreaSize.y = std::max(1.0f, settings.spawnAreaSize.y);
+
+    const SceneObjectId objectId = nextObjectId++;
+
+    objects.push_back({
+        objectId,
+        std::move(name),
+        SceneObjectType::AgentPopulation,
+        transform,
+        settings,
+    });
+
+    dirty = true;
+
+    return objectId;
+}
+
 bool SceneDocument::RestoreObject(SceneObjectData object) {
     if (FindObject(object.id) != nullptr) {
         return false;
@@ -69,6 +93,35 @@ bool SceneDocument::SetTransform(SceneObjectId objectId, SceneTransform transfor
     }
 
     iterator->transform = transform;
+    dirty = true;
+
+    return true;
+}
+
+bool SceneDocument::SetPopulationSettings(SceneObjectId objectId, AgentPopulationSettings settings) {
+
+    auto iterator = std::find_if(objects.begin(), objects.end(),
+                                 [objectId](const SceneObjectData &object) { return object.id == objectId; });
+
+    if (iterator == objects.end() || iterator->type != SceneObjectType::AgentPopulation ||
+        !iterator->population.has_value()) {
+        return false;
+    }
+
+    settings.agentCount = std::max(std::uint32_t{1}, settings.agentCount);
+
+    settings.spawnAreaSize.x = std::max(1.0f, settings.spawnAreaSize.x);
+
+    settings.spawnAreaSize.y = std::max(1.0f, settings.spawnAreaSize.y);
+
+    const AgentPopulationSettings &current = *iterator->population;
+
+    if (current.agentCount == settings.agentCount && current.spawnAreaSize == settings.spawnAreaSize &&
+        current.randomSeed == settings.randomSeed) {
+        return false;
+    }
+
+    iterator->population = settings;
     dirty = true;
 
     return true;

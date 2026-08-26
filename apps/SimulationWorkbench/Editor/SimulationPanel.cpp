@@ -31,32 +31,32 @@ SimulationPanel::SimulationPanel(const sf::Font &font) {
     headerLabel.SetAlignment(LabelAlignment::Left);
     headerLabel.SetHorizontalPadding(12.0f);
 
-    StackPanel &contentPanel = CreateChild<StackPanel>();
+    contentPanel = &CreateChild<StackPanel>();
 
-    contentPanel.SetPosition({12.0f, 72.0f});
-    contentPanel.SetSize({276.0f, 476.0f});
-    contentPanel.SetFillColor(sf::Color(31, 34, 43));
-    contentPanel.SetOutlineColor(sf::Color(65, 72, 88));
-    contentPanel.SetOutlineThickness(1.0f);
-    contentPanel.SetOrientation(StackOrientation::Vertical);
-    contentPanel.SetPadding(Thickness{12.0f});
-    contentPanel.SetSpacing(8.0f);
+    contentPanel->SetPosition({12.0f, 72.0f});
+    contentPanel->SetSize({276.0f, 476.0f});
+    contentPanel->SetFillColor(sf::Color(31, 34, 43));
+    contentPanel->SetOutlineColor(sf::Color(65, 72, 88));
+    contentPanel->SetOutlineThickness(1.0f);
+    contentPanel->SetOrientation(StackOrientation::Vertical);
+    contentPanel->SetPadding(Thickness{12.0f});
+    contentPanel->SetSpacing(8.0f);
 
-    playPauseButton = &contentPanel.CreateChild<TextButton>(font);
+    playPauseButton = &contentPanel->CreateChild<TextButton>(font);
     playPauseButton->SetSize({0.0f, 44.0f});
     playPauseButton->SetTextCharacterSize(14);
 
-    singleStepButton = &contentPanel.CreateChild<TextButton>(font);
+    singleStepButton = &contentPanel->CreateChild<TextButton>(font);
     singleStepButton->SetSize({0.0f, 44.0f});
     singleStepButton->SetText("SINGLE STEP");
     singleStepButton->SetTextCharacterSize(14);
 
-    resetButton = &contentPanel.CreateChild<TextButton>(font);
+    resetButton = &contentPanel->CreateChild<TextButton>(font);
     resetButton->SetSize({0.0f, 44.0f});
     resetButton->SetText("RESET");
     resetButton->SetTextCharacterSize(14);
 
-    selectionLabel = &contentPanel.CreateChild<Label>(font);
+    selectionLabel = &contentPanel->CreateChild<Label>(font);
     selectionLabel->SetSize({0.0f, 36.0f});
     selectionLabel->SetText("SELECTED: NONE");
     selectionLabel->SetCharacterSize(12);
@@ -64,26 +64,50 @@ SimulationPanel::SimulationPanel(const sf::Font &font) {
     selectionLabel->SetHorizontalPadding(8.0f);
     selectionLabel->SetColor(sf::Color(180, 190, 210));
 
-    Label &transformHeader = contentPanel.CreateChild<Label>(font);
+    transformHeader = &contentPanel->CreateChild<Label>(font);
 
-    transformHeader.SetSize({0.0f, 28.0f});
-    transformHeader.SetText("TRANSFORM");
-    transformHeader.SetCharacterSize(12);
-    transformHeader.SetAlignment(LabelAlignment::Left);
-    transformHeader.SetHorizontalPadding(8.0f);
-    transformHeader.SetColor(sf::Color(225, 230, 240));
+    transformHeader->SetSize({0.0f, 28.0f});
+    transformHeader->SetText("TRANSFORM");
+    transformHeader->SetCharacterSize(12);
+    transformHeader->SetAlignment(LabelAlignment::Left);
+    transformHeader->SetHorizontalPadding(8.0f);
+    transformHeader->SetColor(sf::Color(225, 230, 240));
 
-    positionXField = &contentPanel.CreateChild<LabeledNumericField>(font, "POSITION X");
+    positionXField = &contentPanel->CreateChild<LabeledNumericField>(font, "POSITION X");
     positionXField->SetSize({0.0f, 36.0f});
 
-    positionYField = &contentPanel.CreateChild<LabeledNumericField>(font, "POSITION Y");
+    positionYField = &contentPanel->CreateChild<LabeledNumericField>(font, "POSITION Y");
     positionYField->SetSize({0.0f, 36.0f});
 
-    rotationField = &contentPanel.CreateChild<LabeledNumericField>(font, "ROTATION");
+    rotationField = &contentPanel->CreateChild<LabeledNumericField>(font, "ROTATION");
     rotationField->SetSize({0.0f, 36.0f});
 
+    populationHeader = &contentPanel->CreateChild<Label>(font);
+
+    populationHeader->SetSize({0.0f, 28.0f});
+    populationHeader->SetText("POPULATION");
+    populationHeader->SetCharacterSize(12);
+    populationHeader->SetAlignment(LabelAlignment::Left);
+    populationHeader->SetHorizontalPadding(8.0f);
+    populationHeader->SetColor(sf::Color(225, 230, 240));
+
+    agentCountField = &contentPanel->CreateChild<LabeledNumericField>(font, "AGENT COUNT");
+    agentCountField->SetSize({0.0f, 36.0f});
+
+    spawnWidthField = &contentPanel->CreateChild<LabeledNumericField>(font, "SPAWN WIDTH");
+    spawnWidthField->SetSize({0.0f, 36.0f});
+
+    spawnHeightField = &contentPanel->CreateChild<LabeledNumericField>(font, "SPAWN HEIGHT");
+    spawnHeightField->SetSize({0.0f, 36.0f});
+
+    randomSeedField = &contentPanel->CreateChild<LabeledNumericField>(font, "RANDOM SEED");
+    randomSeedField->SetSize({0.0f, 36.0f});
+
+    // Population editing comes in the next step.
+    SetPopulationEnabled(false);
     SetTransformEnabled(false);
     SetSimulationState(false, false);
+    SetInspectorMode(InspectorMode::None);
 }
 
 void SimulationPanel::SetOnPlayPause(ActionCallback callback) { playPauseButton->SetOnClick(std::move(callback)); }
@@ -104,6 +128,22 @@ void SimulationPanel::SetOnRotationCommitted(ValueCallback callback) {
     rotationField->SetOnValueCommitted(std::move(callback));
 }
 
+void SimulationPanel::SetOnAgentCountCommitted(ValueCallback callback) {
+    agentCountField->SetOnValueCommitted(std::move(callback));
+}
+
+void SimulationPanel::SetOnSpawnWidthCommitted(ValueCallback callback) {
+    spawnWidthField->SetOnValueCommitted(std::move(callback));
+}
+
+void SimulationPanel::SetOnSpawnHeightCommitted(ValueCallback callback) {
+    spawnHeightField->SetOnValueCommitted(std::move(callback));
+}
+
+void SimulationPanel::SetOnRandomSeedCommitted(ValueCallback callback) {
+    randomSeedField->SetOnValueCommitted(std::move(callback));
+}
+
 void SimulationPanel::SetSimulationState(bool playing, bool previewActive) {
     playPauseButton->SetText(playing ? "PAUSE" : "PLAY");
     singleStepButton->SetEnabled(!playing);
@@ -117,6 +157,51 @@ void SimulationPanel::SetSelectionName(const std::string &name) {
     }
 
     selectionLabel->SetText("SELECTED: " + name);
+}
+
+void SimulationPanel::SetInspectorMode(InspectorMode mode) {
+    const bool showTransform = mode == InspectorMode::Transform;
+    const bool showPopulation = mode == InspectorMode::Population;
+
+    transformHeader->SetVisible(showTransform);
+    positionXField->SetVisible(showTransform);
+    positionYField->SetVisible(showTransform);
+    rotationField->SetVisible(showTransform);
+
+    populationHeader->SetVisible(showPopulation);
+    agentCountField->SetVisible(showPopulation);
+    spawnWidthField->SetVisible(showPopulation);
+    spawnHeightField->SetVisible(showPopulation);
+    randomSeedField->SetVisible(showPopulation);
+
+    // SetVisible() does not automatically recalculate StackPanel layout.
+    contentPanel->RefreshLayout();
+}
+
+void SimulationPanel::SetPopulationValues(float agentCount, sf::Vector2f spawnAreaSize, float randomSeed) {
+
+    if (!agentCountField->IsEditing()) {
+        agentCountField->SetValue(agentCount);
+    }
+
+    if (!spawnWidthField->IsEditing()) {
+        spawnWidthField->SetValue(spawnAreaSize.x);
+    }
+
+    if (!spawnHeightField->IsEditing()) {
+        spawnHeightField->SetValue(spawnAreaSize.y);
+    }
+
+    if (!randomSeedField->IsEditing()) {
+        randomSeedField->SetValue(randomSeed);
+    }
+}
+
+void SimulationPanel::SetPopulationEnabled(bool enabled) {
+    agentCountField->SetEnabled(enabled);
+    spawnWidthField->SetEnabled(enabled);
+    spawnHeightField->SetEnabled(enabled);
+    randomSeedField->SetEnabled(enabled);
 }
 
 void SimulationPanel::SetTransformEnabled(bool enabled) {

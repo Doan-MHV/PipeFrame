@@ -16,11 +16,15 @@ class SceneDocument {
 
     SceneObjectId CreateObject(std::string name, SceneObjectType type, SceneTransform transform);
 
+    SceneObjectId CreatePopulation(std::string name, SceneTransform transform, AgentPopulationSettings settings);
+
     bool RestoreObject(SceneObjectData object);
 
     bool RemoveObject(SceneObjectId objectId);
 
     bool SetTransform(SceneObjectId objectId, SceneTransform transform);
+
+    bool SetPopulationSettings(SceneObjectId objectId, AgentPopulationSettings settings);
 
     void Clear();
 

@@ -3,7 +3,7 @@
 #include <PipeFrame/Core/Application.h>
 
 int main() {
-    Application app(1920, 1080, "PipeFrame - Simulation Workbench");
+    Application app(1600, 1200, "PipeFrame - Simulation Workbench");
 
     app.SetScene(CreateSimulationWorkbenchScene());
 

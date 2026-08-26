@@ -1,9 +1,13 @@
 #include "WorkbenchScene.h"
 
 #include <algorithm>
+#include <cmath>
+#include <cstdint>
 #include <filesystem>
+#include <functional>
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <memory>
 #include <optional>
 #include <sstream>
@@ -13,11 +17,12 @@
 #include "DemoAgent.h"
 #include "DiagnosticsOverlay.h"
 #include "Editor/HierarchyPanel.h"
+#include "Editor/PopulationBoundsRenderer.h"
 #include "Editor/SceneDocument.h"
 #include "Editor/SceneSerializer.h"
 #include "Editor/SimulationPanel.h"
 #include "Editor/ViewportToolbar.h"
-#include "PipeFrame/UI/TextButton.h"
+#include "Runtime/RuntimeAgentPopulation.h"
 
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -175,13 +180,14 @@ class TestScene final : public Scene {
 
         hierarchyPanel = &uiManager.CreateRoot<HierarchyPanel>(uiManager.GetDefaultFont());
 
-        hierarchyPanel->SetOnAdd([this]() { CreateDemoAgent(); });
+        hierarchyPanel->SetOnAdd([this]() { CreateAgentPopulation(); });
 
-        hierarchyPanel->SetOnDelete([this]() { DeleteSelectedAgent(); });
+        hierarchyPanel->SetOnDelete([this]() { DeleteSelectedObject(); });
 
-        hierarchyPanel->SetOnSelectionChanged([this](DemoAgentId agentId) { SetSelectedAgent(agentId); });
+        hierarchyPanel->SetOnSelectionChanged(
+            [this](pipeframe::editor::SceneObjectId objectId) { SetSelectedObject(objectId); });
 
-        RebuildHierarchyFromRuntimeAgents();
+        RebuildHierarchyFromDocument();
 
         simulationPanel = &uiManager.CreateRoot<SimulationPanel>(uiManager.GetDefaultFont());
 
@@ -233,8 +239,32 @@ class TestScene final : public Scene {
             RefreshInspector();
         });
 
+        simulationPanel->SetOnAgentCountCommitted([this](float value) {
+            ModifySelectedPopulation([value](pipeframe::editor::AgentPopulationSettings &settings) {
+                settings.agentCount = ToUnsignedInteger(value, 1);
+            });
+        });
+
+        simulationPanel->SetOnSpawnWidthCommitted([this](float value) {
+            ModifySelectedPopulation([value](pipeframe::editor::AgentPopulationSettings &settings) {
+                settings.spawnAreaSize.x = std::max(1.0f, value);
+            });
+        });
+
+        simulationPanel->SetOnSpawnHeightCommitted([this](float value) {
+            ModifySelectedPopulation([value](pipeframe::editor::AgentPopulationSettings &settings) {
+                settings.spawnAreaSize.y = std::max(1.0f, value);
+            });
+        });
+
+        simulationPanel->SetOnRandomSeedCommitted([this](float value) {
+            ModifySelectedPopulation([value](pipeframe::editor::AgentPopulationSettings &settings) {
+                settings.randomSeed = ToUnsignedInteger(value, 0);
+            });
+        });
+
         RefreshSimulationControls();
-        SetSelectedAgent(std::nullopt);
+        SetSelectedObject(std::nullopt);
         RefreshInspector();
         RefreshHistoryControls();
     }
@@ -246,6 +276,11 @@ class TestScene final : public Scene {
 
         for (DemoAgent &agent : demoAgents) {
             agent.SetRotation(agent.GetRotation() + 90.0f * fixedDeltaTime);
+        }
+
+        for (pipeframe::runtime::RuntimeAgentPopulation &population : runtimePopulations) {
+
+            population.Update(fixedDeltaTime);
         }
 
         constexpr float MoveSpeed = 300.0f;
@@ -300,9 +335,13 @@ class TestScene final : public Scene {
         context.BeginWorld();
 
         auto &window = context.GetWindow();
+
+        populationBoundsRenderer.Render(window, sceneDocument, selectedObjectId);
+
         for (const DemoAgent &agent : demoAgents) {
             agent.Render(window);
         }
+
         if (pointerInsideViewport) {
             window.draw(worldCursor);
         }
@@ -394,7 +433,7 @@ class TestScene final : public Scene {
                 keyPressed->code == sf::Keyboard::Key::Delete || keyPressed->code == sf::Keyboard::Key::Backspace;
 
             if (!primaryModifier && !keyPressed->alt && deleteKey) {
-                DeleteSelectedAgent();
+                DeleteSelectedObject();
                 return;
             }
 
@@ -402,7 +441,7 @@ class TestScene final : public Scene {
                 if (draggingSelectedObject) {
                     CancelObjectDrag(true);
                 } else {
-                    SetSelectedAgent(std::nullopt);
+                    SetSelectedObject(std::nullopt);
                 }
 
                 return;
@@ -433,7 +472,7 @@ class TestScene final : public Scene {
 
                 const std::optional<DemoAgentId> hitAgent = HitTestAgents(worldPoint);
 
-                SetSelectedAgent(hitAgent);
+                SetSelectedObject(hitAgent);
 
                 dragStartTransform.reset();
 
@@ -470,14 +509,16 @@ class TestScene final : public Scene {
   private:
     using TransformState = pipeframe::editor::SceneTransform;
 
-    enum class EditorCommandType { Transform, CreateAgent, DeleteAgent };
+    enum class EditorCommandType { Transform, PopulationSettings, CreateObject, DeleteObject };
 
     struct EditorCommand {
         EditorCommandType type;
-        DemoAgentId agentId;
-        std::string agentName;
+        pipeframe::editor::SceneObjectData object;
         TransformState before;
         TransformState after;
+
+        std::optional<pipeframe::editor::AgentPopulationSettings> populationBefore;
+        std::optional<pipeframe::editor::AgentPopulationSettings> populationAfter;
     };
 
     std::filesystem::path GetDefaultScenePath() const {
@@ -501,20 +542,21 @@ class TestScene final : public Scene {
             return;
         }
 
-        // Do not let an unfinished drag survive across documents.
+        // Do not let an unfinished drag survive across documents.f
         CancelObjectDrag(false);
 
         sceneDocument = std::move(*loadedDocument);
 
         RebuildRuntimeAgentsFromDocument();
-        RebuildHierarchyFromRuntimeAgents();
+        runtimePopulations.clear();
+        RebuildHierarchyFromDocument();
 
         // Commands from the previous document must never affect
         // objects in the newly loaded document.
         undoHistory.clear();
         redoHistory.clear();
 
-        SetSelectedAgent(std::nullopt);
+        SetSelectedObject(std::nullopt);
 
         // Continue generated names after the greatest loaded ID.
         nextAgentNameNumber = 1;
@@ -533,15 +575,20 @@ class TestScene final : public Scene {
     }
 
     void RestoreRuntimeFromDocument() {
-        const std::optional<DemoAgentId> previousSelection = selectedAgentId;
+        const std::optional<pipeframe::editor::SceneObjectId> previousSelection = selectedObjectId;
 
         RebuildRuntimeAgentsFromDocument();
 
-        if (previousSelection.has_value() && FindAgent(*previousSelection) != nullptr) {
-
-            SetSelectedAgent(previousSelection);
+        if (runtimePreviewActive) {
+            RebuildRuntimePopulationsFromDocument();
         } else {
-            SetSelectedAgent(std::nullopt);
+            runtimePopulations.clear();
+        }
+
+        if (previousSelection.has_value() && sceneDocument.FindObject(*previousSelection) != nullptr) {
+            SetSelectedObject(previousSelection);
+        } else {
+            SetSelectedObject(std::nullopt);
         }
     }
 
@@ -657,26 +704,28 @@ class TestScene final : public Scene {
         sceneDocument.MarkClean();
 
         RebuildRuntimeAgentsFromDocument();
+        if (runtimePreviewActive) {
+            RebuildRuntimePopulationsFromDocument();
+        }
     }
 
-    void RebuildHierarchyFromRuntimeAgents() {
+    void RebuildHierarchyFromDocument() {
         if (hierarchyPanel == nullptr) {
             return;
         }
 
         std::vector<HierarchyPanel::Item> items;
+        items.reserve(sceneDocument.GetObjects().size());
 
-        items.reserve(demoAgents.size());
-
-        for (const DemoAgent &agent : demoAgents) {
+        for (const pipeframe::editor::SceneObjectData &object : sceneDocument.GetObjects()) {
             items.push_back({
-                agent.GetId(),
-                agent.GetName(),
+                object.id,
+                object.name,
             });
         }
 
         hierarchyPanel->SetItems(items);
-        hierarchyPanel->SetSelectedObject(selectedAgentId);
+        hierarchyPanel->SetSelectedObject(selectedObjectId);
     }
 
     void RebuildRuntimeAgentsFromDocument() {
@@ -693,6 +742,27 @@ class TestScene final : public Scene {
 
             agent.SetRotation(object.transform.rotation);
             agent.SetSimulationPlaying(simulationController.IsPlaying());
+        }
+    }
+
+    void RebuildRuntimePopulationsFromDocument() {
+        runtimePopulations.clear();
+
+        for (const pipeframe::editor::SceneObjectData &object : sceneDocument.GetObjects()) {
+
+            if (object.type != pipeframe::editor::SceneObjectType::AgentPopulation) {
+                continue;
+            }
+
+            runtimePopulations.emplace_back();
+
+            if (!runtimePopulations.back().Initialize(object)) {
+                runtimePopulations.pop_back();
+                continue;
+            }
+
+            std::cout << "Compiled runtime population: " << object.name << " (" << runtimePopulations.back().GetCount()
+                      << " agents)\n";
         }
     }
 
@@ -713,24 +783,29 @@ class TestScene final : public Scene {
         }
     }
 
-    void DeleteSelectedAgent() {
-        if (!CanAuthorScene()) {
+    void DeleteSelectedObject() {
+        if (!CanAuthorScene() || !selectedObjectId.has_value()) {
             return;
         }
 
         CancelObjectDrag(true);
 
-        DemoAgent *agent = GetSelectedAgent();
+        const pipeframe::editor::SceneObjectData *selectedObject = sceneDocument.FindObject(*selectedObjectId);
 
-        if (agent == nullptr) {
+        if (selectedObject == nullptr) {
             return;
         }
 
+        const pipeframe::editor::SceneObjectId objectId = selectedObject->id;
+
         const EditorCommand command{
-            EditorCommandType::DeleteAgent, agent->GetId(), agent->GetName(), CaptureTransform(*agent), {},
+            EditorCommandType::DeleteObject,
+            *selectedObject,
+            selectedObject->transform,
+            {},
         };
 
-        if (RemoveAgentFromScene(command.agentId)) {
+        if (RemoveObjectFromScene(objectId)) {
             RecordEditorCommand(command);
         }
     }
@@ -759,90 +834,128 @@ class TestScene final : public Scene {
         newAgent.SetRotation(initialTransform.rotation);
         newAgent.SetSimulationPlaying(false);
 
-        RebuildHierarchyFromRuntimeAgents();
-        SetSelectedAgent(newId);
+        RebuildHierarchyFromDocument();
+        SetSelectedObject(newId);
 
-        RecordEditorCommand({
-            EditorCommandType::CreateAgent,
-            newId,
-            name,
-            {},
-            initialTransform,
-        });
+        const pipeframe::editor::SceneObjectData *createdObject = sceneDocument.FindObject(newId);
+
+        if (createdObject != nullptr) {
+            RecordEditorCommand({
+                EditorCommandType::CreateObject,
+                *createdObject,
+                {},
+                initialTransform,
+            });
+        }
     }
 
-    std::optional<DemoAgentId> FindSelectionAfterRemoval(DemoAgentId removedAgentId) const {
-        std::optional<DemoAgentId> previousAgent;
-        bool foundRemovedAgent = false;
+    void CreateAgentPopulation() {
+        if (!CanAuthorScene()) {
+            return;
+        }
 
-        for (const DemoAgent &agent : demoAgents) {
-            if (agent.GetId() == removedAgentId) {
-                foundRemovedAgent = true;
+        const std::string name = std::string("ANT POPULATION ") + std::to_string(nextAgentNameNumber++);
+
+        const TransformState initialTransform{
+            {0.0f, 0.0f},
+            0.0f,
+        };
+
+        const pipeframe::editor::AgentPopulationSettings settings{
+            1'000'000,
+            {4000.0f, 4000.0f},
+            1,
+        };
+
+        const pipeframe::editor::SceneObjectId newId = sceneDocument.CreatePopulation(name, initialTransform, settings);
+
+        RebuildHierarchyFromDocument();
+        SetSelectedObject(newId);
+
+        const pipeframe::editor::SceneObjectData *createdObject = sceneDocument.FindObject(newId);
+
+        if (createdObject != nullptr) {
+            RecordEditorCommand({
+                EditorCommandType::CreateObject,
+                *createdObject,
+                {},
+                initialTransform,
+            });
+        }
+    }
+
+    std::optional<pipeframe::editor::SceneObjectId>
+    FindSelectionAfterRemoval(pipeframe::editor::SceneObjectId removedObjectId) const {
+
+        std::optional<pipeframe::editor::SceneObjectId> previousObject;
+        bool foundRemovedObject = false;
+
+        for (const pipeframe::editor::SceneObjectData &object : sceneDocument.GetObjects()) {
+
+            if (object.id == removedObjectId) {
+                foundRemovedObject = true;
                 continue;
             }
 
-            if (foundRemovedAgent) {
-                return agent.GetId();
+            if (foundRemovedObject) {
+                return object.id;
             }
 
-            previousAgent = agent.GetId();
+            previousObject = object.id;
         }
 
-        return previousAgent;
+        return previousObject;
     }
 
-    bool RemoveAgentFromScene(DemoAgentId agentId) {
-        if (FindAgent(agentId) == nullptr) {
+    bool RemoveObjectFromScene(pipeframe::editor::SceneObjectId objectId) {
+
+        if (sceneDocument.FindObject(objectId) == nullptr) {
             return false;
         }
 
-        if (!sceneDocument.RemoveObject(agentId)) {
+        const bool removingSelectedObject = selectedObjectId.has_value() && *selectedObjectId == objectId;
+
+        const std::optional<pipeframe::editor::SceneObjectId> nextSelection =
+            removingSelectedObject ? FindSelectionAfterRemoval(objectId) : selectedObjectId;
+
+        if (!sceneDocument.RemoveObject(objectId)) {
             return false;
         }
 
-        const bool removingSelectedAgent = selectedAgentId.has_value() && *selectedAgentId == agentId;
+        std::erase_if(demoAgents, [objectId](const DemoAgent &agent) { return agent.GetId() == objectId; });
 
-        const std::optional<DemoAgentId> nextSelection =
-            removingSelectedAgent ? FindSelectionAfterRemoval(agentId) : selectedAgentId;
+        RebuildHierarchyFromDocument();
 
-        std::erase_if(demoAgents, [agentId](const DemoAgent &agent) { return agent.GetId() == agentId; });
-
-        RebuildHierarchyFromRuntimeAgents();
-
-        if (removingSelectedAgent) {
-            SetSelectedAgent(nextSelection);
+        if (removingSelectedObject) {
+            SetSelectedObject(nextSelection);
         } else if (hierarchyPanel != nullptr) {
-            hierarchyPanel->SetSelectedObject(selectedAgentId);
+            hierarchyPanel->SetSelectedObject(selectedObjectId);
         }
 
         return true;
     }
 
-    bool RestoreAgentFromCommand(const EditorCommand &command, const TransformState &transform) {
-        if (FindAgent(command.agentId) != nullptr) {
-            return false;
-        }
+    bool RestoreObjectFromCommand(const EditorCommand &command, const TransformState &transform) {
 
-        const pipeframe::editor::SceneObjectData object{
-            command.agentId,
-            command.agentName,
-            pipeframe::editor::SceneObjectType::DemoAgent,
-            transform,
-        };
+        pipeframe::editor::SceneObjectData object = command.object;
+        object.transform = transform;
 
         if (!sceneDocument.RestoreObject(object)) {
             return false;
         }
 
-        demoAgents.emplace_back(command.agentId, command.agentName, transform.position);
+        if (object.type == pipeframe::editor::SceneObjectType::DemoAgent) {
 
-        DemoAgent &agent = demoAgents.back();
+            demoAgents.emplace_back(object.id, object.name, object.transform.position);
 
-        agent.SetRotation(transform.rotation);
-        agent.SetSimulationPlaying(simulationController.IsPlaying());
+            DemoAgent &agent = demoAgents.back();
 
-        RebuildHierarchyFromRuntimeAgents();
-        SetSelectedAgent(command.agentId);
+            agent.SetRotation(object.transform.rotation);
+            agent.SetSimulationPlaying(simulationController.IsPlaying());
+        }
+
+        RebuildHierarchyFromDocument();
+        SetSelectedObject(object.id);
 
         return true;
     }
@@ -860,6 +973,82 @@ class TestScene final : public Scene {
         return first.position == second.position && first.rotation == second.rotation;
     }
 
+    bool ArePopulationSettingsEqual(const pipeframe::editor::AgentPopulationSettings &first,
+                                    const pipeframe::editor::AgentPopulationSettings &second) const {
+
+        return first.agentCount == second.agentCount && first.spawnAreaSize == second.spawnAreaSize &&
+               first.randomSeed == second.randomSeed;
+    }
+
+    static std::uint32_t ToUnsignedInteger(float value, std::uint32_t minimumValue) {
+
+        if (!std::isfinite(value)) {
+            return minimumValue;
+        }
+
+        const double roundedValue = std::round(static_cast<double>(value));
+
+        const double boundedValue = std::clamp(roundedValue, static_cast<double>(minimumValue),
+                                               static_cast<double>(std::numeric_limits<std::uint32_t>::max()));
+
+        return static_cast<std::uint32_t>(boundedValue);
+    }
+
+    void RecordPopulationChange(pipeframe::editor::SceneObjectId objectId,
+                                const pipeframe::editor::AgentPopulationSettings &before,
+                                const pipeframe::editor::AgentPopulationSettings &after) {
+
+        if (!CanAuthorScene() || ArePopulationSettingsEqual(before, after)) {
+            return;
+        }
+
+        if (!sceneDocument.SetPopulationSettings(objectId, after)) {
+            return;
+        }
+
+        const pipeframe::editor::SceneObjectData *object = sceneDocument.FindObject(objectId);
+
+        if (object == nullptr) {
+            return;
+        }
+
+        RecordEditorCommand({
+            EditorCommandType::PopulationSettings,
+            *object,
+            {},
+            {},
+            before,
+            after,
+        });
+    }
+
+    void
+    ModifySelectedPopulation(const std::function<void(pipeframe::editor::AgentPopulationSettings &)> &modification) {
+
+        if (!CanAuthorScene() || !selectedObjectId.has_value()) {
+            RefreshInspector();
+            return;
+        }
+
+        const pipeframe::editor::SceneObjectData *object = sceneDocument.FindObject(*selectedObjectId);
+
+        if (object == nullptr || object->type != pipeframe::editor::SceneObjectType::AgentPopulation ||
+            !object->population.has_value()) {
+
+            RefreshInspector();
+            return;
+        }
+
+        const pipeframe::editor::AgentPopulationSettings before = *object->population;
+
+        pipeframe::editor::AgentPopulationSettings after = before;
+
+        modification(after);
+
+        RecordPopulationChange(object->id, before, after);
+        RefreshInspector();
+    }
+
     void RecordEditorCommand(const EditorCommand &command) {
         undoHistory.push_back(command);
         redoHistory.clear();
@@ -868,6 +1057,7 @@ class TestScene final : public Scene {
     }
 
     void RecordTransformChange(DemoAgentId agentId, const TransformState &before, const TransformState &after) {
+
         if (!CanAuthorScene()) {
             return;
         }
@@ -878,10 +1068,15 @@ class TestScene final : public Scene {
 
         sceneDocument.SetTransform(agentId, after);
 
+        const pipeframe::editor::SceneObjectData *object = sceneDocument.FindObject(agentId);
+
+        if (object == nullptr) {
+            return;
+        }
+
         RecordEditorCommand({
             EditorCommandType::Transform,
-            agentId,
-            {},
+            *object,
             before,
             after,
         });
@@ -899,19 +1094,30 @@ class TestScene final : public Scene {
 
         switch (command.type) {
         case EditorCommandType::Transform:
-            if (DemoAgent *agent = FindAgent(command.agentId)) {
+            if (DemoAgent *agent = FindAgent(command.object.id)) {
+
                 ApplyTransform(*agent, command.before);
-                SetSelectedAgent(command.agentId);
+                SetSelectedObject(command.object.id);
                 commandApplied = true;
             }
             break;
 
-        case EditorCommandType::DeleteAgent:
-            commandApplied = RestoreAgentFromCommand(command, command.before);
+        case EditorCommandType::PopulationSettings:
+            if (command.populationBefore.has_value()) {
+                commandApplied = sceneDocument.SetPopulationSettings(command.object.id, *command.populationBefore);
+
+                if (commandApplied) {
+                    SetSelectedObject(command.object.id);
+                }
+            }
             break;
 
-        case EditorCommandType::CreateAgent:
-            commandApplied = RemoveAgentFromScene(command.agentId);
+        case EditorCommandType::DeleteObject:
+            commandApplied = RestoreObjectFromCommand(command, command.before);
+            break;
+
+        case EditorCommandType::CreateObject:
+            commandApplied = RemoveObjectFromScene(command.object.id);
             break;
         }
 
@@ -934,19 +1140,30 @@ class TestScene final : public Scene {
 
         switch (command.type) {
         case EditorCommandType::Transform:
-            if (DemoAgent *agent = FindAgent(command.agentId)) {
+            if (DemoAgent *agent = FindAgent(command.object.id)) {
+
                 ApplyTransform(*agent, command.after);
-                SetSelectedAgent(command.agentId);
+                SetSelectedObject(command.object.id);
                 commandApplied = true;
             }
             break;
 
-        case EditorCommandType::CreateAgent:
-            commandApplied = RestoreAgentFromCommand(command, command.after);
+        case EditorCommandType::PopulationSettings:
+            if (command.populationAfter.has_value()) {
+                commandApplied = sceneDocument.SetPopulationSettings(command.object.id, *command.populationAfter);
+
+                if (commandApplied) {
+                    SetSelectedObject(command.object.id);
+                }
+            }
             break;
 
-        case EditorCommandType::DeleteAgent:
-            commandApplied = RemoveAgentFromScene(command.agentId);
+        case EditorCommandType::CreateObject:
+            commandApplied = RestoreObjectFromCommand(command, command.after);
+            break;
+
+        case EditorCommandType::DeleteObject:
+            commandApplied = RemoveObjectFromScene(command.object.id);
             break;
         }
 
@@ -972,18 +1189,42 @@ class TestScene final : public Scene {
             return;
         }
 
-        DemoAgent *selected = GetSelectedAgent();
+        const pipeframe::editor::SceneObjectData *selectedObject =
+            selectedObjectId.has_value() ? sceneDocument.FindObject(*selectedObjectId) : nullptr;
 
-        const bool hasSelection = selected != nullptr;
-        const bool canEditTransform = hasSelection && CanAuthorScene();
-
-        simulationPanel->SetTransformEnabled(canEditTransform);
-
-        if (selected == nullptr) {
+        if (selectedObject == nullptr) {
+            simulationPanel->SetInspectorMode(InspectorMode::None);
+            simulationPanel->SetTransformEnabled(false);
+            simulationPanel->SetPopulationEnabled(false);
             return;
         }
 
-        simulationPanel->SetTransformValues(selected->GetPosition(), selected->GetRotation());
+        if (selectedObject->type == pipeframe::editor::SceneObjectType::AgentPopulation &&
+            selectedObject->population.has_value()) {
+
+            const pipeframe::editor::AgentPopulationSettings &settings = *selectedObject->population;
+
+            simulationPanel->SetInspectorMode(InspectorMode::Population);
+
+            simulationPanel->SetPopulationEnabled(CanAuthorScene());
+
+            simulationPanel->SetPopulationValues(static_cast<float>(settings.agentCount), settings.spawnAreaSize,
+                                                 static_cast<float>(settings.randomSeed));
+
+            return;
+        }
+
+        simulationPanel->SetInspectorMode(InspectorMode::Transform);
+
+        DemoAgent *selectedAgent = GetSelectedAgent();
+
+        const bool canEditTransform = selectedAgent != nullptr && CanAuthorScene();
+
+        simulationPanel->SetTransformEnabled(canEditTransform);
+
+        if (selectedAgent != nullptr) {
+            simulationPanel->SetTransformValues(selectedAgent->GetPosition(), selectedAgent->GetRotation());
+        }
     }
 
     void RefreshViewportStatus(const RenderContext &context) {
@@ -1021,7 +1262,7 @@ class TestScene final : public Scene {
             return;
         }
 
-        hierarchyPanel->SetSelectedObject(selectedAgentId);
+        hierarchyPanel->SetSelectedObject(selectedObjectId);
         hierarchyPanel->SetAuthoringEnabled(CanAuthorScene());
     }
 
@@ -1069,11 +1310,11 @@ class TestScene final : public Scene {
     }
 
     DemoAgent *GetSelectedAgent() {
-        if (!selectedAgentId.has_value()) {
+        if (!selectedObjectId.has_value()) {
             return nullptr;
         }
 
-        return FindAgent(*selectedAgentId);
+        return FindAgent(*selectedObjectId);
     }
 
     std::optional<DemoAgentId> HitTestAgents(sf::Vector2f worldPoint) const {
@@ -1087,23 +1328,29 @@ class TestScene final : public Scene {
         return std::nullopt;
     }
 
-    void SetSelectedAgent(std::optional<DemoAgentId> newSelection) {
-        selectedAgentId = newSelection;
+    void SetSelectedObject(std::optional<pipeframe::editor::SceneObjectId> newSelection) {
+
+        if (newSelection.has_value() && sceneDocument.FindObject(*newSelection) == nullptr) {
+            newSelection.reset();
+        }
+
+        selectedObjectId = newSelection;
 
         for (DemoAgent &agent : demoAgents) {
-            agent.SetSelected(selectedAgentId.has_value() && agent.GetId() == *selectedAgentId);
+            const bool selected = selectedObjectId.has_value() && agent.GetId() == *selectedObjectId;
+
+            agent.SetSelected(selected);
         }
 
         if (hierarchyPanel != nullptr) {
-            hierarchyPanel->SetSelectedObject(selectedAgentId);
+            hierarchyPanel->SetSelectedObject(selectedObjectId);
         }
 
         if (simulationPanel != nullptr) {
-            if (DemoAgent *selected = GetSelectedAgent()) {
-                simulationPanel->SetSelectionName(selected->GetName());
-            } else {
-                simulationPanel->SetSelectionName("");
-            }
+            const pipeframe::editor::SceneObjectData *selectedObject =
+                selectedObjectId.has_value() ? sceneDocument.FindObject(*selectedObjectId) : nullptr;
+
+            simulationPanel->SetSelectionName(selectedObject != nullptr ? selectedObject->name : "");
         }
 
         RefreshInspector();
@@ -1128,12 +1375,14 @@ class TestScene final : public Scene {
     bool displayedRuntimePreviewActive = false;
 
     pipeframe::editor::SceneDocument sceneDocument;
+    pipeframe::editor::PopulationBoundsRenderer populationBoundsRenderer;
 
     std::size_t nextAgentNameNumber = 3;
 
     std::vector<DemoAgent> demoAgents;
+    std::vector<pipeframe::runtime::RuntimeAgentPopulation> runtimePopulations;
 
-    std::optional<DemoAgentId> selectedAgentId;
+    std::optional<pipeframe::editor::SceneObjectId> selectedObjectId;
 
     bool controlsInitialized = false;
     bool displayedPlayingState = false;

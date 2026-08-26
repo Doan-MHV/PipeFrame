@@ -9,7 +9,9 @@ namespace pipeframe::editor {
 
 namespace {
 
-constexpr unsigned int SceneFormatVersion = 1;
+constexpr unsigned int CurrentSceneFormatVersion = 2;
+constexpr unsigned int OldestSupportedSceneFormatVersion = 1;
+
 constexpr const char *SceneFileHeader = "PIPEFRAME_SCENE";
 
 void SetError(std::string *errorMessage, std::string message) {
@@ -27,22 +29,43 @@ bool SceneSerializer::Save(const SceneDocument &document, const std::filesystem:
 
     if (!output.is_open()) {
         SetError(errorMessage, "Could not open scene file for writing: " + path.string());
+
         return false;
     }
 
-    output << SceneFileHeader << ' ' << SceneFormatVersion << '\n';
+    output << SceneFileHeader << ' ' << CurrentSceneFormatVersion << '\n';
+
     output << document.GetObjects().size() << '\n';
 
     output << std::setprecision(std::numeric_limits<float>::max_digits10);
 
     for (const SceneObjectData &object : document.GetObjects()) {
         output << object.id << ' ' << static_cast<int>(object.type) << ' ' << object.transform.position.x << ' '
-               << object.transform.position.y << ' ' << object.transform.rotation << ' ' << std::quoted(object.name)
-               << '\n';
+               << object.transform.position.y << ' ' << object.transform.rotation << ' ' << std::quoted(object.name);
+
+        if (object.type == SceneObjectType::AgentPopulation) {
+            if (!object.population.has_value()) {
+                SetError(errorMessage, "Population object is missing population settings.");
+
+                return false;
+            }
+
+            const AgentPopulationSettings &settings = *object.population;
+
+            output << ' ' << settings.agentCount << ' ' << settings.spawnAreaSize.x << ' ' << settings.spawnAreaSize.y
+                   << ' ' << settings.randomSeed;
+        } else if (object.type != SceneObjectType::DemoAgent) {
+            SetError(errorMessage, "Scene contains an unsupported object type.");
+
+            return false;
+        }
+
+        output << '\n';
     }
 
     if (!output.good()) {
         SetError(errorMessage, "Failed while writing scene file: " + path.string());
+
         return false;
     }
 
@@ -55,6 +78,7 @@ std::optional<SceneDocument> SceneSerializer::Load(const std::filesystem::path &
 
     if (!input.is_open()) {
         SetError(errorMessage, "Could not open scene file for reading: " + path.string());
+
         return std::nullopt;
     }
 
@@ -63,16 +87,20 @@ std::optional<SceneDocument> SceneSerializer::Load(const std::filesystem::path &
 
     if (!(input >> header >> version)) {
         SetError(errorMessage, "Scene file header is missing or invalid.");
+
         return std::nullopt;
     }
 
     if (header != SceneFileHeader) {
         SetError(errorMessage, "This is not a PipeFrame scene file.");
+
         return std::nullopt;
     }
 
-    if (version != SceneFormatVersion) {
+    if (version < OldestSupportedSceneFormatVersion || version > CurrentSceneFormatVersion) {
+
         SetError(errorMessage, "Unsupported scene file version.");
+
         return std::nullopt;
     }
 
@@ -80,6 +108,7 @@ std::optional<SceneDocument> SceneSerializer::Load(const std::filesystem::path &
 
     if (!(input >> objectCount)) {
         SetError(errorMessage, "Scene object count is missing.");
+
         return std::nullopt;
     }
 
@@ -88,6 +117,7 @@ std::optional<SceneDocument> SceneSerializer::Load(const std::filesystem::path &
     for (std::size_t index = 0; index < objectCount; ++index) {
         SceneObjectId objectId = 0;
         int objectTypeValue = 0;
+
         SceneTransform transform;
         std::string name;
 
@@ -95,23 +125,55 @@ std::optional<SceneDocument> SceneSerializer::Load(const std::filesystem::path &
               transform.rotation >> std::quoted(name))) {
 
             SetError(errorMessage, "Scene object data is incomplete or invalid.");
+
             return std::nullopt;
         }
 
-        if (objectTypeValue != static_cast<int>(SceneObjectType::DemoAgent)) {
+        SceneObjectData object;
+
+        object.id = objectId;
+        object.name = std::move(name);
+        object.transform = transform;
+
+        if (objectTypeValue == static_cast<int>(SceneObjectType::DemoAgent)) {
+
+            object.type = SceneObjectType::DemoAgent;
+        } else if (objectTypeValue == static_cast<int>(SceneObjectType::AgentPopulation)) {
+
+            if (version < 2) {
+                SetError(errorMessage, "Version-1 scenes cannot contain populations.");
+
+                return std::nullopt;
+            }
+
+            AgentPopulationSettings settings;
+
+            if (!(input >> settings.agentCount >> settings.spawnAreaSize.x >> settings.spawnAreaSize.y >>
+                  settings.randomSeed)) {
+
+                SetError(errorMessage, "Population settings are incomplete or invalid.");
+
+                return std::nullopt;
+            }
+
+            if (settings.agentCount == 0 || settings.spawnAreaSize.x <= 0.0f || settings.spawnAreaSize.y <= 0.0f) {
+
+                SetError(errorMessage, "Population settings contain invalid values.");
+
+                return std::nullopt;
+            }
+
+            object.type = SceneObjectType::AgentPopulation;
+            object.population = settings;
+        } else {
             SetError(errorMessage, "Scene contains an unsupported object type.");
+
             return std::nullopt;
         }
-
-        SceneObjectData object{
-            objectId,
-            std::move(name),
-            SceneObjectType::DemoAgent,
-            transform,
-        };
 
         if (!loadedDocument.RestoreObject(std::move(object))) {
             SetError(errorMessage, "Scene contains duplicate object IDs.");
+
             return std::nullopt;
         }
     }

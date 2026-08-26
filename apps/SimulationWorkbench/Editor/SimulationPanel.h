@@ -12,6 +12,9 @@
 class Label;
 class LabeledNumericField;
 class TextButton;
+class StackPanel;
+
+enum class InspectorMode { None, Transform, Population };
 
 class SimulationPanel : public Panel {
   public:
@@ -32,19 +35,39 @@ class SimulationPanel : public Panel {
 
     void SetSelectionName(const std::string &name);
 
+    void SetInspectorMode(InspectorMode mode);
+
+    void SetPopulationValues(float agentCount, sf::Vector2f spawnAreaSize, float randomSeed);
+    void SetPopulationEnabled(bool enabled);
+
     void SetTransformEnabled(bool enabled);
     void SetTransformValues(sf::Vector2f position, float rotation);
 
+    void SetOnAgentCountCommitted(ValueCallback callback);
+    void SetOnSpawnWidthCommitted(ValueCallback callback);
+    void SetOnSpawnHeightCommitted(ValueCallback callback);
+    void SetOnRandomSeedCommitted(ValueCallback callback);
+
   private:
+    StackPanel *contentPanel = nullptr;
+
     TextButton *playPauseButton = nullptr;
     TextButton *singleStepButton = nullptr;
     TextButton *resetButton = nullptr;
 
     Label *selectionLabel = nullptr;
 
+    Label *transformHeader = nullptr;
+    Label *populationHeader = nullptr;
+
     LabeledNumericField *positionXField = nullptr;
     LabeledNumericField *positionYField = nullptr;
     LabeledNumericField *rotationField = nullptr;
+
+    LabeledNumericField *agentCountField = nullptr;
+    LabeledNumericField *spawnWidthField = nullptr;
+    LabeledNumericField *spawnHeightField = nullptr;
+    LabeledNumericField *randomSeedField = nullptr;
 };
 
 #endif
