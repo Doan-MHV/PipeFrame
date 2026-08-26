@@ -6,6 +6,8 @@ add_executable(SimulationWorkbench
         Editor/SceneDocument.cpp
         Editor/SceneSerializer.cpp
         Editor/SimulationPanel.cpp
+        Editor/HierarchyPanel.cpp
+        Editor/ViewportToolbar.cpp
 )
 
 target_link_libraries(SimulationWorkbench
