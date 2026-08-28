@@ -23,6 +23,11 @@ class DiagnosticsOverlay {
     void Render(sf::RenderTarget &target, const SimulationController &simulation, const Camera2D &camera,
                 sf::Vector2f mouseWorldPosition);
 
+    void SetPopulationRenderStats(std::size_t candidateAgentCount, std::size_t visibleAgentCount,
+                                  float geometryBuildTimeMs);
+
+    void SetPopulationSimulationStats(float movementTimeMs, float spatialGridRebuildTimeMs);
+
     void SetVisible(bool newVisible);
     bool IsVisible() const;
 
@@ -41,6 +46,13 @@ class DiagnosticsOverlay {
 
     float framesPerSecond = 0.0f;
     float averageFrameTimeMs = 0.0f;
+
+    std::size_t populationCandidateAgentCount = 0;
+    std::size_t populationVisibleAgentCount = 0;
+    float populationGeometryBuildTimeMs = 0.0f;
+
+    float populationMovementTimeMs = 0.0f;
+    float populationGridRebuildTimeMs = 0.0f;
 };
 
 #endif

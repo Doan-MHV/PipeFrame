@@ -10,12 +10,23 @@
 
 namespace pipeframe::runtime {
 
+struct RuntimePopulationPointRenderStats {
+    std::size_t candidateAgentCount = 0;
+    std::size_t visibleAgentCount = 0;
+    float geometryBuildTimeMs = 0.0f;
+};
+
 class RuntimePopulationPointRenderer final {
   public:
-    void Render(sf::RenderTarget &target, const RuntimeAgentPopulation &population);
+    void BeginFrame();
+
+    void Render(sf::RenderTarget &target, const RuntimeAgentPopulation &population, const sf::FloatRect &worldViewport);
+
+    const RuntimePopulationPointRenderStats &GetFrameStats() const;
 
   private:
     std::vector<sf::Vertex> vertices;
+    RuntimePopulationPointRenderStats frameStats;
 };
 
 } // namespace pipeframe::runtime

@@ -23,6 +23,7 @@
 #include "Editor/SimulationPanel.h"
 #include "Editor/ViewportToolbar.h"
 #include "Runtime/RuntimeAgentPopulation.h"
+#include "Runtime/RuntimePopulationPointRenderer.h"
 
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -278,9 +279,13 @@ class TestScene final : public Scene {
             agent.SetRotation(agent.GetRotation() + 90.0f * fixedDeltaTime);
         }
 
-        for (pipeframe::runtime::RuntimeAgentPopulation &population : runtimePopulations) {
+        float populationMovementTimeMs = 0.0f;
+        float populationGridRebuildTimeMs = 0.0f;
 
+        for (pipeframe::runtime::RuntimeAgentPopulation &population : runtimePopulations) {
             population.Update(fixedDeltaTime);
+
+            pendingPopulationMovementTimeMs += population.GetLastUpdateStats().movementTimeMs;
         }
 
         constexpr float MoveSpeed = 300.0f;
@@ -321,6 +326,18 @@ class TestScene final : public Scene {
             }
         }
 
+        float populationGridRebuildTimeMs = 0.0f;
+
+        for (pipeframe::runtime::RuntimeAgentPopulation &population : runtimePopulations) {
+            population.RebuildSpatialGrid();
+
+            populationGridRebuildTimeMs += population.GetLastUpdateStats().spatialGridRebuildTimeMs;
+        }
+
+        diagnosticsOverlay.SetPopulationSimulationStats(pendingPopulationMovementTimeMs, populationGridRebuildTimeMs);
+
+        pendingPopulationMovementTimeMs = 0.0f;
+
         RefreshSimulationControls();
         RefreshInspector();
 
@@ -337,6 +354,29 @@ class TestScene final : public Scene {
         auto &window = context.GetWindow();
 
         populationBoundsRenderer.Render(window, sceneDocument, selectedObjectId);
+
+        const Camera2D &camera = context.GetCamera();
+
+        const sf::Vector2f cameraSize = camera.GetSize();
+        const sf::Vector2f cameraCenter = camera.GetCenter();
+
+        const sf::FloatRect worldViewport{
+            cameraCenter - cameraSize * 0.5f,
+            cameraSize,
+        };
+
+        runtimePopulationPointRenderer.BeginFrame();
+
+        for (const pipeframe::runtime::RuntimeAgentPopulation &population : runtimePopulations) {
+
+            runtimePopulationPointRenderer.Render(window, population, worldViewport);
+        }
+
+        const auto &populationRenderStats = runtimePopulationPointRenderer.GetFrameStats();
+
+        diagnosticsOverlay.SetPopulationRenderStats(populationRenderStats.candidateAgentCount,
+                                                    populationRenderStats.visibleAgentCount,
+                                                    populationRenderStats.geometryBuildTimeMs);
 
         for (const DemoAgent &agent : demoAgents) {
             agent.Render(window);
@@ -1376,11 +1416,14 @@ class TestScene final : public Scene {
 
     pipeframe::editor::SceneDocument sceneDocument;
     pipeframe::editor::PopulationBoundsRenderer populationBoundsRenderer;
+    float pendingPopulationMovementTimeMs = 0.0f;
 
     std::size_t nextAgentNameNumber = 3;
 
     std::vector<DemoAgent> demoAgents;
     std::vector<pipeframe::runtime::RuntimeAgentPopulation> runtimePopulations;
+
+    pipeframe::runtime::RuntimePopulationPointRenderer runtimePopulationPointRenderer;
 
     std::optional<pipeframe::editor::SceneObjectId> selectedObjectId;
 

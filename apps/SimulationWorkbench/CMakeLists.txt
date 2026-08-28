@@ -11,6 +11,7 @@ add_executable(SimulationWorkbench
         Editor/PopulationBoundsRenderer.cpp
         Runtime/RuntimeAgentPopulation.cpp
         Runtime/RuntimePopulationPointRenderer.cpp
+        Runtime/RuntimePopulationSpatialGrid.cpp
 )
 
 target_link_libraries(SimulationWorkbench

@@ -8,7 +8,7 @@
 #include <PipeFrame/Simulation/SimulationController.h>
 
 DiagnosticsOverlay::DiagnosticsOverlay() : text(font, "", 16) {
-    background.setSize({300.0f, 150.0f});
+    background.setSize({300.0f, 256.0f});
     background.setPosition({12.0f, 12.0f});
     background.setFillColor(sf::Color(20, 22, 28, 220));
     background.setOutlineColor(sf::Color(75, 80, 95));
@@ -41,7 +41,7 @@ void DiagnosticsOverlay::Render(sf::RenderTarget &target, const SimulationContro
     if (!visible) {
         return;
     }
-    
+
     const sf::Vector2f cameraPosition = camera.GetCenter();
 
     std::ostringstream stream;
@@ -53,12 +53,29 @@ void DiagnosticsOverlay::Render(sf::RenderTarget &target, const SimulationContro
            << "Tick: " << simulation.GetTickCount() << '\n'
            << "Camera: " << cameraPosition.x << ", " << cameraPosition.y << '\n'
            << "Zoom: " << camera.GetZoom() << '\n'
-           << "Mouse: " << mouseWorldPosition.x << ", " << mouseWorldPosition.y;
+           << "Mouse: " << mouseWorldPosition.x << ", " << mouseWorldPosition.y << '\n'
+           << "Movement: " << populationMovementTimeMs << " ms" << '\n'
+           << "Grid rebuild: " << populationGridRebuildTimeMs << " ms" << '\n'
+           << "Candidates: " << populationCandidateAgentCount << '\n'
+           << "Visible: " << populationVisibleAgentCount << '\n'
+           << "Geometry: " << populationGeometryBuildTimeMs << " ms";
 
     text.setString(stream.str());
 
     target.draw(background);
     target.draw(text);
+}
+
+void DiagnosticsOverlay::SetPopulationRenderStats(std::size_t candidateAgentCount, std::size_t visibleAgentCount,
+                                                  float geometryBuildTimeMs) {
+    populationCandidateAgentCount = candidateAgentCount;
+    populationVisibleAgentCount = visibleAgentCount;
+    populationGeometryBuildTimeMs = geometryBuildTimeMs;
+}
+
+void DiagnosticsOverlay::SetPopulationSimulationStats(float movementTimeMs, float spatialGridRebuildTimeMs) {
+    populationMovementTimeMs = movementTimeMs;
+    populationGridRebuildTimeMs = spatialGridRebuildTimeMs;
 }
 
 void DiagnosticsOverlay::SetVisible(bool newVisible) { visible = newVisible; }
