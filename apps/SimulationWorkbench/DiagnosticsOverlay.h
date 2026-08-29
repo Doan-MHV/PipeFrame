@@ -1,6 +1,7 @@
 #ifndef PIPEFRAME_DIAGNOSTICS_OVERLAY_H
 #define PIPEFRAME_DIAGNOSTICS_OVERLAY_H
 
+#include <cstddef>
 #include <filesystem>
 
 #include <SFML/Graphics/Font.hpp>
@@ -24,7 +25,7 @@ class DiagnosticsOverlay {
                 sf::Vector2f mouseWorldPosition);
 
     void SetPopulationRenderStats(std::size_t candidateAgentCount, std::size_t visibleAgentCount,
-                                  float geometryBuildTimeMs);
+                                  std::size_t vertexCount, float geometryBuildTimeMs, bool usingQuads);
 
     void SetPopulationSimulationStats(float movementTimeMs, float spatialGridRebuildTimeMs);
 
@@ -49,10 +50,13 @@ class DiagnosticsOverlay {
 
     std::size_t populationCandidateAgentCount = 0;
     std::size_t populationVisibleAgentCount = 0;
-    float populationGeometryBuildTimeMs = 0.0f;
+    std::size_t populationVertexCount = 0;
 
+    float populationGeometryBuildTimeMs = 0.0f;
     float populationMovementTimeMs = 0.0f;
     float populationGridRebuildTimeMs = 0.0f;
+
+    bool populationUsesQuads = false;
 };
 
 #endif

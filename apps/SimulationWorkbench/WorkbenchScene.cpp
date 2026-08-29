@@ -23,6 +23,7 @@
 #include "Editor/SimulationPanel.h"
 #include "Editor/ViewportToolbar.h"
 #include "Runtime/RuntimeAgentPopulation.h"
+#include "Runtime/RuntimePopulationLod.h"
 #include "Runtime/RuntimePopulationPointRenderer.h"
 
 #include <SFML/Graphics/CircleShape.hpp>
@@ -365,6 +366,14 @@ class TestScene final : public Scene {
             cameraSize,
         };
 
+        using pipeframe::runtime::RuntimePopulationRenderMode;
+        using pipeframe::runtime::SelectRuntimePopulationRenderMode;
+
+        const RuntimePopulationRenderMode selectedRenderMode =
+            SelectRuntimePopulationRenderMode(runtimePopulationPointRenderer.GetMode(), camera.GetZoom());
+
+        runtimePopulationPointRenderer.SetMode(selectedRenderMode);
+
         runtimePopulationPointRenderer.BeginFrame();
 
         for (const pipeframe::runtime::RuntimeAgentPopulation &population : runtimePopulations) {
@@ -374,9 +383,10 @@ class TestScene final : public Scene {
 
         const auto &populationRenderStats = runtimePopulationPointRenderer.GetFrameStats();
 
-        diagnosticsOverlay.SetPopulationRenderStats(populationRenderStats.candidateAgentCount,
-                                                    populationRenderStats.visibleAgentCount,
-                                                    populationRenderStats.geometryBuildTimeMs);
+        diagnosticsOverlay.SetPopulationRenderStats(
+            populationRenderStats.candidateAgentCount, populationRenderStats.visibleAgentCount,
+            populationRenderStats.vertexCount, populationRenderStats.geometryBuildTimeMs,
+            populationRenderStats.renderMode == RuntimePopulationRenderMode::Quads);
 
         for (const DemoAgent &agent : demoAgents) {
             agent.Render(window);

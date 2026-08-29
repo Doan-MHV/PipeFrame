@@ -40,4 +40,26 @@ if (BUILD_TESTING)
             NAME SceneSerializerRoundTrip
             COMMAND SceneSerializerTests
     )
+
+    add_executable(RuntimePopulationTests
+            tests/RuntimePopulationTests.cpp
+            Runtime/RuntimeAgentPopulation.cpp
+            Runtime/RuntimePopulationSpatialGrid.cpp
+    )
+
+    target_link_libraries(RuntimePopulationTests
+            PRIVATE
+            PipeFrame::Engine
+    )
+
+    add_test(
+            NAME RuntimePopulationRegression
+            COMMAND RuntimePopulationTests
+    )
+
+    set_tests_properties(
+            RuntimePopulationRegression
+            PROPERTIES
+            TIMEOUT 60
+    )
 endif ()

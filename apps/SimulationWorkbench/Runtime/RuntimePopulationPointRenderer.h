@@ -10,10 +10,18 @@
 
 namespace pipeframe::runtime {
 
+enum class RuntimePopulationRenderMode {
+    Points,
+    Quads,
+};
+
 struct RuntimePopulationPointRenderStats {
     std::size_t candidateAgentCount = 0;
     std::size_t visibleAgentCount = 0;
+    std::size_t vertexCount = 0;
     float geometryBuildTimeMs = 0.0f;
+
+    RuntimePopulationRenderMode renderMode = RuntimePopulationRenderMode::Points;
 };
 
 class RuntimePopulationPointRenderer final {
@@ -24,9 +32,14 @@ class RuntimePopulationPointRenderer final {
 
     const RuntimePopulationPointRenderStats &GetFrameStats() const;
 
+    void SetMode(RuntimePopulationRenderMode newMode);
+
+    RuntimePopulationRenderMode GetMode() const;
+
   private:
     std::vector<sf::Vertex> vertices;
     RuntimePopulationPointRenderStats frameStats;
+    RuntimePopulationRenderMode mode = RuntimePopulationRenderMode::Points;
 };
 
 } // namespace pipeframe::runtime

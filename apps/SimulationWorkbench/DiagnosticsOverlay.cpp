@@ -1,4 +1,3 @@
-
 #include "DiagnosticsOverlay.h"
 
 #include <iomanip>
@@ -8,7 +7,8 @@
 #include <PipeFrame/Simulation/SimulationController.h>
 
 DiagnosticsOverlay::DiagnosticsOverlay() : text(font, "", 16) {
-    background.setSize({300.0f, 256.0f});
+
+    background.setSize({300.0f, 300.0f});
     background.setPosition({12.0f, 12.0f});
     background.setFillColor(sf::Color(20, 22, 28, 220));
     background.setOutlineColor(sf::Color(75, 80, 95));
@@ -20,7 +20,8 @@ DiagnosticsOverlay::DiagnosticsOverlay() : text(font, "", 16) {
 
 bool DiagnosticsOverlay::Load(const std::filesystem::path &fontPath) { return font.openFromFile(fontPath); }
 
-void DiagnosticsOverlay::Update(float frameDeltaTime) {
+void DiagnosticsOverlay::Update(const float frameDeltaTime) {
+
     sampleElapsedTime += frameDeltaTime;
     ++sampleFrameCount;
 
@@ -37,7 +38,8 @@ void DiagnosticsOverlay::Update(float frameDeltaTime) {
 }
 
 void DiagnosticsOverlay::Render(sf::RenderTarget &target, const SimulationController &simulation,
-                                const Camera2D &camera, sf::Vector2f mouseWorldPosition) {
+                                const Camera2D &camera, const sf::Vector2f mouseWorldPosition) {
+
     if (!visible) {
         return;
     }
@@ -49,15 +51,17 @@ void DiagnosticsOverlay::Render(sf::RenderTarget &target, const SimulationContro
 
     stream << (simulation.IsPlaying() ? "PLAYING" : "PAUSED") << '\n'
            << "FPS: " << framesPerSecond << '\n'
-           << "Frame: " << averageFrameTimeMs << " ms" << '\n'
+           << "Frame: " << averageFrameTimeMs << " ms\n"
            << "Tick: " << simulation.GetTickCount() << '\n'
            << "Camera: " << cameraPosition.x << ", " << cameraPosition.y << '\n'
            << "Zoom: " << camera.GetZoom() << '\n'
            << "Mouse: " << mouseWorldPosition.x << ", " << mouseWorldPosition.y << '\n'
-           << "Movement: " << populationMovementTimeMs << " ms" << '\n'
-           << "Grid rebuild: " << populationGridRebuildTimeMs << " ms" << '\n'
+           << "Renderer: " << (populationUsesQuads ? "QUADS" : "POINTS") << '\n'
+           << "Movement: " << populationMovementTimeMs << " ms\n"
+           << "Grid rebuild: " << populationGridRebuildTimeMs << " ms\n"
            << "Candidates: " << populationCandidateAgentCount << '\n'
            << "Visible: " << populationVisibleAgentCount << '\n'
+           << "Vertices: " << populationVertexCount << '\n'
            << "Geometry: " << populationGeometryBuildTimeMs << " ms";
 
     text.setString(stream.str());
@@ -66,23 +70,35 @@ void DiagnosticsOverlay::Render(sf::RenderTarget &target, const SimulationContro
     target.draw(text);
 }
 
-void DiagnosticsOverlay::SetPopulationRenderStats(std::size_t candidateAgentCount, std::size_t visibleAgentCount,
-                                                  float geometryBuildTimeMs) {
+void DiagnosticsOverlay::SetPopulationRenderStats(const std::size_t candidateAgentCount,
+                                                  const std::size_t visibleAgentCount, const std::size_t vertexCount,
+                                                  const float geometryBuildTimeMs, const bool usingQuads) {
+
     populationCandidateAgentCount = candidateAgentCount;
+
     populationVisibleAgentCount = visibleAgentCount;
+
+    populationVertexCount = vertexCount;
+
     populationGeometryBuildTimeMs = geometryBuildTimeMs;
+
+    populationUsesQuads = usingQuads;
 }
 
-void DiagnosticsOverlay::SetPopulationSimulationStats(float movementTimeMs, float spatialGridRebuildTimeMs) {
+void DiagnosticsOverlay::SetPopulationSimulationStats(const float movementTimeMs,
+                                                      const float spatialGridRebuildTimeMs) {
+
     populationMovementTimeMs = movementTimeMs;
+
     populationGridRebuildTimeMs = spatialGridRebuildTimeMs;
 }
 
-void DiagnosticsOverlay::SetVisible(bool newVisible) { visible = newVisible; }
+void DiagnosticsOverlay::SetVisible(const bool newVisible) { visible = newVisible; }
 
 bool DiagnosticsOverlay::IsVisible() const { return visible; }
 
-void DiagnosticsOverlay::SetPosition(sf::Vector2f position) {
+void DiagnosticsOverlay::SetPosition(const sf::Vector2f position) {
+
     background.setPosition(position);
 
     text.setPosition(position + sf::Vector2f{12.0f, 10.0f});

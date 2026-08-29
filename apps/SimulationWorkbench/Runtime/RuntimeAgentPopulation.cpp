@@ -1,10 +1,23 @@
 #include "RuntimeAgentPopulation.h"
 
+#include <algorithm>
+#include <chrono>
+#include <cmath>
+#include <new>
 #include <random>
 
 namespace pipeframe::runtime {
 
+namespace {
+
 constexpr float PopulationGridCellSize = 64.0f;
+constexpr std::uint32_t MaximumRuntimeAgentCount = 1'000'000;
+
+bool IsValidSpawnArea(const sf::Vector2f size) {
+    return std::isfinite(size.x) && std::isfinite(size.y) && size.x > 0.0f && size.y > 0.0f;
+}
+
+} // namespace
 
 bool RuntimeAgentPopulation::Initialize(const editor::SceneObjectData &sourceObject) {
 
@@ -14,55 +27,67 @@ bool RuntimeAgentPopulation::Initialize(const editor::SceneObjectData &sourceObj
         return false;
     }
 
+    const editor::AgentPopulationSettings &settings = *sourceObject.population;
+
+    if (settings.agentCount == 0 || settings.agentCount > MaximumRuntimeAgentCount ||
+        !IsValidSpawnArea(settings.spawnAreaSize)) {
+        return false;
+    }
+
     sourceObjectId = sourceObject.id;
     transform = sourceObject.transform;
-
-    const editor::AgentPopulationSettings &settings = *sourceObject.population;
 
     halfWidth = settings.spawnAreaSize.x * 0.5f;
     halfHeight = settings.spawnAreaSize.y * 0.5f;
 
     const std::size_t count = static_cast<std::size_t>(settings.agentCount);
 
-    positionX.resize(count);
-    positionY.resize(count);
-    velocityX.resize(count);
-    velocityY.resize(count);
+    try {
+        positionX.resize(count);
+        positionY.resize(count);
+        velocityX.resize(count);
+        velocityY.resize(count);
 
-    std::mt19937 randomGenerator{settings.randomSeed};
+        std::mt19937 randomGenerator{settings.randomSeed};
 
-    std::uniform_real_distribution<float> spawnX{
-        -halfWidth,
-        halfWidth,
-    };
+        std::uniform_real_distribution<float> spawnX{
+            -halfWidth,
+            halfWidth,
+        };
 
-    std::uniform_real_distribution<float> spawnY{
-        -halfHeight,
-        halfHeight,
-    };
+        std::uniform_real_distribution<float> spawnY{
+            -halfHeight,
+            halfHeight,
+        };
 
-    std::uniform_real_distribution<float> velocity{
-        -120.0f,
-        120.0f,
-    };
+        std::uniform_real_distribution<float> velocity{
+            -120.0f,
+            120.0f,
+        };
 
-    for (std::size_t index = 0; index < count; ++index) {
-        positionX[index] = spawnX(randomGenerator);
-        positionY[index] = spawnY(randomGenerator);
+        for (std::size_t index = 0; index < count; ++index) {
+            positionX[index] = spawnX(randomGenerator);
+            positionY[index] = spawnY(randomGenerator);
 
-        velocityX[index] = velocity(randomGenerator);
-        velocityY[index] = velocity(randomGenerator);
+            velocityX[index] = velocity(randomGenerator);
+            velocityY[index] = velocity(randomGenerator);
+        }
+
+        spatialGrid.Initialize({-halfWidth, -halfHeight}, settings.spawnAreaSize, PopulationGridCellSize, count);
+
+        spatialGrid.Rebuild(positionX, positionY);
+    } catch (const std::bad_alloc &) {
+        Clear();
+        return false;
     }
 
-    spatialGrid.Initialize({-halfWidth, -halfHeight}, settings.spawnAreaSize, PopulationGridCellSize, count);
-
-    spatialGrid.Rebuild(positionX, positionY);
     spatialGridDirty = false;
-
     return true;
 }
 
 void RuntimeAgentPopulation::Clear() {
+    movementSliceIndex = 0;
+
     sourceObjectId = 0;
     transform = {};
 
@@ -77,20 +102,46 @@ void RuntimeAgentPopulation::Clear() {
     spatialGrid.Clear();
 
     lastUpdateStats = {};
-
     spatialGridDirty = false;
 }
 
-void RuntimeAgentPopulation::Update(float fixedDeltaTime) {
+void RuntimeAgentPopulation::Update(const float fixedDeltaTime) {
     using Clock = std::chrono::steady_clock;
+
+    lastUpdateStats.movementTimeMs = 0.0f;
+    lastUpdateStats.spatialGridRebuildTimeMs = 0.0f;
+
+    if (!std::isfinite(fixedDeltaTime) || fixedDeltaTime <= 0.0f) {
+        return;
+    }
+
+    const std::size_t count = std::min({
+        positionX.size(),
+        positionY.size(),
+        velocityX.size(),
+        velocityY.size(),
+    });
+
+    if (count == 0) {
+        return;
+    }
 
     const auto movementStart = Clock::now();
 
-    const std::size_t count = positionX.size();
+    const std::size_t sliceCount = std::min(MovementSliceCount, count);
 
-    for (std::size_t index = 0; index < count; ++index) {
-        positionX[index] += velocityX[index] * fixedDeltaTime;
-        positionY[index] += velocityY[index] * fixedDeltaTime;
+    const std::size_t beginIndex = count * movementSliceIndex / sliceCount;
+
+    const std::size_t endIndex = count * (movementSliceIndex + 1) / sliceCount;
+
+    // Every agent runs once per slice cycle. Compensate for skipped
+    // ticks so the average movement speed remains unchanged.
+    const float slicedDeltaTime = fixedDeltaTime * static_cast<float>(sliceCount);
+
+    for (std::size_t index = beginIndex; index < endIndex; ++index) {
+
+        positionX[index] += velocityX[index] * slicedDeltaTime;
+        positionY[index] += velocityY[index] * slicedDeltaTime;
 
         if (positionX[index] < -halfWidth) {
             positionX[index] = -halfWidth;
@@ -109,22 +160,24 @@ void RuntimeAgentPopulation::Update(float fixedDeltaTime) {
         }
     }
 
+    movementSliceIndex = (movementSliceIndex + 1) % sliceCount;
+
+    // Rebuild once all movement slices have completed.
+    if (movementSliceIndex == 0) {
+        spatialGridDirty = true;
+    }
+
     const auto movementEnd = Clock::now();
 
-    // Positions changed, so the grid must be rebuilt before rendering.
-    spatialGridDirty = true;
-
     lastUpdateStats.movementTimeMs = std::chrono::duration<float, std::milli>(movementEnd - movementStart).count();
-
-    // RebuildSpatialGrid() records this separately.
-    lastUpdateStats.spatialGridRebuildTimeMs = 0.0f;
 }
 
 void RuntimeAgentPopulation::RebuildSpatialGrid() {
     using Clock = std::chrono::steady_clock;
 
+    lastUpdateStats.spatialGridRebuildTimeMs = 0.0f;
+
     if (!spatialGridDirty) {
-        lastUpdateStats.spatialGridRebuildTimeMs = 0.0f;
         return;
     }
 
@@ -140,6 +193,12 @@ void RuntimeAgentPopulation::RebuildSpatialGrid() {
     spatialGridDirty = false;
 }
 
+std::size_t RuntimeAgentPopulation::GetCount() const { return std::min(positionX.size(), positionY.size()); }
+
+editor::SceneObjectId RuntimeAgentPopulation::GetSourceObjectId() const { return sourceObjectId; }
+
+const editor::SceneTransform &RuntimeAgentPopulation::GetTransform() const { return transform; }
+
 sf::Vector2f RuntimeAgentPopulation::GetSpawnAreaSize() const {
     return {
         halfWidth * 2.0f,
@@ -147,18 +206,12 @@ sf::Vector2f RuntimeAgentPopulation::GetSpawnAreaSize() const {
     };
 }
 
-std::size_t RuntimeAgentPopulation::GetCount() const { return positionX.size(); }
+const RuntimePopulationSpatialGrid &RuntimeAgentPopulation::GetSpatialGrid() const { return spatialGrid; }
 
-editor::SceneObjectId RuntimeAgentPopulation::GetSourceObjectId() const { return sourceObjectId; }
-
-const editor::SceneTransform &RuntimeAgentPopulation::GetTransform() const { return transform; }
+const RuntimeAgentPopulationUpdateStats &RuntimeAgentPopulation::GetLastUpdateStats() const { return lastUpdateStats; }
 
 const std::vector<float> &RuntimeAgentPopulation::GetPositionX() const { return positionX; }
 
 const std::vector<float> &RuntimeAgentPopulation::GetPositionY() const { return positionY; }
-
-const RuntimePopulationSpatialGrid &RuntimeAgentPopulation::GetSpatialGrid() const { return spatialGrid; }
-
-const RuntimeAgentPopulationUpdateStats &RuntimeAgentPopulation::GetLastUpdateStats() const { return lastUpdateStats; }
 
 } // namespace pipeframe::runtime
