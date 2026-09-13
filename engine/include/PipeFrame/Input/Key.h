@@ -26,6 +26,8 @@ enum class Key {
     Down,
 
     Space,
+    Shift,
+    Control,
     Period,
     Escape,
 

@@ -1,103 +1,135 @@
 #include "ViewportToolbar.h"
-
-#include <algorithm>
+#include <cmath>
 #include <utility>
+using namespace pipeframe::ui;
+ViewportToolbar::ViewportToolbar()  {
+    SetPreferredSize({1000,148});
+    actions["newProjectButton"].text="NEW";
+    actions["openProjectButton"].text="OPEN";
+    actions["undoButton"].text="UNDO";
+    actions["redoButton"].text="REDO";
+    actions["saveButton"].text="SAVE";
+    actions["saveAsButton"].text="SAVE AS";
+    actions["viewModeButton"].text="EDITOR";
+    actions["assetsButton"].text="ASSETS";
+    actions["panelsButton"].text="PANELS";
+    actions["reloadButton"].text="RELOAD";
+    actions["buildButton"].text="BUILD & RELOAD";
+    actions["metricsButton"].text="METRICS";
+    actions["toolButton"].text="MOVE";
+    actions["transformSpaceButton"].text="WORLD";
+    actions["pivotButton"].text="CENTER";
+    actions["gridButton"].text="GRID ON";
+    actions["gridStepButton"].text="GRID AUTO";
+    actions["gridOriginButton"].text="ORIGIN 0,0";
+    actions["snapButton"].text="POS OFF";
+    actions["rotationSnapButton"].text="ANG OFF";
+    actions["scaleSnapButton"].text="SCL OFF";
+    actions["frameButton"].text="FRAME";
+}
+View ViewportToolbar::BuildView() {
+    const auto row=[&](const char *key, std::initializer_list<const char *> ids) {
+        std::vector<View> children;
+        for (const auto *id : ids) { const auto &action=actions.at(id);
+            children.push_back(views::Button(id,action.text,action.callback).Enabled(action.enabled).Height(32)); }
+        return views::Wrap(key,std::move(children),88).Spacing(4);
+    };
+    return views::Scroll("toolbar-scroll",views::Column("toolbar",{
+        views::Row("identity",{views::Text("title",title).FitHeight(),views::Text("status",status).FitHeight()}),
+        row("actions",{"newProjectButton","openProjectButton","undoButton","redoButton","saveButton","saveAsButton"}),
+        row("workspace",{"viewModeButton","assetsButton","panelsButton","buildButton","reloadButton","metricsButton"}),
+        row("tools",{"toolButton","transformSpaceButton","pivotButton","gridButton","gridStepButton","gridOriginButton","snapButton","rotationSnapButton","scaleSnapButton","frameButton"})
+    }).Padding(8).Spacing(4)).FillHeight();
+}
+void ViewportToolbar::SetOnNewProject(ActionCallback callback) { actions["newProjectButton"].callback=std::move(callback); InvalidateView(); }
 
-#include <SFML/Graphics/Color.hpp>
+void ViewportToolbar::SetOnOpenProject(ActionCallback callback) { actions["openProjectButton"].callback=std::move(callback); InvalidateView(); }
 
-#include <PipeFrame/UI/Label.h>
-#include <PipeFrame/UI/TextButton.h>
+void ViewportToolbar::SetOnSave(ActionCallback callback) { actions["saveButton"].callback=std::move(callback); InvalidateView(); }
 
-ViewportToolbar::ViewportToolbar(const sf::Font &font) {
-    SetSize({700.0f, 68.0f});
-    SetFillColor(sf::Color(30, 34, 43, 245));
-    SetOutlineColor(sf::Color(78, 86, 104));
-    SetOutlineThickness(1.0f);
+void ViewportToolbar::SetOnSaveAs(ActionCallback callback) { actions["saveAsButton"].callback=std::move(callback); InvalidateView(); }
 
-    metricsButton = &CreateChild<TextButton>(font);
-    metricsButton->SetPosition({4.0f, 4.0f});
-    metricsButton->SetSize({92.0f, 28.0f});
-    metricsButton->SetText("METRICS");
-    metricsButton->SetTextCharacterSize(11);
+void ViewportToolbar::SetOnMetrics(ActionCallback callback) { actions["metricsButton"].callback=std::move(callback); InvalidateView(); }
+void ViewportToolbar::SetOnAssets(ActionCallback callback) { actions["assetsButton"].callback=std::move(callback); InvalidateView(); }
+void ViewportToolbar::SetOnPanels(ActionCallback callback) { actions["panelsButton"].callback=std::move(callback); InvalidateView(); }
+void ViewportToolbar::SetOnReload(ActionCallback callback) { actions["reloadButton"].callback=std::move(callback); InvalidateView(); }
 
-    undoButton = &CreateChild<TextButton>(font);
-    undoButton->SetPosition({100.0f, 4.0f});
-    undoButton->SetSize({68.0f, 28.0f});
-    undoButton->SetText("UNDO");
-    undoButton->SetTextCharacterSize(10);
+void ViewportToolbar::SetOnGrid(ActionCallback callback) { actions["gridButton"].callback=std::move(callback); InvalidateView(); }
+void ViewportToolbar::SetOnGridStep(ActionCallback callback) { actions["gridStepButton"].callback=std::move(callback); InvalidateView(); }
+void ViewportToolbar::SetOnGridOrigin(ActionCallback callback) { actions["gridOriginButton"].callback=std::move(callback); InvalidateView(); }
 
-    redoButton = &CreateChild<TextButton>(font);
-    redoButton->SetPosition({172.0f, 4.0f});
-    redoButton->SetSize({68.0f, 28.0f});
-    redoButton->SetText("REDO");
-    redoButton->SetTextCharacterSize(10);
+void ViewportToolbar::SetOnSnap(ActionCallback callback) { actions["snapButton"].callback=std::move(callback); InvalidateView(); }
+void ViewportToolbar::SetOnRotationSnap(ActionCallback callback) { actions["rotationSnapButton"].callback=std::move(callback); InvalidateView(); }
+void ViewportToolbar::SetOnScaleSnap(ActionCallback callback) { actions["scaleSnapButton"].callback=std::move(callback); InvalidateView(); }
+void ViewportToolbar::SetOnTool(ActionCallback callback) { actions["toolButton"].callback=std::move(callback); InvalidateView(); }
+void ViewportToolbar::SetOnTransformSpace(ActionCallback callback) { actions["transformSpaceButton"].callback=std::move(callback); InvalidateView(); }
+void ViewportToolbar::SetOnPivot(ActionCallback callback) { actions["pivotButton"].callback=std::move(callback); InvalidateView(); }
+void ViewportToolbar::SetOnFrame(ActionCallback callback) { actions["frameButton"].callback=std::move(callback); InvalidateView(); }
 
-    saveButton = &CreateChild<TextButton>(font);
-    saveButton->SetPosition({244.0f, 4.0f});
-    saveButton->SetSize({60.0f, 28.0f});
-    saveButton->SetText("SAVE");
-    saveButton->SetTextCharacterSize(10);
+void ViewportToolbar::SetOnViewMode(ActionCallback callback) { actions["viewModeButton"].callback=std::move(callback); InvalidateView(); }
 
-    loadButton = &CreateChild<TextButton>(font);
-    loadButton->SetPosition({308.0f, 4.0f});
-    loadButton->SetSize({60.0f, 28.0f});
-    loadButton->SetText("LOAD");
-    loadButton->SetTextCharacterSize(10);
+void ViewportToolbar::SetOnUndo(ActionCallback callback) { actions["undoButton"].callback=std::move(callback); InvalidateView(); }
 
-    titleLabel = &CreateChild<Label>(font);
-    titleLabel->SetText("SCENE VIEW");
-    titleLabel->SetCharacterSize(13);
-    titleLabel->SetAlignment(LabelAlignment::Center);
-    titleLabel->SetHitTestVisible(false);
+void ViewportToolbar::SetOnRedo(ActionCallback callback) { actions["redoButton"].callback=std::move(callback); InvalidateView(); }
 
-    statusLabel = &CreateChild<Label>(font);
-    statusLabel->SetCharacterSize(12);
-    statusLabel->SetAlignment(LabelAlignment::Right);
-    statusLabel->SetHorizontalPadding(12.0f);
-    statusLabel->SetHitTestVisible(false);
-
-    OnGeometryChanged();
+void ViewportToolbar::SetProjectName(const std::string &name) {
+    if (title != (name.empty() ? "PIPEFRAME" : "PIPEFRAME  |  " + name)) { title=name.empty() ? "PIPEFRAME" : "PIPEFRAME  |  " + name; InvalidateView(); }
 }
 
-void ViewportToolbar::SetOnMetrics(ActionCallback callback) { metricsButton->SetOnClick(std::move(callback)); }
+void ViewportToolbar::SetMetricsVisible(const bool visible) { if (actions["metricsButton"].text != (visible ? "CLOSE" : "METRICS")) { actions["metricsButton"].text=visible ? "CLOSE" : "METRICS"; InvalidateView(); } }
+void ViewportToolbar::SetAssetsVisible(const bool visible) { if (actions["assetsButton"].text != (visible ? "INSPECT" : "ASSETS")) { actions["assetsButton"].text=visible ? "INSPECT" : "ASSETS"; InvalidateView(); } }
+void ViewportToolbar::SetPanelsVisible(const bool visible) { if (actions["panelsButton"].text != (visible ? "PANELS ON" : "PANELS")) { actions["panelsButton"].text=visible ? "PANELS ON" : "PANELS"; InvalidateView(); } }
 
-void ViewportToolbar::SetOnUndo(ActionCallback callback) { undoButton->SetOnClick(std::move(callback)); }
+void ViewportToolbar::SetGridVisible(const bool visible) { if (actions["gridButton"].text != (visible ? "GRID ON" : "GRID OFF")) { actions["gridButton"].text=visible ? "GRID ON" : "GRID OFF"; InvalidateView(); } }
 
-void ViewportToolbar::SetOnRedo(ActionCallback callback) { redoButton->SetOnClick(std::move(callback)); }
-
-void ViewportToolbar::SetOnSave(ActionCallback callback) { saveButton->SetOnClick(std::move(callback)); }
-
-void ViewportToolbar::SetOnLoad(ActionCallback callback) { loadButton->SetOnClick(std::move(callback)); }
-
-void ViewportToolbar::SetMetricsVisible(bool visible) { metricsButton->SetText(visible ? "CLOSE" : "METRICS"); }
-
-void ViewportToolbar::SetHistoryEnabled(bool undoEnabled, bool redoEnabled) {
-    undoButton->SetEnabled(undoEnabled);
-    redoButton->SetEnabled(redoEnabled);
+void ViewportToolbar::SetGridStep(const float step) {
+    if (actions["gridStepButton"].text != (step <= 0.0f ? "GRID AUTO" : "GRID " + std::to_string(step).substr(0,4))) { actions["gridStepButton"].text=step <= 0.0f ? "GRID AUTO" : "GRID " + std::to_string(step).substr(0,4); InvalidateView(); }
 }
 
-void ViewportToolbar::SetAuthoringEnabled(bool enabled) {
-    saveButton->SetEnabled(enabled);
-    loadButton->SetEnabled(enabled);
+void ViewportToolbar::SetGridOrigin(const float x, const float y) {
+    if (actions["gridOriginButton"].text != ("ORIGIN " + std::to_string(static_cast<int>(std::round(x))) + "," +
+                              std::to_string(static_cast<int>(std::round(y))))) { actions["gridOriginButton"].text="ORIGIN " + std::to_string(static_cast<int>(std::round(x))) + "," +
+                              std::to_string(static_cast<int>(std::round(y))); InvalidateView(); }
 }
 
-void ViewportToolbar::SetStatusText(const std::string &text) { statusLabel->SetText(text); }
-
-void ViewportToolbar::OnGeometryChanged() {
-    if (titleLabel == nullptr || statusLabel == nullptr) {
-        return;
-    }
-
-    constexpr float ControlsWidth = 372.0f;
-    constexpr float RowHeight = 28.0f;
-
-    const float width = GetSize().x;
-    const float titleWidth = std::max(1.0f, width - ControlsWidth - 4.0f);
-
-    titleLabel->SetPosition({ControlsWidth, 4.0f});
-    titleLabel->SetSize({titleWidth, RowHeight});
-    titleLabel->SetVisible(width >= 500.0f);
-
-    statusLabel->SetPosition({4.0f, 36.0f});
-    statusLabel->SetSize({std::max(1.0f, width - 8.0f), RowHeight});
+void ViewportToolbar::SetSnapEnabled(const bool enabled, const float step) {
+    if (actions["snapButton"].text != (enabled ? "POS " + std::to_string(static_cast<int>(step)) : "POS OFF")) { actions["snapButton"].text=enabled ? "POS " + std::to_string(static_cast<int>(step)) : "POS OFF"; InvalidateView(); }
 }
+
+void ViewportToolbar::SetRotationSnapEnabled(const bool enabled, const float step) {
+    if (actions["rotationSnapButton"].text != (enabled ? "ANG " + std::to_string(static_cast<int>(step)) : "ANG OFF")) { actions["rotationSnapButton"].text=enabled ? "ANG " + std::to_string(static_cast<int>(step)) : "ANG OFF"; InvalidateView(); }
+}
+
+void ViewportToolbar::SetScaleSnapEnabled(const bool enabled, const float step) {
+    if (actions["scaleSnapButton"].text != (enabled ? "SCL " + std::to_string(step).substr(0,3) : "SCL OFF")) { actions["scaleSnapButton"].text=enabled ? "SCL " + std::to_string(step).substr(0,3) : "SCL OFF"; InvalidateView(); }
+}
+
+void ViewportToolbar::SetToolText(const std::string &text) { if (actions["toolButton"].text != (text)) { actions["toolButton"].text=text; InvalidateView(); } }
+void ViewportToolbar::SetTransformSpaceText(const std::string &text) { if (actions["transformSpaceButton"].text != (text)) { actions["transformSpaceButton"].text=text; InvalidateView(); } }
+void ViewportToolbar::SetPivotText(const std::string &text) { if (actions["pivotButton"].text != (text)) { actions["pivotButton"].text=text; InvalidateView(); } }
+
+void ViewportToolbar::SetViewModeText(const std::string &text) { if (actions["viewModeButton"].text != (text)) { actions["viewModeButton"].text=text; InvalidateView(); } }
+
+void ViewportToolbar::SetHistoryEnabled(const bool undoEnabled, const bool redoEnabled) {
+
+    if (actions["undoButton"].enabled != (undoEnabled)) { actions["undoButton"].enabled=undoEnabled; InvalidateView(); }
+    if (actions["redoButton"].enabled != (redoEnabled)) { actions["redoButton"].enabled=redoEnabled; InvalidateView(); }
+}
+
+void ViewportToolbar::SetAuthoringEnabled(const bool enabled) {
+    if (actions["newProjectButton"].enabled != (enabled)) { actions["newProjectButton"].enabled=enabled; InvalidateView(); }
+    if (actions["openProjectButton"].enabled != (enabled)) { actions["openProjectButton"].enabled=enabled; InvalidateView(); }
+    if (actions["saveButton"].enabled != (enabled)) { actions["saveButton"].enabled=enabled; InvalidateView(); }
+    if (actions["saveAsButton"].enabled != (enabled)) { actions["saveAsButton"].enabled=enabled; InvalidateView(); }
+}
+
+void ViewportToolbar::SetStatusText(const std::string &text) { if (status != (text)) { status=text; InvalidateView(); } }
+
+float ViewportToolbar::PreferredHeight(float width) {
+    const float columns=std::max(1.0f,std::floor((width-16+4)/92));
+    const float lines=std::ceil(6/columns)+std::ceil(5/columns)+std::ceil(10/columns);
+    return 40+lines*36;
+}
+
+void ViewportToolbar::SetOnBuild(ActionCallback callback){actions["buildButton"].callback=std::move(callback);InvalidateView();}
+void ViewportToolbar::SetBuildRunning(bool running){const std::string text=running?"CANCEL BUILD":"BUILD & RELOAD";if(actions["buildButton"].text!=text){actions["buildButton"].text=text;InvalidateView();}}

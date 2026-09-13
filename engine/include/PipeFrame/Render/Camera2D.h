@@ -1,36 +1,19 @@
-#ifndef PIPEFRAME_CAMERA2D_H
-#define PIPEFRAME_CAMERA2D_H
-
-#include <SFML/Graphics/Rect.hpp>
-#include <SFML/Graphics/View.hpp>
-#include <SFML/System/Vector2.hpp>
+#pragma once
+#include <PipeFrame/Foundation/MathTypes.h>
 
 class Camera2D {
-  public:
-    Camera2D();
-
-    void SetCenter(sf::Vector2f center);
-    void Move(sf::Vector2f offset);
-
-    void SetSize(sf::Vector2f size);
-    void SetZoom(float zoom);
-
-    sf::Vector2f GetCenter() const;
-    sf::Vector2f GetSize() const;
-    float GetZoom() const;
-
-    void SetViewport(sf::FloatRect normalizedViewport);
-
-    const sf::View &GetView() const;
-
-  private:
-    void RefreshView();
-
-    sf::View view;
-
-    sf::Vector2f center{0.0f, 0.0f};
-    sf::Vector2f baseSize{1280.0f, 720.0f};
-    float zoom = 1.0f;
+public:
+    void SetCenter(pipeframe::Vector2f value) { center = value; }
+    void Move(pipeframe::Vector2f offset) { center += offset; }
+    void SetSize(pipeframe::Vector2f value) { baseSize = value; }
+    void SetZoom(float value) { if (value > 0) zoom = value; }
+    pipeframe::Vector2f GetCenter() const { return center; }
+    pipeframe::Vector2f GetSize() const { return baseSize * zoom; }
+    float GetZoom() const { return zoom; }
+    void SetViewport(pipeframe::Rectanglef value) { viewport = value; }
+    pipeframe::Rectanglef GetViewport() const { return viewport; }
+private:
+    pipeframe::Vector2f center{}, baseSize{1280,720};
+    pipeframe::Rectanglef viewport{{0,0},{1,1}};
+    float zoom = 1;
 };
-
-#endif // PIPEFRAME_CAMERA2D_H

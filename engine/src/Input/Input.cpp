@@ -1,4 +1,4 @@
-#include "PipeFrame/Input/Input.h"
+#include "PipeFrame/Backend/SFML/Input/Input.h"
 
 #include <array>
 
@@ -36,6 +36,14 @@ Key FromSfmlKey(sf::Keyboard::Key key) {
         return Key::Down;
     case sf::Keyboard::Key::Space:
         return Key::Space;
+    case sf::Keyboard::Key::LShift:
+    case sf::Keyboard::Key::RShift:
+        return Key::Shift;
+    case sf::Keyboard::Key::LControl:
+    case sf::Keyboard::Key::RControl:
+    case sf::Keyboard::Key::LSystem:
+    case sf::Keyboard::Key::RSystem:
+        return Key::Control;
     case sf::Keyboard::Key::Escape:
         return Key::Escape;
     case sf::Keyboard::Key::N:

@@ -1,15 +1,16 @@
-#include "PipeFrame/Core/Application.h"
+#include <PipeFrame/Backend/SFML/RenderContextAdapter.h>
+#include "PipeFrame/Backend/SFML/Core/Application.h"
 
-#include <PipeFrame/Core/Scene.h>
+#include <PipeFrame/Backend/SFML/Core/Scene.h>
 #include <PipeFrame/Core/Time.h>
-#include <PipeFrame/Input/Input.h>
+#include <PipeFrame/Backend/SFML/Input/Input.h>
 #include <SFML/System/Clock.hpp>
 #include <algorithm>
 #include <cmath>
 
 Application::Application(int width, int height, const std::string &title)
     : window(sf::VideoMode({static_cast<unsigned int>(width), static_cast<unsigned int>(height)}), title),
-      renderContext(window) {
+      renderContext(pipeframe::backend::sfml::MakeRenderContext(window)) {
     window.setFramerateLimit(60);
     renderContext.GetCamera().SetSize({static_cast<float>(width), static_cast<float>(height)});
 }
@@ -34,6 +35,13 @@ void Application::Run() {
     float fixedTimeAccumulator = 0.0f;
 
     while (window.isOpen()) {
+        const unsigned int requestedFrameRateLimit = activeScene != nullptr ? activeScene->GetFrameRateLimit() : 60;
+
+        if (requestedFrameRateLimit != appliedFrameRateLimit) {
+            window.setFramerateLimit(requestedFrameRateLimit);
+            appliedFrameRateLimit = requestedFrameRateLimit;
+        }
+
         Input::BeginFrame();
 
         const float frameDeltaTime = std::min(clock.restart().asSeconds(), Time::MaximumFrameDeltaTime);
@@ -48,8 +56,8 @@ void Application::Run() {
             if (const auto *resized = event->getIf<sf::Event::Resized>()) {
                 const sf::Vector2f newSize{static_cast<float>(resized->size.x), static_cast<float>(resized->size.y)};
 
-                renderContext.GetCamera().SetSize(newSize);
-                renderContext.SetScreenSize(resized->size);
+                renderContext.GetCamera().SetSize({newSize.x,newSize.y});
+                renderContext.SetScreenSize({resized->size.x,resized->size.y});
 
                 if (activeScene) {
                     activeScene->OnResize(resized->size, renderContext);
@@ -61,7 +69,17 @@ void Application::Run() {
             }
         }
 
-        fixedTimeAccumulator += frameDeltaTime;
+        const float simulationTimeScale =
+            activeScene != nullptr ? std::max(0.0f, activeScene->GetSimulationTimeScale()) : 1.0f;
+
+        fixedTimeAccumulator += frameDeltaTime * simulationTimeScale;
+
+        if (activeScene != nullptr && activeScene->UseMaximumSimulationRate()) {
+            const float maximumBatchTime =
+                Time::FixedDeltaTime * static_cast<float>(Time::MaximumFixedStepsPerFrame);
+
+            fixedTimeAccumulator = std::max(fixedTimeAccumulator, maximumBatchTime);
+        }
 
         unsigned int fixedStepCount = 0;
 

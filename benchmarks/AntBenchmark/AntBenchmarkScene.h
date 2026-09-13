@@ -9,7 +9,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Clock.hpp>
 
-#include <PipeFrame/Core/Scene.h>
+#include <PipeFrame/Backend/SFML/Core/Scene.h>
 #include <PipeFrame/Render/CameraController2D.h>
 #include <PipeFrame/Simulation/SimulationController.h>
 

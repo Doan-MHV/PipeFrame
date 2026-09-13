@@ -8,19 +8,14 @@
 
 #include "SceneTypes.h"
 
-#include <SFML/Graphics/Font.hpp>
+#include <PipeFrame/UI/ViewPanel.h>
 
-#include <PipeFrame/UI/Panel.h>
-
-class Button;
-class Label;
-class StackPanel;
-class TextButton;
-
-class HierarchyPanel : public Panel {
+class HierarchyPanel : public pipeframe::ui::ViewPanel {
   public:
     using ObjectId = pipeframe::editor::SceneObjectId;
+
     using ActionCallback = std::function<void()>;
+
     using SelectionCallback = std::function<void(ObjectId)>;
 
     struct Item {
@@ -28,47 +23,25 @@ class HierarchyPanel : public Panel {
         std::string name;
     };
 
-    explicit HierarchyPanel(const sf::Font &font);
+    HierarchyPanel();
 
     void SetOnAdd(ActionCallback callback);
     void SetOnDelete(ActionCallback callback);
+
     void SetOnSelectionChanged(SelectionCallback callback);
 
     void SetItems(const std::vector<Item> &items);
+
     void SetSelectedObject(std::optional<ObjectId> objectId);
 
     void SetAuthoringEnabled(bool enabled);
 
-  protected:
-    void OnGeometryChanged() override;
-
   private:
-    struct Entry {
-        ObjectId id;
-        Button *button = nullptr;
-        Label *label = nullptr;
-    };
-
-    Entry *FindEntry(ObjectId id);
-    void CreateEntry(const Item &item);
-    void RefreshSelection();
-    void RefreshDeleteButton();
-
-    const sf::Font &font;
-
-    Panel *headerPanel = nullptr;
-    StackPanel *listPanel = nullptr;
-
-    TextButton *addButton = nullptr;
-    TextButton *deleteButton = nullptr;
-
-    std::vector<Entry> entries;
-
+    pipeframe::ui::View BuildView() override;
+    std::vector<Item> items;
+    ActionCallback onAdd, onDelete;
     std::optional<ObjectId> selectedObjectId;
-
     bool authoringEnabled = false;
-
     SelectionCallback onSelectionChanged;
 };
-
 #endif

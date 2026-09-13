@@ -1,39 +1,35 @@
-#ifndef PIPEFRAME_SCENE_TYPES_H
-#define PIPEFRAME_SCENE_TYPES_H
+#ifndef PIPEFRAME_EDITOR_SCENE_TYPES_H
+#define PIPEFRAME_EDITOR_SCENE_TYPES_H
 
-#include <cstdint>
-#include <optional>
-#include <string>
-
-#include <SFML/System/Vector2.hpp>
+#include <PipeFrame/Project/ProjectTypes.h>
 
 namespace pipeframe::editor {
 
-using SceneObjectId = std::uint32_t;
+using SceneObjectId = pipeframe::SceneObjectId;
+using SceneObjectTypeId = pipeframe::SceneObjectTypeId;
 
-enum class SceneObjectType : std::uint8_t { DemoAgent = 0, AgentPopulation = 1 };
+using PropertyKind = pipeframe::PropertyKind;
+using PropertyValue = pipeframe::PropertyValue;
+using PropertyMap = pipeframe::PropertyMap;
 
-struct AgentPopulationSettings {
-    std::uint32_t agentCount = 1000;
+using PropertyDescriptor =
+    pipeframe::PropertyDescriptor;
 
-    sf::Vector2f spawnAreaSize{1000.0f, 1000.0f};
+using SceneObjectTypeDescriptor =
+    pipeframe::SceneObjectTypeDescriptor;
 
-    std::uint32_t randomSeed = 1;
-};
-
-struct SceneTransform {
-    sf::Vector2f position{0.0f, 0.0f};
-    float rotation = 0.0f;
-};
-
-struct SceneObjectData {
-    SceneObjectId id = 0;
-    std::string name;
-    SceneObjectType type = SceneObjectType::DemoAgent;
-    SceneTransform transform;
-
-    std::optional<AgentPopulationSettings> population;
-};
+using SceneTransform = pipeframe::SceneTransform;
+using SceneObjectData = pipeframe::SceneObjectData;
+using SceneComponentData = pipeframe::SceneComponentData;
+using SceneComponentTypeDescriptor = pipeframe::SceneComponentTypeDescriptor;
+using SceneObjectReference = pipeframe::SceneObjectReference;
+using PrefabInstanceLink = pipeframe::PrefabInstanceLink;
+using AssetReference = pipeframe::AssetReference;
+using Color = pipeframe::Color;
+using SceneSettings = pipeframe::SceneSettings;
+using SceneConnectionKind = pipeframe::SceneConnectionKind;
+using SceneConnectionEndpoint = pipeframe::SceneConnectionEndpoint;
+using SceneConnectionData = pipeframe::SceneConnectionData;
 
 } // namespace pipeframe::editor
 

@@ -1,8 +1,10 @@
+#include <PipeFrame/Backend/SFML/InputEventAdapter.h>
+#include <PipeFrame/Backend/SFML/RenderContextAdapter.h>
 #include "AntBenchmarkScene.h"
 
 #include <iostream>
 
-#include <PipeFrame/Input/Input.h>
+#include <PipeFrame/Backend/SFML/Input/Input.h>
 #include <PipeFrame/Input/Key.h>
 #include <PipeFrame/Render/RenderContext.h>
 
@@ -56,13 +58,13 @@ void AntBenchmarkScene::Load() {
 }
 
 void AntBenchmarkScene::HandleEvent(const sf::Event &event, RenderContext &context) {
-    cameraController.HandleEvent(event, context);
+    if(const auto input=pipeframe::backend::sfml::FromBackend(event)) cameraController.HandleEvent(*input, context);
 
     if (const auto *pressed = event.getIf<sf::Event::MouseButtonPressed>()) {
         const bool selectionClick = pressed->button == sf::Mouse::Button::Left && !Input::IsKeyDown(Key::Space);
 
         if (selectionClick) {
-            const sf::Vector2f worldPosition = context.ScreenToWorld(pressed->position);
+            const sf::Vector2f worldPosition = pipeframe::backend::sfml::ScreenToWorld(context,pressed->position);
 
             SelectNearestAnt(worldPosition, context.GetCamera().GetZoom());
         }
@@ -251,7 +253,7 @@ void AntBenchmarkScene::Update(float deltaTime) {
 void AntBenchmarkScene::Render(RenderContext &context) {
     context.BeginWorld();
 
-    sf::RenderWindow &window = context.GetWindow();
+    sf::RenderWindow &window = pipeframe::backend::sfml::GetWindow(context);
     const Camera2D &camera = context.GetCamera();
 
     UpdateAutomaticLod(camera.GetZoom());
@@ -259,8 +261,8 @@ void AntBenchmarkScene::Render(RenderContext &context) {
     if (renderingEnabled) {
         geometryClock.restart();
 
-        const sf::Vector2f cameraCenter = camera.GetCenter();
-        const sf::Vector2f cameraSize = camera.GetSize();
+        const sf::Vector2f cameraCenter = {camera.GetCenter().x,camera.GetCenter().y};
+        const sf::Vector2f cameraSize = {camera.GetSize().x,camera.GetSize().y};
 
         const sf::Vector2f viewportPosition{cameraCenter.x - cameraSize.x * 0.5f, cameraCenter.y - cameraSize.y * 0.5f};
 

@@ -17,3 +17,7 @@ target_compile_definitions(AntBenchmark
         PRIVATE
         PIPEFRAME_ASSET_DIR="${CMAKE_SOURCE_DIR}/assets"
 )
+# Native hosts/tests opt in explicitly; Engine no longer exports backend dependencies.
+if(TARGET AntBenchmark)
+    target_link_libraries(AntBenchmark PRIVATE PipeFrame::BackendSFML)
+endif()

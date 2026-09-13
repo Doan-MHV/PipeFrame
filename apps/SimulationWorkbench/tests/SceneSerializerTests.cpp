@@ -1,221 +1,183 @@
-#include <chrono>
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <string>
-
 #include "../Editor/SceneDocument.h"
 #include "../Editor/SceneSerializer.h"
 
+#include <filesystem>
+#include <algorithm>
+#include <iostream>
+#include <string>
+
 namespace {
 
-using namespace pipeframe::editor;
+bool Check(
+    const bool condition,
+    const std::string &message) {
 
-class TemporarySceneFile {
-  public:
-    explicit TemporarySceneFile(std::string name) {
-        const auto uniqueValue = std::chrono::steady_clock::now().time_since_epoch().count();
-
-        path = std::filesystem::temp_directory_path() / (std::move(name) + std::to_string(uniqueValue) + ".pfscene");
-    }
-
-    ~TemporarySceneFile() {
-        std::error_code error;
-        std::filesystem::remove(path, error);
-    }
-
-    const std::filesystem::path &GetPath() const { return path; }
-
-  private:
-    std::filesystem::path path;
-};
-
-bool Check(bool condition, const std::string &message) {
     if (!condition) {
-        std::cerr << "FAILED: " << message << '\n';
+        std::cerr
+            << "FAILED: "
+            << message
+            << '\n';
+
         return false;
     }
 
     return true;
 }
 
-bool TestPopulationRoundTrip() {
-    TemporarySceneFile file{"pipeframe_population_"};
-
-    SceneDocument document;
-
-    document.CreateObject("DEMO AGENT", SceneObjectType::DemoAgent,
-                          {
-                              {10.0f, 20.0f},
-                              45.0f,
-                          });
-
-    AgentPopulationSettings settings;
-
-    settings.agentCount = 1'000'000;
-    settings.spawnAreaSize = {4000.0f, 2500.0f};
-    settings.randomSeed = 12345;
-
-    const SceneObjectId populationId = document.CreatePopulation("ANT COLONY",
-                                                                 {
-                                                                     {100.0f, -200.0f},
-                                                                     15.0f,
-                                                                 },
-                                                                 settings);
-
-    std::string errorMessage;
-
-    if (!SceneSerializer::Save(document, file.GetPath(), &errorMessage)) {
-
-        std::cerr << "FAILED: " << errorMessage << '\n';
-        return false;
-    }
-
-    const std::optional<SceneDocument> loadedDocument = SceneSerializer::Load(file.GetPath(), &errorMessage);
-
-    if (!loadedDocument.has_value()) {
-        std::cerr << "FAILED: " << errorMessage << '\n';
-        return false;
-    }
-
-    bool passed = true;
-
-    passed &= Check(loadedDocument->GetObjects().size() == 2, "Expected two loaded scene objects.");
-
-    passed &= Check(!loadedDocument->IsDirty(), "Loaded document should be clean.");
-
-    const SceneObjectData *population = loadedDocument->FindObject(populationId);
-
-    passed &= Check(population != nullptr, "Population ID was not restored.");
-
-    if (population == nullptr) {
-        return false;
-    }
-
-    passed &= Check(population->type == SceneObjectType::AgentPopulation, "Loaded object has the wrong type.");
-
-    passed &= Check(population->name == "ANT COLONY", "Population name was not restored.");
-
-    passed &=
-        Check(population->transform.position == sf::Vector2f{100.0f, -200.0f}, "Population position was not restored.");
-
-    passed &= Check(population->transform.rotation == 15.0f, "Population rotation was not restored.");
-
-    passed &= Check(population->population.has_value(), "Population settings are missing.");
-
-    if (!population->population.has_value()) {
-        return false;
-    }
-
-    const AgentPopulationSettings &loadedSettings = *population->population;
-
-    passed &= Check(loadedSettings.agentCount == 1'000'000, "Agent count was not restored.");
-
-    passed &=
-        Check(loadedSettings.spawnAreaSize == sf::Vector2f{4000.0f, 2500.0f}, "Spawn-area size was not restored.");
-
-    passed &= Check(loadedSettings.randomSeed == 12345, "Random seed was not restored.");
-
-    return passed;
-}
-
-bool TestPopulationEditing() {
-    SceneDocument document;
-
-    const SceneObjectId populationId = document.CreatePopulation("TEST POPULATION", {}, {});
-
-    document.MarkClean();
-
-    AgentPopulationSettings settings;
-    settings.agentCount = 0;
-    settings.spawnAreaSize = {0.0f, -50.0f};
-    settings.randomSeed = 42;
-
-    bool passed = true;
-
-    passed &= Check(document.SetPopulationSettings(populationId, settings), "Population settings should be changed.");
-
-    const SceneObjectData *population = document.FindObject(populationId);
-
-    passed &=
-        Check(population != nullptr && population->population.has_value(), "Edited population settings are missing.");
-
-    if (population == nullptr || !population->population.has_value()) {
-        return false;
-    }
-
-    const AgentPopulationSettings &edited = *population->population;
-
-    passed &= Check(edited.agentCount == 1, "Agent count should be clamped to one.");
-
-    passed &= Check(edited.spawnAreaSize == sf::Vector2f{1.0f, 1.0f}, "Spawn area should be clamped to one.");
-
-    passed &= Check(edited.randomSeed == 42, "Random seed was not updated.");
-
-    passed &= Check(document.IsDirty(), "Editing a population should dirty the document.");
-
-    document.MarkClean();
-
-    passed &= Check(!document.SetPopulationSettings(populationId, settings),
-                    "Applying identical settings should do nothing.");
-
-    passed &= Check(!document.IsDirty(), "An unchanged population should remain clean.");
-
-    return passed;
-}
-
-bool TestVersionOneCompatibility() {
-    TemporarySceneFile file{"pipeframe_version_one_"};
-
-    {
-        std::ofstream output(file.GetPath());
-
-        output << "PIPEFRAME_SCENE 1\n";
-        output << "1\n";
-        output << "42 0 12.5 -3.25 90 \"LEGACY AGENT\"\n";
-    }
-
-    std::string errorMessage;
-
-    const std::optional<SceneDocument> loadedDocument = SceneSerializer::Load(file.GetPath(), &errorMessage);
-
-    if (!loadedDocument.has_value()) {
-        std::cerr << "FAILED: " << errorMessage << '\n';
-        return false;
-    }
-
-    const SceneObjectData *object = loadedDocument->FindObject(42);
-
-    bool passed = true;
-
-    passed &= Check(object != nullptr, "Version-1 object was not restored.");
-
-    if (object == nullptr) {
-        return false;
-    }
-
-    passed &= Check(object->type == SceneObjectType::DemoAgent, "Version-1 object has the wrong type.");
-
-    passed &= Check(object->name == "LEGACY AGENT", "Version-1 name was not restored.");
-
-    passed &= Check(!object->population.has_value(), "Version-1 object unexpectedly has population data.");
-
-    return passed;
-}
-
 } // namespace
 
 int main() {
+    using namespace pipeframe::editor;
+
     bool passed = true;
 
-    passed &= TestPopulationRoundTrip();
-    passed &= TestPopulationEditing();
-    passed &= TestVersionOneCompatibility();
+    const std::filesystem::path path =
+        std::filesystem::temp_directory_path() /
+        "pipeframe_generic_scene_test.pfscene";
+
+    SceneDocument document;
+
+    PropertyMap properties;
+
+    properties["agentCount"] =
+        std::int64_t{10'000};
+
+    properties["speed"] = 80.0;
+
+    properties["enabled"] = true;
+
+    properties["label"] =
+        std::string{"Test population"};
+
+    properties["spawnSize"] =
+        pipeframe::Vector2f{1200.0f, 800.0f};
+
+    const SceneObjectId objectId =
+        document.CreateObject(
+            "DEMO POPULATION",
+            "basic.population",
+            {{25.0f, 50.0f}, 15.0f, {2.0f, 0.5f}},
+            std::move(properties));
+
+    const SceneObjectId childId = document.CreateObject(
+        "CHILD", "test.child", {{10.0f, 0.0f}, 30.0f, {0.5f, 2.0f}});
+    passed &= Check(document.SetParent(childId, objectId), "Child should accept a valid parent.");
+    passed &= Check(document.SetSettings({"cm", "degrees", "right-handed-y-up"}),
+                    "Project units should be authorable.");
+    passed &= Check(document.SetLayer(childId, "Sensors") && document.SetTags(childId,{"robot","sensor"}),
+                    "Layer and tags should be authorable.");
+    passed &= Check(document.SetVisible(childId,false) && document.SetLocked(childId,true),
+                    "Visibility and locking should be authorable.");
+    SceneComponentData sensor{"test.sensor",2,{{"target",SceneObjectReference{objectId}},
+                                              {"tint",Color{1,2,3,4}},
+                                              {"texture",AssetReference{"sensor.texture"}},
+                                              {"enabled",true},
+                                              {"samples",std::int64_t{16}},
+                                              {"range",20.0},
+                                              {"label",std::string{"Front sensor"}},
+                                              {"offset",pipeframe::Vector2f{2.0f,3.0f}},
+                                              {"mode",std::string{"Sweep"}}},true,false};
+    const PropertyMap expectedSensorProperties=sensor.properties;
+    passed &= Check(document.AddComponent(childId,std::move(sensor)),"Project component should attach.");
+    passed &= Check(document.AddConnection({42, SceneConnectionKind::Signal,
+                                            {objectId, "controller.out"}, {childId, "sensor.in"}}),
+                    "Stable endpoint connection should attach.");
+    const SceneTransform world=document.GetWorldTransform(childId);
+    passed &= Check(world.position!=pipeframe::Vector2f{10.0f,0.0f} && world.scale==pipeframe::Vector2f{1.0f,1.0f},
+                    "Nested transform should inherit parent rotation and scale.");
+    passed &= Check(document.Validate().empty(),"Authored hierarchy should validate.");
+
+    passed &= Check(
+        objectId != 0,
+        "Generic object should be created.");
+
+    std::string errorMessage;
+
+    passed &= Check(
+        SceneSerializer::Save(
+            document,
+            path,
+            &errorMessage),
+        "Scene should save: " + errorMessage);
+
+    const std::optional<SceneDocument> loaded =
+        SceneSerializer::Load(
+            path,
+            &errorMessage);
+
+    passed &= Check(
+        loaded.has_value(),
+        "Scene should load: " + errorMessage);
+
+    if (loaded.has_value()) {
+        passed &= Check(
+            !loaded->IsDirty(),
+            "Loaded document should be clean.");
+        passed &= Check(loaded->GetSettings().lengthUnit == "cm" &&
+                            loaded->GetConnections() == document.GetConnections(),
+                        "Units, coordinates, and stable endpoint connections should survive.");
+
+        const SceneObjectData *object =
+            loaded->FindObject(objectId);
+
+        passed &= Check(
+            object != nullptr,
+            "Loaded object should exist.");
+
+        if (object != nullptr) {
+            passed &= Check(
+                object->typeId ==
+                    "basic.population",
+                "Project-owned type ID should survive.");
+
+            passed &= Check(
+                object->transform.position ==
+                    pipeframe::Vector2f{25.0f, 50.0f},
+                "Transform should survive.");
+
+            passed &= Check(
+                object->transform.scale ==
+                    pipeframe::Vector2f{2.0f, 0.5f},
+                "Transform scale should survive.");
+
+            passed &= Check(
+                object->properties.size() == 5,
+                "All generic properties should survive.");
+
+            const PropertyValue *agentCount =
+                loaded->FindProperty(
+                    objectId,
+                    "agentCount");
+
+            passed &= Check(
+                agentCount != nullptr &&
+                    std::get<std::int64_t>(
+                        *agentCount) == 10'000,
+                "Integer property should survive.");
+
+            const SceneObjectData *child=loaded->FindObject(childId);
+            passed &= Check(child && child->parentId==objectId && child->layer=="Sensors" &&
+                            child->tags==std::vector<std::string>({"robot","sensor"}) && !child->visible && child->locked,
+                            "Hierarchy metadata should survive.");
+            if(child){
+                const auto component=std::ranges::find_if(child->components,[](const auto &item){return item.typeId=="test.sensor";});
+                passed &= Check(component!=child->components.end() && component->schemaVersion==2 &&
+                                std::get<SceneObjectReference>(component->properties.at("target")).objectId==objectId &&
+                                component->properties==expectedSensorProperties,
+                                "Every Inspector property storage kind should round-trip.");
+            }
+        }
+    }
+
+    std::error_code removeError;
+    std::filesystem::remove(path, removeError);
 
     if (!passed) {
         return 1;
     }
 
-    std::cout << "All scene serializer tests passed.\n";
+    std::cout
+        << "All generic scene serializer tests passed.\n";
+
     return 0;
 }

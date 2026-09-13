@@ -1,52 +1,45 @@
-#ifndef PIPEFRAME_RENDER_CONTEXT_H
-#define PIPEFRAME_RENDER_CONTEXT_H
+#pragma once
+#include <PipeFrame/Render/Camera2D.h>
+#include <PipeFrame/Render/Canvas.h>
+#include <memory>
+#include <stdexcept>
 
-#include "PipeFrame/Render/Camera2D.h"
-#include <SFML/Graphics/Rect.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/View.hpp>
-
-class RenderContext {
-  public:
-    explicit RenderContext(sf::RenderWindow &window) : window(window) { SetScreenSize(window.getSize()); }
-
-    sf::RenderWindow &GetWindow() { return window; }
-
-    const sf::RenderWindow &GetWindow() const { return window; }
-
-    Camera2D &GetCamera() { return camera; }
-
-    const Camera2D &GetCamera() const { return camera; }
-
-    sf::Vector2f ScreenToWorld(sf::Vector2i pixelPosition) const {
-        return window.mapPixelToCoords(pixelPosition, camera.GetView());
-    }
-
-    sf::Vector2i WorldToScreen(sf::Vector2f worldPosition) const {
-        return window.mapCoordsToPixel(worldPosition, camera.GetView());
-    }
-
-    void BeginWorld() { window.setView(camera.GetView()); }
-
-    void BeginScreen() { window.setView(screenView); }
-
-    void SetScreenSize(sf::Vector2u newSize) {
-        const sf::Vector2f screenSize{static_cast<float>(newSize.x), static_cast<float>(newSize.y)};
-
-        screenView.setSize(screenSize);
-        screenView.setCenter(screenSize * 0.5f);
-    }
-
-    sf::IntRect GetWorldViewportBounds() const { return window.getViewport(camera.GetView()); }
-
-    bool IsInsideWorldViewport(sf::Vector2i pixelPosition) const {
-        return GetWorldViewportBounds().contains(pixelPosition);
-    }
-
-  private:
-    sf::RenderWindow &window;
-    Camera2D camera;
-    sf::View screenView;
+class RenderSurface {
+public:
+    virtual ~RenderSurface() = default;
+    virtual pipeframe::Canvas GetCanvas() = 0;
+    virtual pipeframe::Vector2u GetSize() const = 0;
+    virtual void SetScreenSize(pipeframe::Vector2u) = 0;
+    virtual void BeginWorld(const Camera2D &) = 0;
+    virtual void BeginScreen() = 0;
+    virtual pipeframe::Rectanglei Viewport(const Camera2D &) const = 0;
+    virtual pipeframe::Vector2f PixelToWorld(pipeframe::Vector2i, const Camera2D &) const = 0;
+    virtual pipeframe::Vector2i WorldToPixel(pipeframe::Vector2f, const Camera2D &) const = 0;
 };
 
-#endif
+class RenderContext {
+public:
+    explicit RenderContext(std::shared_ptr<RenderSurface> value) : surface(std::move(value)) {
+        if (!surface) throw std::invalid_argument("RenderContext requires a surface");
+    }
+    RenderSurface &GetSurface() const { return *surface; }
+    pipeframe::Canvas GetCanvas() { return surface->GetCanvas(); }
+    pipeframe::Vector2u GetSize() const { return surface->GetSize(); }
+    Camera2D &GetCamera() { return camera; }
+    const Camera2D &GetCamera() const { return camera; }
+    pipeframe::Vector2f GetCameraCenter() const { return camera.GetCenter(); }
+    pipeframe::Vector2f GetCameraSize() const { return camera.GetSize(); }
+    void SetCameraCenter(pipeframe::Vector2f value) { camera.SetCenter(value); }
+    void SetCameraSize(pipeframe::Vector2f value) { camera.SetSize(value); }
+    void SetCameraZoom(float value) { camera.SetZoom(value); }
+    pipeframe::Rectanglei GetViewportRectangle() const { return surface->Viewport(camera); }
+    pipeframe::Vector2f MapPixelToWorld(pipeframe::Vector2i point) const { return surface->PixelToWorld(point,camera); }
+    pipeframe::Vector2i MapWorldToPixel(pipeframe::Vector2f point) const { return surface->WorldToPixel(point,camera); }
+    bool IsInsideWorldViewport(pipeframe::Vector2i point) const { return GetViewportRectangle().Contains(point); }
+    void SetScreenSize(pipeframe::Vector2u size) { surface->SetScreenSize(size); }
+    void BeginWorld() { surface->BeginWorld(camera); }
+    void BeginScreen() { surface->BeginScreen(); }
+private:
+    std::shared_ptr<RenderSurface> surface;
+    Camera2D camera;
+};

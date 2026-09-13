@@ -9,6 +9,9 @@ AntSimulator-master/
 CurrentPlan.md
 AntPezzaSource/
 /AntPezzaSource/
+AreaPezzaSource/
 TimeTrackerPezza/
 SailBoatPezza/
 **/LiveModules/
+/cmake-build-*/
+**/Build/

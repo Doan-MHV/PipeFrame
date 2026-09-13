@@ -4,43 +4,63 @@
 #include <functional>
 #include <string>
 
-#include <SFML/Graphics/Font.hpp>
+#include <PipeFrame/UI/ViewPanel.h>
+#include <map>
 
-#include <PipeFrame/UI/Panel.h>
-
-class Label;
-class TextButton;
-
-class ViewportToolbar : public Panel {
+class ViewportToolbar : public pipeframe::ui::ViewPanel {
   public:
     using ActionCallback = std::function<void()>;
 
-    explicit ViewportToolbar(const sf::Font &font);
+    ViewportToolbar();
+
+    void SetOnNewProject(ActionCallback callback);
+    void SetOnOpenProject(ActionCallback callback);
+    void SetOnSave(ActionCallback callback);
+    void SetOnSaveAs(ActionCallback callback);
 
     void SetOnMetrics(ActionCallback callback);
+    void SetOnAssets(ActionCallback callback);
+    void SetOnPanels(ActionCallback callback);
+    void SetOnReload(ActionCallback callback);
+    void SetOnBuild(ActionCallback callback);
+    void SetBuildRunning(bool running);
+    void SetOnGrid(ActionCallback callback);
+    void SetOnGridStep(ActionCallback callback);
+    void SetOnGridOrigin(ActionCallback callback);
+    void SetOnSnap(ActionCallback callback);
+    void SetOnRotationSnap(ActionCallback callback);
+    void SetOnScaleSnap(ActionCallback callback);
+    void SetOnTool(ActionCallback callback);
+    void SetOnTransformSpace(ActionCallback callback);
+    void SetOnPivot(ActionCallback callback);
+    void SetOnFrame(ActionCallback callback);
+    void SetOnViewMode(ActionCallback callback);
     void SetOnUndo(ActionCallback callback);
     void SetOnRedo(ActionCallback callback);
-    void SetOnSave(ActionCallback callback);
-    void SetOnLoad(ActionCallback callback);
 
+    void SetProjectName(const std::string &name);
     void SetMetricsVisible(bool visible);
+    void SetAssetsVisible(bool visible);
+    void SetPanelsVisible(bool visible);
+    void SetGridVisible(bool visible);
+    void SetGridStep(float step);
+    void SetGridOrigin(float x, float y);
+    void SetSnapEnabled(bool enabled, float step);
+    void SetRotationSnapEnabled(bool enabled, float step);
+    void SetScaleSnapEnabled(bool enabled, float step);
+    void SetToolText(const std::string &text);
+    void SetTransformSpaceText(const std::string &text);
+    void SetPivotText(const std::string &text);
+    void SetViewModeText(const std::string &text);
     void SetHistoryEnabled(bool undoEnabled, bool redoEnabled);
     void SetAuthoringEnabled(bool enabled);
-
     void SetStatusText(const std::string &text);
-
-  protected:
-    void OnGeometryChanged() override;
+    static float PreferredHeight(float width);
 
   private:
-    TextButton *metricsButton = nullptr;
-    TextButton *undoButton = nullptr;
-    TextButton *redoButton = nullptr;
-    TextButton *saveButton = nullptr;
-    TextButton *loadButton = nullptr;
-
-    Label *titleLabel = nullptr;
-    Label *statusLabel = nullptr;
+    struct Action { std::string text; ActionCallback callback; bool enabled{true}; };
+    std::map<std::string,Action> actions;
+    std::string title, status;
+    pipeframe::ui::View BuildView() override;
 };
-
 #endif
