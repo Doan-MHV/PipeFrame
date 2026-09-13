@@ -1,0 +1,27 @@
+Test project /Users/donvo/PipeFrame/cmake-build-release
+    Start  1: ReferenceProjectConformance
+1/9 Test  #1: ReferenceProjectConformance .........   Passed    0.99 sec
+    Start 11: AssetDatabaseRegression
+2/9 Test #11: AssetDatabaseRegression .............   Passed    0.63 sec
+    Start 31: WorkbenchUIAcceptance
+3/9 Test #31: WorkbenchUIAcceptance ...............   Passed    2.29 sec
+    Start 43: AntEnvironmentAuthoringAcceptance
+4/9 Test #43: AntEnvironmentAuthoringAcceptance ...   Passed    0.29 sec
+    Start 44: AntSimulationRegression
+5/9 Test #44: AntSimulationRegression .............   Passed    0.24 sec
+    Start 50: AntWorldMapLoaderRegression
+6/9 Test #50: AntWorldMapLoaderRegression .........   Passed    0.27 sec
+    Start 65: AntEnvironmentRendererRegression
+7/9 Test #65: AntEnvironmentRendererRegression ....   Passed    0.21 sec
+    Start 72: AntBehaviorParityRegression
+8/9 Test #72: AntBehaviorParityRegression .........   Passed    0.32 sec
+    Start 73: AntStressRegression
+9/9 Test #73: AntStressRegression .................   Passed    4.54 sec
+
+100% tests passed, 0 tests failed out of 9
+
+Label Time Summary:
+performance    =   4.54 sec*proc (1 test)
+stress         =   4.54 sec*proc (1 test)
+
+Total Test time (real) =   9.78 sec

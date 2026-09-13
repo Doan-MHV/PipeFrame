@@ -1,0 +1,51 @@
+Start testing: Sep 12 19:30 EDT
+----------------------------------------------------------
+3/71 Testing: TilemapRegression
+3/71 Test: TilemapRegression
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/engine/TilemapTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/engine
+"TilemapRegression" start time: Sep 12 19:30 EDT
+Output:
+----------------------------------------------------------
+Tilemap regression passed
+<end of output>
+Test time =   0.33 sec
+----------------------------------------------------------
+Test Passed.
+"TilemapRegression" end time: Sep 12 19:30 EDT
+"TilemapRegression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/71 Testing: SceneProjectRuntimeAcceptance
+20/71 Test: SceneProjectRuntimeAcceptance
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/engine/SceneProjectRuntimeTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/engine
+"SceneProjectRuntimeAcceptance" start time: Sep 12 19:30 EDT
+Output:
+----------------------------------------------------------
+Scene project runtime lifecycle and authoring passed.
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"SceneProjectRuntimeAcceptance" end time: Sep 12 19:30 EDT
+"SceneProjectRuntimeAcceptance" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/71 Testing: ProjectBuildAcceptance
+35/71 Test: ProjectBuildAcceptance
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench/ProjectBuildTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench
+"ProjectBuildAcceptance" start time: Sep 12 19:30 EDT
+Output:
+----------------------------------------------------------
+Generated CMake build, entity picker registry, attachment, validation, behaviour execution, prefab/reopen, compiler failure and reload recovery passed
+<end of output>
+Test time =   9.35 sec
+----------------------------------------------------------
+Test Passed.
+"ProjectBuildAcceptance" end time: Sep 12 19:30 EDT
+"ProjectBuildAcceptance" time elapsed: 00:00:09
+----------------------------------------------------------
+
+End testing: Sep 12 19:30 EDT

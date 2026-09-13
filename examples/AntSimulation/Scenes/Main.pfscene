@@ -1,0 +1,29 @@
+PIPEFRAME_SCENE 3
+4
+1 96 108 0 "ANT COLONY" "ant.colony" 7
+"spawnRadius" 2 4
+"randomSeed" 1 1
+"colonyColorBlue" 1 111
+"colonyColorRed" 1 239
+"movementSpeed" 2 2
+"initialPopulation" 1 1000
+"colonyColorGreen" 1 71
+2 288 108 0 "FOOD SOURCE" "ant.food-source" 2
+"radius" 2 12
+"amount" 1 7
+3 0 0 0 "SIMULATION SETTINGS" "ant.simulation-settings" 8
+"showTargets" 0 0
+"showShadows" 0 1
+"showPhysicsDebug" 0 0
+"showMarkers" 0 1
+"showAnts" 0 1
+"dynamicAntColors" 0 0
+"markerIntensity" 1 10
+"showGrid" 0 1
+4 0 0 0 "PLAYGROUND" "pipeframe.playground2d" 6
+"columns" 1 384
+"rows" 1 216
+"cellSize" 2 1
+"color" 5 22 21 20 255
+"showGrid" 0 1
+"asset" 6 "source:Assets/Tilemaps/Main.pftilemap"

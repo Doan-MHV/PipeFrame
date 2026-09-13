@@ -1,0 +1,50 @@
+
+--- Configure ---
+-- Running vcpkg install
+Detecting compiler hash for triplet arm64-osx...
+Compiler found: /usr/bin/c++
+Detecting compiler hash for triplet arm64-osx-dynamic...
+Compiler found: /usr/bin/c++
+The following packages are already installed:
+  * brotli:arm64-osx-dynamic@1.2.0
+  * bzip2[core,tool]:arm64-osx-dynamic@1.0.8#6
+  * egl-registry:arm64-osx-dynamic@2025-05-27
+  * freetype[core,zlib,png,bzip2,brotli]:arm64-osx-dynamic@2.14.3
+  * libflac[core,stack-protector]:arm64-osx-dynamic@1.5.0
+  * libogg:arm64-osx-dynamic@1.3.6#1
+  * libpng:arm64-osx-dynamic@1.6.58
+  * libvorbis:arm64-osx-dynamic@1.3.7#4
+  * miniaudio:arm64-osx-dynamic@0.11.25
+    nativefiledialog-extended:arm64-osx-dynamic@1.3.0
+  * opengl:arm64-osx-dynamic@2022-12-04#3
+  * opengl-registry:arm64-osx-dynamic@2026-08-03
+    sfml[core,window,network,graphics,audio]:arm64-osx-dynamic@3.0.2
+  * stb:arm64-osx-dynamic@2024-07-29#1
+  * vcpkg-cmake:arm64-osx@2025-08-07
+  * vcpkg-cmake-config:arm64-osx@2026-07-21
+  * zlib:arm64-osx-dynamic@1.3.2#2
+nativefiledialog-extended provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(nfd CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE nfd::nfd)
+
+The package sfml provides CMake targets:
+
+    find_package(SFML COMPONENTS Network Graphics Window Audio System CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE SFML::Network SFML::Graphics SFML::Window SFML::Audio SFML::System)
+
+    # If you want SFML to provide an implementation of main():
+    target_link_libraries(main PRIVATE SFML::Main)
+
+All requested installations completed successfully in: 115 us
+-- Running vcpkg install - done
+-- Found SFML 3.0.2 in /Users/donvo/PipeFrame/cmake-build-release/vcpkg_installed/arm64-osx-dynamic/share/sfml
+-- Found SFML 3.0.2 in /Users/donvo/PipeFrame/cmake-build-release/vcpkg_installed/arm64-osx-dynamic/share/sfml
+-- Configuring done (2.0s)
+-- Generating done (0.1s)
+-- Build files have been written to: /Users/donvo/PipeFrame/cmake-build-release
+
+--- Build ---
+[0/2] Re-checking globbed directories...
+ninja: no work to do.

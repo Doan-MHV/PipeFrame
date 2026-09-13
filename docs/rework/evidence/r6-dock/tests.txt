@@ -1,0 +1,35 @@
+Start testing: Sep 12 18:58 EDT
+----------------------------------------------------------
+3/70 Testing: DockResizeRegression
+3/70 Test: DockResizeRegression
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/engine/DockResizeTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/engine
+"DockResizeRegression" start time: Sep 12 18:58 EDT
+Output:
+----------------------------------------------------------
+Dock resize regression passed
+<end of output>
+Test time =   0.34 sec
+----------------------------------------------------------
+Test Passed.
+"DockResizeRegression" end time: Sep 12 18:58 EDT
+"DockResizeRegression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/70 Testing: WorkbenchUIAcceptance
+26/70 Test: WorkbenchUIAcceptance
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench/WorkbenchUITests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench
+"WorkbenchUIAcceptance" start time: Sep 12 18:58 EDT
+Output:
+----------------------------------------------------------
+All Workbench UI acceptance checks passed.
+<end of output>
+Test time =   5.12 sec
+----------------------------------------------------------
+Test Passed.
+"WorkbenchUIAcceptance" end time: Sep 12 18:59 EDT
+"WorkbenchUIAcceptance" time elapsed: 00:00:05
+----------------------------------------------------------
+
+End testing: Sep 12 18:59 EDT

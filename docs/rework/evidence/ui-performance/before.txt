@@ -1,0 +1,1 @@
+Paused selected Inspector refresh/update (no GPU/present), 120 frames: median 801.63 ms, p95 829.44 ms

@@ -1,0 +1,6 @@
+Ant 1440x900 offscreen paused selected: median 1.66696 ms, p95 2.00263 ms
+Mean stages ms (input/simulation, UI refresh/update, world submission, screen submission, offscreen display): 2.255e-05 0.0928416 1.21084 0.419275 0.000173567 
+Ant 1440x900 offscreen paused scrolling: median 1.69 ms, p95 1.95833 ms
+Mean stages ms (input/simulation, UI refresh/update, world submission, screen submission, offscreen display): 0.0172996 0.0928382 1.18678 0.39873 0.000156917 
+Ant 1440x900 offscreen playing one colony: median 3.42563 ms, p95 3.63992 ms
+Mean stages ms (input/simulation, UI refresh/update, world submission, screen submission, offscreen display): 1.34771 0.511123 1.18307 0.398992 0.000201092 

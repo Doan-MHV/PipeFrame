@@ -1,0 +1,19 @@
+PIPEFRAME_ASSET_DATABASE 2 11
+ASSET "asset-00000002" 1 0 "Assets/Textures/ant_background_1K.bmp" ".pipeframe/cache/asset-00000002/compiled.pfasset" ".pipeframe/cache/asset-00000002/thumbnail.png" ".pipeframe/cache/asset-00000002/preview.png" "pipeframe.texture" 4 2 7693010522185727828 "" 0 0 0
+ENDASSET
+ASSET "asset-00000003" 1 0 "Assets/Textures/ant_body_parts.png" ".pipeframe/cache/asset-00000003/compiled.pfasset" ".pipeframe/cache/asset-00000003/thumbnail.png" ".pipeframe/cache/asset-00000003/preview.png" "pipeframe.texture" 4 2 10838470475347276632 "" 0 0 0
+ENDASSET
+ASSET "asset-00000004" 1 0 "Assets/Textures/ant_body_parts_shadow.png" ".pipeframe/cache/asset-00000004/compiled.pfasset" ".pipeframe/cache/asset-00000004/thumbnail.png" ".pipeframe/cache/asset-00000004/preview.png" "pipeframe.texture" 4 2 11539131911101041738 "" 0 0 0
+ENDASSET
+ASSET "asset-00000005" 1 0 "Assets/Textures/ant_full.png" ".pipeframe/cache/asset-00000005/compiled.pfasset" ".pipeframe/cache/asset-00000005/thumbnail.png" ".pipeframe/cache/asset-00000005/preview.png" "pipeframe.texture" 4 2 8422093278131807836 "" 0 0 0
+ENDASSET
+ASSET "asset-00000006" 1 0 "Assets/Textures/ant_leg.png" ".pipeframe/cache/asset-00000006/compiled.pfasset" ".pipeframe/cache/asset-00000006/thumbnail.png" ".pipeframe/cache/asset-00000006/preview.png" "pipeframe.texture" 4 2 9421100468809734666 "" 0 0 0
+ENDASSET
+ASSET "asset-00000007" 1 0 "Assets/Textures/ant_leg_shadow.png" ".pipeframe/cache/asset-00000007/compiled.pfasset" ".pipeframe/cache/asset-00000007/thumbnail.png" ".pipeframe/cache/asset-00000007/preview.png" "pipeframe.texture" 4 2 9984074794602732463 "" 0 0 0
+ENDASSET
+ASSET "asset-00000008" 1 0 "Assets/Textures/circle.png" ".pipeframe/cache/asset-00000008/compiled.pfasset" ".pipeframe/cache/asset-00000008/thumbnail.png" ".pipeframe/cache/asset-00000008/preview.png" "pipeframe.texture" 4 2 7766382701770824816 "" 0 0 0
+ENDASSET
+ASSET "asset-00000009" 1 0 "Assets/Textures/marker.png" ".pipeframe/cache/asset-00000009/compiled.pfasset" ".pipeframe/cache/asset-00000009/thumbnail.png" ".pipeframe/cache/asset-00000009/preview.png" "pipeframe.texture" 4 2 5271649199467581541 "" 0 0 0
+ENDASSET
+ASSET "asset-0000000a" 9 0 "Assets/Tilemaps/Main.pftilemap" ".pipeframe/cache/asset-0000000a/compiled.pfasset" ".pipeframe/cache/asset-0000000a/thumbnail.pfpreview" ".pipeframe/cache/asset-0000000a/preview.pfpreview" "pipeframe.tilemap" 3 7 13038903552632596080 "" 0 0 0
+ENDASSET

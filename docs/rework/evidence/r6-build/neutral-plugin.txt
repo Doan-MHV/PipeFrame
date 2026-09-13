@@ -1,0 +1,1 @@
+Ant Plugin.cpp compile without SFML include directories: exit 0

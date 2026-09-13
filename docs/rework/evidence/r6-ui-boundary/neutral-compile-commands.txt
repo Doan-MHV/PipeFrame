@@ -1,0 +1,5 @@
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/RenderPublicHeadersTests.dir/tests/RenderPublicHeadersTests.cpp.o -c /Users/donvo/PipeFrame/engine/tests/RenderPublicHeadersTests.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/examples/AntSimulation/Source -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o examples/AntSimulation/CMakeFiles/AntUIBoundaryCompile.dir/Source/Runtime/AntUIHost.cpp.o -c /Users/donvo/PipeFrame/examples/AntSimulation/Source/Runtime/AntUIHost.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/examples/AntSimulation/Source -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o examples/AntSimulation/CMakeFiles/AntUIBoundaryCompile.dir/Source/Editor/AntDashboard.cpp.o -c /Users/donvo/PipeFrame/examples/AntSimulation/Source/Editor/AntDashboard.cpp

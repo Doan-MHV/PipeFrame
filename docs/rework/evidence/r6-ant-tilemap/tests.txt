@@ -1,0 +1,52 @@
+Start testing: Sep 12 19:21 EDT
+----------------------------------------------------------
+27/71 Testing: WorkbenchUIAcceptance
+27/71 Test: WorkbenchUIAcceptance
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench/WorkbenchUITests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench
+"WorkbenchUIAcceptance" start time: Sep 12 19:21 EDT
+Output:
+----------------------------------------------------------
+All Workbench UI acceptance checks passed.
+<end of output>
+Test time =   4.23 sec
+----------------------------------------------------------
+Test Passed.
+"WorkbenchUIAcceptance" end time: Sep 12 19:21 EDT
+"WorkbenchUIAcceptance" time elapsed: 00:00:04
+----------------------------------------------------------
+
+39/71 Testing: AntSimulationRegression
+39/71 Test: AntSimulationRegression
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/examples/AntSimulation/AntSimulationTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/examples/AntSimulation
+"AntSimulationRegression" start time: Sep 12 19:21 EDT
+Output:
+----------------------------------------------------------
+All ant simulation tests passed.
+<end of output>
+Test time =   0.47 sec
+----------------------------------------------------------
+Test Passed.
+"AntSimulationRegression" end time: Sep 12 19:21 EDT
+"AntSimulationRegression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+45/71 Testing: AntWorldMapLoaderRegression
+45/71 Test: AntWorldMapLoaderRegression
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/examples/AntSimulation/AntWorldMapLoaderTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/examples/AntSimulation
+"AntWorldMapLoaderRegression" start time: Sep 12 19:21 EDT
+Output:
+----------------------------------------------------------
+Reference parity: 20056 wall cells, 1821 food cells
+All ant world-map loader tests passed.
+<end of output>
+Test time =   0.21 sec
+----------------------------------------------------------
+Test Passed.
+"AntWorldMapLoaderRegression" end time: Sep 12 19:21 EDT
+"AntWorldMapLoaderRegression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Sep 12 19:21 EDT

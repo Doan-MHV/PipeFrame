@@ -1,0 +1,3 @@
+[0/2] Re-checking globbed directories...
+[1/3] Building CXX object engine/CMakeFiles/IndependentAuthoringTests.dir/tests/IndependentAuthoringTests.cpp.o
+[2/3] Linking CXX executable engine/IndependentAuthoringTests

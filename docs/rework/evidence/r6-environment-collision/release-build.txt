@@ -1,0 +1,222 @@
+[0/2] Re-checking globbed directories...
+[1/2] Re-running CMake...
+-- Running vcpkg install
+Detecting compiler hash for triplet arm64-osx...
+Compiler found: /usr/bin/c++
+Detecting compiler hash for triplet arm64-osx-dynamic...
+Compiler found: /usr/bin/c++
+The following packages are already installed:
+  * brotli:arm64-osx-dynamic@1.2.0
+  * bzip2[core,tool]:arm64-osx-dynamic@1.0.8#6
+  * egl-registry:arm64-osx-dynamic@2025-05-27
+  * freetype[core,zlib,png,bzip2,brotli]:arm64-osx-dynamic@2.14.3
+  * libflac[core,stack-protector]:arm64-osx-dynamic@1.5.0
+  * libogg:arm64-osx-dynamic@1.3.6#1
+  * libpng:arm64-osx-dynamic@1.6.58
+  * libvorbis:arm64-osx-dynamic@1.3.7#4
+  * miniaudio:arm64-osx-dynamic@0.11.25
+    nativefiledialog-extended:arm64-osx-dynamic@1.3.0
+  * opengl:arm64-osx-dynamic@2022-12-04#3
+  * opengl-registry:arm64-osx-dynamic@2026-08-03
+    sfml[core,window,network,graphics,audio]:arm64-osx-dynamic@3.0.2
+  * stb:arm64-osx-dynamic@2024-07-29#1
+  * vcpkg-cmake:arm64-osx@2025-08-07
+  * vcpkg-cmake-config:arm64-osx@2026-07-21
+  * zlib:arm64-osx-dynamic@1.3.2#2
+nativefiledialog-extended provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(nfd CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE nfd::nfd)
+
+The package sfml provides CMake targets:
+
+    find_package(SFML COMPONENTS Network Graphics Window Audio System CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE SFML::Network SFML::Graphics SFML::Window SFML::Audio SFML::System)
+
+    # If you want SFML to provide an implementation of main():
+    target_link_libraries(main PRIVATE SFML::Main)
+
+All requested installations completed successfully in: 126 us
+-- Running vcpkg install - done
+-- Found SFML 3.0.2 in /Users/donvo/PipeFrame/cmake-build-release/vcpkg_installed/arm64-osx-dynamic/share/sfml
+-- Found SFML 3.0.2 in /Users/donvo/PipeFrame/cmake-build-release/vcpkg_installed/arm64-osx-dynamic/share/sfml
+-- Configuring done (1.9s)
+-- Generating done (0.1s)
+-- Build files have been written to: /Users/donvo/PipeFrame/cmake-build-release
+[0/4] Re-checking globbed directories...
+[1/178] Building CXX object engine/CMakeFiles/PipeFrameEngine.dir/src/Project/ProjectRuntimeLibrary.cpp.o
+[2/178] Building CXX object engine/CMakeFiles/PipeFrameEngine.dir/src/Project/PluginAPI.cpp.o
+[3/178] Linking CXX shared library engine/libPipeFrameEngine.dylib
+[4/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/OldAbiWorkbenchRuntime.dir/tests/IncompatibleWorkbenchRuntime.cpp.o
+[5/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/IncompatibleWorkbenchRuntime.dir/tests/IncompatibleWorkbenchRuntime.cpp.o
+[6/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchTestRuntime.dir/tests/WorkbenchTestRuntime.cpp.o
+[7/178] Building CXX object examples/BasicSimulation/CMakeFiles/BasicSimulationRuntime.dir/Source/Plugin.cpp.o
+[8/178] Building CXX object examples/BasicSimulation/CMakeFiles/BasicSimulationRuntime.dir/Source/BasicSimulationRuntime.cpp.o
+[9/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Physics/ContactSolver.cpp.o
+[10/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Editor/AntDashboard.cpp.o
+[11/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Runtime/AntUIHost.cpp.o
+[12/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Plugin.cpp.o
+[13/178] Building CXX object engine/CMakeFiles/TilemapTests.dir/tests/TilemapTests.cpp.o
+[14/178] Building CXX object CMakeFiles/ReferenceProjectConformanceTests.dir/engine/tests/ReferenceProjectConformanceTests.cpp.o
+[15/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Runtime/AntSimulationRuntime.cpp.o
+[16/178] Building CXX object engine/CMakeFiles/PluginAPITests.dir/tests/PluginAPITests.cpp.o
+[17/178] Building CXX object engine/CMakeFiles/RuntimeLibraryResolutionTests.dir/tests/RuntimeLibraryResolutionTests.cpp.o
+[18/178] Building CXX object engine/CMakeFiles/BrushToolTests.dir/tests/BrushToolTests.cpp.o
+[19/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Editor/WorkspaceToolsPanel.cpp.o
+[20/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Backend/SFML/Workbench.cpp.o
+[21/178] Building CXX object engine/CMakeFiles/EnvironmentCollisionTests.dir/tests/EnvironmentCollisionTests.cpp.o
+[22/178] Building CXX object engine/CMakeFiles/VisualAssetTests.dir/tests/VisualAssetTests.cpp.o
+[23/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Editor/InspectorPanel.cpp.o
+[24/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Editor/WorkbenchInput.cpp.o
+[25/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Backend/SFML/WorkbenchLayout.cpp.o
+[26/178] Building CXX object engine/CMakeFiles/SceneProjectRuntimeTests.dir/tests/SceneProjectRuntimeTests.cpp.o
+[27/178] Linking CXX shared library apps/SimulationWorkbench/libWorkbenchTestRuntime.dylib
+[28/178] Linking CXX shared library apps/SimulationWorkbench/libIncompatibleWorkbenchRuntime.dylib
+[29/178] Linking CXX shared library apps/SimulationWorkbench/libOldAbiWorkbenchRuntime.dylib
+[30/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Runtime/SimulationSession.cpp.o
+[31/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Backend/SFML/WorkbenchView.cpp.o
+[32/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Runtime/ProjectRuntimeHost.cpp.o
+[33/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Editor/ProjectSession.cpp.o
+[34/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Editor/WorkspaceToolsPanel.cpp.o
+[35/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Editor/InspectorPanel.cpp.o
+[36/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Backend/SFML/WorkbenchLayout.cpp.o
+[37/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Editor/WorkbenchInput.cpp.o
+[38/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/tests/WorkbenchUITests.cpp.o
+[39/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Backend/SFML/WorkbenchView.cpp.o
+[40/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Runtime/SimulationSession.cpp.o
+[41/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Runtime/ProjectRuntimeHost.cpp.o
+[42/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/AntComponentEditingTests.dir/tests/AntComponentEditingTests.cpp.o
+[43/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/AntComponentEditingTests.dir/Editor/InspectorPanel.cpp.o
+[44/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/AntComponentEditingTests.dir/Runtime/ProjectRuntimeHost.cpp.o
+[45/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Editor/ProjectSession.cpp.o
+[46/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/AntComponentEditingTests.dir/Runtime/SimulationSession.cpp.o
+[47/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/RuntimeSceneEditTests.dir/tests/RuntimeSceneEditTests.cpp.o
+[48/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/AntComponentEditingTests.dir/Editor/ProjectSession.cpp.o
+[49/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SceneModelTests.dir/tests/SceneModelTests.cpp.o
+[50/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/RuntimeSceneEditTests.dir/Runtime/ProjectRuntimeHost.cpp.o
+[51/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SceneModelTests.dir/Runtime/ProjectRuntimeHost.cpp.o
+[52/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/RuntimeSceneEditTests.dir/Editor/ProjectSession.cpp.o
+[53/178] Linking CXX shared library /Users/donvo/PipeFrame/examples/BasicSimulation/Build/Release/BasicSimulationRuntime.dylib
+[54/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/ProjectBuildTests.dir/tests/ProjectBuildTests.cpp.o
+[55/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/SceneModelTests.dir/Editor/ProjectSession.cpp.o
+[56/178] Linking CXX shared library /Users/donvo/PipeFrame/examples/AntSimulation/Build/Release/AntSimulationRuntime.dylib
+[57/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/ProjectBuildTests.dir/Runtime/ProjectRuntimeHost.cpp.o
+[58/178] Building CXX object examples/BasicSimulation/CMakeFiles/BasicSimulationTests.dir/Tests/BasicSimulationTests.cpp.o
+[59/178] Building CXX object examples/BasicSimulation/CMakeFiles/BasicSimulationTests.dir/Source/BasicSimulationRuntime.cpp.o
+[60/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/ProjectBuildTests.dir/Editor/ProjectSession.cpp.o
+[61/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[62/178] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSolverTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[63/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/Editor/AntDashboard.cpp.o
+[64/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/Runtime/AntUIHost.cpp.o
+[65/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[66/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[67/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Tests/AntSimulationTests.cpp.o
+[68/178] Linking CXX executable ReferenceProjectConformanceTests
+[69/178] Linking CXX executable engine/TilemapTests
+[70/178] Linking CXX executable engine/VisualAssetTests
+[71/178] Linking CXX executable engine/EnvironmentCollisionTests
+[72/178] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[73/178] Linking CXX executable engine/BrushToolTests
+[74/178] Linking CXX executable engine/EnvironmentEditingTests
+[75/178] Linking CXX executable engine/PluginAPITests
+[76/178] Linking CXX executable engine/RuntimeLibraryResolutionTests
+[77/178] Linking CXX executable engine/UIHardeningTests
+[78/178] Linking CXX executable engine/TableViewTests
+[79/178] Linking CXX executable engine/ChartTests
+[80/178] Linking CXX executable engine/NetworkViewTests
+[81/178] Linking CXX executable engine/SceneProjectRuntimeTests
+[82/178] Linking CXX executable engine/ComponentRegistryTests
+[83/178] Linking CXX executable engine/MountedViewTests
+[84/178] Linking CXX executable engine/UIFrameworkTests
+[85/178] Linking CXX executable engine/SimulationControllerTests
+[86/178] Linking CXX executable engine/WorldModuleTests
+[87/178] Linking CXX executable engine/RenderContextTests
+[88/178] Linking CXX executable engine/ProcessTaskTests
+[89/178] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[90/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/39c67e9d356227590954ea1628260402.cpp.o
+[91/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/fdf13bce1c5a438594016becb201bd31.cpp.o
+[92/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/5da627a89717411b3888c91ed9d7bcdd.cpp.o
+[93/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/076cfa00620b5cbfff5d1c3ba04c9d1a.cpp.o
+[94/178] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/Runtime/AntSimulationRuntime.cpp.o
+[95/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/e4dd282117c98bb7d61dbe267958eb34.cpp.o
+[96/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/af3cd94869b996ceee4d4146861d024a.cpp.o
+[97/178] Building CXX object engine/CMakeFiles/RenderPublicHeadersTests.dir/tests/RenderPublicHeadersTests.cpp.o
+[98/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/355c6349641e49a93d70f1d511453360.cpp.o
+[99/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/91ba30d65eee35c7d99770146ca131e1.cpp.o
+[100/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/49f76aab1dfba4c94eb56d9a30647e4b.cpp.o
+[101/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/b6118367d5b14dc965b4e28b38b00f10.cpp.o
+[102/178] Building CXX object examples/AntSimulation/CMakeFiles/AntDashboardTests.dir/Tests/AntDashboardTests.cpp.o
+[103/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/9d962d56160c54bc1a2a8788cc20909f.cpp.o
+[104/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/6340d9b419eb9ab30cde9298ef7dcafb.cpp.o
+[105/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/12b851a2b2f9e6133865f9ded0b3ecd3.cpp.o
+[106/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/7acc8f8a079dbb74e49315ddd45caa50.cpp.o
+[107/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/ad29894be9cf7bf4acc825bfb1995e59.cpp.o
+[108/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/073d6f8513a3da1224a36db2eb225fb6.cpp.o
+[109/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/886cc8cf52840d033024cc63bc6bd90a.cpp.o
+[110/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/20503375a643b2b4c02a7eca21af569d.cpp.o
+[111/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3273dab936bcacfc4346e85ff20bb580.cpp.o
+[112/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/e727c13ca5efa97764cf85e355b87f4b.cpp.o
+[113/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/29c662d040aa8520c73c725da1ac1b8a.cpp.o
+[114/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/28876a4fde918465708aeb15b1cb8b3d.cpp.o
+[115/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/b5580abb70a662ffb9f5d75872ccfe8d.cpp.o
+[116/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/8fbebe5ab847d732456c8a8a977147a6.cpp.o
+[117/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/10e0290af72b5793f7b9e82e63e5ed77.cpp.o
+[118/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/ae6b6a1ca3affa13d628b47d8e2aa9cd.cpp.o
+[119/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/81cc59d59a9fa5006cd53f8cb3fd13ec.cpp.o
+[120/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/4f91c8ece908fefae8935c00541b62d4.cpp.o
+[121/178] Linking CXX executable apps/SimulationWorkbench/SimulationWorkbench
+[122/178] Linking CXX executable apps/SimulationWorkbench/WorkbenchUITests
+[123/178] Linking CXX executable apps/SimulationWorkbench/SceneSerializerTests
+[124/178] Linking CXX executable apps/SimulationWorkbench/ProjectManagerTests
+[125/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3618007812528f9b5fd9a3570905c38d.cpp.o
+[126/178] Linking CXX executable apps/SimulationWorkbench/SceneHistoryTests
+[127/178] Linking CXX executable apps/SimulationWorkbench/AntComponentEditingTests
+[128/178] Linking CXX executable apps/SimulationWorkbench/RuntimeSceneEditTests
+[129/178] Linking CXX executable apps/SimulationWorkbench/SceneModelTests
+[130/178] Linking CXX executable apps/SimulationWorkbench/PrefabLibraryTests
+[131/178] Linking CXX executable apps/SimulationWorkbench/ProjectBuildTests
+[132/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3b210c294171a5f8ae581fc8754adf35.cpp.o
+[133/178] Linking CXX executable benchmarks/AntBenchmark/AntBenchmark
+[134/178] Linking CXX executable examples/UIGallery/UIGallery
+[135/178] Linking CXX executable examples/ThermalLab/ThermalLab
+[136/178] Linking CXX executable examples/BasicSimulation/BasicSimulationTests
+[137/178] Linking CXX executable examples/AntSimulation/AntSimulationTests
+[138/178] Linking CXX executable examples/AntSimulation/AntConfigurationTests
+[139/178] Linking CXX executable examples/AntSimulation/AntMarkerTests
+[140/178] Linking CXX executable examples/AntSimulation/AntEnvironmentTests
+[141/178] Linking CXX executable examples/AntSimulation/AntFoodTests
+[142/178] Linking CXX executable examples/AntSimulation/AntWallBuilderTests
+[143/178] Linking CXX executable examples/AntSimulation/AntWorldMapLoaderTests
+[144/178] Linking CXX executable examples/AntSimulation/AntBehaviorTests
+[145/178] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/82f7091298a65a8da7bc3b418e744a25.cpp.o
+[146/178] Linking CXX executable examples/AntSimulation/AntMarkerSamplerTests
+[147/178] Linking CXX executable examples/AntSimulation/AntColonyTests
+[148/178] Linking CXX executable examples/AntSimulation/AntWorkerBehaviorTests
+[149/178] Linking CXX executable examples/AntSimulation/AntContactSystemTests
+[150/178] Linking CXX executable examples/AntSimulation/AntPhysicsWorldTests
+[151/178] Linking CXX executable examples/AntSimulation/AntContactSolverTests
+[152/178] Linking CXX executable examples/AntSimulation/AntSystemIntegrationTests
+[153/178] Linking CXX executable examples/AntSimulation/AntAvoidanceSystemTests
+[154/178] Linking CXX executable examples/AntSimulation/AntGeometryTests
+[155/178] Linking CXX executable examples/AntSimulation/AntRendererTests
+[156/178] Linking CXX executable examples/AntSimulation/AntShadowRendererTests
+[157/178] Linking CXX executable examples/AntSimulation/AntMarkerRendererTests
+[158/178] Linking CXX executable examples/AntSimulation/AntWallRendererTests
+[159/178] Linking CXX executable examples/AntSimulation/AntEnvironmentRendererTests
+[160/178] Linking CXX executable examples/AntSimulation/AntDebugRendererTests
+[161/178] Linking CXX executable examples/AntSimulation/AntEditorToolTests
+[162/178] Linking CXX executable examples/AntSimulation/AntEditorToolRendererTests
+[163/178] Linking CXX executable examples/AntSimulation/AntInspectorTests
+[164/178] Linking CXX executable examples/AntSimulation/AntColonyInspectorTests
+[165/178] Linking CXX executable examples/AntSimulation/AntSimulationWorldTests
+[166/178] Linking CXX executable examples/AntSimulation/AntBehaviorParityTests
+[167/178] Linking CXX executable examples/AntSimulation/AntStressTests
+[168/178] Linking CXX executable examples/AntSimulation/AntRenderPerformanceTests
+[169/178] Linking CXX executable examples/AntSimulation/AntColonyHistoryTests
+[170/178] Linking CXX executable examples/AntSimulation/AntDashboardTests
+[171/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/WorkspaceToolsPanel.cpp.o
+[172/178] Building CXX object engine/CMakeFiles/PublicEngineConsumerCompile.dir/tests/PublicEngineConsumerCompile.cpp.o
+[173/178] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/InspectorPanel.cpp.o
+[174/178] Building CXX object examples/AntSimulation/CMakeFiles/AntUIBoundaryCompile.dir/Source/Runtime/AntUIHost.cpp.o
+[175/178] Building CXX object examples/AntSimulation/CMakeFiles/AntUIBoundaryCompile.dir/Source/Editor/AntDashboard.cpp.o

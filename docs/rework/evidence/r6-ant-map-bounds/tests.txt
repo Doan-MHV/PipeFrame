@@ -1,0 +1,20 @@
+September 12, 2026 — Debug verification
+ctest --test-dir cmake-build-debug -R '^(TilemapRegression|SceneProjectRuntimeAcceptance|AntSimulationRegression|PipeFrameDependencyLint)$' --output-on-failure
+PipeFrameDependencyLint: Passed (0.06 sec)
+TilemapRegression: Passed (0.31 sec)
+SceneProjectRuntimeAcceptance: Passed (0.29 sec)
+AntSimulationRegression: Passed (0.40 sec)
+4/4 passed; total 1.06 sec.
+
+ctest --test-dir cmake-build-debug -R '^WorkbenchUIAcceptance$' --output-on-failure
+WorkbenchUIAcceptance: Passed (4.37 sec)
+1/1 passed; total 4.37 sec.
+
+New coverage: typed Ant map overrides legacy filename; reimport + Reset updates walls;
+missing/restored source recovers at unchanged revision; partial-cell bounded fill;
+changing bounds cancels gesture; native outside-ground rejection, bounded fill and undo.
+Debug SimulationWorkbench, AntSimulationTests, SceneProjectRuntimeTests,
+TilemapTests and WorkbenchUITests built successfully.
+This is focused verification, not the full R6 graphical acceptance or performance gate.
+
+Release SimulationWorkbench and Ant runtime plugin built successfully.

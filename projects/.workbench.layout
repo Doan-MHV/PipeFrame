@@ -1,0 +1,6 @@
+PIPEFRAME_WORKSPACE 1
+"Default" 1 4
+"scene-tools" 1 "scene" 0 1 1 360 40 40 480 360 ""
+"standard-tools" 2 "output" 0 0 1 220 40 40 480 360 ""
+"scene-viewport" 3 "viewport" 0 1 1 320 80 176 640 420 ""
+"game-viewport" 3 "viewport" 1 1 0 320 80 176 640 420 ""

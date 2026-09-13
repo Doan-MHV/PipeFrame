@@ -1,0 +1,81 @@
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/fdf13bce1c5a438594016becb201bd31.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/fdf13bce1c5a438594016becb201bd31.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/39c67e9d356227590954ea1628260402.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/39c67e9d356227590954ea1628260402.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/5da627a89717411b3888c91ed9d7bcdd.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/5da627a89717411b3888c91ed9d7bcdd.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/076cfa00620b5cbfff5d1c3ba04c9d1a.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/076cfa00620b5cbfff5d1c3ba04c9d1a.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/e4dd282117c98bb7d61dbe267958eb34.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/e4dd282117c98bb7d61dbe267958eb34.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/af3cd94869b996ceee4d4146861d024a.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/af3cd94869b996ceee4d4146861d024a.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/355c6349641e49a93d70f1d511453360.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/355c6349641e49a93d70f1d511453360.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/91ba30d65eee35c7d99770146ca131e1.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/91ba30d65eee35c7d99770146ca131e1.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/b6118367d5b14dc965b4e28b38b00f10.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/b6118367d5b14dc965b4e28b38b00f10.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/9d962d56160c54bc1a2a8788cc20909f.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/9d962d56160c54bc1a2a8788cc20909f.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/49f76aab1dfba4c94eb56d9a30647e4b.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/49f76aab1dfba4c94eb56d9a30647e4b.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/12b851a2b2f9e6133865f9ded0b3ecd3.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/12b851a2b2f9e6133865f9ded0b3ecd3.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/7acc8f8a079dbb74e49315ddd45caa50.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/7acc8f8a079dbb74e49315ddd45caa50.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/6340d9b419eb9ab30cde9298ef7dcafb.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/6340d9b419eb9ab30cde9298ef7dcafb.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3273dab936bcacfc4346e85ff20bb580.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/3273dab936bcacfc4346e85ff20bb580.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/ad29894be9cf7bf4acc825bfb1995e59.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/ad29894be9cf7bf4acc825bfb1995e59.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/b5580abb70a662ffb9f5d75872ccfe8d.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/b5580abb70a662ffb9f5d75872ccfe8d.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/073d6f8513a3da1224a36db2eb225fb6.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/073d6f8513a3da1224a36db2eb225fb6.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/886cc8cf52840d033024cc63bc6bd90a.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/886cc8cf52840d033024cc63bc6bd90a.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/20503375a643b2b4c02a7eca21af569d.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/20503375a643b2b4c02a7eca21af569d.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/29c662d040aa8520c73c725da1ac1b8a.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/29c662d040aa8520c73c725da1ac1b8a.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/e727c13ca5efa97764cf85e355b87f4b.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/e727c13ca5efa97764cf85e355b87f4b.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3b210c294171a5f8ae581fc8754adf35.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/3b210c294171a5f8ae581fc8754adf35.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/28876a4fde918465708aeb15b1cb8b3d.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/28876a4fde918465708aeb15b1cb8b3d.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/8fbebe5ab847d732456c8a8a977147a6.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/8fbebe5ab847d732456c8a8a977147a6.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/10e0290af72b5793f7b9e82e63e5ed77.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/10e0290af72b5793f7b9e82e63e5ed77.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/ae6b6a1ca3affa13d628b47d8e2aa9cd.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/ae6b6a1ca3affa13d628b47d8e2aa9cd.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/81cc59d59a9fa5006cd53f8cb3fd13ec.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/81cc59d59a9fa5006cd53f8cb3fd13ec.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/4f91c8ece908fefae8935c00541b62d4.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/4f91c8ece908fefae8935c00541b62d4.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3618007812528f9b5fd9a3570905c38d.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/3618007812528f9b5fd9a3570905c38d.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/82f7091298a65a8da7bc3b418e744a25.cpp.o -c /Users/donvo/PipeFrame/cmake-build-debug/engine/isolated-ui/82f7091298a65a8da7bc3b418e744a25.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/PublicEngineConsumerCompile.dir/tests/PublicEngineConsumerCompile.cpp.o -c /Users/donvo/PipeFrame/engine/tests/PublicEngineConsumerCompile.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/tests/WorkbenchInputBoundaryCompile.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/tests/WorkbenchInputBoundaryCompile.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/HierarchyPanel.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/HierarchyPanel.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/InspectorPanel.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/InspectorPanel.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/ViewportToolbar.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/ViewportToolbar.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/AssetBrowserPanel.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/AssetBrowserPanel.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/WorkspaceToolsPanel.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/WorkspaceToolsPanel.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/ProjectBrowser.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/ProjectBrowser.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/examples/AntSimulation/Source -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o examples/AntSimulation/CMakeFiles/AntUIBoundaryCompile.dir/Source/Runtime/AntUIHost.cpp.o -c /Users/donvo/PipeFrame/examples/AntSimulation/Source/Runtime/AntUIHost.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/examples/AntSimulation/Source -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o examples/AntSimulation/CMakeFiles/AntUIBoundaryCompile.dir/Source/Editor/AntDashboard.cpp.o -c /Users/donvo/PipeFrame/examples/AntSimulation/Source/Editor/AntDashboard.cpp

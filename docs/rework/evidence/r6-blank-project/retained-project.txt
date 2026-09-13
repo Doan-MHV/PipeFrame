@@ -1,0 +1,2 @@
+PASS: blank project -> generate/build -> Playground/material/New Map -> gestures/undo/redo -> spawn/goal/obstacle -> settings/behaviour/body -> run/pause/reset -> prefab/save/reopen/rebuild/reload
+Retained tutorial project: "/Users/donvo/PipeFrame/projects/R6LearningArena"

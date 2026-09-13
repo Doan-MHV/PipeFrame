@@ -1,0 +1,10 @@
+Debug: September 12, 2026
+PipeFrameDependencyLint passed 0.06 sec
+AssetDatabaseRegression passed 1.52 sec
+WorkbenchUIAcceptance passed 3.99 sec
+3/3 passed, total 5.58 sec.
+Coverage: unique asset ID; original document/history preserved; dirty copy rejected;
+original and copied sources reopen independently; only selected scene reference changes;
+scene undo/redo restores assignment.
+SimulationWorkbench and WorkbenchUITests rebuilt successfully after shortening help text.
+Release and full R6 acceptance/performance gates were not rerun for this change.

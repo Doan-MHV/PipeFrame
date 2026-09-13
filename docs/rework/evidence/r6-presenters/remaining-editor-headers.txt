@@ -1,0 +1,5 @@
+apps/SimulationWorkbench/Editor/DockSplitter.h
+apps/SimulationWorkbench/Editor/WorkbenchLayout.h
+apps/SimulationWorkbench/Editor/WorkbenchView.h
+apps/SimulationWorkbench/Editor/WorkbenchInput.h
+apps/SimulationWorkbench/Editor/PopulationBoundsRenderer.h

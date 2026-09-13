@@ -1,0 +1,11 @@
+
+--- Configure ---
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/donvo/PipeFrame/projects/R6NativeLesson/.pipeframe/build/Release
+
+--- Build ---
+[ 66%] Building CXX object CMakeFiles/R6NativeLessonRuntime.dir/Source/Runtime/R6NativeLessonRuntime.cpp.o
+[ 66%] Building CXX object CMakeFiles/R6NativeLessonRuntime.dir/Source/Plugin.cpp.o
+[100%] Linking CXX shared library /Users/donvo/PipeFrame/projects/R6NativeLesson/Build/Release/R6NativeLessonRuntime.dylib
+[100%] Built target R6NativeLessonRuntime

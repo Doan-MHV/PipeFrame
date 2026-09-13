@@ -1,0 +1,154 @@
+Test project /Users/donvo/PipeFrame/cmake-build-debug
+      Start  1: ReferenceProjectConformance
+ 1/72 Test  #1: ReferenceProjectConformance ..........   Passed    0.10 sec
+      Start  2: PipeFrameDependencyLint
+ 2/72 Test  #2: PipeFrameDependencyLint ..............   Passed    0.07 sec
+      Start  3: TilemapRegression
+ 3/72 Test  #3: TilemapRegression ....................   Passed    0.00 sec
+      Start  4: VisualAssetAcceptance
+ 4/72 Test  #4: VisualAssetAcceptance ................   Passed    0.57 sec
+      Start  5: DockResizeRegression
+ 5/72 Test  #5: DockResizeRegression .................   Passed    0.00 sec
+      Start  6: FoundationHeadlessRegression
+ 6/72 Test  #6: FoundationHeadlessRegression .........   Passed    0.01 sec
+      Start  7: AuthoringFoundationRegression
+ 7/72 Test  #7: AuthoringFoundationRegression ........   Passed    0.00 sec
+      Start  8: AssetDatabaseRegression
+ 8/72 Test  #8: AssetDatabaseRegression ..............   Passed    3.30 sec
+      Start  9: EditorWorkspaceRegression
+ 9/72 Test  #9: EditorWorkspaceRegression ............   Passed    0.00 sec
+      Start 10: PluginAPIRegression
+10/72 Test #10: PluginAPIRegression ..................   Passed    0.04 sec
+      Start 11: SpatialServicesRegression
+11/72 Test #11: SpatialServicesRegression ............   Passed    0.00 sec
+      Start 12: PhysicsEnvironmentRegression
+12/72 Test #12: PhysicsEnvironmentRegression .........   Passed    0.00 sec
+      Start 13: ResourceRenderRegression
+13/72 Test #13: ResourceRenderRegression .............   Passed    0.01 sec
+      Start 14: LearningExperimentRegression
+14/72 Test #14: LearningExperimentRegression .........   Passed    0.01 sec
+      Start 15: RuntimeLibraryResolutionRegression
+15/72 Test #15: RuntimeLibraryResolutionRegression ...   Passed    0.03 sec
+      Start 16: UIHardeningRegression
+16/72 Test #16: UIHardeningRegression ................   Passed    0.12 sec
+      Start 17: TableViewRegression
+17/72 Test #17: TableViewRegression ..................   Passed    0.15 sec
+      Start 18: NetworkViewRegression
+18/72 Test #18: NetworkViewRegression ................   Passed    0.13 sec
+      Start 19: ChartRegression
+19/72 Test #19: ChartRegression ......................   Passed    0.13 sec
+      Start 20: ComponentRegistryAcceptance
+20/72 Test #20: ComponentRegistryAcceptance ..........   Passed    0.04 sec
+      Start 21: SceneProjectRuntimeAcceptance
+21/72 Test #21: SceneProjectRuntimeAcceptance ........   Passed    0.05 sec
+      Start 22: MountedViewRegression
+22/72 Test #22: MountedViewRegression ................   Passed    0.21 sec
+      Start 23: UIFrameworkRegression
+23/72 Test #23: UIFrameworkRegression ................   Passed    1.75 sec
+      Start 24: SimulationControllerRegression
+24/72 Test #24: SimulationControllerRegression .......   Passed    0.04 sec
+      Start 25: WorldModuleRegression
+25/72 Test #25: WorldModuleRegression ................   Passed    0.03 sec
+      Start 26: RenderContextRegression
+26/72 Test #26: RenderContextRegression ..............   Passed    0.14 sec
+      Start 27: ProcessTaskRegression
+27/72 Test #27: ProcessTaskRegression ................   Passed    0.80 sec
+      Start 28: WorkbenchUIAcceptance
+28/72 Test #28: WorkbenchUIAcceptance ................   Passed    3.74 sec
+      Start 29: SceneSerializerRoundTrip
+29/72 Test #29: SceneSerializerRoundTrip .............   Passed    0.04 sec
+      Start 30: ProjectManagerRegression
+30/72 Test #30: ProjectManagerRegression .............   Passed    0.04 sec
+      Start 31: SceneHistoryRegression
+31/72 Test #31: SceneHistoryRegression ...............   Passed    0.03 sec
+      Start 32: AntComponentEditingAcceptance
+32/72 Test #32: AntComponentEditingAcceptance ........   Passed    5.20 sec
+      Start 33: RuntimeSceneEditRegression
+33/72 Test #33: RuntimeSceneEditRegression ...........   Passed    0.30 sec
+      Start 34: ComponentSceneModelAcceptance
+34/72 Test #34: ComponentSceneModelAcceptance ........   Passed    0.26 sec
+      Start 35: PrefabLibraryRegression
+35/72 Test #35: PrefabLibraryRegression ..............   Passed    0.04 sec
+      Start 36: ProjectBuildAcceptance
+36/72 Test #36: ProjectBuildAcceptance ...............   Passed   10.93 sec
+      Start 37: UIGalleryAcceptance
+37/72 Test #37: UIGalleryAcceptance ..................   Passed    0.13 sec
+      Start 38: ThermalLabGoldenAcceptance
+38/72 Test #38: ThermalLabGoldenAcceptance ...........   Passed    0.54 sec
+      Start 39: BasicSimulationRegression
+39/72 Test #39: BasicSimulationRegression ............   Passed    0.04 sec
+      Start 40: AntSimulationRegression
+40/72 Test #40: AntSimulationRegression ..............   Passed    0.12 sec
+      Start 41: AntConfigurationRegression
+41/72 Test #41: AntConfigurationRegression ...........   Passed    0.03 sec
+      Start 42: AntMarkerRegression
+42/72 Test #42: AntMarkerRegression ..................   Passed    0.03 sec
+      Start 43: AntEnvironmentRegression
+43/72 Test #43: AntEnvironmentRegression .............   Passed    0.03 sec
+      Start 44: AntFoodRegression
+44/72 Test #44: AntFoodRegression ....................   Passed    0.03 sec
+      Start 45: AntWallBuilderRegression
+45/72 Test #45: AntWallBuilderRegression .............   Passed    0.03 sec
+      Start 46: AntWorldMapLoaderRegression
+46/72 Test #46: AntWorldMapLoaderRegression ..........   Passed    0.21 sec
+      Start 47: AntBehaviorRegression
+47/72 Test #47: AntBehaviorRegression ................   Passed    0.04 sec
+      Start 48: AntMarkerSamplerRegression
+48/72 Test #48: AntMarkerSamplerRegression ...........   Passed    0.03 sec
+      Start 49: AntColonyRegression
+49/72 Test #49: AntColonyRegression ..................   Passed    0.04 sec
+      Start 50: AntWorkerBehaviorRegression
+50/72 Test #50: AntWorkerBehaviorRegression ..........   Passed    0.03 sec
+      Start 51: AntContactSystemRegression
+51/72 Test #51: AntContactSystemRegression ...........   Passed    0.04 sec
+      Start 52: AntPhysicsWorldRegression
+52/72 Test #52: AntPhysicsWorldRegression ............   Passed    0.04 sec
+      Start 53: AntContactSolverRegression
+53/72 Test #53: AntContactSolverRegression ...........   Passed    0.04 sec
+      Start 54: AntSimulationPipelineRegression
+54/72 Test #54: AntSimulationPipelineRegression ......   Passed    0.04 sec
+      Start 55: AntAvoidanceSystemRegression
+55/72 Test #55: AntAvoidanceSystemRegression .........   Passed    0.04 sec
+      Start 56: AntGeometryRegression
+56/72 Test #56: AntGeometryRegression ................   Passed    0.04 sec
+      Start 57: AntRendererRegression
+57/72 Test #57: AntRendererRegression ................   Passed    0.04 sec
+      Start 58: AntShadowRendererRegression
+58/72 Test #58: AntShadowRendererRegression ..........   Passed    0.03 sec
+      Start 59: AntMarkerRendererRegression
+59/72 Test #59: AntMarkerRendererRegression ..........   Passed    0.03 sec
+      Start 60: AntWallRendererRegression
+60/72 Test #60: AntWallRendererRegression ............   Passed    0.03 sec
+      Start 61: AntEnvironmentRendererRegression
+61/72 Test #61: AntEnvironmentRendererRegression .....   Passed    0.03 sec
+      Start 62: AntDebugRendererRegression
+62/72 Test #62: AntDebugRendererRegression ...........   Passed    0.03 sec
+      Start 63: AntEditorToolRegression
+63/72 Test #63: AntEditorToolRegression ..............   Passed    0.03 sec
+      Start 64: AntEditorToolRendererRegression
+64/72 Test #64: AntEditorToolRendererRegression ......   Passed    0.03 sec
+      Start 65: AntInspectorRegression
+65/72 Test #65: AntInspectorRegression ...............   Passed    0.04 sec
+      Start 66: AntColonyInspectorRegression
+66/72 Test #66: AntColonyInspectorRegression .........   Passed    0.03 sec
+      Start 67: AntSimulationWorldRegression
+67/72 Test #67: AntSimulationWorldRegression .........   Passed    0.04 sec
+      Start 68: AntBehaviorParityRegression
+68/72 Test #68: AntBehaviorParityRegression ..........   Passed    0.61 sec
+      Start 69: AntStressRegression
+69/72 Test #69: AntStressRegression ..................   Passed   58.13 sec
+      Start 70: AntRenderPerformanceRegression
+70/72 Test #70: AntRenderPerformanceRegression .......   Passed    1.09 sec
+      Start 71: AntColonyHistoryTests
+71/72 Test #71: AntColonyHistoryTests ................   Passed    0.04 sec
+      Start 72: AntDashboardAcceptance
+72/72 Test #72: AntDashboardAcceptance ...............   Passed    1.42 sec
+
+100% tests passed, 0 tests failed out of 72
+
+Label Time Summary:
+performance    =  59.22 sec*proc (2 tests)
+rendering      =   1.09 sec*proc (1 test)
+stress         =  59.22 sec*proc (2 tests)
+
+Total Test time (real) =  91.58 sec

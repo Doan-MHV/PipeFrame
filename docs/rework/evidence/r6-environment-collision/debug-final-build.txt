@@ -1,0 +1,10 @@
+[0/2] Re-checking globbed directories...
+[1/10] Building CXX object engine/CMakeFiles/TilemapTests.dir/tests/TilemapTests.cpp.o
+[2/10] Linking CXX executable engine/TilemapTests
+[3/10] Building CXX object engine/CMakeFiles/PublicEngineConsumerCompile.dir/tests/PublicEngineConsumerCompile.cpp.o
+[4/10] Building CXX object engine/CMakeFiles/SceneProjectRuntimeTests.dir/tests/SceneProjectRuntimeTests.cpp.o
+[5/10] Building CXX object engine/CMakeFiles/EnvironmentCollisionTests.dir/tests/EnvironmentCollisionTests.cpp.o
+[6/10] Linking CXX executable engine/SceneProjectRuntimeTests
+[7/10] Linking CXX executable engine/EnvironmentCollisionTests
+[8/10] Building CXX object engine/CMakeFiles/VisualAssetTests.dir/tests/VisualAssetTests.cpp.o
+[9/10] Linking CXX executable engine/VisualAssetTests

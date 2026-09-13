@@ -1,0 +1,1 @@
+Independent registered component -> attached Behaviour -> nested stateful UI -> resize/unmount/reset passed

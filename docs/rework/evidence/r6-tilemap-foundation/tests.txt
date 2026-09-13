@@ -1,0 +1,95 @@
+Start testing: Sep 12 19:12 EDT
+----------------------------------------------------------
+3/71 Testing: TilemapRegression
+3/71 Test: TilemapRegression
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/engine/TilemapTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/engine
+"TilemapRegression" start time: Sep 12 19:12 EDT
+Output:
+----------------------------------------------------------
+Tilemap regression passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"TilemapRegression" end time: Sep 12 19:12 EDT
+"TilemapRegression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/71 Testing: DockResizeRegression
+4/71 Test: DockResizeRegression
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/engine/DockResizeTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/engine
+"DockResizeRegression" start time: Sep 12 19:12 EDT
+Output:
+----------------------------------------------------------
+Dock resize regression passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"DockResizeRegression" end time: Sep 12 19:12 EDT
+"DockResizeRegression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/71 Testing: AssetDatabaseRegression
+7/71 Test: AssetDatabaseRegression
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/engine/AssetDatabaseTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/engine
+"AssetDatabaseRegression" start time: Sep 12 19:12 EDT
+Output:
+----------------------------------------------------------
+Failed to load image
+    Provided path: /var/folders/zy/lt6gjzbs6_jg0_r_hz6dzvkc0000gn/T/pipeframe_asset_database_test/Assets/Textures/truncated.png
+    Absolute path: /var/folders/zy/lt6gjzbs6_jg0_r_hz6dzvkc0000gn/T/pipeframe_asset_database_test/Assets/Textures/truncated.png
+Reason: Corrupt PNG
+Failed to load image
+    Provided path: /var/folders/zy/lt6gjzbs6_jg0_r_hz6dzvkc0000gn/T/pipeframe_asset_database_test/Assets/Textures/Moved/albedo.png
+    Absolute path: /var/folders/zy/lt6gjzbs6_jg0_r_hz6dzvkc0000gn/T/pipeframe_asset_database_test/Assets/Textures/Moved/albedo.png
+Reason: Corrupt PNG
+Failed to load image
+    Provided path: /var/folders/zy/lt6gjzbs6_jg0_r_hz6dzvkc0000gn/T/pipeframe_asset_database_test/Assets/Textures/invalid.png
+    Absolute path: /var/folders/zy/lt6gjzbs6_jg0_r_hz6dzvkc0000gn/T/pipeframe_asset_database_test/Assets/Textures/invalid.png
+Reason: Image not of any known type, or corrupt
+All asset database and import pipeline tests passed.
+<end of output>
+Test time =   0.60 sec
+----------------------------------------------------------
+Test Passed.
+"AssetDatabaseRegression" end time: Sep 12 19:12 EDT
+"AssetDatabaseRegression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/71 Testing: RenderContextRegression
+25/71 Test: RenderContextRegression
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/engine/RenderContextTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/engine
+"RenderContextRegression" start time: Sep 12 19:12 EDT
+Output:
+----------------------------------------------------------
+Render context: viewport, mapping, zoom, resize, passes and offscreen rendering passed
+<end of output>
+Test time =   0.39 sec
+----------------------------------------------------------
+Test Passed.
+"RenderContextRegression" end time: Sep 12 19:12 EDT
+"RenderContextRegression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/71 Testing: WorkbenchUIAcceptance
+27/71 Test: WorkbenchUIAcceptance
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench/WorkbenchUITests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench
+"WorkbenchUIAcceptance" start time: Sep 12 19:12 EDT
+Output:
+----------------------------------------------------------
+All Workbench UI acceptance checks passed.
+<end of output>
+Test time =   4.70 sec
+----------------------------------------------------------
+Test Passed.
+"WorkbenchUIAcceptance" end time: Sep 12 19:12 EDT
+"WorkbenchUIAcceptance" time elapsed: 00:00:04
+----------------------------------------------------------
+
+End testing: Sep 12 19:12 EDT

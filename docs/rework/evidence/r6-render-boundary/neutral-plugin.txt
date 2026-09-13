@@ -1,0 +1,1 @@
+PASS: clang++ -std=c++20 -fsyntax-only -Iengine/include -Iexamples/AntSimulation/Source examples/AntSimulation/Source/Plugin.cpp

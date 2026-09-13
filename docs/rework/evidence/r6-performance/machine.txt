@@ -1,0 +1,9 @@
+Reference machine: Apple M3 Pro; 18 GiB unified memory
+OS: macOS 26.6.2 (25G83), arm64
+Build: CMake Release, -O3 -DNDEBUG, C++20, PIPEFRAME_ANT_REWORK_ONLY=ON
+Measurement date: September 13, 2026
+All benchmarks run sequentially with no concurrent build, test, or visible Workbench process.
+User desktop apps remained open (Codex, CLion, browsers, Music, Preview, Finder).
+No CPU affinity, worker-count, power-mode or simulation-quality changes were made.
+1440x900 offscreen target; software submission/display timings, not GPU completion or photons.
+Peak resident memory: getrusage(RUSAGE_SELF).ru_maxrss (bytes on macOS), includes process/driver allocations.

@@ -1,0 +1,7 @@
+Test project /Users/donvo/PipeFrame/cmake-build-debug
+    Start 17: LearningExperimentRegression
+1/1 Test #17: LearningExperimentRegression .....   Passed    0.23 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.23 sec

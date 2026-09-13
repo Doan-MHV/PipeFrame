@@ -1,0 +1,13 @@
+[0/2] Re-checking globbed directories...
+[1/13] Building CXX object engine/CMakeFiles/BehaviourServicesTests.dir/tests/BehaviourServicesTests.cpp.o
+[2/13] Linking CXX executable engine/BehaviourServicesTests
+[3/13] Building CXX object engine/CMakeFiles/EnvironmentCollisionTests.dir/tests/EnvironmentCollisionTests.cpp.o
+[4/13] Linking CXX executable engine/EnvironmentCollisionTests
+[5/13] Building CXX object engine/CMakeFiles/SceneProjectRuntimeTests.dir/tests/SceneProjectRuntimeTests.cpp.o
+[6/13] Building CXX object engine/CMakeFiles/IndependentAuthoringTests.dir/tests/IndependentAuthoringTests.cpp.o
+[7/13] Linking CXX executable engine/SceneProjectRuntimeTests
+[8/13] Linking CXX executable engine/IndependentAuthoringTests
+[9/13] Building CXX object engine/CMakeFiles/VisualAssetTests.dir/tests/VisualAssetTests.cpp.o
+[10/13] Linking CXX executable engine/VisualAssetTests
+[11/13] Building CXX object engine/CMakeFiles/IndependentAuthoringPublicCompile.dir/tests/IndependentAuthoringPublicCompile.cpp.o
+[12/13] Building CXX object engine/CMakeFiles/PublicEngineConsumerCompile.dir/tests/PublicEngineConsumerCompile.cpp.o

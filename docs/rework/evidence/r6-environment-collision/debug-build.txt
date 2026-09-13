@@ -1,0 +1,25 @@
+[0/2] Re-checking globbed directories...
+[1/25] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Physics/ContactSolver.cpp.o
+[2/25] Linking CXX shared library /Users/donvo/PipeFrame/examples/AntSimulation/Build/Debug/AntSimulationRuntime.dylib
+[3/25] Building CXX object engine/CMakeFiles/TilemapTests.dir/tests/TilemapTests.cpp.o
+[4/25] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[5/25] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSolverTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[6/25] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[7/25] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[8/25] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[9/25] Linking CXX executable engine/TilemapTests
+[10/25] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[11/25] Linking CXX executable examples/AntSimulation/AntSimulationTests
+[12/25] Linking CXX executable examples/AntSimulation/AntContactSolverTests
+[13/25] Linking CXX executable examples/AntSimulation/AntSystemIntegrationTests
+[14/25] Linking CXX executable examples/AntSimulation/AntSimulationWorldTests
+[15/25] Building CXX object engine/CMakeFiles/SceneProjectRuntimeTests.dir/tests/SceneProjectRuntimeTests.cpp.o
+[16/25] Linking CXX executable examples/AntSimulation/AntBehaviorParityTests
+[17/25] Building CXX object engine/CMakeFiles/EnvironmentCollisionTests.dir/tests/EnvironmentCollisionTests.cpp.o
+[18/25] Linking CXX executable engine/SceneProjectRuntimeTests
+[19/25] Linking CXX executable examples/AntSimulation/AntDashboardTests
+[20/25] Linking CXX executable examples/AntSimulation/AntStressTests
+[21/25] Linking CXX executable engine/EnvironmentCollisionTests
+[22/25] Building CXX object engine/CMakeFiles/VisualAssetTests.dir/tests/VisualAssetTests.cpp.o
+[23/25] Linking CXX executable engine/VisualAssetTests
+[24/25] Building CXX object engine/CMakeFiles/PublicEngineConsumerCompile.dir/tests/PublicEngineConsumerCompile.cpp.o

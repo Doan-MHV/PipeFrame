@@ -1,0 +1,4 @@
+PIPEFRAME_PROJECT_SETTINGS 1
+name "SailBoat Simulation"
+default_scene "Scenes/Main.pfscene"
+fixed_step 0.016666667

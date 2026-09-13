@@ -1,0 +1,14 @@
+R6 approved render-boundary migration — September 12, 2026
+Debug build: PASS
+Release build: PASS
+RenderPublicHeadersTests: compiled with only engine/include (no native include paths)
+Ant Source/Plugin.cpp: standalone syntax check PASS (no native include paths)
+CTest: 69/69 passed; 96.17 seconds
+Native UI interactions and saved 800/1440 screenshots: PASS
+ABI 3 rejection before registration on load/reload: PASS
+Generated project build, reload, validation, prefab/save/reopen: PASS
+
+Evidence: docs/rework/evidence/r6-render-boundary/
+R6 overall remains OPEN: legacy native UI and Editor header boundary migration;
+five-colony p95 measured 17.00 ms (above 16.67 ms target).
+See R6_RENDER_BOUNDARY.md for scope and compatibility.

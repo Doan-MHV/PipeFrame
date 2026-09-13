@@ -1,0 +1,3 @@
+PIPEFRAME_INPUT 1
+action "frame_selection" "F"
+action "toggle_simulation" "Space"

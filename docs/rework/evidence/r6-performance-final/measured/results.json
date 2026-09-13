@@ -1,0 +1,79 @@
+{
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "build": "/Users/donvo/PipeFrame/cmake-build-release",
+  "executable_sha256": "37ae44b9c26ac9773d69e2b13d1239916889e4bd7e3d1a35aafe6229e5f47625",
+  "results": [
+    {
+      "run": 1,
+      "fixture": "ant-scale",
+      "exit_code": 0,
+      "samples_present": true
+    },
+    {
+      "run": 1,
+      "fixture": "ant-ui",
+      "exit_code": 0,
+      "samples_present": true
+    },
+    {
+      "run": 1,
+      "fixture": "ant-drag",
+      "exit_code": 0,
+      "samples_present": true
+    },
+    {
+      "run": 1,
+      "fixture": "environment",
+      "exit_code": 0,
+      "samples_present": true
+    },
+    {
+      "run": 2,
+      "fixture": "ant-scale",
+      "exit_code": 0,
+      "samples_present": true
+    },
+    {
+      "run": 2,
+      "fixture": "ant-ui",
+      "exit_code": 0,
+      "samples_present": true
+    },
+    {
+      "run": 2,
+      "fixture": "ant-drag",
+      "exit_code": 0,
+      "samples_present": true
+    },
+    {
+      "run": 2,
+      "fixture": "environment",
+      "exit_code": 0,
+      "samples_present": true
+    },
+    {
+      "run": 3,
+      "fixture": "ant-scale",
+      "exit_code": 0,
+      "samples_present": true
+    },
+    {
+      "run": 3,
+      "fixture": "ant-ui",
+      "exit_code": 0,
+      "samples_present": true
+    },
+    {
+      "run": 3,
+      "fixture": "ant-drag",
+      "exit_code": 0,
+      "samples_present": true
+    },
+    {
+      "run": 3,
+      "fixture": "environment",
+      "exit_code": 0,
+      "samples_present": true
+    }
+  ]
+}

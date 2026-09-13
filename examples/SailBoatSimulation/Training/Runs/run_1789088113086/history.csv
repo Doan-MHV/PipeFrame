@@ -1,0 +1,9 @@
+run,iteration,best_score,average_score,progress,node_count,connection_count,metrics
+0,0,0.538201,0.538206,0,5,0,distance=800.413;race_time=-1
+0,1,3828.57,326.69,0.087,5,1,distance=840.94;race_time=262.669
+0,2,3835.83,1937.66,0.531,5,1,distance=839.74;race_time=262.169
+0,3,3843.12,2465.48,0.678,6,2,distance=838.121;race_time=261.669
+0,4,3845.56,2650.69,0.726,7,4,distance=837.623;race_time=261.503
+0,5,3860.24,2667.33,0.738,6,3,distance=832.846;race_time=260.503
+0,6,3860.24,2744.15,0.758,6,3,distance=832.846;race_time=260.503
+0,7,3860.24,2910.84,0.8,6,3,distance=832.846;race_time=260.503

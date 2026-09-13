@@ -1,0 +1,11 @@
+apps/SimulationWorkbench/Editor/WorkbenchView.h
+apps/SimulationWorkbench/Editor/PopulationBoundsRenderer.h
+apps/SimulationWorkbench/Editor/ViewportToolbar.h
+apps/SimulationWorkbench/Editor/AssetBrowserPanel.h
+apps/SimulationWorkbench/Editor/HierarchyPanel.h
+apps/SimulationWorkbench/Editor/WorkbenchLayout.h
+apps/SimulationWorkbench/Editor/WorkspaceToolsPanel.h
+apps/SimulationWorkbench/Editor/DockSplitter.h
+apps/SimulationWorkbench/Editor/ProjectBrowser.h
+apps/SimulationWorkbench/Editor/WorkbenchInput.h
+apps/SimulationWorkbench/Editor/InspectorPanel.h

@@ -1,0 +1,460 @@
+[0/2] Re-checking globbed directories...
+[1/2] Re-running CMake...
+-- Running vcpkg install
+Detecting compiler hash for triplet arm64-osx...
+Compiler found: /usr/bin/c++
+Detecting compiler hash for triplet arm64-osx-dynamic...
+Compiler found: /usr/bin/c++
+The following packages are already installed:
+  * brotli:arm64-osx-dynamic@1.2.0
+  * bzip2[core,tool]:arm64-osx-dynamic@1.0.8#6
+  * egl-registry:arm64-osx-dynamic@2025-05-27
+  * freetype[core,zlib,png,bzip2,brotli]:arm64-osx-dynamic@2.14.3
+  * libflac[core,stack-protector]:arm64-osx-dynamic@1.5.0
+  * libogg:arm64-osx-dynamic@1.3.6#1
+  * libpng:arm64-osx-dynamic@1.6.58
+  * libvorbis:arm64-osx-dynamic@1.3.7#4
+  * miniaudio:arm64-osx-dynamic@0.11.25
+    nativefiledialog-extended:arm64-osx-dynamic@1.3.0
+  * opengl:arm64-osx-dynamic@2022-12-04#3
+  * opengl-registry:arm64-osx-dynamic@2026-01-26
+    sfml[core,window,network,graphics,audio]:arm64-osx-dynamic@3.0.2
+  * stb:arm64-osx-dynamic@2024-07-29#1
+  * vcpkg-cmake:arm64-osx@2024-04-23
+  * vcpkg-cmake-config:arm64-osx@2026-07-21
+  * zlib:arm64-osx-dynamic@1.3.2#2
+nativefiledialog-extended provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(nfd CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE nfd::nfd)
+
+The package sfml provides CMake targets:
+
+    find_package(SFML COMPONENTS Network Graphics Window Audio System CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE SFML::Network SFML::Graphics SFML::Window SFML::Audio SFML::System)
+
+    # If you want SFML to provide an implementation of main():
+    target_link_libraries(main PRIVATE SFML::Main)
+
+All requested installations completed successfully in: 141 us
+-- Running vcpkg install - done
+-- Found SFML 3.0.2 in /Users/donvo/PipeFrame/cmake-build-debug/vcpkg_installed/arm64-osx-dynamic/share/sfml
+-- Found SFML 3.0.2 in /Users/donvo/PipeFrame/cmake-build-debug/vcpkg_installed/arm64-osx-dynamic/share/sfml
+-- Configuring done (2.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: /Users/donvo/PipeFrame/cmake-build-debug
+[0/4] Re-checking globbed directories...
+[1/416] Building CXX object engine/CMakeFiles/PipeFrameEngine.dir/src/Project/PluginAPI.cpp.o
+[2/416] Building CXX object engine/CMakeFiles/PipeFrameEngine.dir/src/Project/ProjectRuntimeLibrary.cpp.o
+[3/416] Linking CXX shared library engine/libPipeFrameEngine.dylib
+[4/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/OldAbiWorkbenchRuntime.dir/tests/IncompatibleWorkbenchRuntime.cpp.o
+[5/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/IncompatibleWorkbenchRuntime.dir/tests/IncompatibleWorkbenchRuntime.cpp.o
+[6/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchTestRuntime.dir/tests/WorkbenchTestRuntime.cpp.o
+[7/416] Building CXX object examples/BasicSimulation/CMakeFiles/BasicSimulationRuntime.dir/Source/Plugin.cpp.o
+[8/416] Building CXX object examples/BasicSimulation/CMakeFiles/BasicSimulationRuntime.dir/Source/BasicSimulationRuntime.cpp.o
+[9/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/AntWorld.cpp.o
+[10/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Runtime/AntView.cpp.o
+[11/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Editor/AntDashboard.cpp.o
+[12/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Runtime/Systems/MarkerSampler.cpp.o
+[13/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Runtime/AntUIHost.cpp.o
+[14/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Runtime/ColonyView.cpp.o
+[15/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Runtime/AntSimulationRuntime.cpp.o
+[16/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Runtime/AntRegistration.cpp.o
+[17/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Physics/CollisionGrid.cpp.o
+[18/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Runtime/Systems/WorkerBehavior.cpp.o
+[19/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Runtime/AntQuery.cpp.o
+[20/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Physics/AntContactSystem.cpp.o
+[21/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp.o
+[22/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Physics/AntBodySystem.cpp.o
+[23/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Physics/ContactSolver.cpp.o
+[24/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Physics/AntMovementSystem.cpp.o
+[25/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Runtime/Systems/AntForagingSystem.cpp.o
+[26/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Runtime/Systems/AntCleanupSystem.cpp.o
+[27/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Rendering/AntGeometry.cpp.o
+[28/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Physics/AntAvoidanceSystem.cpp.o
+[29/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Rendering/AntRenderer.cpp.o
+[30/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Rendering/ShadowRenderer.cpp.o
+[31/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Rendering/WallRenderer.cpp.o
+[32/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Rendering/MarkerRenderer.cpp.o
+[33/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Rendering/EnvironmentRenderer.cpp.o
+[34/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Editor/AntEditorToolRenderer.cpp.o
+[35/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Rendering/AntDebugRenderer.cpp.o
+[36/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Editor/AntInspector.cpp.o
+[37/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Editor/ColonyInspector.cpp.o
+[38/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/World/Runtime/ColonyHistory.cpp.o
+[39/416] Building CXX object CMakeFiles/ReferenceProjectConformanceTests.dir/engine/tests/ReferenceProjectConformanceTests.cpp.o
+[40/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationRuntime.dir/Source/Plugin.cpp.o
+[41/416] Building CXX object engine/CMakeFiles/BrushToolTests.dir/tests/BrushToolTests.cpp.o
+[42/416] Building CXX object engine/CMakeFiles/PluginAPITests.dir/tests/PluginAPITests.cpp.o
+[43/416] Building CXX object engine/CMakeFiles/FoundationHeadlessTests.dir/tests/FoundationHeadlessTests.cpp.o
+[44/416] Building CXX object engine/CMakeFiles/RuntimeLibraryResolutionTests.dir/tests/RuntimeLibraryResolutionTests.cpp.o
+[45/416] Building CXX object engine/CMakeFiles/EnvironmentCollisionTests.dir/tests/EnvironmentCollisionTests.cpp.o
+[46/416] Building CXX object engine/CMakeFiles/VisualAssetTests.dir/tests/VisualAssetTests.cpp.o
+[47/416] Building CXX object engine/CMakeFiles/ComponentRegistryTests.dir/tests/ComponentRegistryTests.cpp.o
+[48/416] Building CXX object engine/CMakeFiles/WorldModuleTests.dir/tests/WorldModuleTests.cpp.o
+[49/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Editor/WorkspaceToolsPanel.cpp.o
+[50/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Backend/SFML/Workbench.cpp.o
+[51/416] Building CXX object engine/CMakeFiles/SceneProjectRuntimeTests.dir/tests/SceneProjectRuntimeTests.cpp.o
+[52/416] Building CXX object engine/CMakeFiles/BehaviourServicesTests.dir/tests/BehaviourServicesTests.cpp.o
+[53/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Editor/InspectorPanel.cpp.o
+[54/416] Building CXX object engine/CMakeFiles/IndependentAuthoringTests.dir/tests/IndependentAuthoringTests.cpp.o
+[55/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Editor/WorkbenchInput.cpp.o
+[56/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Backend/SFML/WorkbenchLayout.cpp.o
+[57/416] Linking CXX shared library apps/SimulationWorkbench/libWorkbenchTestRuntime.dylib
+[58/416] Linking CXX shared library apps/SimulationWorkbench/libIncompatibleWorkbenchRuntime.dylib
+[59/416] Linking CXX shared library apps/SimulationWorkbench/libOldAbiWorkbenchRuntime.dylib
+[60/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Editor/ProjectSession.cpp.o
+[61/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Runtime/ProjectRuntimeHost.cpp.o
+[62/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Runtime/SimulationSession.cpp.o
+[63/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Backend/SFML/WorkbenchView.cpp.o
+[64/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Editor/WorkspaceToolsPanel.cpp.o
+[65/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Backend/SFML/WorkbenchLayout.cpp.o
+[66/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Editor/InspectorPanel.cpp.o
+[67/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/tests/WorkbenchUITests.cpp.o
+[68/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Editor/WorkbenchInput.cpp.o
+[69/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Backend/SFML/WorkbenchView.cpp.o
+[70/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Runtime/SimulationSession.cpp.o
+[71/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Runtime/ProjectRuntimeHost.cpp.o
+[72/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Editor/ProjectSession.cpp.o
+[73/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/AntComponentEditingTests.dir/tests/AntComponentEditingTests.cpp.o
+[74/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/AntComponentEditingTests.dir/Editor/InspectorPanel.cpp.o
+[75/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/AntComponentEditingTests.dir/Runtime/ProjectRuntimeHost.cpp.o
+[76/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/AntComponentEditingTests.dir/Runtime/SimulationSession.cpp.o
+[77/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/AntComponentEditingTests.dir/Editor/ProjectSession.cpp.o
+[78/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/RuntimeSceneEditTests.dir/tests/RuntimeSceneEditTests.cpp.o
+[79/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/RuntimeSceneEditTests.dir/Runtime/ProjectRuntimeHost.cpp.o
+[80/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SceneModelTests.dir/tests/SceneModelTests.cpp.o
+[81/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/RuntimeSceneEditTests.dir/Editor/ProjectSession.cpp.o
+[82/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SceneModelTests.dir/Runtime/ProjectRuntimeHost.cpp.o
+[83/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/SceneModelTests.dir/Editor/ProjectSession.cpp.o
+[84/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/ProjectBuildTests.dir/tests/ProjectBuildTests.cpp.o
+[85/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/ProjectBuildTests.dir/Runtime/ProjectRuntimeHost.cpp.o
+[86/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/BlankProjectAcceptanceTests.dir/tests/BlankProjectAcceptanceTests.cpp.o
+[87/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/ProjectBuildTests.dir/Editor/ProjectSession.cpp.o
+[88/416] Linking CXX shared library /Users/donvo/PipeFrame/examples/BasicSimulation/Build/Debug/BasicSimulationRuntime.dylib
+[89/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/BlankProjectAcceptanceTests.dir/Runtime/ProjectRuntimeHost.cpp.o
+[90/416] Linking CXX shared library /Users/donvo/PipeFrame/examples/AntSimulation/Build/Debug/AntSimulationRuntime.dylib
+[91/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/BlankProjectAcceptanceTests.dir/Runtime/SimulationSession.cpp.o
+[92/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/BlankProjectAcceptanceTests.dir/Editor/ProjectSession.cpp.o
+[93/416] Building CXX object examples/BasicSimulation/CMakeFiles/BasicSimulationTests.dir/Tests/BasicSimulationTests.cpp.o
+[94/416] Building CXX object examples/BasicSimulation/CMakeFiles/BasicSimulationTests.dir/Source/BasicSimulationRuntime.cpp.o
+[95/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/AntWorld.cpp.o
+[96/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Tests/AntEnvironmentAuthoringTests.cpp.o
+[97/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/Editor/AntDashboard.cpp.o
+[98/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/Runtime/AntUIHost.cpp.o
+[99/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Runtime/AntView.cpp.o
+[100/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Runtime/Systems/MarkerSampler.cpp.o
+[101/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[102/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/Runtime/AntRegistration.cpp.o
+[103/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/Runtime/AntSimulationRuntime.cpp.o
+[104/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[105/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Runtime/Systems/WorkerBehavior.cpp.o
+[106/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Physics/CollisionGrid.cpp.o
+[107/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Physics/AntContactSystem.cpp.o
+[108/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp.o
+[109/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Physics/AntBodySystem.cpp.o
+[110/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[111/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Runtime/Systems/AntForagingSystem.cpp.o
+[112/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Physics/AntMovementSystem.cpp.o
+[113/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Runtime/Systems/AntCleanupSystem.cpp.o
+[114/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Rendering/AntGeometry.cpp.o
+[115/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Physics/AntAvoidanceSystem.cpp.o
+[116/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Rendering/AntRenderer.cpp.o
+[117/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Rendering/ShadowRenderer.cpp.o
+[118/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Rendering/WallRenderer.cpp.o
+[119/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Rendering/MarkerRenderer.cpp.o
+[120/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Rendering/EnvironmentRenderer.cpp.o
+[121/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/Editor/AntEditorToolRenderer.cpp.o
+[122/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Rendering/AntDebugRenderer.cpp.o
+[123/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/Editor/AntInspector.cpp.o
+[124/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/Editor/ColonyInspector.cpp.o
+[125/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentAuthoringTests.dir/Source/World/Runtime/ColonyHistory.cpp.o
+[126/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/AntWorld.cpp.o
+[127/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/Editor/AntDashboard.cpp.o
+[128/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/Runtime/AntUIHost.cpp.o
+[129/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Tests/AntSimulationTests.cpp.o
+[130/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Runtime/AntView.cpp.o
+[131/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Runtime/Systems/MarkerSampler.cpp.o
+[132/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/Runtime/AntSimulationRuntime.cpp.o
+[133/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[134/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/Runtime/AntRegistration.cpp.o
+[135/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Physics/CollisionGrid.cpp.o
+[136/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Runtime/Systems/WorkerBehavior.cpp.o
+[137/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[138/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Physics/AntContactSystem.cpp.o
+[139/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp.o
+[140/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Physics/AntBodySystem.cpp.o
+[141/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[142/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Physics/AntMovementSystem.cpp.o
+[143/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Runtime/Systems/AntForagingSystem.cpp.o
+[144/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Runtime/Systems/AntCleanupSystem.cpp.o
+[145/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Rendering/AntGeometry.cpp.o
+[146/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Physics/AntAvoidanceSystem.cpp.o
+[147/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Rendering/MarkerRenderer.cpp.o
+[148/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Rendering/ShadowRenderer.cpp.o
+[149/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Rendering/AntRenderer.cpp.o
+[150/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Rendering/WallRenderer.cpp.o
+[151/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Rendering/EnvironmentRenderer.cpp.o
+[152/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/Editor/AntEditorToolRenderer.cpp.o
+[153/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/Editor/ColonyInspector.cpp.o
+[154/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/Editor/AntInspector.cpp.o
+[155/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Rendering/AntDebugRenderer.cpp.o
+[156/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationTests.dir/Source/World/Runtime/ColonyHistory.cpp.o
+[157/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorTests.dir/Source/World/Runtime/AntView.cpp.o
+[158/416] Building CXX object examples/AntSimulation/CMakeFiles/AntMarkerSamplerTests.dir/Source/World/Runtime/AntView.cpp.o
+[159/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorTests.dir/Tests/AntBehaviorTests.cpp.o
+[160/416] Building CXX object examples/AntSimulation/CMakeFiles/AntMarkerSamplerTests.dir/Source/World/Runtime/Systems/MarkerSampler.cpp.o
+[161/416] Building CXX object examples/AntSimulation/CMakeFiles/AntMarkerSamplerTests.dir/Tests/MarkerSamplerTests.cpp.o
+[162/416] Building CXX object examples/AntSimulation/CMakeFiles/AntColonyTests.dir/Source/World/Runtime/AntView.cpp.o
+[163/416] Building CXX object examples/AntSimulation/CMakeFiles/AntColonyTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[164/416] Building CXX object examples/AntSimulation/CMakeFiles/AntColonyTests.dir/Tests/ColonyTests.cpp.o
+[165/416] Building CXX object examples/AntSimulation/CMakeFiles/AntWorkerBehaviorTests.dir/Source/World/Runtime/AntView.cpp.o
+[166/416] Building CXX object examples/AntSimulation/CMakeFiles/AntColonyTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[167/416] Building CXX object examples/AntSimulation/CMakeFiles/AntWorkerBehaviorTests.dir/Source/World/Runtime/Systems/MarkerSampler.cpp.o
+[168/416] Building CXX object examples/AntSimulation/CMakeFiles/AntWorkerBehaviorTests.dir/Tests/WorkerBehaviorTests.cpp.o
+[169/416] Building CXX object examples/AntSimulation/CMakeFiles/AntColonyTests.dir/Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp.o
+[170/416] Building CXX object examples/AntSimulation/CMakeFiles/AntWorkerBehaviorTests.dir/Source/World/Runtime/Systems/WorkerBehavior.cpp.o
+[171/416] Building CXX object examples/AntSimulation/CMakeFiles/AntWorkerBehaviorTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[172/416] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSystemTests.dir/Source/World/Runtime/AntView.cpp.o
+[173/416] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSystemTests.dir/Tests/AntContactSystemTests.cpp.o
+[174/416] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSystemTests.dir/Source/World/Physics/CollisionGrid.cpp.o
+[175/416] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSystemTests.dir/Source/World/Physics/AntContactSystem.cpp.o
+[176/416] Building CXX object examples/AntSimulation/CMakeFiles/AntPhysicsWorldTests.dir/Source/World/Runtime/AntView.cpp.o
+[177/416] Building CXX object examples/AntSimulation/CMakeFiles/AntPhysicsWorldTests.dir/Tests/AntPhysicsWorldTests.cpp.o
+[178/416] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSystemTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[179/416] Building CXX object examples/AntSimulation/CMakeFiles/AntPhysicsWorldTests.dir/Source/World/Physics/AntBodySystem.cpp.o
+[180/416] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSolverTests.dir/Source/World/Runtime/AntView.cpp.o
+[181/416] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSolverTests.dir/Tests/ContactSolverTests.cpp.o
+[182/416] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSolverTests.dir/Source/World/Physics/CollisionGrid.cpp.o
+[183/416] Building CXX object examples/AntSimulation/CMakeFiles/AntPhysicsWorldTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[184/416] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSolverTests.dir/Source/World/Physics/AntBodySystem.cpp.o
+[185/416] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSolverTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[186/416] Building CXX object examples/AntSimulation/CMakeFiles/AntContactSolverTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[187/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Runtime/AntView.cpp.o
+[188/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Runtime/Systems/MarkerSampler.cpp.o
+[189/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Tests/AntSystemIntegrationTests.cpp.o
+[190/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Runtime/Systems/WorkerBehavior.cpp.o
+[191/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Physics/AntContactSystem.cpp.o
+[192/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Runtime/Systems/AntForagingSystem.cpp.o
+[193/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[194/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Physics/AntMovementSystem.cpp.o
+[195/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[196/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Runtime/Systems/AntCleanupSystem.cpp.o
+[197/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Physics/CollisionGrid.cpp.o
+[198/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Physics/AntBodySystem.cpp.o
+[199/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[200/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Physics/AntAvoidanceSystem.cpp.o
+[201/416] Building CXX object examples/AntSimulation/CMakeFiles/AntAvoidanceSystemTests.dir/Source/World/Runtime/AntView.cpp.o
+[202/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSystemIntegrationTests.dir/Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp.o
+[203/416] Building CXX object examples/AntSimulation/CMakeFiles/AntAvoidanceSystemTests.dir/Tests/AntAvoidanceSystemTests.cpp.o
+[204/416] Building CXX object examples/AntSimulation/CMakeFiles/AntAvoidanceSystemTests.dir/Source/World/Physics/CollisionGrid.cpp.o
+[205/416] Building CXX object examples/AntSimulation/CMakeFiles/AntAvoidanceSystemTests.dir/Source/World/Physics/AntBodySystem.cpp.o
+[206/416] Building CXX object examples/AntSimulation/CMakeFiles/AntAvoidanceSystemTests.dir/Source/World/Physics/AntAvoidanceSystem.cpp.o
+[207/416] Building CXX object examples/AntSimulation/CMakeFiles/AntGeometryTests.dir/Source/World/Runtime/AntView.cpp.o
+[208/416] Building CXX object examples/AntSimulation/CMakeFiles/AntGeometryTests.dir/Tests/AntGeometryTests.cpp.o
+[209/416] Building CXX object examples/AntSimulation/CMakeFiles/AntAvoidanceSystemTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[210/416] Building CXX object examples/AntSimulation/CMakeFiles/AntGeometryTests.dir/Source/World/Rendering/AntGeometry.cpp.o
+[211/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRendererTests.dir/Source/World/Runtime/AntView.cpp.o
+[212/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRendererTests.dir/Tests/AntRendererTests.cpp.o
+[213/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRendererTests.dir/Source/World/Rendering/AntGeometry.cpp.o
+[214/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRendererTests.dir/Source/World/Rendering/AntRenderer.cpp.o
+[215/416] Building CXX object examples/AntSimulation/CMakeFiles/AntShadowRendererTests.dir/Source/World/Runtime/AntView.cpp.o
+[216/416] Building CXX object examples/AntSimulation/CMakeFiles/AntShadowRendererTests.dir/Source/World/Rendering/AntGeometry.cpp.o
+[217/416] Building CXX object examples/AntSimulation/CMakeFiles/AntShadowRendererTests.dir/Tests/ShadowRendererTests.cpp.o
+[218/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRendererTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[219/416] Building CXX object examples/AntSimulation/CMakeFiles/AntShadowRendererTests.dir/Source/World/Rendering/AntRenderer.cpp.o
+[220/416] Building CXX object examples/AntSimulation/CMakeFiles/AntMarkerRendererTests.dir/Tests/MarkerRendererTests.cpp.o
+[221/416] Building CXX object examples/AntSimulation/CMakeFiles/AntShadowRendererTests.dir/Source/World/Rendering/ShadowRenderer.cpp.o
+[222/416] Building CXX object examples/AntSimulation/CMakeFiles/AntWallRendererTests.dir/Tests/WallRendererTests.cpp.o
+[223/416] Building CXX object examples/AntSimulation/CMakeFiles/AntMarkerRendererTests.dir/Source/World/Rendering/MarkerRenderer.cpp.o
+[224/416] Building CXX object examples/AntSimulation/CMakeFiles/AntWallRendererTests.dir/Source/World/Rendering/WallRenderer.cpp.o
+[225/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentRendererTests.dir/Source/World/Rendering/WallRenderer.cpp.o
+[226/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentRendererTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[227/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentRendererTests.dir/Source/World/Rendering/MarkerRenderer.cpp.o
+[228/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentRendererTests.dir/Tests/EnvironmentRendererTests.cpp.o
+[229/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEnvironmentRendererTests.dir/Source/World/Rendering/EnvironmentRenderer.cpp.o
+[230/416] Building CXX object examples/AntSimulation/CMakeFiles/AntDebugRendererTests.dir/Source/World/Runtime/AntView.cpp.o
+[231/416] Building CXX object examples/AntSimulation/CMakeFiles/AntDebugRendererTests.dir/Tests/AntDebugRendererTests.cpp.o
+[232/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEditorToolRendererTests.dir/Tests/AntEditorToolRendererTests.cpp.o
+[233/416] Building CXX object examples/AntSimulation/CMakeFiles/AntDebugRendererTests.dir/Source/World/Rendering/AntDebugRenderer.cpp.o
+[234/416] Building CXX object examples/AntSimulation/CMakeFiles/AntEditorToolRendererTests.dir/Source/Editor/AntEditorToolRenderer.cpp.o
+[235/416] Building CXX object examples/AntSimulation/CMakeFiles/AntInspectorTests.dir/Tests/AntInspectorTests.cpp.o
+[236/416] Building CXX object examples/AntSimulation/CMakeFiles/AntDebugRendererTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[237/416] Building CXX object examples/AntSimulation/CMakeFiles/AntInspectorTests.dir/Source/World/Runtime/AntView.cpp.o
+[238/416] Building CXX object examples/AntSimulation/CMakeFiles/AntInspectorTests.dir/Source/Editor/AntInspector.cpp.o
+[239/416] Building CXX object examples/AntSimulation/CMakeFiles/AntColonyInspectorTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[240/416] Building CXX object examples/AntSimulation/CMakeFiles/AntColonyInspectorTests.dir/Source/Editor/ColonyInspector.cpp.o
+[241/416] Building CXX object examples/AntSimulation/CMakeFiles/AntColonyInspectorTests.dir/Tests/ColonyInspectorTests.cpp.o
+[242/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Tests/AntSimulationWorldTests.cpp.o
+[243/416] Building CXX object examples/AntSimulation/CMakeFiles/AntInspectorTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[244/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Runtime/AntView.cpp.o
+[245/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Runtime/Systems/MarkerSampler.cpp.o
+[246/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Runtime/Systems/WorkerBehavior.cpp.o
+[247/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/AntWorld.cpp.o
+[248/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Physics/AntContactSystem.cpp.o
+[249/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Physics/AntAvoidanceSystem.cpp.o
+[250/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[251/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Runtime/Systems/AntForagingSystem.cpp.o
+[252/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Physics/AntMovementSystem.cpp.o
+[253/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Runtime/Systems/AntCleanupSystem.cpp.o
+[254/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[255/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Physics/CollisionGrid.cpp.o
+[256/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Physics/AntBodySystem.cpp.o
+[257/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[258/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Tests/AntBehaviorParityTests.cpp.o
+[259/416] Building CXX object examples/AntSimulation/CMakeFiles/AntSimulationWorldTests.dir/Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp.o
+[260/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Runtime/AntView.cpp.o
+[261/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/AntWorld.cpp.o
+[262/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Runtime/Systems/MarkerSampler.cpp.o
+[263/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Runtime/Systems/WorkerBehavior.cpp.o
+[264/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Physics/AntContactSystem.cpp.o
+[265/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[266/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Physics/AntAvoidanceSystem.cpp.o
+[267/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Runtime/Systems/AntForagingSystem.cpp.o
+[268/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Runtime/Systems/AntCleanupSystem.cpp.o
+[269/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Physics/AntMovementSystem.cpp.o
+[270/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[271/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Physics/CollisionGrid.cpp.o
+[272/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Physics/AntBodySystem.cpp.o
+[273/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[274/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Tests/AntStressTests.cpp.o
+[275/416] Building CXX object examples/AntSimulation/CMakeFiles/AntBehaviorParityTests.dir/Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp.o
+[276/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Runtime/AntView.cpp.o
+[277/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/AntWorld.cpp.o
+[278/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Runtime/Systems/MarkerSampler.cpp.o
+[279/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Runtime/Systems/WorkerBehavior.cpp.o
+[280/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Physics/AntContactSystem.cpp.o
+[281/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[282/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Physics/AntAvoidanceSystem.cpp.o
+[283/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Runtime/Systems/AntForagingSystem.cpp.o
+[284/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Physics/AntMovementSystem.cpp.o
+[285/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Runtime/Systems/AntCleanupSystem.cpp.o
+[286/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[287/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Physics/CollisionGrid.cpp.o
+[288/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Physics/AntBodySystem.cpp.o
+[289/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Physics/ContactSolver.cpp.o
+[290/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRenderPerformanceTests.dir/Source/World/Runtime/AntView.cpp.o
+[291/416] Building CXX object examples/AntSimulation/CMakeFiles/AntStressTests.dir/Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp.o
+[292/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRenderPerformanceTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[293/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRenderPerformanceTests.dir/Tests/AntRenderPerformanceTests.cpp.o
+[294/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRenderPerformanceTests.dir/Source/World/Rendering/AntGeometry.cpp.o
+[295/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRenderPerformanceTests.dir/Source/World/Rendering/MarkerRenderer.cpp.o
+[296/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRenderPerformanceTests.dir/Source/World/Rendering/AntRenderer.cpp.o
+[297/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRenderPerformanceTests.dir/Source/World/Rendering/ShadowRenderer.cpp.o
+[298/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRenderPerformanceTests.dir/Source/World/Runtime/AntQuery.cpp.o
+[299/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRenderPerformanceTests.dir/Source/World/Rendering/WallRenderer.cpp.o
+[300/416] Building CXX object examples/AntSimulation/CMakeFiles/AntColonyHistoryTests.dir/Source/World/Runtime/ColonyView.cpp.o
+[301/416] Linking CXX executable ReferenceProjectConformanceTests
+[302/416] Building CXX object examples/AntSimulation/CMakeFiles/AntColonyHistoryTests.dir/Source/World/Runtime/ColonyHistory.cpp.o
+[303/416] Linking CXX executable engine/VisualAssetTests
+[304/416] Building CXX object examples/AntSimulation/CMakeFiles/AntRenderPerformanceTests.dir/Source/World/Rendering/EnvironmentRenderer.cpp.o
+[305/416] Linking CXX executable engine/EnvironmentCollisionTests
+[306/416] Linking CXX executable engine/BrushToolTests
+[307/416] Linking CXX executable engine/EnvironmentEditingTests
+[308/416] Linking CXX executable engine/FoundationHeadlessTests
+[309/416] Linking CXX executable engine/PluginAPITests
+[310/416] Linking CXX executable engine/RuntimeLibraryResolutionTests
+[311/416] Linking CXX executable engine/UIHardeningTests
+[312/416] Linking CXX executable engine/TableViewTests
+[313/416] Linking CXX executable engine/ChartTests
+[314/416] Linking CXX executable engine/NetworkViewTests
+[315/416] Linking CXX executable engine/ComponentRegistryTests
+[316/416] Linking CXX executable engine/MountedViewTests
+[317/416] Linking CXX executable engine/SceneProjectRuntimeTests
+[318/416] Linking CXX executable engine/SimulationControllerTests
+[319/416] Linking CXX executable engine/UIFrameworkTests
+[320/416] Building CXX object examples/AntSimulation/CMakeFiles/AntColonyHistoryTests.dir/Tests/ColonyHistoryTests.cpp.o
+[321/416] Linking CXX executable engine/WorldModuleTests
+[322/416] Linking CXX executable engine/BehaviourServicesTests
+[323/416] Linking CXX executable engine/IndependentAuthoringTests
+[324/416] Linking CXX executable engine/RenderContextTests
+[325/416] Linking CXX executable engine/ProcessTaskTests
+[326/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/39c67e9d356227590954ea1628260402.cpp.o
+[327/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/5da627a89717411b3888c91ed9d7bcdd.cpp.o
+[328/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/fdf13bce1c5a438594016becb201bd31.cpp.o
+[329/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/076cfa00620b5cbfff5d1c3ba04c9d1a.cpp.o
+[330/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/e4dd282117c98bb7d61dbe267958eb34.cpp.o
+[331/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/af3cd94869b996ceee4d4146861d024a.cpp.o
+[332/416] Building CXX object engine/CMakeFiles/RenderPublicHeadersTests.dir/tests/RenderPublicHeadersTests.cpp.o
+[333/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/355c6349641e49a93d70f1d511453360.cpp.o
+[334/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/91ba30d65eee35c7d99770146ca131e1.cpp.o
+[335/416] Building CXX object examples/AntSimulation/CMakeFiles/AntDashboardTests.dir/Tests/AntDashboardTests.cpp.o
+[336/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/49f76aab1dfba4c94eb56d9a30647e4b.cpp.o
+[337/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/b6118367d5b14dc965b4e28b38b00f10.cpp.o
+[338/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/9d962d56160c54bc1a2a8788cc20909f.cpp.o
+[339/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/6340d9b419eb9ab30cde9298ef7dcafb.cpp.o
+[340/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/12b851a2b2f9e6133865f9ded0b3ecd3.cpp.o
+[341/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/7acc8f8a079dbb74e49315ddd45caa50.cpp.o
+[342/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/ad29894be9cf7bf4acc825bfb1995e59.cpp.o
+[343/416] Building CXX object engine/CMakeFiles/IndependentAuthoringPublicCompile.dir/tests/IndependentAuthoringPublicCompile.cpp.o
+[344/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/073d6f8513a3da1224a36db2eb225fb6.cpp.o
+[345/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3273dab936bcacfc4346e85ff20bb580.cpp.o
+[346/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/20503375a643b2b4c02a7eca21af569d.cpp.o
+[347/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/886cc8cf52840d033024cc63bc6bd90a.cpp.o
+[348/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/29c662d040aa8520c73c725da1ac1b8a.cpp.o
+[349/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/b5580abb70a662ffb9f5d75872ccfe8d.cpp.o
+[350/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/e727c13ca5efa97764cf85e355b87f4b.cpp.o
+[351/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/28876a4fde918465708aeb15b1cb8b3d.cpp.o
+[352/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/8fbebe5ab847d732456c8a8a977147a6.cpp.o
+[353/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/ae6b6a1ca3affa13d628b47d8e2aa9cd.cpp.o
+[354/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/81cc59d59a9fa5006cd53f8cb3fd13ec.cpp.o
+[355/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/10e0290af72b5793f7b9e82e63e5ed77.cpp.o
+[356/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/4f91c8ece908fefae8935c00541b62d4.cpp.o
+[357/416] Linking CXX executable apps/SimulationWorkbench/SimulationWorkbench
+[358/416] Linking CXX executable apps/SimulationWorkbench/WorkbenchUITests
+[359/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3618007812528f9b5fd9a3570905c38d.cpp.o
+[360/416] Linking CXX executable apps/SimulationWorkbench/SceneSerializerTests
+[361/416] Linking CXX executable apps/SimulationWorkbench/ProjectManagerTests
+[362/416] Linking CXX executable apps/SimulationWorkbench/SceneHistoryTests
+[363/416] Linking CXX executable apps/SimulationWorkbench/AntComponentEditingTests
+[364/416] Linking CXX executable apps/SimulationWorkbench/RuntimeSceneEditTests
+[365/416] Linking CXX executable apps/SimulationWorkbench/SceneModelTests
+[366/416] Linking CXX executable apps/SimulationWorkbench/PrefabLibraryTests
+[367/416] Linking CXX executable apps/SimulationWorkbench/ProjectBuildTests
+[368/416] Linking CXX executable apps/SimulationWorkbench/BlankProjectAcceptanceTests
+[369/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3b210c294171a5f8ae581fc8754adf35.cpp.o
+[370/416] Linking CXX executable benchmarks/AntBenchmark/AntBenchmark
+[371/416] Linking CXX executable examples/UIGallery/UIGallery
+[372/416] Linking CXX executable examples/ThermalLab/ThermalLab
+[373/416] Linking CXX executable examples/BasicSimulation/BasicSimulationTests
+[374/416] Linking CXX executable examples/AntSimulation/AntEnvironmentAuthoringTests
+[375/416] Linking CXX executable examples/AntSimulation/AntSimulationTests
+[376/416] Linking CXX executable examples/AntSimulation/AntConfigurationTests
+[377/416] Linking CXX executable examples/AntSimulation/AntMarkerTests
+[378/416] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/82f7091298a65a8da7bc3b418e744a25.cpp.o
+[379/416] Linking CXX executable examples/AntSimulation/AntEnvironmentTests
+[380/416] Linking CXX executable examples/AntSimulation/AntFoodTests
+[381/416] Linking CXX executable examples/AntSimulation/AntWallBuilderTests
+[382/416] Linking CXX executable examples/AntSimulation/AntWorldMapLoaderTests
+[383/416] Linking CXX executable examples/AntSimulation/AntBehaviorTests
+[384/416] Linking CXX executable examples/AntSimulation/AntMarkerSamplerTests
+[385/416] Linking CXX executable examples/AntSimulation/AntColonyTests
+[386/416] Linking CXX executable examples/AntSimulation/AntWorkerBehaviorTests
+[387/416] Linking CXX executable examples/AntSimulation/AntContactSystemTests
+[388/416] Linking CXX executable examples/AntSimulation/AntPhysicsWorldTests
+[389/416] Linking CXX executable examples/AntSimulation/AntContactSolverTests
+[390/416] Linking CXX executable examples/AntSimulation/AntSystemIntegrationTests
+[391/416] Linking CXX executable examples/AntSimulation/AntAvoidanceSystemTests
+[392/416] Linking CXX executable examples/AntSimulation/AntGeometryTests
+[393/416] Linking CXX executable examples/AntSimulation/AntRendererTests
+[394/416] Linking CXX executable examples/AntSimulation/AntShadowRendererTests
+[395/416] Linking CXX executable examples/AntSimulation/AntMarkerRendererTests
+[396/416] Linking CXX executable examples/AntSimulation/AntWallRendererTests
+[397/416] Linking CXX executable examples/AntSimulation/AntEnvironmentRendererTests
+[398/416] Linking CXX executable examples/AntSimulation/AntDebugRendererTests
+[399/416] Linking CXX executable examples/AntSimulation/AntEditorToolTests
+[400/416] Linking CXX executable examples/AntSimulation/AntEditorToolRendererTests
+[401/416] Linking CXX executable examples/AntSimulation/AntInspectorTests
+[402/416] Linking CXX executable examples/AntSimulation/AntColonyInspectorTests
+[403/416] Linking CXX executable examples/AntSimulation/AntSimulationWorldTests
+[404/416] Linking CXX executable examples/AntSimulation/AntBehaviorParityTests
+[405/416] Linking CXX executable examples/AntSimulation/AntStressTests
+[406/416] Linking CXX executable examples/AntSimulation/AntRenderPerformanceTests
+[407/416] Linking CXX executable examples/AntSimulation/AntColonyHistoryTests
+[408/416] Linking CXX executable examples/AntSimulation/AntDashboardTests
+[409/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/WorkspaceToolsPanel.cpp.o
+[410/416] Building CXX object engine/CMakeFiles/PublicEngineConsumerCompile.dir/tests/PublicEngineConsumerCompile.cpp.o
+[411/416] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/InspectorPanel.cpp.o
+[412/416] Building CXX object examples/AntSimulation/CMakeFiles/AntUIBoundaryCompile.dir/Source/Runtime/AntUIHost.cpp.o
+[413/416] Building CXX object examples/AntSimulation/CMakeFiles/AntUIBoundaryCompile.dir/Source/Editor/AntDashboard.cpp.o

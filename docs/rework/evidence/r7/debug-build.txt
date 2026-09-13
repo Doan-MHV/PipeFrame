@@ -1,0 +1,100 @@
+[0/2] Re-checking globbed directories...
+[1/2] Re-running CMake...
+-- Running vcpkg install
+Detecting compiler hash for triplet arm64-osx...
+Compiler found: /usr/bin/c++
+Detecting compiler hash for triplet arm64-osx-dynamic...
+Compiler found: /usr/bin/c++
+The following packages are already installed:
+  * brotli:arm64-osx-dynamic@1.2.0
+  * bzip2[core,tool]:arm64-osx-dynamic@1.0.8#6
+  * egl-registry:arm64-osx-dynamic@2025-05-27
+  * freetype[core,zlib,png,bzip2,brotli]:arm64-osx-dynamic@2.14.3
+  * libflac[core,stack-protector]:arm64-osx-dynamic@1.5.0
+  * libogg:arm64-osx-dynamic@1.3.6#1
+  * libpng:arm64-osx-dynamic@1.6.58
+  * libvorbis:arm64-osx-dynamic@1.3.7#4
+  * miniaudio:arm64-osx-dynamic@0.11.25
+    nativefiledialog-extended:arm64-osx-dynamic@1.3.0
+  * opengl:arm64-osx-dynamic@2022-12-04#3
+  * opengl-registry:arm64-osx-dynamic@2026-01-26
+    sfml[core,window,network,graphics,audio]:arm64-osx-dynamic@3.0.2
+  * stb:arm64-osx-dynamic@2024-07-29#1
+  * vcpkg-cmake:arm64-osx@2024-04-23
+  * vcpkg-cmake-config:arm64-osx@2026-07-21
+  * zlib:arm64-osx-dynamic@1.3.2#2
+nativefiledialog-extended provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(nfd CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE nfd::nfd)
+
+The package sfml provides CMake targets:
+
+    find_package(SFML COMPONENTS Network Graphics Window Audio System CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE SFML::Network SFML::Graphics SFML::Window SFML::Audio SFML::System)
+
+    # If you want SFML to provide an implementation of main():
+    target_link_libraries(main PRIVATE SFML::Main)
+
+All requested installations completed successfully in: 126 us
+-- Running vcpkg install - done
+-- Found SFML 3.0.2 in /Users/donvo/PipeFrame/cmake-build-debug/vcpkg_installed/arm64-osx-dynamic/share/sfml
+-- Found SFML 3.0.2 in /Users/donvo/PipeFrame/cmake-build-debug/vcpkg_installed/arm64-osx-dynamic/share/sfml
+-- Configuring done (1.9s)
+-- Generating done (0.1s)
+-- Build files have been written to: /Users/donvo/PipeFrame/cmake-build-debug
+[0/4] Re-checking globbed directories...
+[1/56] Building CXX object apps/SimulationWorkbench/CMakeFiles/ProjectManagerTests.dir/tests/ProjectManagerTests.cpp.o
+[2/56] Building CXX object apps/SimulationWorkbench/CMakeFiles/SimulationWorkbench.dir/Editor/ProjectScaffolder.cpp.o
+[3/56] Building CXX object apps/SimulationWorkbench/CMakeFiles/WorkbenchUITests.dir/Editor/ProjectScaffolder.cpp.o
+[4/56] Building CXX object apps/SimulationWorkbench/CMakeFiles/ProjectManagerTests.dir/Editor/ProjectScaffolder.cpp.o
+[5/56] Building CXX object apps/SimulationWorkbench/CMakeFiles/AntComponentEditingTests.dir/Editor/ProjectScaffolder.cpp.o
+[6/56] Building CXX object apps/SimulationWorkbench/CMakeFiles/RuntimeSceneEditTests.dir/Editor/ProjectScaffolder.cpp.o
+[7/56] Building CXX object engine/CMakeFiles/FoundationHeadlessTests.dir/tests/FoundationHeadlessTests.cpp.o
+[8/56] Linking CXX executable engine/FoundationHeadlessTests
+[9/56] Building CXX object apps/SimulationWorkbench/CMakeFiles/ProjectBuildTests.dir/Editor/ProjectScaffolder.cpp.o
+[10/56] Building CXX object apps/SimulationWorkbench/CMakeFiles/BlankProjectAcceptanceTests.dir/Editor/ProjectScaffolder.cpp.o
+[11/56] Building CXX object apps/SimulationWorkbench/CMakeFiles/SceneModelTests.dir/Editor/ProjectScaffolder.cpp.o
+[12/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/39c67e9d356227590954ea1628260402.cpp.o
+[13/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/5da627a89717411b3888c91ed9d7bcdd.cpp.o
+[14/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/fdf13bce1c5a438594016becb201bd31.cpp.o
+[15/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/076cfa00620b5cbfff5d1c3ba04c9d1a.cpp.o
+[16/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/af3cd94869b996ceee4d4146861d024a.cpp.o
+[17/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/e4dd282117c98bb7d61dbe267958eb34.cpp.o
+[18/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/355c6349641e49a93d70f1d511453360.cpp.o
+[19/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/91ba30d65eee35c7d99770146ca131e1.cpp.o
+[20/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/b6118367d5b14dc965b4e28b38b00f10.cpp.o
+[21/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/9d962d56160c54bc1a2a8788cc20909f.cpp.o
+[22/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/49f76aab1dfba4c94eb56d9a30647e4b.cpp.o
+[23/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/6340d9b419eb9ab30cde9298ef7dcafb.cpp.o
+[24/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/12b851a2b2f9e6133865f9ded0b3ecd3.cpp.o
+[25/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/7acc8f8a079dbb74e49315ddd45caa50.cpp.o
+[26/56] Building CXX object engine/CMakeFiles/IndependentAuthoringPublicCompile.dir/tests/IndependentAuthoringPublicCompile.cpp.o
+[27/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/ad29894be9cf7bf4acc825bfb1995e59.cpp.o
+[28/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/073d6f8513a3da1224a36db2eb225fb6.cpp.o
+[29/56] Building CXX object engine/CMakeFiles/IndependentAuthoringTests.dir/tests/IndependentAuthoringTests.cpp.o
+[30/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3273dab936bcacfc4346e85ff20bb580.cpp.o
+[31/56] Linking CXX executable engine/IndependentAuthoringTests
+[32/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/886cc8cf52840d033024cc63bc6bd90a.cpp.o
+[33/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/20503375a643b2b4c02a7eca21af569d.cpp.o
+[34/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/b5580abb70a662ffb9f5d75872ccfe8d.cpp.o
+[35/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/e727c13ca5efa97764cf85e355b87f4b.cpp.o
+[36/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/29c662d040aa8520c73c725da1ac1b8a.cpp.o
+[37/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/28876a4fde918465708aeb15b1cb8b3d.cpp.o
+[38/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/8fbebe5ab847d732456c8a8a977147a6.cpp.o
+[39/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/ae6b6a1ca3affa13d628b47d8e2aa9cd.cpp.o
+[40/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/10e0290af72b5793f7b9e82e63e5ed77.cpp.o
+[41/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/81cc59d59a9fa5006cd53f8cb3fd13ec.cpp.o
+[42/56] Linking CXX executable apps/SimulationWorkbench/SimulationWorkbench
+[43/56] Linking CXX executable apps/SimulationWorkbench/WorkbenchUITests
+[44/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/4f91c8ece908fefae8935c00541b62d4.cpp.o
+[45/56] Linking CXX executable apps/SimulationWorkbench/ProjectManagerTests
+[46/56] Linking CXX executable apps/SimulationWorkbench/AntComponentEditingTests
+[47/56] Linking CXX executable apps/SimulationWorkbench/RuntimeSceneEditTests
+[48/56] Linking CXX executable apps/SimulationWorkbench/SceneModelTests
+[49/56] Linking CXX executable apps/SimulationWorkbench/ProjectBuildTests
+[50/56] Linking CXX executable apps/SimulationWorkbench/BlankProjectAcceptanceTests
+[51/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3618007812528f9b5fd9a3570905c38d.cpp.o
+[52/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/3b210c294171a5f8ae581fc8754adf35.cpp.o
+[53/56] Building CXX object engine/CMakeFiles/UIEditorPublicHeadersCompile.dir/isolated-ui/82f7091298a65a8da7bc3b418e744a25.cpp.o

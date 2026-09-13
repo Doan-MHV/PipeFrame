@@ -1,0 +1,9 @@
+Test project /Users/donvo/PipeFrame/cmake-build-release
+    Start 2: PipeFrameDependencyLint
+1/2 Test #2: PipeFrameDependencyLint ..........   Passed    0.06 sec
+    Start 4: VisualAssetAcceptance
+2/2 Test #4: VisualAssetAcceptance ............   Passed    0.85 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.91 sec

@@ -1,0 +1,8 @@
+PIPEFRAME_MODULES 1
+Components
+Systems
+Runtime
+Editor
+Entity Probe
+Component ProbeSettings
+Behaviour ProbeBehaviour

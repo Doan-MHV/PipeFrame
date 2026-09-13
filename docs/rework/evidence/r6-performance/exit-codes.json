@@ -1,0 +1,62 @@
+[
+  {
+    "run": 1,
+    "fixture": "ant-scale",
+    "exit_code": 0
+  },
+  {
+    "run": 1,
+    "fixture": "ant-ui",
+    "exit_code": 0
+  },
+  {
+    "run": 1,
+    "fixture": "environment",
+    "exit_code": 0
+  },
+  {
+    "run": 2,
+    "fixture": "ant-scale",
+    "exit_code": 0
+  },
+  {
+    "run": 2,
+    "fixture": "ant-ui",
+    "exit_code": 0
+  },
+  {
+    "run": 2,
+    "fixture": "environment",
+    "exit_code": 0
+  },
+  {
+    "run": 3,
+    "fixture": "ant-scale",
+    "exit_code": 0
+  },
+  {
+    "run": 3,
+    "fixture": "ant-ui",
+    "exit_code": 0
+  },
+  {
+    "run": 3,
+    "fixture": "environment",
+    "exit_code": 0
+  },
+  {
+    "run": 1,
+    "fixture": "ant-drag",
+    "exit_code": 0
+  },
+  {
+    "run": 2,
+    "fixture": "ant-drag",
+    "exit_code": 0
+  },
+  {
+    "run": 3,
+    "fixture": "ant-drag",
+    "exit_code": 0
+  }
+]

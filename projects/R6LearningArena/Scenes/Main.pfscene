@@ -1,0 +1,87 @@
+PIPEFRAME_SCENE 7
+"m" "degrees" "right-handed-y-up"
+6 0
+1 0 0 0 1 1 "Playground" "pipeframe.playground2d" 0 0 1 0 "Default" 0 0 3 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 0 0
+"rotation" 2 0
+"scale" 4 1 1
+"pipeframe.playground" 1 1 0 7
+"columns" 1 32
+"color" 5 40 46 52 255
+"cellSize" 2 10
+"material" 6 "asset-00000002"
+"rows" 1 24
+"showGrid" 0 1
+"size" 4 320 240
+"pipeframe.tilemap2d" 1 1 0 2
+"asset" 6 "asset-00000001"
+"visible" 0 1
+2 30 105 0 1 1 "Spawn" "pipeframe.environment-obstacle" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 30 105
+"rotation" 2 0
+"scale" 4 1 1
+"pipeframe.environment-collider2d" 1 1 0 8
+"shape" 3 "Box"
+"size" 4 10 10
+"start" 4 -0.5 0
+"enabled" 0 0
+"end" 4 0.5 0
+"layerMask" 1 1
+"visible" 0 1
+"color" 5 60 210 100 255
+3 280 105 0 1 1 "Goal" "pipeframe.environment-obstacle" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 280 105
+"rotation" 2 0
+"scale" 4 1 1
+"pipeframe.environment-collider2d" 1 1 0 8
+"shape" 3 "Box"
+"size" 4 10 10
+"start" 4 -0.5 0
+"enabled" 0 0
+"end" 4 0.5 0
+"layerMask" 1 1
+"visible" 0 1
+"color" 5 240 180 40 255
+4 60 120 0 1 1 "Obstacle" "pipeframe.environment-obstacle" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 60 120
+"rotation" 2 0
+"scale" 4 1 1
+"pipeframe.environment-collider2d" 1 1 0 8
+"shape" 3 "Box"
+"size" 4 10 10
+"start" 4 -0.5 0
+"enabled" 0 1
+"end" 4 0.5 0
+"layerMask" 1 1
+"visible" 0 1
+"color" 5 180 95 70 255
+5 30 105 0 1 1 "Probe" "project.Probe" 0 0 1 0 "Default" 0 0 5 1
+"ProbePrefab" 1 1 5 ""
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 30 105
+"rotation" 2 0
+"scale" 4 1 1
+"project.ProbeSettings" 1 1 0 0
+"pipeframe.kinematic-body2d" 1 1 0 1
+"radius" 2 2
+"project.ProbeBehaviour" 1 1 0 0
+"pipeframe.environment-collider2d" 1 1 0 2
+"enabled" 0 0
+"size" 4 6 6
+6 30 120 0 1 1 "Probe" "project.Probe" 0 0 1 0 "Default" 0 0 5 1
+"ProbePrefab" 1 1 6 ""
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 30 120
+"rotation" 2 0
+"scale" 4 1 1
+"project.ProbeSettings" 1 1 0 0
+"pipeframe.kinematic-body2d" 1 1 0 1
+"radius" 2 2
+"project.ProbeBehaviour" 1 1 0 0
+"pipeframe.environment-collider2d" 1 1 0 2
+"enabled" 0 0
+"size" 4 6 6

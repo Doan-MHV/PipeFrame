@@ -1,0 +1,2 @@
+384x216; median 0.994208; p95 1.14679; input p95 0.011958; mean UI/draw 0.0369227 0.977135; load 30.0978; save 13.5408; peak MiB 121.047; source bytes 166182
+1024x1024; median 7.95429; p95 8.90417; input p95 0.013333; mean UI/draw 0.0516285 7.94734; load 194.206; save 156.976; peak MiB 466.672; source bytes 2098256

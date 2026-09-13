@@ -1,0 +1,5 @@
+#include <PipeFrame/Backend/SFML/GeometryRenderer.h>
+#include <PipeFrame/Backend/SFML/Conversions.h>
+#include <SFML/Graphics/Vertex.hpp>
+#include <vector>
+namespace pipeframe::backend::sfml {void DrawGeometry(sf::RenderTarget &target,const GeometryCommand &command,const sf::RenderStates &states){std::vector<sf::Vertex> vertices;vertices.reserve(command.vertices.size());for(const auto &vertex:command.vertices)vertices.push_back({ToBackend(vertex.position),ToBackend(vertex.color),ToBackend(vertex.textureCoordinate)});sf::PrimitiveType topology=sf::PrimitiveType::Triangles;switch(command.topology){case PrimitiveTopology::Points:topology=sf::PrimitiveType::Points;break;case PrimitiveTopology::Lines:topology=sf::PrimitiveType::Lines;break;case PrimitiveTopology::LineStrip:topology=sf::PrimitiveType::LineStrip;break;case PrimitiveTopology::Triangles:topology=sf::PrimitiveType::Triangles;break;case PrimitiveTopology::TriangleStrip:topology=sf::PrimitiveType::TriangleStrip;break;}if(!vertices.empty())target.draw(vertices.data(),vertices.size(),topology,states);}}

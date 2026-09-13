@@ -1,0 +1,6 @@
+Final Debug/Release builds succeeded.
+Full Debug: 77/77. Full Release: 77/77.
+Guide relative links and retained tutorial sources verified.
+git diff --check: passed.
+Ant Source SFML/sf::/PipeFrame/Backend scan: no matches.
+Performance runner exit 1: run 3 ant-scale fixture exit 2; five-colony p95 16.7074 ms > 16.67 ms. All other fixtures passed.

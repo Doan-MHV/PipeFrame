@@ -1,0 +1,5 @@
+Matched map Main.png, seed 1, 1000 configured ants/colony, 1x fixed 1/60s, 1440x900; 1200 warmup ticks, 180 measured frames
+Colony positions: (96,108) (208,16) (352,16) (40,28) (136,28)
+1 colonies; live ants 1000; median 4.55992 ms; p95 5.14892 ms; mean simulation/UI/render 2.74457 0.0974067 1.84972 
+3 colonies; live ants 3023; median 10.1256 ms; p95 11.1256 ms; mean simulation/UI/render 7.8561 0.140163 2.03733 
+5 colonies; live ants 4764; median 15.0928 ms; p95 17.0881 ms; mean simulation/UI/render 12.57 0.167251 2.48658 

@@ -1,0 +1,25 @@
+Test project /Users/donvo/PipeFrame/cmake-build-release
+    Start  3: TilemapRegression
+1/8 Test  #3: TilemapRegression ................   Passed    0.29 sec
+    Start  4: VisualAssetAcceptance
+2/8 Test  #4: VisualAssetAcceptance ............   Passed    0.48 sec
+    Start  5: EnvironmentCollisionAcceptance
+3/8 Test  #5: EnvironmentCollisionAcceptance ...   Passed    0.25 sec
+    Start 24: SceneProjectRuntimeAcceptance
+4/8 Test #24: SceneProjectRuntimeAcceptance ....   Passed    0.23 sec
+    Start 55: AntPhysicsWorldRegression
+5/8 Test #55: AntPhysicsWorldRegression ........   Passed    0.20 sec
+    Start 56: AntContactSolverRegression
+6/8 Test #56: AntContactSolverRegression .......   Passed    0.28 sec
+    Start 71: AntBehaviorParityRegression
+7/8 Test #71: AntBehaviorParityRegression ......   Passed    0.26 sec
+    Start 72: AntStressRegression
+8/8 Test #72: AntStressRegression ..............   Passed    4.99 sec
+
+100% tests passed, 0 tests failed out of 8
+
+Label Time Summary:
+performance    =   4.99 sec*proc (1 test)
+stress         =   4.99 sec*proc (1 test)
+
+Total Test time (real) =   6.97 sec

@@ -1,0 +1,9 @@
+R6 package 1 dashboard/controller slice
+Debug and Release builds: PASS
+Neutral render/dashboard/controller header compilation: PASS
+Actual AntUIHost.cpp and AntDashboard.cpp without native include dirs: PASS
+CTest: 69/69 passed, 93.59 seconds
+Native Ant dashboard controls/screenshots: PASS
+Plugin ABI: 5 (previous-ABI rejection retained)
+Package 1 remains open: Widget/ViewPanel/Controls and Workbench header migration.
+Other R6 execution packages remain open/planned.

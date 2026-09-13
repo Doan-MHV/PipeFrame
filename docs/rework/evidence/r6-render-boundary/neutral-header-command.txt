@@ -1,0 +1,1 @@
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/RenderPublicHeadersTests.dir/tests/RenderPublicHeadersTests.cpp.o -c /Users/donvo/PipeFrame/engine/tests/RenderPublicHeadersTests.cpp

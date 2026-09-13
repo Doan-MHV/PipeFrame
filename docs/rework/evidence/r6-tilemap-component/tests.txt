@@ -1,0 +1,51 @@
+Start testing: Sep 12 19:27 EDT
+----------------------------------------------------------
+20/71 Testing: SceneProjectRuntimeAcceptance
+20/71 Test: SceneProjectRuntimeAcceptance
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/engine/SceneProjectRuntimeTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/engine
+"SceneProjectRuntimeAcceptance" start time: Sep 12 19:27 EDT
+Output:
+----------------------------------------------------------
+Scene project runtime lifecycle and authoring passed.
+<end of output>
+Test time =   0.64 sec
+----------------------------------------------------------
+Test Passed.
+"SceneProjectRuntimeAcceptance" end time: Sep 12 19:27 EDT
+"SceneProjectRuntimeAcceptance" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/71 Testing: WorkbenchUIAcceptance
+27/71 Test: WorkbenchUIAcceptance
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench/WorkbenchUITests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench
+"WorkbenchUIAcceptance" start time: Sep 12 19:27 EDT
+Output:
+----------------------------------------------------------
+All Workbench UI acceptance checks passed.
+<end of output>
+Test time =   4.77 sec
+----------------------------------------------------------
+Test Passed.
+"WorkbenchUIAcceptance" end time: Sep 12 19:27 EDT
+"WorkbenchUIAcceptance" time elapsed: 00:00:04
+----------------------------------------------------------
+
+35/71 Testing: ProjectBuildAcceptance
+35/71 Test: ProjectBuildAcceptance
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench/ProjectBuildTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench
+"ProjectBuildAcceptance" start time: Sep 12 19:27 EDT
+Output:
+----------------------------------------------------------
+Generated CMake build, entity picker registry, attachment, validation, behaviour execution, prefab/reopen, compiler failure and reload recovery passed
+<end of output>
+Test time =   9.35 sec
+----------------------------------------------------------
+Test Passed.
+"ProjectBuildAcceptance" end time: Sep 12 19:27 EDT
+"ProjectBuildAcceptance" time elapsed: 00:00:09
+----------------------------------------------------------
+
+End testing: Sep 12 19:27 EDT

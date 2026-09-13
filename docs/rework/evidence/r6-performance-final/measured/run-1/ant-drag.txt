@@ -1,0 +1,2 @@
+Ant 1440x900 offscreen paused colony drag: median 2.55796 ms, p95 3.10492 ms
+Mean stages ms (input/simulation, UI refresh/update, world submission, screen submission, offscreen display): 0.289727 0.650184 1.3114 0.392821 0.000332242 

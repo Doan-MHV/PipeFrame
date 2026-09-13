@@ -1,0 +1,35 @@
+Start testing: Sep 12 19:16 EDT
+----------------------------------------------------------
+20/71 Testing: SceneProjectRuntimeAcceptance
+20/71 Test: SceneProjectRuntimeAcceptance
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/engine/SceneProjectRuntimeTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/engine
+"SceneProjectRuntimeAcceptance" start time: Sep 12 19:16 EDT
+Output:
+----------------------------------------------------------
+Scene project runtime lifecycle and authoring passed.
+<end of output>
+Test time =   0.49 sec
+----------------------------------------------------------
+Test Passed.
+"SceneProjectRuntimeAcceptance" end time: Sep 12 19:16 EDT
+"SceneProjectRuntimeAcceptance" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/71 Testing: ProjectBuildAcceptance
+35/71 Test: ProjectBuildAcceptance
+Command: "/Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench/ProjectBuildTests"
+Directory: /Users/donvo/PipeFrame/cmake-build-debug/apps/SimulationWorkbench
+"ProjectBuildAcceptance" start time: Sep 12 19:16 EDT
+Output:
+----------------------------------------------------------
+Generated CMake build, entity picker registry, attachment, validation, behaviour execution, prefab/reopen, compiler failure and reload recovery passed
+<end of output>
+Test time =   9.02 sec
+----------------------------------------------------------
+Test Passed.
+"ProjectBuildAcceptance" end time: Sep 12 19:16 EDT
+"ProjectBuildAcceptance" time elapsed: 00:00:09
+----------------------------------------------------------
+
+End testing: Sep 12 19:16 EDT

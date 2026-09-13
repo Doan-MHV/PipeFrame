@@ -1,0 +1,14 @@
+[0/2] Re-checking globbed directories...
+[1/14] Building CXX object engine/CMakeFiles/AssetDatabaseTests.dir/tests/AssetDatabaseTests.cpp.o
+[2/14] Building CXX object engine/CMakeFiles/AssetDatabaseTests.dir/src/Project/AssetDatabase.cpp.o
+[3/14] Building CXX object engine/CMakeFiles/PipeFrameEngine.dir/src/Project/AssetDatabase.cpp.o
+[4/14] Linking CXX executable engine/AssetDatabaseTests
+[5/14] Linking CXX shared library engine/libPipeFrameEngine.dylib
+[6/14] Linking CXX shared library apps/SimulationWorkbench/libIncompatibleWorkbenchRuntime.dylib
+[7/14] Linking CXX shared library apps/SimulationWorkbench/libOldAbiWorkbenchRuntime.dylib
+[8/14] Linking CXX shared library /Users/donvo/PipeFrame/examples/BasicSimulation/Build/Debug/BasicSimulationRuntime.dylib
+[9/14] Linking CXX shared library apps/SimulationWorkbench/libWorkbenchTestRuntime.dylib
+[10/14] Linking CXX shared library /Users/donvo/PipeFrame/examples/AntSimulation/Build/Debug/AntSimulationRuntime.dylib
+[11/14] Linking CXX executable engine/VisualAssetTests
+[12/14] Linking CXX executable apps/SimulationWorkbench/WorkbenchUITests
+[13/14] Linking CXX executable apps/SimulationWorkbench/SimulationWorkbench

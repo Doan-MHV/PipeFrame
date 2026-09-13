@@ -1,0 +1,5 @@
+Matched Main.pftilemap (legacy Main.png placement fixture), seed 1, 1000 configured ants/colony, 1x fixed 1/60s, 1440x900; 1200 warmup ticks, 180 measured frames
+Colony positions: (96,108) (208,16) (352,16) (40,28) (136,28)
+1 colonies; live ants 999; median 4.68892 ms; p95 5.05788 ms; mean simulation/UI/render 2.83766 0.108573 1.86322 
+3 colonies; live ants 3023; median 10.136 ms; p95 11.0595 ms; mean simulation/UI/render 7.84866 0.148875 2.05865 
+5 colonies; live ants 4832; median 15.0147 ms; p95 16.56 ms; mean simulation/UI/render 12.5393 0.173797 2.36564 

@@ -1,0 +1,12 @@
+Test project /Users/donvo/PipeFrame/cmake-build-release
+    Start 17: LearningExperimentRegression
+1/1 Test #17: LearningExperimentRegression .....***Exception: SegFault  0.03 sec
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.04 sec
+
+The following tests FAILED:
+	 17 - LearningExperimentRegression (SEGFAULT)
+Errors while running CTest

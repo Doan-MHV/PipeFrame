@@ -1,0 +1,19 @@
+Test project /Users/donvo/PipeFrame/cmake-build-release
+    Start  2: PipeFrameDependencyLint
+1/7 Test  #2: PipeFrameDependencyLint ..........   Passed    0.06 sec
+    Start  3: TilemapRegression
+2/7 Test  #3: TilemapRegression ................   Passed    0.26 sec
+    Start  5: CustomBrushAcceptance
+3/7 Test  #5: CustomBrushAcceptance ............   Passed    0.37 sec
+    Start  6: EnvironmentEditingAcceptance
+4/7 Test  #6: EnvironmentEditingAcceptance .....   Passed    0.22 sec
+    Start 30: WorkbenchUIAcceptance
+5/7 Test #30: WorkbenchUIAcceptance ............   Passed    2.77 sec
+    Start 38: ProjectBuildAcceptance
+6/7 Test #38: ProjectBuildAcceptance ...........   Passed   16.06 sec
+    Start 48: AntWorldMapLoaderRegression
+7/7 Test #48: AntWorldMapLoaderRegression ......   Passed    0.23 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =  20.00 sec

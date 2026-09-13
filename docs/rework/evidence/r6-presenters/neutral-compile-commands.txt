@@ -1,0 +1,13 @@
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o engine/CMakeFiles/RenderPublicHeadersTests.dir/tests/RenderPublicHeadersTests.cpp.o -c /Users/donvo/PipeFrame/engine/tests/RenderPublicHeadersTests.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/HierarchyPanel.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/HierarchyPanel.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/InspectorPanel.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/InspectorPanel.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/ViewportToolbar.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/ViewportToolbar.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/AssetBrowserPanel.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/AssetBrowserPanel.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/WorkspaceToolsPanel.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/WorkspaceToolsPanel.cpp
+
+/usr/bin/c++ -DPIPEFRAME_ANT_REWORK_ONLY -I/Users/donvo/PipeFrame/engine/include -I/Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -o apps/SimulationWorkbench/CMakeFiles/WorkbenchPresenterBoundaryCompile.dir/Editor/ProjectBrowser.cpp.o -c /Users/donvo/PipeFrame/apps/SimulationWorkbench/Editor/ProjectBrowser.cpp

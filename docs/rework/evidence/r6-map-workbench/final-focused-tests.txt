@@ -1,0 +1,13 @@
+Test project /Users/donvo/PipeFrame/cmake-build-debug
+    Start  2: PipeFrameDependencyLint
+1/4 Test  #2: PipeFrameDependencyLint ..........   Passed    0.06 sec
+    Start  3: TilemapRegression
+2/4 Test  #3: TilemapRegression ................   Passed    0.00 sec
+    Start  7: AssetDatabaseRegression
+3/4 Test  #7: AssetDatabaseRegression ..........   Passed    1.16 sec
+    Start 27: WorkbenchUIAcceptance
+4/4 Test #27: WorkbenchUIAcceptance ............   Passed    4.03 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   5.24 sec
