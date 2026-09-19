@@ -1,13 +1,15 @@
 #pragma once
-#include <optional>
 #include <PipeFrame/Input/InputEvent.h>
+
+#include <optional>
 class RenderContext;
 
 class CameraController2D {
 public:
-    void HandleEvent(const pipeframe::InputEvent &event, RenderContext &context);
+    void HandleEvent(const pipeframe::InputEvent& event, RenderContext& context);
     void CancelInteraction();
     bool IsPanModifierActive() const { return spacePressed; }
+
 private:
     std::optional<pipeframe::PointerButton> dragButton;
     pipeframe::Vector2i previousMousePosition{};

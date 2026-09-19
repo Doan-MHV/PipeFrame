@@ -26,14 +26,10 @@ struct GridRaycastResult {
 };
 
 class GridRaycast {
-public:
+  public:
     [[nodiscard]]
-    static GridRaycastResult Cast(
-        const AntEnvironment &environment,
-        pipeframe::Vector2f start,
-        pipeframe::Vector2f direction,
-        float maximumDistance
-    );
+    static GridRaycastResult Cast(const AntEnvironment &environment, pipeframe::Vector2f start,
+                                  pipeframe::Vector2f direction, float maximumDistance);
 };
 
 } // namespace ant_simulation

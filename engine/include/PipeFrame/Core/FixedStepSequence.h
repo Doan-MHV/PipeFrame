@@ -12,7 +12,8 @@ public:
     explicit FixedStepSequence(std::size_t phaseCount) : count(phaseCount) {
         if (!count) throw std::invalid_argument("A fixed step requires phases");
     }
-    template<class Function> void Execute(std::size_t phase, float delta, Function run) {
+    template <class Function>
+    void Execute(std::size_t phase, float delta, Function run) {
         if (faulted) throw std::logic_error("Fixed step failed; reset simulation before continuing");
         if (running || phase != next || phase >= count)
             throw std::logic_error("Fixed step phase repeated, skipped or reentered");
@@ -20,16 +21,25 @@ public:
             throw std::invalid_argument("Fixed step phases require one finite positive timestep");
         step = delta;
         running = true;
-        try { run(); }
-        catch (...) { running = false; faulted = true; throw; }
+        try {
+            run();
+        } catch (...) {
+            running = false;
+            faulted = true;
+            throw;
+        }
         running = false;
-        if (++next == count) { next = 0; ++ticks; }
+        if (++next == count) {
+            next = 0;
+            ++ticks;
+        }
     }
     std::size_t CompletedTicks() const { return ticks; }
     bool IsFaulted() const { return faulted; }
+
 private:
     std::size_t count, next{}, ticks{};
     float step{};
     bool running{}, faulted{};
 };
-}
+}  // namespace pipeframe

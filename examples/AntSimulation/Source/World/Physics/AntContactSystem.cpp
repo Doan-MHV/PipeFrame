@@ -1,29 +1,21 @@
 #include "World/Physics/AntContactSystem.h"
 
-#include "World/Runtime/AntView.h"
 #include "Components/AntIdentityComponent.h"
+#include "World/Runtime/AntView.h"
 
 namespace ant_simulation {
 
-AntContactSystem::AntContactSystem(
-    AntQuery &newAntQuery,
-    const pipeframe::Vector2i worldSize
-)
-    : antStore(newAntQuery) {
+AntContactSystem::AntContactSystem(AntQuery &newAntQuery, const pipeframe::Vector2i worldSize) : antStore(newAntQuery) {
     collisionGrid.Initialize(
         {
-            static_cast<float>(
-                worldSize.x),
-            static_cast<float>(
-                worldSize.y),
+            static_cast<float>(worldSize.x),
+            static_cast<float>(worldSize.y),
         },
         ContactDistance);
 }
 
-std::size_t
-AntContactSystem::ProcessContacts() {
-    collisionGrid.Rebuild(
-        antStore.GetAnts());
+std::size_t AntContactSystem::ProcessContacts() {
+    collisionGrid.Rebuild(antStore.GetAnts());
 
     std::size_t alertedAntCount{0};
     const auto encounters = antStore.GetWorld().BorrowComponents<AntEncounterComponent>();
@@ -35,8 +27,7 @@ AntContactSystem::ProcessContacts() {
 
         // This intentionally matches AntPezza.
         // Its soldier contact implementation is currently empty.
-        if (ant.GetRole() ==
-            AntRole::Soldier) {
+        if (ant.GetRole() == AntRole::Soldier) {
             continue;
         }
 
@@ -45,7 +36,8 @@ AntContactSystem::ProcessContacts() {
         }
 
         auto *encounter = encounters.Get(ant.GetId());
-        if (!encounter) continue;
+        if (!encounter)
+            continue;
         encounter->enemyTimer = 0.0f;
         ++alertedAntCount;
     }
@@ -53,58 +45,35 @@ AntContactSystem::ProcessContacts() {
     return alertedAntCount;
 }
 
-bool AntContactSystem::HasEnemyContact(
-    const AntView &ant
-) const {
+bool AntContactSystem::HasEnemyContact(const AntView &ant) const {
     const CollisionGrid::CellRange range =
-        collisionGrid.GetCellsOverlapping(
-            {ant.GetPosition().x,ant.GetPosition().y},
-            ContactDistance);
+        collisionGrid.GetCellsOverlapping({ant.GetPosition().x, ant.GetPosition().y}, ContactDistance);
 
     if (range.IsEmpty()) {
         return false;
     }
 
-    const float contactDistanceSquared =
-        ContactDistance *
-        ContactDistance;
+    const float contactDistanceSquared = ContactDistance * ContactDistance;
 
-    for (int row = range.minimumRow;
-         row <= range.maximumRow;
-         ++row) {
-        for (int column = range.minimumColumn;
-             column <= range.maximumColumn;
-             ++column) {
-            for (const AntId candidateId :
-                 collisionGrid.GetAntIds(
-                     column,
-                     row)) {
-                if (candidateId ==
-                    ant.GetId()) {
+    for (int row = range.minimumRow; row <= range.maximumRow; ++row) {
+        for (int column = range.minimumColumn; column <= range.maximumColumn; ++column) {
+            for (const AntId candidateId : collisionGrid.GetAntIds(column, row)) {
+                if (candidateId == ant.GetId()) {
                     continue;
                 }
 
-                const AntView *candidate =
-                    antStore.Find(
-                        candidateId);
+                const AntView *candidate = antStore.Find(candidateId);
 
-                if (candidate == nullptr ||
-                    candidate->IsDead() ||
-                    candidate->GetColonyId() ==
-                        ant.GetColonyId()) {
+                if (candidate == nullptr || candidate->IsDead() || candidate->GetColonyId() == ant.GetColonyId()) {
                     continue;
                 }
 
-                const pipeframe::Vector2f difference{
-                    candidate->GetPosition().x-ant.GetPosition().x,
-                    candidate->GetPosition().y-ant.GetPosition().y};
+                const pipeframe::Vector2f difference{candidate->GetPosition().x - ant.GetPosition().x,
+                                                     candidate->GetPosition().y - ant.GetPosition().y};
 
-                const float distanceSquared =
-                    difference.x * difference.x +
-                    difference.y * difference.y;
+                const float distanceSquared = difference.x * difference.x + difference.y * difference.y;
 
-                if (distanceSquared <=
-                    contactDistanceSquared) {
+                if (distanceSquared <= contactDistanceSquared) {
                     return true;
                 }
             }

@@ -1,39 +1,31 @@
 #ifndef PIPEFRAME_TEXT_FIELD_H
 #define PIPEFRAME_TEXT_FIELD_H
 
+#include <PipeFrame/Backend/SFML/UI/Panel.h>
+
+#include <SFML/Graphics/Text.hpp>
 #include <functional>
 #include <string>
 
-#include <SFML/Graphics/Text.hpp>
-
-#include <PipeFrame/Backend/SFML/UI/Panel.h>
-
 class TextField : public Panel {
 public:
-    using ValueCommittedCallback =
-        std::function<void(const std::string &)>;
+    using ValueCommittedCallback = std::function<void(const std::string&)>;
 
-    explicit TextField(const sf::Font &font);
+    explicit TextField(const sf::Font& font);
 
-    void SetValue(const std::string &newValue);
+    void SetValue(const std::string& newValue);
 
     [[nodiscard]]
-    const std::string &GetValue() const;
+    const std::string& GetValue() const;
 
-    void SetOnValueCommitted(
-        ValueCommittedCallback callback
-    );
+    void SetOnValueCommitted(ValueCommittedCallback callback);
 
 protected:
-    void OnRender(
-        sf::RenderTarget &target
-    ) const override;
+    void OnRender(sf::RenderTarget& target) const override;
 
     void OnGeometryChanged() override;
 
-    bool OnEvent(
-        const sf::Event &event
-    ) override;
+    bool OnEvent(const sf::Event& event) override;
 
     void OnKeyboardFocusGained() override;
     void OnKeyboardFocusLost() override;

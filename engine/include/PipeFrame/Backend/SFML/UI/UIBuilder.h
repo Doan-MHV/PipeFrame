@@ -11,11 +11,10 @@
 namespace pipeframe::ui {
 
 template <typename WidgetType, typename ConfigureFunction, typename... Arguments>
-WidgetType &BuildChild(Widget &parent, ConfigureFunction &&configure, Arguments &&...arguments) {
-
+WidgetType& BuildChild(Widget& parent, ConfigureFunction&& configure, Arguments&&... arguments) {
     static_assert(std::is_base_of_v<Widget, WidgetType>, "WidgetType must derive from Widget");
 
-    WidgetType &widget = parent.CreateChild<WidgetType>(std::forward<Arguments>(arguments)...);
+    WidgetType& widget = parent.CreateChild<WidgetType>(std::forward<Arguments>(arguments)...);
 
     std::invoke(std::forward<ConfigureFunction>(configure), widget);
 
@@ -23,23 +22,21 @@ WidgetType &BuildChild(Widget &parent, ConfigureFunction &&configure, Arguments 
 }
 
 template <typename WidgetType, typename ConfigureFunction, typename... Arguments>
-WidgetType &BuildKeyedChild(Widget &parent, const std::string &key, ConfigureFunction &&configure,
-                            Arguments &&...arguments) {
+WidgetType& BuildKeyedChild(Widget& parent, const std::string& key, ConfigureFunction&& configure,
+                            Arguments&&... arguments) {
     static_assert(std::is_base_of_v<Widget, WidgetType>, "WidgetType must derive from Widget");
 
-    WidgetType &widget =
-        parent.GetOrCreateChild<WidgetType>(key, std::forward<Arguments>(arguments)...);
+    WidgetType& widget = parent.GetOrCreateChild<WidgetType>(key, std::forward<Arguments>(arguments)...);
     widget.SetVisible(true);
     std::invoke(std::forward<ConfigureFunction>(configure), widget);
     return widget;
 }
 
 template <typename WidgetType, typename ConfigureFunction, typename... Arguments>
-WidgetType &BuildRoot(UIManager &manager, ConfigureFunction &&configure, Arguments &&...arguments) {
-
+WidgetType& BuildRoot(UIManager& manager, ConfigureFunction&& configure, Arguments&&... arguments) {
     static_assert(std::is_base_of_v<Widget, WidgetType>, "WidgetType must derive from Widget");
 
-    WidgetType &widget = manager.CreateRoot<WidgetType>(std::forward<Arguments>(arguments)...);
+    WidgetType& widget = manager.CreateRoot<WidgetType>(std::forward<Arguments>(arguments)...);
 
     std::invoke(std::forward<ConfigureFunction>(configure), widget);
 
@@ -47,13 +44,12 @@ WidgetType &BuildRoot(UIManager &manager, ConfigureFunction &&configure, Argumen
 }
 
 template <typename WidgetType, typename ConfigureFunction>
-WidgetType &Configure(WidgetType &widget, ConfigureFunction &&configure) {
-
+WidgetType& Configure(WidgetType& widget, ConfigureFunction&& configure) {
     std::invoke(std::forward<ConfigureFunction>(configure), widget);
 
     return widget;
 }
 
-} // namespace pipeframe::ui
+}  // namespace pipeframe::ui
 
 #endif

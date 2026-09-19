@@ -1,27 +1,21 @@
 #ifndef ANT_STORE_H
 #define ANT_STORE_H
 
-#include <cstddef>
 #include <PipeFrame/ECS/SceneViewCache.h>
+#include <cstddef>
 
-#include "World/Runtime/AntView.h"
 #include "Components/AntIdentityComponent.h"
 #include "Configuration/AntConfiguration.h"
+#include "World/Runtime/AntView.h"
 #include "World/Runtime/Environment/Marker.h"
 
 namespace ant_simulation {
 
 class AntQuery final : public pipeframe::SceneViewCache<AntView, AntIdentityComponent> {
-public:
+  public:
     using SceneViewCache::SceneViewCache;
-    AntView &Create(
-        ColonyId colonyId,
-        AntRole role,
-        pipeframe::Vector2f position,
-        float initialAngle,
-        float initialMarkerOffset,
-        const AntConfiguration &configuration
-    );
+    AntView &Create(ColonyId colonyId, AntRole role, pipeframe::Vector2f position, float initialAngle,
+                    float initialMarkerOffset, const AntConfiguration &configuration);
 
     [[nodiscard]]
     AntView *Find(AntId id);
@@ -45,7 +39,6 @@ public:
     std::size_t RemoveColony(ColonyId colonyId);
 
     void Clear();
-
 };
 
 } // namespace ant_simulation

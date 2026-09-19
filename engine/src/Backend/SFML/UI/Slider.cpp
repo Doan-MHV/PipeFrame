@@ -8,8 +8,7 @@
 #include <SFML/Window/Mouse.hpp>
 
 Slider::Slider(const UITheme &newTheme)
-    : track(CreateChild<Panel>()), filledTrack(CreateChild<Panel>()),
-      thumb(CreateChild<Panel>()), theme(newTheme) {
+    : track(CreateChild<Panel>()), filledTrack(CreateChild<Panel>()), thumb(CreateChild<Panel>()), theme(newTheme) {
     SetSize({160.0f, theme.controlHeight});
     SetFillColor(sf::Color::Transparent);
     SetOutlineColor(sf::Color::Transparent);
@@ -74,9 +73,7 @@ float Slider::GetNormalizedValue() const {
     return range <= 0.0f ? 0.0f : (value - minimum) / range;
 }
 
-void Slider::SetOnValueChanged(ValueChangedCallback callback) {
-    onValueChanged = std::move(callback);
-}
+void Slider::SetOnValueChanged(ValueChangedCallback callback) { onValueChanged = std::move(callback); }
 
 bool Slider::OnEvent(const sf::Event &event) {
     if (const auto *pressed = event.getIf<sf::Event::MouseButtonPressed>()) {
@@ -174,8 +171,7 @@ void Slider::RefreshGeometry() {
     track.SetSize({size.x, trackHeight});
     filledTrack.SetPosition({0.0f, centerY - trackHeight * 0.5f});
     filledTrack.SetSize({size.x * progress, trackHeight});
-    thumb.SetPosition({std::clamp(size.x * progress - thumbSize * 0.5f, 0.0f,
-                                  std::max(0.0f, size.x - thumbSize)),
+    thumb.SetPosition({std::clamp(size.x * progress - thumbSize * 0.5f, 0.0f, std::max(0.0f, size.x - thumbSize)),
                        centerY - thumbSize * 0.5f});
     thumb.SetSize({thumbSize, thumbSize});
     thumb.SetCornerRadius(thumbSize * 0.5f);

@@ -27,17 +27,11 @@ struct AntWorldCell {
 
     bool wall{false};
 
-    WorldCellEditState editState{
-        WorldCellEditState::None
-    };
+    WorldCellEditState editState{WorldCellEditState::None};
 
-    WorldEntityId foodEntityId{
-        InvalidWorldEntityId
-    };
+    WorldEntityId foodEntityId{InvalidWorldEntityId};
 
-    WorldEntityId physicsObjectId{
-        InvalidWorldEntityId
-    };
+    WorldEntityId physicsObjectId{InvalidWorldEntityId};
 
     float markerSamplingCoefficient{1.0f};
 
@@ -49,31 +43,20 @@ struct AntWorldCell {
     }
 
     [[nodiscard]]
-    const Marker &GetMarker(
-        const MarkerKind kind
-    ) const {
+    const Marker &GetMarker(const MarkerKind kind) const {
         assert(IsMarkerChannel(kind));
 
         return markers[GetMarkerChannelIndex(kind)];
     }
 
-    void DecayMarkers(
-        const float rate,
-        const float deltaTime
-    ) {
+    void DecayMarkers(const float rate, const float deltaTime) {
         for (Marker &marker : markers) {
             marker.Decay(rate, deltaTime);
         }
     }
 
-    void AddMarker(
-        MarkerKind kind,
-        float intensity,
-        ColonyId colonyId
-    ) {
-        if (!IsMarkerChannel(kind) ||
-            colonyId == InvalidColonyId ||
-            intensity <= 0.0f) {
+    void AddMarker(MarkerKind kind, float intensity, ColonyId colonyId) {
+        if (!IsMarkerChannel(kind) || colonyId == InvalidColonyId || intensity <= 0.0f) {
             return;
         }
 
@@ -97,13 +80,8 @@ struct AntWorldCell {
         marker.intensity += intensity;
     }
 
-    void SetPersistentMarker(
-        MarkerKind kind,
-        float intensity,
-        ColonyId colonyId
-    ) {
-        if (!IsMarkerChannel(kind) ||
-            colonyId == InvalidColonyId) {
+    void SetPersistentMarker(MarkerKind kind, float intensity, ColonyId colonyId) {
+        if (!IsMarkerChannel(kind) || colonyId == InvalidColonyId) {
             return;
         }
 
@@ -116,8 +94,7 @@ struct AntWorldCell {
 
     [[nodiscard]]
     bool HasNavigationMarkers() const {
-        return GetMarker(MarkerKind::ToHome).HasOwner() ||
-               GetMarker(MarkerKind::ToFood).HasOwner();
+        return GetMarker(MarkerKind::ToHome).HasOwner() || GetMarker(MarkerKind::ToFood).HasOwner();
     }
 
     [[nodiscard]]
@@ -127,27 +104,19 @@ struct AntWorldCell {
 
     [[nodiscard]]
     bool IsEraseRequested() const {
-        return editState ==
-               WorldCellEditState::EraseRequested;
+        return editState == WorldCellEditState::EraseRequested;
     }
 
     [[nodiscard]]
     bool IsWallRequested() const {
-        return editState ==
-               WorldCellEditState::WallRequested;
+        return editState == WorldCellEditState::WallRequested;
     }
 
-    void RequestErase() {
-        editState = WorldCellEditState::EraseRequested;
-    }
+    void RequestErase() { editState = WorldCellEditState::EraseRequested; }
 
-    void RequestWall() {
-        editState = WorldCellEditState::WallRequested;
-    }
+    void RequestWall() { editState = WorldCellEditState::WallRequested; }
 
-    void ResetEditState() {
-        editState = WorldCellEditState::None;
-    }
+    void ResetEditState() { editState = WorldCellEditState::None; }
 
     void ClearFood() {
         foodQuantity = 0;

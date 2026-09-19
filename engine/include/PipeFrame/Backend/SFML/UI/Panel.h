@@ -1,12 +1,13 @@
 #ifndef PIPEFRAME_PANEL_H
 #define PIPEFRAME_PANEL_H
 
-#include <SFML/Graphics/Color.hpp>
 #include <PipeFrame/Backend/SFML/UI/RoundedRectangleShape.h>
 #include <PipeFrame/Backend/SFML/UI/Widget.h>
 
+#include <SFML/Graphics/Color.hpp>
+
 class Panel : public Widget {
-  public:
+public:
     Panel();
 
     void SetFillColor(sf::Color color);
@@ -23,12 +24,12 @@ class Panel : public Widget {
     sf::Color GetShadowColor() const;
     sf::Vector2f GetShadowOffset() const;
 
-  protected:
-    void OnRender(sf::RenderTarget &target) const override;
+protected:
+    void OnRender(sf::RenderTarget& target) const override;
     void OnGeometryChanged() override;
     void OnOpacityChanged() override;
 
-  private:
+private:
     void RefreshOpacity();
 
     RoundedRectangleShape background;

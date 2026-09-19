@@ -132,6 +132,7 @@ class Workbench::Implementation final {
             view.RenderWorldBackground(context);
 
             project.GetRuntime().Render(context);
+            project.GetRuntime().RenderDebug(context, view.GetWorldDebugOptions());
 
             project.RenderTilemapEditing(context);
             view.RenderWorldOverlay(context);

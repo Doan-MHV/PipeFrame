@@ -1,19 +1,17 @@
 #ifndef PIPEFRAME_UI_EDGE_DRAWER_H
 #define PIPEFRAME_UI_EDGE_DRAWER_H
 
-#include <functional>
-
 #include <PipeFrame/Backend/SFML/UI/Button.h>
 #include <PipeFrame/Backend/SFML/UI/Surface.h>
-
 #include <PipeFrame/UI/DrawerTypes.h>
 
+#include <functional>
+
 class EdgeDrawer final : public Surface {
-  public:
+public:
     using OpenChangedCallback = std::function<void(bool)>;
 
-    explicit EdgeDrawer(DrawerEdge edge = DrawerEdge::Left,
-                        const UITheme &theme = UITheme::Dark());
+    explicit EdgeDrawer(DrawerEdge edge = DrawerEdge::Left, const UITheme& theme = UITheme::Dark());
 
     void SetEdge(DrawerEdge edge);
     DrawerEdge GetEdge() const;
@@ -28,22 +26,22 @@ class EdgeDrawer final : public Surface {
     float GetHandleExtent() const;
     void SetHandleLength(float length);
     float GetHandleLength() const;
-    Button &GetHandle();
-    const Button &GetHandle() const;
+    Button& GetHandle();
+    const Button& GetHandle() const;
 
     void SetTransitionDuration(float seconds);
     void SetOnOpenChanged(OpenChangedCallback callback);
 
-  protected:
+protected:
     void OnGeometryChanged() override;
-    void OnRender(sf::RenderTarget &target) const override;
+    void OnRender(sf::RenderTarget& target) const override;
 
-  private:
+private:
     sf::Vector2f ClosedOffset() const;
     void RefreshHandleGeometry();
     void RefreshDrawerOffset(bool animate);
 
-    Button &handle;
+    Button& handle;
     UITheme theme;
     DrawerEdge edge;
     OpenChangedCallback onOpenChanged;

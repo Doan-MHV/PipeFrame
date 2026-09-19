@@ -1,16 +1,17 @@
 #pragma once
-#include <PipeFrame/ECS/ComponentView.h>
-#include <PipeFrame/Components/Transform2DComponent.h>
-#include "Components/ColonyStateComponent.h"
 #include "Components/ColonyHistoryComponent.h"
+#include "Components/ColonyStateComponent.h"
 #include "Configuration/AntConfiguration.h"
+#include <PipeFrame/Components/Transform2DComponent.h>
+#include <PipeFrame/ECS/ComponentView.h>
 namespace ant_simulation {
 // Borrowed view: all data is owned by the engine scene.
-class ColonyView : public pipeframe::ComponentView<ColonyStateComponent, ColonyHistoryComponent, pipeframe::Transform2DComponent> {
-public:
+class ColonyView
+    : public pipeframe::ComponentView<ColonyStateComponent, ColonyHistoryComponent, pipeframe::Transform2DComponent> {
+  public:
     explicit ColonyView(pipeframe::SceneObject object) : ComponentView(object) {}
-    void Initialize(ColonyId, pipeframe::Vector2f, pipeframe::Color,
-                    const AntConfiguration &, std::size_t collectionWindowSamples = 60);
+    void Initialize(ColonyId, pipeframe::Vector2f, pipeframe::Color, const AntConfiguration &,
+                    std::size_t collectionWindowSamples = 60);
     ColonyStateComponent &State() const { return Require<ColonyStateComponent>(); }
     ColonyHistoryComponent &History() const { return Require<ColonyHistoryComponent>(); }
     pipeframe::Transform2DComponent &Transform() const { return Require<pipeframe::Transform2DComponent>(); }
@@ -22,9 +23,7 @@ public:
     void UpdateCollectionRate();
 
     [[nodiscard]]
-    std::size_t AcquireNameSuffix(
-        std::size_t nameIndex
-    );
+    std::size_t AcquireNameSuffix(std::size_t nameIndex);
 
     [[nodiscard]]
     ColonyId GetId() const;
@@ -58,7 +57,6 @@ public:
 
     void SetAntCount(std::size_t antCount);
 
-private:
-
+  private:
 };
 } // namespace ant_simulation

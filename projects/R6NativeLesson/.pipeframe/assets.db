@@ -1,3 +1,5 @@
-PIPEFRAME_ASSET_DATABASE 2 2
+PIPEFRAME_ASSET_DATABASE 2 3
 ASSET "asset-00000001" 9 0 "Assets/Tilemaps/Environment.pftilemap" ".pipeframe/cache/asset-00000001/compiled.pfasset" ".pipeframe/cache/asset-00000001/thumbnail.pfpreview" ".pipeframe/cache/asset-00000001/preview.pfpreview" "pipeframe.tilemap" 3 2 2337811250070862840 "" 0 0 0
+ENDASSET
+ASSET "asset-00000002" 9 0 "Assets/Tilemaps/Environment2.pftilemap" ".pipeframe/cache/asset-00000002/compiled.pfasset" ".pipeframe/cache/asset-00000002/thumbnail.pfpreview" ".pipeframe/cache/asset-00000002/preview.pfpreview" "pipeframe.tilemap" 3 1 17451417733003594263 "" 0 0 0
 ENDASSET

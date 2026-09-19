@@ -53,7 +53,8 @@ void Label::SetAlignment(LabelAlignment newAlignment) {
 }
 
 void Label::SetHorizontalPadding(float newPadding) {
-    if (horizontalPadding == newPadding) return;
+    if (horizontalPadding == newPadding)
+        return;
     measurements.clear();
     horizontalPadding = newPadding;
     RefreshTextPosition();
@@ -84,7 +85,7 @@ void Label::RefreshTextPosition() {
 
     const float availableWidth = widgetSize.x - horizontalPadding * 2;
     if (textDirty || cachedTextWidth != availableWidth) {
-        const auto display=WrappedText(availableWidth);
+        const auto display = WrappedText(availableWidth);
         text.setString(display);
         cachedTextWidth = availableWidth;
         textDirty = false;
@@ -112,48 +113,50 @@ void Label::RefreshTextPosition() {
 }
 
 sf::String Label::WrappedText(float availableWidth) const {
-        sf::String display(content);
-        if (wrap && availableWidth > 0 && std::isfinite(availableWidth)) {
-            const float available = availableWidth;
-            sf::String output, line;
-            sf::Text probe = text;
-            for (const auto character : display) {
-                if (character == '\n') {
-                    output += line;
-                    output += '\n';
-                    line.clear();
-                    continue;
-                }
-                line += character;
-                probe.setString(line);
-                if (probe.getLocalBounds().size.x > available && line.getSize() > 1) {
-                    std::size_t split = line.getSize() - 1;
-                    for (std::size_t i = line.getSize() - 1; i > 0; --i)
-                        if (line[i] == ' ') {
-                            split = i;
-                            break;
-                        }
-                    output += line.substring(0, split);
-                    output += '\n';
-                    line = line.substring(split + (line[split] == ' ' ? 1 : 0));
-                }
+    sf::String display(content);
+    if (wrap && availableWidth > 0 && std::isfinite(availableWidth)) {
+        const float available = availableWidth;
+        sf::String output, line;
+        sf::Text probe = text;
+        for (const auto character : display) {
+            if (character == '\n') {
+                output += line;
+                output += '\n';
+                line.clear();
+                continue;
             }
-            output += line;
-            display = output;
+            line += character;
+            probe.setString(line);
+            if (probe.getLocalBounds().size.x > available && line.getSize() > 1) {
+                std::size_t split = line.getSize() - 1;
+                for (std::size_t i = line.getSize() - 1; i > 0; --i)
+                    if (line[i] == ' ') {
+                        split = i;
+                        break;
+                    }
+                output += line.substring(0, split);
+                output += '\n';
+                line = line.substring(split + (line[split] == ' ' ? 1 : 0));
+            }
         }
+        output += line;
+        display = output;
+    }
     return display;
 }
 
 sf::Vector2f Label::OnMeasure(const BoxConstraints &constraints) {
-    const float width=wrap ? constraints.maximum.x-horizontalPadding*2 : 0.0f;
-    for (const auto &cached:measurements)
-        if (cached.width==width) return constraints.Constrain(cached.size);
-    auto probe=text;
+    const float width = wrap ? constraints.maximum.x - horizontalPadding * 2 : 0.0f;
+    for (const auto &cached : measurements)
+        if (cached.width == width)
+            return constraints.Constrain(cached.size);
+    auto probe = text;
     probe.setString(WrappedText(width));
-    const auto bounds=probe.getLocalBounds();
-    const float lineHeight=text.getFont().getLineSpacing(text.getCharacterSize());
-    const sf::Vector2f size{bounds.size.x+horizontalPadding*2,std::max(lineHeight,bounds.size.y)+8};
-    if (measurements.size()>=8) measurements.erase(measurements.begin());
-    measurements.push_back({width,size});
+    const auto bounds = probe.getLocalBounds();
+    const float lineHeight = text.getFont().getLineSpacing(text.getCharacterSize());
+    const sf::Vector2f size{bounds.size.x + horizontalPadding * 2, std::max(lineHeight, bounds.size.y) + 8};
+    if (measurements.size() >= 8)
+        measurements.erase(measurements.begin());
+    measurements.push_back({width, size});
     return constraints.Constrain(size);
 }

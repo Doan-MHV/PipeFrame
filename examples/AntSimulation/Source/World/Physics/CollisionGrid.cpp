@@ -5,26 +5,25 @@
 
 namespace ant_simulation {
 
-bool CollisionGrid::CellRange::IsEmpty() const {
-    return maximumColumn < minimumColumn || maximumRow < minimumRow;
-}
+bool CollisionGrid::CellRange::IsEmpty() const { return maximumColumn < minimumColumn || maximumRow < minimumRow; }
 
 void CollisionGrid::Initialize(const pipeframe::Vector2f worldSize, const float cellSize) {
-    index.Initialize({{0.0f,0.0f},worldSize},cellSize);
+    index.Initialize({{0.0f, 0.0f}, worldSize}, cellSize);
 }
 
 void CollisionGrid::Rebuild(const std::span<const AntView> ants) {
     std::vector<pipeframe::UniformSpatialIndex<AntId>::Entry> entries;
     entries.reserve(ants.size());
     for (const AntView &ant : ants) {
-        const auto position=ant.GetPosition();
-        entries.push_back({ant.GetId(),{position.x,position.y}});
+        const auto position = ant.GetPosition();
+        entries.push_back({ant.GetId(), {position.x, position.y}});
     }
     index.Rebuild(entries);
 }
 
-CollisionGrid::CellRange CollisionGrid::GetCellsOverlapping(const pipeframe::Vector2f center, const float radius) const {
-    const auto range=index.CellsOverlapping(center,radius);
+CollisionGrid::CellRange CollisionGrid::GetCellsOverlapping(const pipeframe::Vector2f center,
+                                                            const float radius) const {
+    const auto range = index.CellsOverlapping(center, radius);
     return {range.minimum.column, range.maximum.column, range.minimum.row, range.maximum.row};
 }
 

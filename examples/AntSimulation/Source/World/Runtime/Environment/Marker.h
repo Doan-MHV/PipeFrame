@@ -23,15 +23,11 @@ inline constexpr std::size_t MarkerChannelCount{3};
 
 [[nodiscard]]
 constexpr bool IsMarkerChannel(const MarkerKind kind) {
-    return kind == MarkerKind::ToHome ||
-           kind == MarkerKind::ToFood ||
-           kind == MarkerKind::ToEnemy;
+    return kind == MarkerKind::ToHome || kind == MarkerKind::ToFood || kind == MarkerKind::ToEnemy;
 }
 
 [[nodiscard]]
-constexpr std::size_t GetMarkerChannelIndex(
-    const MarkerKind kind
-) {
+constexpr std::size_t GetMarkerChannelIndex(const MarkerKind kind) {
     return static_cast<std::size_t>(kind);
 }
 
@@ -42,11 +38,7 @@ struct Marker {
 
     Marker() = default;
 
-    Marker(
-        ColonyId sourceColonyId,
-        float initialIntensity,
-        bool isPersistent = false
-    );
+    Marker(ColonyId sourceColonyId, float initialIntensity, bool isPersistent = false);
 
     [[nodiscard]]
     bool HasOwner() const;

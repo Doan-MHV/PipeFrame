@@ -1,8 +1,11 @@
 #ifndef ANT_WORLD_H
 #define ANT_WORLD_H
 
-#include <cstddef>
 #include <PipeFrame/World/World.h>
+#include <PipeFrame/Project/EntityRegistry.h>
+#include <functional>
+namespace pipeframe { class TilemapAssetModule; }
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -10,17 +13,18 @@
 
 #include <PipeFrame/Foundation/MathTypes.h>
 
-#include "World/Runtime/AntStepResult.h"
-#include "World/Physics/AntMovementSystem.h"
-#include "World/Runtime/Systems/AntForagingSystem.h"
-#include "World/Runtime/Systems/AntCleanupSystem.h"
-#include "World/Runtime/AntQuery.h"
-#include "World/Runtime/Systems/ColonyLifecycleSystem.h"
 #include "Configuration/AntConfiguration.h"
 #include "World/Physics/AntBodySystem.h"
+#include "World/Physics/AntMovementSystem.h"
+#include "World/Runtime/AntQuery.h"
+#include "World/Runtime/AntStepResult.h"
 #include "World/Runtime/Environment/AntEnvironment.h"
+#include "World/Runtime/Systems/AntCleanupSystem.h"
+#include "World/Runtime/Systems/AntForagingSystem.h"
+#include "World/Runtime/Systems/ColonyLifecycleSystem.h"
 
 namespace ant_simulation {
+struct AntWorldBuildResult;
 class AntRuntimeWorld;
 class AntPhysicsWorld;
 
@@ -68,49 +72,36 @@ struct AntBehaviorCheckpoint {
 };
 
 class AntWorld final : public pipeframe::World {
-public:
-    explicit AntWorld(
-        AntConfiguration configuration,
-        std::uint32_t randomSeed = 0
-    );
+  public:
+    static std::optional<AntWorldBuildResult> FromScene(
+        std::span<const pipeframe::SceneObjectData> objects,
+        pipeframe::TilemapAssetModule &assets,
+        const pipeframe::EntityRegistry &entities,
+        const pipeframe::ComponentRegistry &components,
+        const std::function<void(pipeframe::EntityRegistry &, AntWorld &)> &bindFactories,
+        std::string *error = nullptr);
+    explicit AntWorld(AntConfiguration configuration, std::uint32_t randomSeed = 0);
 
     ~AntWorld();
 
-    AntWorld(
-        const AntWorld &
-    ) = delete;
+    AntWorld(const AntWorld &) = delete;
 
-    AntWorld &operator=(
-        const AntWorld &
-    ) = delete;
+    AntWorld &operator=(const AntWorld &) = delete;
 
-    bool Initialize(
-        std::string &errorMessage
-    );
+    bool Initialize(std::string &errorMessage);
 
-    bool Reset(
-        std::string &errorMessage
-    );
+    bool Reset(std::string &errorMessage);
 
     void Clear();
 
-    ColonyView &CreateColony(
-        ColonyId id,
-        pipeframe::Vector2f position,
-        pipeframe::Color color
-    );
+    ColonyView &CreateColony(ColonyId id, pipeframe::Vector2f position, pipeframe::Color color);
 
     [[nodiscard]]
     bool RemoveColony(ColonyId id);
 
-    ColonyView &CreateColony(
-        pipeframe::Vector2f position,
-        pipeframe::Color color
-    );
+    ColonyView &CreateColony(pipeframe::Vector2f position, pipeframe::Color color);
 
-    AntSimulationStepResult FixedUpdate(
-        float fixedDeltaTime
-    );
+    AntSimulationStepResult FixedUpdate(float fixedDeltaTime);
 
     void BeginFixedStep(float fixedDeltaTime);
     void UpdateMovement(float fixedDeltaTime);
@@ -121,15 +112,13 @@ public:
     bool IsInitialized() const;
 
     [[nodiscard]]
-    const AntConfiguration &
-    GetConfiguration() const;
+    const AntConfiguration &GetConfiguration() const;
 
     [[nodiscard]]
     AntEnvironment &GetEnvironment();
 
     [[nodiscard]]
-    const AntEnvironment &
-    GetEnvironment() const;
+    const AntEnvironment &GetEnvironment() const;
 
     [[nodiscard]]
     pipeframe::BehaviourScene &GetScene();
@@ -143,8 +132,7 @@ public:
     ColonyLifecycleSystem &GetColonyLifecycleSystem();
 
     [[nodiscard]]
-    const ColonyLifecycleSystem &
-    GetColonyLifecycleSystem() const;
+    const ColonyLifecycleSystem &GetColonyLifecycleSystem() const;
 
     [[nodiscard]]
     AntBodySystem &GetPhysicsBodies();
@@ -153,17 +141,15 @@ public:
     AntRuntimeWorld &GetRuntimeWorld();
 
     [[nodiscard]]
-    const AntBodySystem &
-    GetPhysicsBodies() const;
+    const AntBodySystem &GetPhysicsBodies() const;
 
     [[nodiscard]]
-    const AntSimulationWorldStatistics &
-    GetStatistics() const;
+    const AntSimulationWorldStatistics &GetStatistics() const;
 
     [[nodiscard]]
     AntBehaviorCheckpoint CaptureBehaviorCheckpoint() const;
 
-private:
+  private:
     struct State;
 
     void RefreshStatistics();
@@ -174,6 +160,15 @@ private:
     std::unique_ptr<State> state;
 
     AntSimulationWorldStatistics statistics;
+};
+
+struct AntWorldBuildResult {
+    std::unique_ptr<AntWorld> world;
+    AntConfiguration configuration;
+    pipeframe::RegisteredEntityObjects entities;
+    pipeframe::AssetReference map;
+    std::uint64_t mapRevision{};
+    bool hasPlayground{};
 };
 
 } // namespace ant_simulation

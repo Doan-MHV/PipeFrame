@@ -1,10 +1,10 @@
 #ifndef PIPEFRAME_UI_VIEW_MODELS_H
 #define PIPEFRAME_UI_VIEW_MODELS_H
 
+#include <PipeFrame/Foundation/MathTypes.h>
+
 #include <cstdint>
 #include <string>
-
-#include <PipeFrame/Foundation/MathTypes.h>
 
 namespace pipeframe {
 
@@ -32,6 +32,6 @@ struct NetworkEdgeViewModel {
     bool enabled{true};
 };
 
-} // namespace pipeframe
+}  // namespace pipeframe
 
 #endif

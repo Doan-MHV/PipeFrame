@@ -50,10 +50,8 @@ void MetricCard::OnGeometryChanged() {
     if (accent == nullptr || title == nullptr || value == nullptr || detail == nullptr) {
         return;
     }
-    accent->Arrange({{theme.spacing8, theme.spacing12},
-                     {3.0f, std::max(0.0f, height - theme.spacing24)}});
+    accent->Arrange({{theme.spacing8, theme.spacing12}, {3.0f, std::max(0.0f, height - theme.spacing24)}});
     title->Arrange({{contentX, theme.spacing8}, {contentWidth, 20.0f}});
     value->Arrange({{contentX, 27.0f}, {contentWidth, 30.0f}});
-    detail->Arrange({{contentX, std::max(54.0f, height - 26.0f)},
-                     {contentWidth, 18.0f}});
+    detail->Arrange({{contentX, std::max(54.0f, height - 26.0f)}, {contentWidth, 18.0f}});
 }

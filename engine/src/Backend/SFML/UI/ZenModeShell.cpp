@@ -14,8 +14,7 @@ ZenModeShell::ZenModeShell()
         layer->SetFillColor(sf::Color::Transparent);
         layer->SetOutlineThickness(0.0f);
         layer->SetHitTestVisible(false);
-        SetChildAlignment(*layer,
-                          {HorizontalAlignment::Stretch, VerticalAlignment::Stretch});
+        SetChildAlignment(*layer, {HorizontalAlignment::Stretch, VerticalAlignment::Stretch});
     }
 }
 
@@ -40,6 +39,4 @@ void ZenModeShell::SetZenMode(const bool enabled, const bool notify) {
 void ZenModeShell::ToggleZenMode() { SetZenMode(!zenMode, true); }
 bool ZenModeShell::IsZenMode() const { return zenMode; }
 
-void ZenModeShell::SetOnZenModeChanged(ChangedCallback callback) {
-    onZenModeChanged = std::move(callback);
-}
+void ZenModeShell::SetOnZenModeChanged(ChangedCallback callback) { onZenModeChanged = std::move(callback); }

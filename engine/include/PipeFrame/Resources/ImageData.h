@@ -1,17 +1,17 @@
 #ifndef PIPEFRAME_RESOURCES_IMAGE_DATA_H
 #define PIPEFRAME_RESOURCES_IMAGE_DATA_H
 
+#include <PipeFrame/Foundation/MathTypes.h>
+
 #include <cstddef>
 #include <filesystem>
 #include <string>
 #include <vector>
 
-#include <PipeFrame/Foundation/MathTypes.h>
-
 namespace pipeframe {
 
 class ImageData {
-  public:
+public:
     ImageData() = default;
     explicit ImageData(Vector2u size, Color fill = {});
 
@@ -22,28 +22,20 @@ class ImageData {
     [[nodiscard]] Color Pixel(Vector2u position) const;
     bool SetPixel(Vector2u position, Color color);
 
-    [[nodiscard]] const std::vector<Color> &Pixels() const;
-    [[nodiscard]] std::vector<Color> &Pixels();
+    [[nodiscard]] const std::vector<Color>& Pixels() const;
+    [[nodiscard]] std::vector<Color>& Pixels();
 
-  private:
+private:
     [[nodiscard]] std::size_t Offset(Vector2u position) const;
 
     Vector2u size{};
     std::vector<Color> pixels;
 };
 
-bool LoadImageData(
-    const std::filesystem::path &filePath,
-    ImageData &image,
-    std::string &errorMessage
-);
+bool LoadImageData(const std::filesystem::path& filePath, ImageData& image, std::string& errorMessage);
 
-bool SaveImageData(
-    const std::filesystem::path &filePath,
-    const ImageData &image,
-    std::string &errorMessage
-);
+bool SaveImageData(const std::filesystem::path& filePath, const ImageData& image, std::string& errorMessage);
 
-} // namespace pipeframe
+}  // namespace pipeframe
 
 #endif

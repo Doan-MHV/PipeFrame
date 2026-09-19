@@ -13,15 +13,11 @@ public:
 
     void Update(float deltaTime);
 
-    void SetDirectionInstant(
-        pipeframe::Vector2f direction
-    );
+    void SetDirectionInstant(pipeframe::Vector2f direction);
 
     void SetAngleInstant(float angle);
 
-    void SetTarget(
-        pipeframe::Vector2f direction
-    );
+    void SetTarget(pipeframe::Vector2f direction);
 
     void SetSpeed(float speed);
 
@@ -53,9 +49,7 @@ private:
     float speed{1.0f};
 };
 
-} // namespace pipeframe
-
-
+}  // namespace pipeframe
 
 #include <cmath>
 
@@ -63,12 +57,8 @@ namespace pipeframe {
 
 namespace {
 
-pipeframe::Vector2f Normalize(
-    const pipeframe::Vector2f value
-) {
-    const float lengthSquared =
-        value.x * value.x +
-        value.y * value.y;
+pipeframe::Vector2f Normalize(const pipeframe::Vector2f value) {
+    const float lengthSquared = value.x * value.x + value.y * value.y;
 
     if (lengthSquared <= 0.000001f) {
         return {
@@ -77,23 +67,16 @@ pipeframe::Vector2f Normalize(
         };
     }
 
-    const float inverseLength =
-        1.0f / std::sqrt(lengthSquared);
+    const float inverseLength = 1.0f / std::sqrt(lengthSquared);
 
     return value * inverseLength;
 }
 
-} // namespace
+}  // namespace
 
-inline DirectionTracker::DirectionTracker(
-    const float trackingSpeed
-)
-    : speed(trackingSpeed) {
-}
+inline DirectionTracker::DirectionTracker(const float trackingSpeed) : speed(trackingSpeed) {}
 
-inline void DirectionTracker::Update(
-    const float deltaTime
-) {
+inline void DirectionTracker::Update(const float deltaTime) {
     if (deltaTime <= 0.0f) {
         return;
     }
@@ -108,14 +91,9 @@ inline void DirectionTracker::Update(
         temporaryDirection.x,
     };
 
-    const float turnAmount =
-        normal.x * target.x +
-        normal.y * target.y;
+    const float turnAmount = normal.x * target.x + normal.y * target.y;
 
-    currentAngle +=
-        speed *
-        turnAmount *
-        deltaTime;
+    currentAngle += speed * turnAmount * deltaTime;
 
     currentDirection = {
         std::cos(currentAngle),
@@ -123,23 +101,15 @@ inline void DirectionTracker::Update(
     };
 }
 
-inline void DirectionTracker::SetDirectionInstant(
-    const pipeframe::Vector2f direction
-) {
-    currentDirection =
-        Normalize(direction);
+inline void DirectionTracker::SetDirectionInstant(const pipeframe::Vector2f direction) {
+    currentDirection = Normalize(direction);
 
     target = currentDirection;
 
-    currentAngle =
-        std::atan2(
-            currentDirection.y,
-            currentDirection.x);
+    currentAngle = std::atan2(currentDirection.y, currentDirection.x);
 }
 
-inline void DirectionTracker::SetAngleInstant(
-    const float angle
-) {
+inline void DirectionTracker::SetAngleInstant(const float angle) {
     currentAngle = angle;
 
     currentDirection = {
@@ -150,15 +120,11 @@ inline void DirectionTracker::SetAngleInstant(
     target = currentDirection;
 }
 
-inline void DirectionTracker::SetTarget(
-    const pipeframe::Vector2f direction
-) {
+inline void DirectionTracker::SetTarget(const pipeframe::Vector2f direction) {
     target = Normalize(direction);
 }
 
-inline void DirectionTracker::SetSpeed(
-    const float newSpeed
-) {
+inline void DirectionTracker::SetSpeed(const float newSpeed) {
     speed = newSpeed;
 }
 
@@ -170,15 +136,13 @@ inline float DirectionTracker::GetSpeed() const {
     return speed;
 }
 
-pipeframe::Vector2f
-inline DirectionTracker::GetDirection() const {
+pipeframe::Vector2f inline DirectionTracker::GetDirection() const {
     return currentDirection;
 }
 
-pipeframe::Vector2f
-inline DirectionTracker::GetTarget() const {
+pipeframe::Vector2f inline DirectionTracker::GetTarget() const {
     return target;
 }
 
-} // namespace pipeframe
+}  // namespace pipeframe
 #endif

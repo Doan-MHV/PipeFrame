@@ -24,9 +24,9 @@ std::optional<Network> NetworkGenerator::Generate(const Genome &genome, std::str
         const GenomeNode &source = genome.GetNodes()[genomeIndex];
         network.nodes[networkIndex].bias = source.bias;
         network.nodes[networkIndex].activation = source.activation;
-        network.roles[networkIndex] = source.kind == NodeKind::Input ? NetworkNodeRole::Input :
-                                      source.kind == NodeKind::Output ? NetworkNodeRole::Output :
-                                                                      NetworkNodeRole::Hidden;
+        network.roles[networkIndex] = source.kind == NodeKind::Input    ? NetworkNodeRole::Input
+                                      : source.kind == NodeKind::Output ? NetworkNodeRole::Output
+                                                                        : NetworkNodeRole::Hidden;
     }
 
     for (std::size_t genomeIndex = 0; genomeIndex < genome.GetNodeCount(); ++genomeIndex) {

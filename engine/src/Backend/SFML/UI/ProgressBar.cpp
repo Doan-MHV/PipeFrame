@@ -2,8 +2,7 @@
 
 #include <algorithm>
 
-ProgressBar::ProgressBar(const UITheme &theme)
-    : fill(CreateChild<Panel>()), transitionDuration(theme.motionNormal) {
+ProgressBar::ProgressBar(const UITheme &theme) : fill(CreateChild<Panel>()), transitionDuration(theme.motionNormal) {
     SetSize({160.0f, 8.0f});
     SetFillColor(theme.controlNormal);
     SetOutlineColor(sf::Color::Transparent);
@@ -30,9 +29,7 @@ float ProgressBar::GetVisualValue() const { return animatedValue.Get(); }
 void ProgressBar::SetTrackColor(const sf::Color color) { Panel::SetFillColor(color); }
 void ProgressBar::SetFillColorRole(const sf::Color color) { fill.SetFillColor(color); }
 
-void ProgressBar::SetTransitionDuration(const float seconds) {
-    transitionDuration = std::max(0.0f, seconds);
-}
+void ProgressBar::SetTransitionDuration(const float seconds) { transitionDuration = std::max(0.0f, seconds); }
 
 void ProgressBar::SetReducedMotion(const bool reducedMotion) {
     Widget::SetReducedMotion(reducedMotion);
@@ -48,12 +45,9 @@ void ProgressBar::OnGeometryChanged() {
 }
 
 void ProgressBar::OnUpdate(const float realDeltaSeconds) {
-    if (animatedValue.Update(realDeltaSeconds,
-                             IsReducedMotion() ? 0.0f : transitionDuration)) {
+    if (animatedValue.Update(realDeltaSeconds, IsReducedMotion() ? 0.0f : transitionDuration)) {
         RefreshFill();
     }
 }
 
-void ProgressBar::RefreshFill() {
-    fill.Arrange({{0.0f, 0.0f}, {GetSize().x * animatedValue.Get(), GetSize().y}});
-}
+void ProgressBar::RefreshFill() { fill.Arrange({{0.0f, 0.0f}, {GetSize().x * animatedValue.Get(), GetSize().y}}); }

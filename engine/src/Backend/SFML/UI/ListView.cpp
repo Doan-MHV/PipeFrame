@@ -27,13 +27,9 @@ Button &ListView::AddItem() {
 
 std::size_t ListView::GetItemCount() const { return items.size(); }
 
-Button *ListView::GetItem(const std::size_t index) {
-    return index < items.size() ? items[index] : nullptr;
-}
+Button *ListView::GetItem(const std::size_t index) { return index < items.size() ? items[index] : nullptr; }
 
-const Button *ListView::GetItem(const std::size_t index) const {
-    return index < items.size() ? items[index] : nullptr;
-}
+const Button *ListView::GetItem(const std::size_t index) const { return index < items.size() ? items[index] : nullptr; }
 
 void ListView::SetSelectedIndex(const std::size_t index, const bool notify) {
     if (index >= items.size() || selectedIndex == index) {
@@ -50,9 +46,7 @@ void ListView::SetSelectedIndex(const std::size_t index, const bool notify) {
 
 std::size_t ListView::GetSelectedIndex() const { return selectedIndex; }
 
-void ListView::SetOnSelectionChanged(SelectionChangedCallback callback) {
-    onSelectionChanged = std::move(callback);
-}
+void ListView::SetOnSelectionChanged(SelectionChangedCallback callback) { onSelectionChanged = std::move(callback); }
 
 bool ListView::OnEvent(const sf::Event &event) {
     const auto *key = event.getIf<sf::Event::KeyPressed>();

@@ -10,8 +10,7 @@ GenomeMutator::GenomeMutator(const MutationSettings newSettings, const std::uint
 void GenomeMutator::Mutate(Genome &genome) {
     for (std::uint32_t mutation = 0; mutation < settings.mutationCount; ++mutation) {
         if (Chance(0.25f)) {
-            Chance(0.5f) ? static_cast<void>(MutateBias(genome))
-                         : static_cast<void>(MutateWeight(genome));
+            Chance(0.5f) ? static_cast<void>(MutateBias(genome)) : static_cast<void>(MutateWeight(genome));
         }
     }
     if (genome.GetHiddenCount() < settings.maximumHiddenNodes && Chance(settings.newNodeProbability)) {
@@ -74,13 +73,9 @@ bool GenomeMutator::MutateWeight(Genome &genome) {
     return true;
 }
 
-bool GenomeMutator::Chance(const float probability) {
-    return random.NextFloat() < std::clamp(probability, 0.0f, 1.0f);
-}
+bool GenomeMutator::Chance(const float probability) { return random.NextFloat() < std::clamp(probability, 0.0f, 1.0f); }
 
-float GenomeMutator::FullRange(const float magnitude) {
-    return (random.NextFloat() * 2.0f - 1.0f) * magnitude;
-}
+float GenomeMutator::FullRange(const float magnitude) { return (random.NextFloat() * 2.0f - 1.0f) * magnitude; }
 
 std::size_t GenomeMutator::Index(const std::size_t count) {
     return count == 0 ? 0 : static_cast<std::size_t>(random.NextU64() % count);

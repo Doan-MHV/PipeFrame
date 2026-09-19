@@ -4,9 +4,7 @@
 
 namespace {
 
-sf::Vector2f SanitizeMinimum(const sf::Vector2f size) {
-    return {std::max(0.0f, size.x), std::max(0.0f, size.y)};
-}
+sf::Vector2f SanitizeMinimum(const sf::Vector2f size) { return {std::max(0.0f, size.x), std::max(0.0f, size.y)}; }
 
 sf::Vector2f SanitizeMaximum(const sf::Vector2f size, const sf::Vector2f minimum) {
     return {std::max(minimum.x, size.x), std::max(minimum.y, size.y)};
@@ -304,7 +302,8 @@ void Widget::EndCompositionPass() {
     if (disposeUncomposed) {
         for (std::size_t i = children.size(); i > 0; --i) {
             auto &child = *children[i - 1];
-            if (!child.key.empty() && std::find(composedKeys.begin(), composedKeys.end(), child.key) == composedKeys.end())
+            if (!child.key.empty() &&
+                std::find(composedKeys.begin(), composedKeys.end(), child.key) == composedKeys.end())
                 RemoveChild(child);
         }
         // Description order controls both layout and hit testing; identity is retained by key.
@@ -312,11 +311,13 @@ void Widget::EndCompositionPass() {
             return std::find(composedKeys.begin(), composedKeys.end(), a->key) <
                    std::find(composedKeys.begin(), composedKeys.end(), b->key);
         });
-        if (!children.empty()) OnChildGeometryChanged(*children.front());
+        if (!children.empty())
+            OnChildGeometryChanged(*children.front());
     } else {
         for (const auto &child : children) {
-            if (!child->key.empty()) child->SetVisible(
-                std::find(composedKeys.begin(), composedKeys.end(), child->key) != composedKeys.end());
+            if (!child->key.empty())
+                child->SetVisible(std::find(composedKeys.begin(), composedKeys.end(), child->key) !=
+                                  composedKeys.end());
         }
     }
     composedKeys.clear();
@@ -369,24 +370,30 @@ void Widget::Update(const float realDeltaSeconds) {
     for (const std::unique_ptr<Widget> &child : children) {
         child->Update(realDeltaSeconds);
     }
-    for (std::size_t i=children.size(); i>0; --i) if (children[i-1]->IsDisposed()) RemoveChild(*children[i-1]);
+    for (std::size_t i = children.size(); i > 0; --i)
+        if (children[i - 1]->IsDisposed())
+            RemoveChild(*children[i - 1]);
 }
 
 void Widget::RenderChildren(sf::RenderTarget &target) const {
-    const auto previous=target.getView();
+    const auto previous = target.getView();
     if (ClipsChildren()) {
-        const auto size=target.getSize();
-        if (!size.x || !size.y) return;
-        const auto start=target.mapCoordsToPixel(GetScreenPosition());
-        const auto end=target.mapCoordsToPixel(GetScreenPosition()+GetSize());
-        const sf::FloatRect clip{{float(start.x)/size.x,float(start.y)/size.y},
-            {float(std::max(0,end.x-start.x))/size.x,float(std::max(0,end.y-start.y))/size.y}};
-        auto view=previous;
+        const auto size = target.getSize();
+        if (!size.x || !size.y)
+            return;
+        const auto start = target.mapCoordsToPixel(GetScreenPosition());
+        const auto end = target.mapCoordsToPixel(GetScreenPosition() + GetSize());
+        const sf::FloatRect clip{
+            {float(start.x) / size.x, float(start.y) / size.y},
+            {float(std::max(0, end.x - start.x)) / size.x, float(std::max(0, end.y - start.y)) / size.y}};
+        auto view = previous;
         view.setScissor(previous.getScissor().findIntersection(clip).value_or(sf::FloatRect{}));
         target.setView(view);
     }
-    for (const auto &child : children) child->Render(target);
-    if (ClipsChildren()) target.setView(previous);
+    for (const auto &child : children)
+        child->Render(target);
+    if (ClipsChildren())
+        target.setView(previous);
 }
 
 void Widget::OnGeometryChanged() {}
@@ -492,8 +499,10 @@ Widget *Widget::FindTopmostAt(const sf::Vector2f screenPoint) {
 }
 
 void Widget::RemoveChild(Widget &child) {
-    const auto it = std::find_if(children.begin(), children.end(), [&](const auto &item) { return item.get() == &child; });
-    if (it == children.end()) return;
+    const auto it =
+        std::find_if(children.begin(), children.end(), [&](const auto &item) { return item.get() == &child; });
+    if (it == children.end())
+        return;
     auto removed = std::move(*it);
     children.erase(it);
     removed->SetVisible(false);

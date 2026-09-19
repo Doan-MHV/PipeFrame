@@ -6,16 +6,13 @@
 
 namespace pipeframe {
 
-ImageData::ImageData(const Vector2u imageSize, const Color fill) {
-    Resize(imageSize, fill);
-}
+ImageData::ImageData(const Vector2u imageSize, const Color fill) { Resize(imageSize, fill); }
 
 void ImageData::Resize(const Vector2u imageSize, const Color fill) {
     size = imageSize;
 
     if (size.x == 0 || size.y == 0 ||
-        static_cast<std::size_t>(size.x) >
-            std::numeric_limits<std::size_t>::max() / static_cast<std::size_t>(size.y)) {
+        static_cast<std::size_t>(size.x) > std::numeric_limits<std::size_t>::max() / static_cast<std::size_t>(size.y)) {
         size = {};
         pixels.clear();
         return;
@@ -24,13 +21,9 @@ void ImageData::Resize(const Vector2u imageSize, const Color fill) {
     pixels.assign(static_cast<std::size_t>(size.x) * size.y, fill);
 }
 
-Vector2u ImageData::Size() const {
-    return size;
-}
+Vector2u ImageData::Size() const { return size; }
 
-bool ImageData::Empty() const {
-    return pixels.empty();
-}
+bool ImageData::Empty() const { return pixels.empty(); }
 
 Color ImageData::Pixel(const Vector2u position) const {
     if (position.x >= size.x || position.y >= size.y) {
@@ -49,23 +42,15 @@ bool ImageData::SetPixel(const Vector2u position, const Color color) {
     return true;
 }
 
-const std::vector<Color> &ImageData::Pixels() const {
-    return pixels;
-}
+const std::vector<Color> &ImageData::Pixels() const { return pixels; }
 
-std::vector<Color> &ImageData::Pixels() {
-    return pixels;
-}
+std::vector<Color> &ImageData::Pixels() { return pixels; }
 
 std::size_t ImageData::Offset(const Vector2u position) const {
     return static_cast<std::size_t>(position.y) * size.x + position.x;
 }
 
-bool LoadImageData(
-    const std::filesystem::path &filePath,
-    ImageData &image,
-    std::string &errorMessage
-) {
+bool LoadImageData(const std::filesystem::path &filePath, ImageData &image, std::string &errorMessage) {
     errorMessage.clear();
 
     if (filePath.empty()) {
@@ -93,11 +78,7 @@ bool LoadImageData(
     return true;
 }
 
-bool SaveImageData(
-    const std::filesystem::path &filePath,
-    const ImageData &image,
-    std::string &errorMessage
-) {
+bool SaveImageData(const std::filesystem::path &filePath, const ImageData &image, std::string &errorMessage) {
     errorMessage.clear();
 
     if (filePath.empty()) {

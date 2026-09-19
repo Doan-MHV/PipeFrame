@@ -1,0 +1,11 @@
+Test project /Users/donvo/PipeFrame/cmake-build-release
+    Start 24: SpritePhysicsAcceptance
+1/3 Test #24: SpritePhysicsAcceptance ..........   Passed    0.50 sec
+    Start 25: SceneProjectRuntimeAcceptance
+2/3 Test #25: SceneProjectRuntimeAcceptance ....   Passed    0.24 sec
+    Start 31: WorldModuleRegression
+3/3 Test #31: WorldModuleRegression ............   Passed    0.03 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   0.78 sec

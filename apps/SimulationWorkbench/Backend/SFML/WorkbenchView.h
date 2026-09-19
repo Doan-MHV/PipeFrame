@@ -9,6 +9,7 @@
 
 
 #include <PipeFrame/UI/FloatingWindowController.h>
+#include <PipeFrame/Render/WorldDebugView.h>
 #include <filesystem>
 #include <functional>
 #include <optional>
@@ -77,6 +78,8 @@ enum class TransformPivotMode {
 
 class WorkbenchView final {
   public:
+    pipeframe::WorldDebugOptions GetWorldDebugOptions() const { return worldDebugOptions; }
+
     struct Callbacks {
         std::function<void()> newProject;
         std::function<void()> openProject;
@@ -274,6 +277,7 @@ class WorkbenchView final {
     bool assetsVisible = false;
     bool panelsVisible = false;
     pipeframe::ui::FloatingWindowController floatingWindowController;
+    pipeframe::WorldDebugOptions worldDebugOptions;
     bool gridVisible = true;
     bool positionSnapEnabled = false;
     float positionSnapStep = 10.0f;

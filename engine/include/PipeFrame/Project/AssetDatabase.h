@@ -1,17 +1,17 @@
 #ifndef PIPEFRAME_PROJECT_ASSET_DATABASE_H
 #define PIPEFRAME_PROJECT_ASSET_DATABASE_H
 
+#include <PipeFrame/Foundation/MathTypes.h>
+
 #include <cstdint>
 #include <filesystem>
 #include <functional>
-#include <optional>
 #include <memory>
+#include <optional>
 #include <span>
 #include <string>
 #include <unordered_map>
 #include <vector>
-
-#include <PipeFrame/Foundation/MathTypes.h>
 
 namespace pipeframe::assets {
 
@@ -41,7 +41,7 @@ struct PartAttachmentMetadata {
     Transform2D localTransform{};
     std::vector<std::string> accepts;
     bool multiple{false};
-    bool operator==(const PartAttachmentMetadata &) const = default;
+    bool operator==(const PartAttachmentMetadata&) const = default;
 };
 
 struct PartConfigurationLimit {
@@ -49,7 +49,7 @@ struct PartConfigurationLimit {
     double minimum{};
     double maximum{};
     std::string unit;
-    bool operator==(const PartConfigurationLimit &) const = default;
+    bool operator==(const PartConfigurationLimit&) const = default;
 };
 
 struct PartAssetMetadata {
@@ -59,7 +59,7 @@ struct PartAssetMetadata {
     std::vector<PartAttachmentMetadata> attachments;
     std::vector<std::string> compatibilityTags;
     std::vector<PartConfigurationLimit> configurationLimits;
-    bool operator==(const PartAssetMetadata &) const = default;
+    bool operator==(const PartAssetMetadata&) const = default;
 };
 
 struct AssetRecord {
@@ -78,7 +78,7 @@ struct AssetRecord {
     std::vector<std::string> tags;
     std::optional<PartAssetMetadata> part;
     std::string error;
-    bool operator==(const AssetRecord &) const = default;
+    bool operator==(const AssetRecord&) const = default;
 };
 
 struct AssetImportRequest {
@@ -104,8 +104,7 @@ struct AssetImportContext {
     std::function<bool()> isCancelled;
 };
 
-using AssetImporterFunction =
-    std::function<std::optional<AssetImportOutput>(const AssetImportContext &, std::string &)>;
+using AssetImporterFunction = std::function<std::optional<AssetImportOutput>(const AssetImportContext&, std::string&)>;
 
 struct AssetImporterDescriptor {
     std::string id;
@@ -135,8 +134,8 @@ class AssetDatabase final {
 public:
     AssetDatabase();
     ~AssetDatabase();
-    AssetDatabase(const AssetDatabase &)=delete;
-    AssetDatabase &operator=(const AssetDatabase &)=delete;
+    AssetDatabase(const AssetDatabase&) = delete;
+    AssetDatabase& operator=(const AssetDatabase&) = delete;
     // All database calls belong to the owning (editor) thread. PumpOperations never
     // waits: it starts one CPU importer or publishes a completed staged result.
     // Importer callbacks must use only their context/captured thread-safe data, never
@@ -147,37 +146,36 @@ public:
     static constexpr std::uint32_t CurrentFormatVersion = 2;
     static constexpr std::uint32_t OldestSupportedFormatVersion = 1;
 
-    bool Open(std::filesystem::path projectDirectory, std::string *error = nullptr);
-    bool Save(std::string *error = nullptr) const;
+    bool Open(std::filesystem::path projectDirectory, std::string* error = nullptr);
+    bool Save(std::string* error = nullptr) const;
     // Discover supported, unindexed files recursively under Assets, without copying them.
     // Existing records/IDs are preserved; import failures remain in operation diagnostics.
-    bool DiscoverProjectAssets(std::string *error = nullptr);
+    bool DiscoverProjectAssets(std::string* error = nullptr);
 
-    bool RegisterImporter(AssetImporterDescriptor importer, std::string *error = nullptr);
+    bool RegisterImporter(AssetImporterDescriptor importer, std::string* error = nullptr);
     void RegisterBuiltInImporters();
 
     AssetOperationId QueueImport(AssetImportRequest request);
-    AssetOperationId QueueReimport(const AssetId &assetId);
+    AssetOperationId QueueReimport(const AssetId& assetId);
     bool ProcessNextOperation();
     bool ProcessOperation(AssetOperationId operationId);
     bool CancelOperation(AssetOperationId operationId);
 
-    std::optional<AssetId> ImportNow(AssetImportRequest request, std::string *error = nullptr);
-    bool Reimport(const AssetId &assetId, std::string *error = nullptr);
-    bool Move(const AssetId &assetId, const std::filesystem::path &newRelativePath,
-              std::string *error = nullptr);
-    bool RepairMissingSource(const AssetId &assetId, const std::filesystem::path &replacement,
-                             std::string *error = nullptr);
+    std::optional<AssetId> ImportNow(AssetImportRequest request, std::string* error = nullptr);
+    bool Reimport(const AssetId& assetId, std::string* error = nullptr);
+    bool Move(const AssetId& assetId, const std::filesystem::path& newRelativePath, std::string* error = nullptr);
+    bool RepairMissingSource(const AssetId& assetId, const std::filesystem::path& replacement,
+                             std::string* error = nullptr);
     void RefreshMissingStates();
 
-    const AssetRecord *Find(const AssetId &assetId) const;
+    const AssetRecord* Find(const AssetId& assetId) const;
     std::span<const AssetRecord> GetAssets() const;
     std::span<const AssetOperation> GetOperations() const;
-    std::vector<const AssetRecord *> Search(const AssetSearchQuery &query = {}) const;
-    std::vector<AssetId> GetDependents(const AssetId &assetId) const;
+    std::vector<const AssetRecord*> Search(const AssetSearchQuery& query = {}) const;
+    std::vector<AssetId> GetDependents(const AssetId& assetId) const;
     std::vector<std::string> Validate() const;
 
-    const std::filesystem::path &GetProjectDirectory() const;
+    const std::filesystem::path& GetProjectDirectory() const;
     std::filesystem::path GetDatabasePath() const;
 
 private:
@@ -188,14 +186,14 @@ private:
         bool cancellationRequested{false};
     };
 
-    bool Load(std::string *error);
-    bool Execute(PendingOperation &operation);
-    bool ExecuteImport(PendingOperation &operation, const AssetImportRequest &request);
-    bool ExecuteReimport(PendingOperation &operation, AssetRecord &record);
-    const AssetImporterDescriptor *FindImporter(const std::filesystem::path &path,
+    bool Load(std::string* error);
+    bool Execute(PendingOperation& operation);
+    bool ExecuteImport(PendingOperation& operation, const AssetImportRequest& request);
+    bool ExecuteReimport(PendingOperation& operation, AssetRecord& record);
+    const AssetImporterDescriptor* FindImporter(const std::filesystem::path& path,
                                                 std::optional<AssetType> type = {}) const;
-    AssetRecord *FindMutable(const AssetId &assetId);
-    PendingOperation *FindPending(AssetOperationId operationId);
+    AssetRecord* FindMutable(const AssetId& assetId);
+    PendingOperation* FindPending(AssetOperationId operationId);
     void RefreshPublicOperations();
     AssetId AllocateId();
 
@@ -210,10 +208,10 @@ private:
     AssetOperationId nextOperationId{1};
 };
 
-const char *ToString(AssetType type);
-const char *ToString(AssetState state);
-const char *ToString(AssetOperationState state);
+const char* ToString(AssetType type);
+const char* ToString(AssetState state);
+const char* ToString(AssetOperationState state);
 
-} // namespace pipeframe::assets
+}  // namespace pipeframe::assets
 
 #endif

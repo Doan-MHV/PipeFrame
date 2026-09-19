@@ -1,12 +1,12 @@
 #ifndef PIPEFRAME_LEARNING_GENOME_SELECTOR_H
 #define PIPEFRAME_LEARNING_GENOME_SELECTOR_H
 
+#include <PipeFrame/Core/DeterministicRandom.h>
+
 #include <cstddef>
 #include <cstdint>
 #include <span>
 #include <vector>
-
-#include <PipeFrame/Core/DeterministicRandom.h>
 
 namespace pipeframe::learning {
 
@@ -25,6 +25,6 @@ private:
     DeterministicRandom random;
 };
 
-} // namespace pipeframe::learning
+}  // namespace pipeframe::learning
 
 #endif

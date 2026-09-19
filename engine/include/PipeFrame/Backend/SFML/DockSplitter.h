@@ -1,4 +1,5 @@
 #pragma once
+
 #include <PipeFrame/Backend/SFML/UI/Panel.h>
 #include <PipeFrame/UI/DockResizeController.h>
 
@@ -12,13 +13,15 @@ public:
     void SetAxis(Axis axis);
     void SetOnDragged(DragCallback callback);
     bool IsDragging() const;
+
 protected:
-    bool OnEvent(const sf::Event &event) override;
+    bool OnEvent(const sf::Event& event) override;
     void OnPointerEntered() override;
     void OnPointerExited() override;
+
 private:
     void RefreshColor();
     ui::DockResizeController controller;
     bool hovered{};
 };
-}
+}  // namespace pipeframe::backend::sfml

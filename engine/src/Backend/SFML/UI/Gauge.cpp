@@ -7,14 +7,13 @@
 namespace {
 
 sf::Color ApplyOpacity(sf::Color color, const float opacity) {
-    color.a = static_cast<std::uint8_t>(std::clamp(
-        std::lround(static_cast<float>(color.a) * std::clamp(opacity, 0.0f, 1.0f)), 0l, 255l));
+    color.a = static_cast<std::uint8_t>(
+        std::clamp(std::lround(static_cast<float>(color.a) * std::clamp(opacity, 0.0f, 1.0f)), 0l, 255l));
     return color;
 }
 
-void AppendArc(std::vector<sf::Vertex> &vertices, const sf::Vector2f center,
-               const float innerRadius, const float outerRadius, const float startDegrees,
-               const float sweepDegrees, const sf::Color color) {
+void AppendArc(std::vector<sf::Vertex> &vertices, const sf::Vector2f center, const float innerRadius,
+               const float outerRadius, const float startDegrees, const float sweepDegrees, const sf::Color color) {
     const int segments = std::max(1, static_cast<int>(std::ceil(std::abs(sweepDegrees) / 6.0f)));
     vertices.clear();
     vertices.reserve(static_cast<std::size_t>(segments) * 6);
@@ -41,8 +40,7 @@ void AppendArc(std::vector<sf::Vertex> &vertices, const sf::Vector2f center,
 } // namespace
 
 Gauge::Gauge(const UITheme &theme)
-    : trackColor(theme.controlNormal), fillColor(theme.accent),
-      transitionDuration(theme.motionNormal) {
+    : trackColor(theme.controlNormal), fillColor(theme.accent), transitionDuration(theme.motionNormal) {
     SetSize({72.0f, 72.0f});
     SetHitTestVisible(false);
     RebuildGeometry();
@@ -65,8 +63,14 @@ void Gauge::SetValue(const float newValue, const bool animate) {
 
 float Gauge::GetValue() const { return value; }
 float Gauge::GetVisualValue() const { return animatedValue.Get(); }
-void Gauge::SetTrackColor(const sf::Color color) { trackColor = color; RebuildGeometry(); }
-void Gauge::SetFillColor(const sf::Color color) { fillColor = color; RebuildGeometry(); }
+void Gauge::SetTrackColor(const sf::Color color) {
+    trackColor = color;
+    RebuildGeometry();
+}
+void Gauge::SetFillColor(const sf::Color color) {
+    fillColor = color;
+    RebuildGeometry();
+}
 void Gauge::SetThickness(const float newThickness) {
     thickness = std::max(1.0f, newThickness);
     RebuildGeometry();
@@ -76,9 +80,7 @@ void Gauge::SetSweep(const float newStartDegrees, const float newSweepDegrees) {
     sweepDegrees = std::clamp(newSweepDegrees, -360.0f, 360.0f);
     RebuildGeometry();
 }
-void Gauge::SetTransitionDuration(const float seconds) {
-    transitionDuration = std::max(0.0f, seconds);
-}
+void Gauge::SetTransitionDuration(const float seconds) { transitionDuration = std::max(0.0f, seconds); }
 void Gauge::SetReducedMotion(const bool reducedMotion) {
     Widget::SetReducedMotion(reducedMotion);
     if (reducedMotion) {
@@ -94,8 +96,7 @@ void Gauge::OnRender(sf::RenderTarget &target) const {
 void Gauge::OnGeometryChanged() { RebuildGeometry(); }
 void Gauge::OnOpacityChanged() { RebuildGeometry(); }
 void Gauge::OnUpdate(const float realDeltaSeconds) {
-    if (animatedValue.Update(realDeltaSeconds,
-                             IsReducedMotion() ? 0.0f : transitionDuration)) {
+    if (animatedValue.Update(realDeltaSeconds, IsReducedMotion() ? 0.0f : transitionDuration)) {
         RebuildGeometry();
     }
 }
@@ -112,7 +113,6 @@ void Gauge::RebuildGeometry() {
     const float innerRadius = std::max(0.0f, outerRadius - thickness);
     AppendArc(trackVertices, center, innerRadius, outerRadius, startDegrees, sweepDegrees,
               ApplyOpacity(trackColor, GetEffectiveOpacity()));
-    AppendArc(fillVertices, center, innerRadius, outerRadius, startDegrees,
-              sweepDegrees * NormalizedVisualValue(),
+    AppendArc(fillVertices, center, innerRadius, outerRadius, startDegrees, sweepDegrees * NormalizedVisualValue(),
               ApplyOpacity(fillColor, GetEffectiveOpacity()));
 }

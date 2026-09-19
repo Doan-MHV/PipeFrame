@@ -1,10 +1,10 @@
 #ifndef PIPEFRAME_RENDER_TYPES_H
 #define PIPEFRAME_RENDER_TYPES_H
 
+#include <PipeFrame/Foundation/MathTypes.h>
+
 #include <cstdint>
 #include <vector>
-
-#include <PipeFrame/Foundation/MathTypes.h>
 
 namespace pipeframe {
 
@@ -33,9 +33,9 @@ struct RenderFrameInfo {
 class RenderCommandSink {
 public:
     virtual ~RenderCommandSink() = default;
-    virtual void Submit(const GeometryCommand &command) = 0;
+    virtual void Submit(const GeometryCommand& command) = 0;
 };
 
-} // namespace pipeframe
+}  // namespace pipeframe
 
 #endif

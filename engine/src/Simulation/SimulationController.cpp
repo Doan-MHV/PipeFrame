@@ -5,9 +5,7 @@ void SimulationController::Play() {
     singleStepRequested = false;
 }
 
-void SimulationController::Pause() {
-    state = SimulationState::Paused;
-}
+void SimulationController::Pause() { state = SimulationState::Paused; }
 
 void SimulationController::TogglePlayPause() {
     if (IsPlaying()) {
@@ -34,17 +32,11 @@ bool SimulationController::ConsumeTick() {
     return true;
 }
 
-bool SimulationController::IsPlaying() const {
-    return state == SimulationState::Playing;
-}
+bool SimulationController::IsPlaying() const { return state == SimulationState::Playing; }
 
-bool SimulationController::IsPaused() const {
-    return state == SimulationState::Paused;
-}
+bool SimulationController::IsPaused() const { return state == SimulationState::Paused; }
 
-void SimulationController::SetSpeed(const SimulationSpeed newSpeed) {
-    speed = newSpeed;
-}
+void SimulationController::SetSpeed(const SimulationSpeed newSpeed) { speed = newSpeed; }
 
 void SimulationController::CycleSpeed() {
     switch (speed) {
@@ -63,9 +55,7 @@ void SimulationController::CycleSpeed() {
     }
 }
 
-SimulationSpeed SimulationController::GetSpeed() const {
-    return speed;
-}
+SimulationSpeed SimulationController::GetSpeed() const { return speed; }
 
 float SimulationController::GetTimeScale() const {
     switch (speed) {
@@ -97,25 +87,14 @@ const char *SimulationController::GetSpeedName() const {
     return "1X";
 }
 
-void SimulationController::SetFullSpeed(
-    const bool enabled
-) {
+void SimulationController::SetFullSpeed(const bool enabled) {
     speed = enabled ? SimulationSpeed::Maximum : SimulationSpeed::Realtime;
 }
 
-void SimulationController::ToggleFullSpeed() {
-    SetFullSpeed(!IsFullSpeed());
-}
+void SimulationController::ToggleFullSpeed() { SetFullSpeed(!IsFullSpeed()); }
 
-bool SimulationController::IsFullSpeed() const {
-    return speed == SimulationSpeed::Maximum;
-}
+bool SimulationController::IsFullSpeed() const { return speed == SimulationSpeed::Maximum; }
 
-std::uint64_t
-SimulationController::GetTickCount() const {
-    return tickCount;
-}
+std::uint64_t SimulationController::GetTickCount() const { return tickCount; }
 
-void SimulationController::ResetTickCount() {
-    tickCount = 0;
-}
+void SimulationController::ResetTickCount() { tickCount = 0; }

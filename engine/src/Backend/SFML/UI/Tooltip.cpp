@@ -18,14 +18,10 @@ void Tooltip::SetShowDelay(const float seconds) { showDelay = std::max(0.0f, sec
 void Tooltip::ShowAt(const sf::Vector2f anchor, const sf::FloatRect &viewport) {
     const sf::Vector2f tooltipSize = GetSize();
     sf::Vector2f position{anchor.x + 12.0f, anchor.y - tooltipSize.y - 10.0f};
-    const float maximumX = std::max(viewport.position.x,
-                                    viewport.position.x + viewport.size.x - tooltipSize.x);
-    const float maximumY = std::max(viewport.position.y,
-                                    viewport.position.y + viewport.size.y - tooltipSize.y);
-    position.x = std::clamp(position.x, viewport.position.x,
-                            maximumX);
-    position.y = std::clamp(position.y, viewport.position.y,
-                            maximumY);
+    const float maximumX = std::max(viewport.position.x, viewport.position.x + viewport.size.x - tooltipSize.x);
+    const float maximumY = std::max(viewport.position.y, viewport.position.y + viewport.size.y - tooltipSize.y);
+    position.x = std::clamp(position.x, viewport.position.x, maximumX);
+    position.y = std::clamp(position.y, viewport.position.y, maximumY);
     SetPosition(position);
     SetVisible(true);
     SetOpacity(0.0f);

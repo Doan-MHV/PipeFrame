@@ -26,7 +26,6 @@ private:
     std::vector<std::size_t> incomingCounts;
 };
 
-} // namespace pipeframe::learning
+}  // namespace pipeframe::learning
 
 #endif
-

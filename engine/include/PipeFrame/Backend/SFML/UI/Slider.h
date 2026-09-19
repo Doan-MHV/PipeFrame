@@ -1,16 +1,16 @@
 #ifndef PIPEFRAME_UI_SLIDER_H
 #define PIPEFRAME_UI_SLIDER_H
 
-#include <functional>
-
 #include <PipeFrame/Backend/SFML/UI/Panel.h>
 #include <PipeFrame/Backend/SFML/UI/UITheme.h>
 
+#include <functional>
+
 class Slider final : public Panel {
-  public:
+public:
     using ValueChangedCallback = std::function<void(float)>;
 
-    explicit Slider(const UITheme &theme = UITheme::Dark());
+    explicit Slider(const UITheme& theme = UITheme::Dark());
 
     void SetRange(float minimum, float maximum);
     float GetMinimum() const;
@@ -24,23 +24,23 @@ class Slider final : public Panel {
     float GetNormalizedValue() const;
     void SetOnValueChanged(ValueChangedCallback callback);
 
-  protected:
-    bool OnEvent(const sf::Event &event) override;
+protected:
+    bool OnEvent(const sf::Event& event) override;
     void OnGeometryChanged() override;
     void OnEnabledChanged() override;
     void OnKeyboardFocusGained() override;
     void OnKeyboardFocusLost() override;
 
-  private:
+private:
     void SetValueFromInput(float value);
     void SetValueFromPointer(float screenX);
     float SanitizeValue(float value) const;
     void RefreshGeometry();
     void RefreshVisual();
 
-    Panel &track;
-    Panel &filledTrack;
-    Panel &thumb;
+    Panel& track;
+    Panel& filledTrack;
+    Panel& thumb;
     UITheme theme;
     ValueChangedCallback onValueChanged;
     float minimum = 0.0f;

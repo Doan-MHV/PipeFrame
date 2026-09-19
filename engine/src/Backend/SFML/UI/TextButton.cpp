@@ -25,9 +25,18 @@ void TextButton::OnGeometryChanged() {
     }
 }
 
-void TextButton::SetTextWrap(bool wrap) { wrappedText=wrap; label->SetWrap(wrap); label->SetHeightPolicy(SizePolicy::FitContent); }
-void TextButton::SetTextLeading(bool leading) { label->SetAlignment(leading?LabelAlignment::Left:LabelAlignment::Center); }
+void TextButton::SetTextWrap(bool wrap) {
+    wrappedText = wrap;
+    label->SetWrap(wrap);
+    label->SetHeightPolicy(SizePolicy::FitContent);
+}
+void TextButton::SetTextLeading(bool leading) {
+    label->SetAlignment(leading ? LabelAlignment::Left : LabelAlignment::Center);
+}
 sf::Vector2f TextButton::OnMeasure(const BoxConstraints &constraints) {
-    if (!wrappedText) return Button::OnMeasure(constraints);
-    auto measured=label->Measure(constraints); measured.y=std::max(34.0f,measured.y+8); return measured;
+    if (!wrappedText)
+        return Button::OnMeasure(constraints);
+    auto measured = label->Measure(constraints);
+    measured.y = std::max(34.0f, measured.y + 8);
+    return measured;
 }

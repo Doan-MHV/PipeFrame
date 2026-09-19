@@ -1,17 +1,16 @@
 #ifndef PIPEFRAME_BUTTON_H
 #define PIPEFRAME_BUTTON_H
 
-#include <functional>
+#include <PipeFrame/Backend/SFML/UI/Motion.h>
+#include <PipeFrame/Backend/SFML/UI/Panel.h>
 
 #include <SFML/Graphics/Color.hpp>
-
-#include <PipeFrame/Backend/SFML/UI/Panel.h>
-#include <PipeFrame/Backend/SFML/UI/Motion.h>
+#include <functional>
 
 enum class ButtonState { Normal, Hovered, Pressed, Focused, Selected, Disabled };
 
 class Button : public Panel {
-  public:
+public:
     using ClickCallback = std::function<void()>;
 
     Button();
@@ -34,9 +33,9 @@ class Button : public Panel {
 
     ButtonState GetState() const;
 
-  protected:
+protected:
     void OnGeometryChanged() override;
-    bool OnEvent(const sf::Event &event) override;
+    bool OnEvent(const sf::Event& event) override;
 
     void OnPointerEntered() override;
     void OnPointerExited() override;
@@ -45,7 +44,7 @@ class Button : public Panel {
     void OnKeyboardFocusGained() override;
     void OnKeyboardFocusLost() override;
 
-  private:
+private:
     void RefreshVisual();
 
     ClickCallback onClick;

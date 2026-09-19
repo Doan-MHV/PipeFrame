@@ -1,35 +1,34 @@
 #ifndef PIPEFRAME_NUMERIC_FIELD_H
 #define PIPEFRAME_NUMERIC_FIELD_H
 
+#include <PipeFrame/Backend/SFML/UI/Panel.h>
+
+#include <SFML/Graphics/Text.hpp>
 #include <functional>
 #include <string>
 
-#include <SFML/Graphics/Text.hpp>
-
-#include <PipeFrame/Backend/SFML/UI/Panel.h>
-
 class NumericField : public Panel {
-  public:
+public:
     using ValueCommittedCallback = std::function<void(float)>;
 
-    explicit NumericField(const sf::Font &font);
+    explicit NumericField(const sf::Font& font);
 
     void SetValue(float newValue);
     float GetValue() const;
 
     void SetOnValueCommitted(ValueCommittedCallback callback);
 
-  protected:
-    void OnRender(sf::RenderTarget &target) const override;
+protected:
+    void OnRender(sf::RenderTarget& target) const override;
     void OnGeometryChanged() override;
-    bool OnEvent(const sf::Event &event) override;
+    bool OnEvent(const sf::Event& event) override;
 
     void OnKeyboardFocusGained() override;
     void OnKeyboardFocusLost() override;
 
     void OnEnabledChanged() override;
 
-  private:
+private:
     void Commit();
     void CancelEditing();
     void RefreshText();

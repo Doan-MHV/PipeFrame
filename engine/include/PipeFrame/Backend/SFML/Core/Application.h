@@ -1,16 +1,14 @@
 #ifndef PIPEFRAME_APPLICATION_H
 #define PIPEFRAME_APPLICATION_H
 
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <memory>
 #include <string>
-
-#include <SFML/Graphics/RenderWindow.hpp>
 
 #include "PipeFrame/Backend/SFML/Core/Scene.h"
 #include "PipeFrame/Render/RenderContext.h"
 
-class Application
-{
+class Application {
 public:
     Application(int width, int height, const std::string& title);
 

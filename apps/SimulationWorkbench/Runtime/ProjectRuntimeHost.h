@@ -127,6 +127,8 @@ class ProjectRuntimeHost final {
     void Render(
         RenderContext &context);
 
+    void RenderDebug(RenderContext &context, WorldDebugOptions options);
+
     void RenderScreen(
         RenderContext &context);
 

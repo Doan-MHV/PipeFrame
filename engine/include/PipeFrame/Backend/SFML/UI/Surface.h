@@ -12,21 +12,19 @@ enum class SurfaceVariant {
 };
 
 class Surface : public Panel {
-  public:
-    explicit Surface(SurfaceVariant variant = SurfaceVariant::Base,
-                     const UITheme &theme = UITheme::Dark());
+public:
+    explicit Surface(SurfaceVariant variant = SurfaceVariant::Base, const UITheme& theme = UITheme::Dark());
 
-    void SetVariant(SurfaceVariant variant, const UITheme &theme = UITheme::Dark());
+    void SetVariant(SurfaceVariant variant, const UITheme& theme = UITheme::Dark());
     SurfaceVariant GetVariant() const;
 
-  private:
+private:
     SurfaceVariant variant = SurfaceVariant::Base;
 };
 
 class Card final : public Surface {
-  public:
-    explicit Card(const UITheme &theme = UITheme::Dark())
-        : Surface(SurfaceVariant::Elevated, theme) {}
+public:
+    explicit Card(const UITheme& theme = UITheme::Dark()) : Surface(SurfaceVariant::Elevated, theme) {}
 };
 
 #endif

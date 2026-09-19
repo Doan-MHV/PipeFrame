@@ -30,8 +30,8 @@ float EffectiveFlex(const StackPanel &panel, const Widget &child, const StackOri
         return explicitFlex;
     }
 
-    const SizePolicy mainPolicy = orientation == StackOrientation::Vertical ? child.GetHeightPolicy()
-                                                                            : child.GetWidthPolicy();
+    const SizePolicy mainPolicy =
+        orientation == StackOrientation::Vertical ? child.GetHeightPolicy() : child.GetWidthPolicy();
     return mainPolicy == SizePolicy::Stretch ? 1.0f : 0.0f;
 }
 
@@ -135,7 +135,8 @@ void StackPanel::RefreshLayout() {
     layoutInProgress = true;
 
     auto constraints = BoxConstraints::Unbounded();
-    if (GetWidthPolicy() != SizePolicy::FitContent && GetSize().x > 0) constraints.maximum.x = GetSize().x;
+    if (GetWidthPolicy() != SizePolicy::FitContent && GetSize().x > 0)
+        constraints.maximum.x = GetSize().x;
     const sf::Vector2f measured = Measure(constraints);
     sf::Vector2f fittedSize = GetSize();
     if (GetWidthPolicy() == SizePolicy::FitContent) {
@@ -182,24 +183,28 @@ sf::Vector2f StackPanel::OnMeasure(const BoxConstraints &constraints) {
     const BoxConstraints childConstraints = ChildMeasureConstraints(
         orientation, orientation == StackOrientation::Vertical ? maximumContentWidth : maximumContentHeight);
 
-    float horizontalFixed=0.0f, horizontalFlex=0.0f;
-    if (orientation==StackOrientation::Horizontal && std::isfinite(maximumContentWidth)) {
+    float horizontalFixed = 0.0f, horizontalFlex = 0.0f;
+    if (orientation == StackOrientation::Horizontal && std::isfinite(maximumContentWidth)) {
         for (Widget *child : children) {
-            const float flex=EffectiveFlex(*this,*child,orientation);
-            if (flex>0) horizontalFlex+=flex;
-            else horizontalFixed+=child->Measure(childConstraints).x;
+            const float flex = EffectiveFlex(*this, *child, orientation);
+            if (flex > 0)
+                horizontalFlex += flex;
+            else
+                horizontalFixed += child->Measure(childConstraints).x;
         }
     }
-    const float horizontalRemaining=std::max(0.0f,maximumContentWidth-horizontalFixed-
-        spacing*static_cast<float>(children.empty() ? 0 : children.size()-1));
+    const float horizontalRemaining =
+        std::max(0.0f, maximumContentWidth - horizontalFixed -
+                           spacing * static_cast<float>(children.empty() ? 0 : children.size() - 1));
     float mainSize = 0.0f;
     float crossSize = 0.0f;
 
     for (Widget *child : children) {
-        auto measuredConstraints=childConstraints;
-        if (orientation==StackOrientation::Horizontal && horizontalFlex>0) {
-            const float flex=EffectiveFlex(*this,*child,orientation);
-            if (flex>0) measuredConstraints.maximum.x=horizontalRemaining*flex/horizontalFlex;
+        auto measuredConstraints = childConstraints;
+        if (orientation == StackOrientation::Horizontal && horizontalFlex > 0) {
+            const float flex = EffectiveFlex(*this, *child, orientation);
+            if (flex > 0)
+                measuredConstraints.maximum.x = horizontalRemaining * flex / horizontalFlex;
         }
         const sf::Vector2f childSize = child->Measure(measuredConstraints);
         if (orientation == StackOrientation::Vertical) {
@@ -304,8 +309,8 @@ void StackPanel::LayoutVertical() {
         float childWidth = childDesiredSize.x;
         float childX = padding.left;
 
-        const bool stretchCrossAxis = crossAxisAlignment == CrossAxisAlignment::Stretch ||
-                                      child->GetWidthPolicy() == SizePolicy::Stretch;
+        const bool stretchCrossAxis =
+            crossAxisAlignment == CrossAxisAlignment::Stretch || child->GetWidthPolicy() == SizePolicy::Stretch;
 
         switch (stretchCrossAxis ? CrossAxisAlignment::Stretch : crossAxisAlignment) {
         case CrossAxisAlignment::Stretch:
@@ -382,8 +387,8 @@ void StackPanel::LayoutHorizontal() {
         float childHeight = childDesiredSize.y;
         float childY = padding.top;
 
-        const bool stretchCrossAxis = crossAxisAlignment == CrossAxisAlignment::Stretch ||
-                                      child->GetHeightPolicy() == SizePolicy::Stretch;
+        const bool stretchCrossAxis =
+            crossAxisAlignment == CrossAxisAlignment::Stretch || child->GetHeightPolicy() == SizePolicy::Stretch;
 
         switch (stretchCrossAxis ? CrossAxisAlignment::Stretch : crossAxisAlignment) {
         case CrossAxisAlignment::Stretch:
@@ -407,4 +412,7 @@ void StackPanel::LayoutHorizontal() {
     }
 }
 
-void StackPanel::OnChildRemoved(Widget &child) { childFlex.erase(&child); RefreshLayout(); }
+void StackPanel::OnChildRemoved(Widget &child) {
+    childFlex.erase(&child);
+    RefreshLayout();
+}

@@ -69,9 +69,7 @@ void Button::OnGeometryChanged() {
     }
 }
 
-void Button::SetTransitionDuration(const float seconds) {
-    transitionDuration = std::max(0.0f, seconds);
-}
+void Button::SetTransitionDuration(const float seconds) { transitionDuration = std::max(0.0f, seconds); }
 
 void Button::SetReducedMotion(const bool newReducedMotion) {
     reducedMotion = newReducedMotion;
@@ -116,9 +114,7 @@ void Button::OnKeyboardFocusGained() { RefreshVisual(); }
 void Button::OnKeyboardFocusLost() {
     keyboardPressed = false;
     pressed = false;
-    AnimateVisualOffsetTo(pointerInside ? sf::Vector2f{0.0f, -1.0f}
-                                        : sf::Vector2f{0.0f, 0.0f},
-                          transitionDuration);
+    AnimateVisualOffsetTo(pointerInside ? sf::Vector2f{0.0f, -1.0f} : sf::Vector2f{0.0f, 0.0f}, transitionDuration);
     RefreshVisual();
 }
 
@@ -141,9 +137,7 @@ bool Button::OnEvent(const sf::Event &event) {
         const bool activate = keyboardPressed;
         keyboardPressed = false;
         pressed = false;
-        AnimateVisualOffsetTo(pointerInside ? sf::Vector2f{0.0f, -1.0f}
-                                            : sf::Vector2f{0.0f, 0.0f},
-                              transitionDuration);
+        AnimateVisualOffsetTo(pointerInside ? sf::Vector2f{0.0f, -1.0f} : sf::Vector2f{0.0f, 0.0f}, transitionDuration);
         RefreshVisual();
         if (activate && onClick) {
             onClick();
@@ -192,9 +186,7 @@ bool Button::OnEvent(const sf::Event &event) {
 
         pointerInside = clicked;
         pressed = false;
-        AnimateVisualOffsetTo(clicked ? sf::Vector2f{0.0f, -1.0f}
-                                      : sf::Vector2f{0.0f, 0.0f},
-                              transitionDuration);
+        AnimateVisualOffsetTo(clicked ? sf::Vector2f{0.0f, -1.0f} : sf::Vector2f{0.0f, 0.0f}, transitionDuration);
 
         RefreshVisual();
 

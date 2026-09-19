@@ -1,11 +1,11 @@
 #ifndef PIPEFRAME_LEARNING_GENOME_MUTATOR_H
 #define PIPEFRAME_LEARNING_GENOME_MUTATOR_H
 
-#include <cstddef>
-#include <cstdint>
-
 #include <PipeFrame/Core/DeterministicRandom.h>
 #include <PipeFrame/Learning/Genome.h>
+
+#include <cstddef>
+#include <cstdint>
 
 namespace pipeframe::learning {
 
@@ -20,16 +20,16 @@ struct MutationSettings {
 };
 
 class GenomeMutator final {
-  public:
+public:
     GenomeMutator(MutationSettings settings, std::uint64_t seed);
 
-    void Mutate(Genome &genome);
-    bool AddNode(Genome &genome);
-    bool AddConnection(Genome &genome);
-    bool MutateBias(Genome &genome);
-    bool MutateWeight(Genome &genome);
+    void Mutate(Genome& genome);
+    bool AddNode(Genome& genome);
+    bool AddConnection(Genome& genome);
+    bool MutateBias(Genome& genome);
+    bool MutateWeight(Genome& genome);
 
-  private:
+private:
     [[nodiscard]] bool Chance(float probability);
     [[nodiscard]] float FullRange(float magnitude);
     [[nodiscard]] std::size_t Index(std::size_t count);
@@ -38,6 +38,6 @@ class GenomeMutator final {
     DeterministicRandom random;
 };
 
-} // namespace pipeframe::learning
+}  // namespace pipeframe::learning
 
 #endif

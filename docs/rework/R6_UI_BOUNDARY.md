@@ -39,7 +39,7 @@ dashboard.SetDrawerOpen(0, true);
 // Destroy the dashboard before destroying its resources or callback owner.
 ```
 
-Actual Ant consumer: examples/AntSimulation/Source/Runtime/AntUIHost.cpp.
+Actual Ant consumer: examples/AntSimulation/Source/Editor/AntUIHost.cpp.
 Ant's declarative content remains in Source/Editor/AntDashboard.cpp.
 
 ## Verification and remaining scope

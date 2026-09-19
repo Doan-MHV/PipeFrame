@@ -24,6 +24,10 @@ class ViewportToolbar : public pipeframe::ui::ViewPanel {
     void SetOnReload(ActionCallback callback);
     void SetOnBuild(ActionCallback callback);
     void SetBuildRunning(bool running);
+    void SetOnPhysicsDebug(ActionCallback callback);
+    void SetOnMeshDebug(ActionCallback callback);
+    void SetPhysicsDebugVisible(bool visible);
+    void SetMeshDebugVisible(bool visible);
     void SetOnGrid(ActionCallback callback);
     void SetOnGridStep(ActionCallback callback);
     void SetOnGridOrigin(ActionCallback callback);

@@ -46,13 +46,9 @@ void PopupLayer::SetContentBounds(const sf::FloatRect &bounds) {
     ArrangeContent();
 }
 
-sf::FloatRect PopupLayer::GetContentBounds() const {
-    return {content.GetPosition(), content.GetSize()};
-}
+sf::FloatRect PopupLayer::GetContentBounds() const { return {content.GetPosition(), content.GetSize()}; }
 
-void PopupLayer::SetDismissOnBackgroundClick(const bool dismiss) {
-    dismissOnBackgroundClick = dismiss;
-}
+void PopupLayer::SetDismissOnBackgroundClick(const bool dismiss) { dismissOnBackgroundClick = dismiss; }
 
 bool PopupLayer::DismissesOnBackgroundClick() const { return dismissOnBackgroundClick; }
 
@@ -97,10 +93,8 @@ bool PopupLayer::OnEvent(const sf::Event &event) {
         return true;
     }
     if (const auto *released = event.getIf<sf::Event::MouseButtonReleased>()) {
-        const bool dismiss = released->button == sf::Mouse::Button::Left &&
-                             backgroundPointerPressed &&
-                             !content.Contains(PointerPosition(event)) &&
-                             dismissOnBackgroundClick;
+        const bool dismiss = released->button == sf::Mouse::Button::Left && backgroundPointerPressed &&
+                             !content.Contains(PointerPosition(event)) && dismissOnBackgroundClick;
         backgroundPointerPressed = false;
         if (dismiss) {
             Dismiss();

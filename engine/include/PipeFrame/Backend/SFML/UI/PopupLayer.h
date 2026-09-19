@@ -1,21 +1,21 @@
 #ifndef PIPEFRAME_UI_POPUP_LAYER_H
 #define PIPEFRAME_UI_POPUP_LAYER_H
 
-#include <functional>
-
 #include <PipeFrame/Backend/SFML/UI/Surface.h>
 #include <PipeFrame/Backend/SFML/UI/UITheme.h>
 
+#include <functional>
+
 class PopupLayer final : public Panel {
-  public:
+public:
     using DismissCallback = std::function<void()>;
 
-    explicit PopupLayer(const UITheme &theme = UITheme::Dark());
+    explicit PopupLayer(const UITheme& theme = UITheme::Dark());
 
-    Surface &GetContent();
-    const Surface &GetContent() const;
+    Surface& GetContent();
+    const Surface& GetContent() const;
 
-    void SetContentBounds(const sf::FloatRect &bounds);
+    void SetContentBounds(const sf::FloatRect& bounds);
     sf::FloatRect GetContentBounds() const;
 
     void SetDismissOnBackgroundClick(bool dismiss);
@@ -26,15 +26,15 @@ class PopupLayer final : public Panel {
     void Dismiss();
     bool IsOpen() const;
 
-  protected:
-    bool OnEvent(const sf::Event &event) override;
+protected:
+    bool OnEvent(const sf::Event& event) override;
     void OnGeometryChanged() override;
     void OnUpdate(float realDeltaSeconds) override;
 
-  private:
+private:
     void ArrangeContent();
 
-    Surface &content;
+    Surface& content;
     UITheme theme;
     DismissCallback onDismiss;
     sf::FloatRect requestedContentBounds{{0.0f, 0.0f}, {320.0f, 180.0f}};

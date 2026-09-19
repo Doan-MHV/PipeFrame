@@ -137,4 +137,7 @@ void OverlayPanel::ArrangeChildren() {
     }
 }
 
-void OverlayPanel::OnChildRemoved(Widget &child) { childAlignments.erase(&child); RefreshLayout(); }
+void OverlayPanel::OnChildRemoved(Widget &child) {
+    childAlignments.erase(&child);
+    RefreshLayout();
+}

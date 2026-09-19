@@ -1,8 +1,6 @@
 #include <PipeFrame/Backend/SFML/UI/Surface.h>
 
-Surface::Surface(const SurfaceVariant newVariant, const UITheme &theme) {
-    SetVariant(newVariant, theme);
-}
+Surface::Surface(const SurfaceVariant newVariant, const UITheme &theme) { SetVariant(newVariant, theme); }
 
 void Surface::SetVariant(const SurfaceVariant newVariant, const UITheme &theme) {
     variant = newVariant;

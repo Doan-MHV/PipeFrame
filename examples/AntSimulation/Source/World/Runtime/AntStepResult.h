@@ -18,4 +18,4 @@ struct AntSimulationStepResult {
     float cleanupTimeMs{0.0f};
 };
 
-}
+} // namespace ant_simulation

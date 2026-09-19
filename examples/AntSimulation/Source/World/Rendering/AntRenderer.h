@@ -10,9 +10,9 @@
 
 #include <PipeFrame/Resources/GraphicsResourceService.h>
 
-#include "World/Runtime/AntView.h"
 #include "Configuration/AntConfiguration.h"
 #include "World/Rendering/AntGeometry.h"
+#include "World/Runtime/AntView.h"
 
 namespace ant_simulation {
 
@@ -27,41 +27,24 @@ struct AntRendererStatistics {
     std::size_t visibleCount{0};
     std::size_t vertexCount{0};
 
-    AntRenderingMode mode{
-        AntRenderingMode::Points
-    };
+    AntRenderingMode mode{AntRenderingMode::Points};
 };
 
 class AntRenderer final : public pipeframe::RenderLayer {
-public:
-    static constexpr float PointZoomThreshold{
-        2.0f
-    };
+  public:
+    static constexpr float PointZoomThreshold{2.0f};
 
-    explicit AntRenderer(
-        const AntConfiguration &configuration
-    );
+    explicit AntRenderer(const AntConfiguration &configuration);
 
-    bool LoadAssets(
-        const std::filesystem::path &assetRoot,
-        std::string &errorMessage
-    );
+    bool LoadAssets(const std::filesystem::path &assetRoot, std::string &errorMessage);
 
     void SetAutomaticMode(bool enabled);
 
     void SetMode(AntRenderingMode mode);
 
-    void UpdateGeometry(
-        std::span<const AntView> ants,
-        const pipeframe::Rectanglef &viewport,
-        float zoom
-    );
+    void UpdateGeometry(std::span<const AntView> ants, const pipeframe::Rectanglef &viewport, float zoom);
 
-    void Draw(
-        pipeframe::Canvas target,
-        pipeframe::RenderState states =
-            pipeframe::RenderState::Default
-    ) const override;
+    void Draw(pipeframe::Canvas target, pipeframe::RenderState states = pipeframe::RenderState::Default) const override;
 
     [[nodiscard]]
     bool AreAssetsLoaded() const;
@@ -70,46 +53,30 @@ public:
     AntRenderingMode GetMode() const;
 
     [[nodiscard]]
-    const AntRendererStatistics &
-    GetStatistics() const;
+    const AntRendererStatistics &GetStatistics() const;
 
     [[nodiscard]]
-    const AntGeometry &
-    GetGeometry() const;
+    const AntGeometry &GetGeometry() const;
 
     [[nodiscard]]
-    std::span<const pipeframe::Vertex2D>
-    GetPointVertices() const;
+    std::span<const pipeframe::Vertex2D> GetPointVertices() const;
 
-private:
+  private:
     [[nodiscard]]
-    AntRenderingMode SelectMode(
-        float zoom
-    ) const;
+    AntRenderingMode SelectMode(float zoom) const;
 
     [[nodiscard]]
-    static bool IsVisible(
-        pipeframe::Vector2f position,
-        const pipeframe::Rectanglef &viewport,
-        float margin
-    );
+    static bool IsVisible(pipeframe::Vector2f position, const pipeframe::Rectanglef &viewport, float margin);
 
-
-    static void DrawVertices(
-        pipeframe::Canvas target,
-        std::span<const pipeframe::Vertex2D> vertices,
-        pipeframe::PrimitiveTopology primitiveType,
-        const pipeframe::RenderState &states
-    );
+    static void DrawVertices(pipeframe::Canvas target, std::span<const pipeframe::Vertex2D> vertices,
+                             pipeframe::PrimitiveTopology primitiveType, const pipeframe::RenderState &states);
 
     const AntConfiguration &configuration;
 
     bool automaticMode{true};
     bool assetsLoaded{false};
 
-    AntRenderingMode mode{
-        AntRenderingMode::Points
-    };
+    AntRenderingMode mode{AntRenderingMode::Points};
 
     AntGeometry geometry;
     std::vector<pipeframe::Vertex2D> pointVertices;

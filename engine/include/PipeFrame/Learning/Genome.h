@@ -1,14 +1,14 @@
 #ifndef PIPEFRAME_LEARNING_GENOME_H
 #define PIPEFRAME_LEARNING_GENOME_H
 
+#include <PipeFrame/Learning/Activation.h>
+#include <PipeFrame/Learning/DirectedAcyclicGraph.h>
+
 #include <cstddef>
 #include <cstdint>
 #include <filesystem>
 #include <string>
 #include <vector>
-
-#include <PipeFrame/Learning/Activation.h>
-#include <PipeFrame/Learning/DirectedAcyclicGraph.h>
 
 namespace pipeframe::learning {
 
@@ -47,15 +47,15 @@ public:
     [[nodiscard]] std::size_t GetNodeCount() const;
     [[nodiscard]] bool IsInput(std::size_t node) const;
     [[nodiscard]] bool IsOutput(std::size_t node) const;
-    [[nodiscard]] const std::vector<GenomeNode> &GetNodes() const;
-    [[nodiscard]] std::vector<GenomeNode> &GetNodes();
-    [[nodiscard]] const std::vector<GenomeConnection> &GetConnections() const;
-    [[nodiscard]] std::vector<GenomeConnection> &GetConnections();
-    [[nodiscard]] const DirectedAcyclicGraph &GetGraph() const;
+    [[nodiscard]] const std::vector<GenomeNode>& GetNodes() const;
+    [[nodiscard]] std::vector<GenomeNode>& GetNodes();
+    [[nodiscard]] const std::vector<GenomeConnection>& GetConnections() const;
+    [[nodiscard]] std::vector<GenomeConnection>& GetConnections();
+    [[nodiscard]] const DirectedAcyclicGraph& GetGraph() const;
     [[nodiscard]] std::string GetSignature() const;
 
-    bool Save(const std::filesystem::path &path, std::string &errorMessage) const;
-    bool Load(const std::filesystem::path &path, std::string &errorMessage);
+    bool Save(const std::filesystem::path& path, std::string& errorMessage) const;
+    bool Load(const std::filesystem::path& path, std::string& errorMessage);
 
 private:
     void AddNode(GenomeNode node);
@@ -67,6 +67,6 @@ private:
     DirectedAcyclicGraph graph;
 };
 
-} // namespace pipeframe::learning
+}  // namespace pipeframe::learning
 
 #endif

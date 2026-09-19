@@ -6,22 +6,17 @@
 
 #include <PipeFrame/Backend/SFML/UI/Label.h>
 
-LabeledTextField::LabeledTextField(
-    const sf::Font &font,
-    const std::string &captionText
-) {
+LabeledTextField::LabeledTextField(const sf::Font &font, const std::string &captionText) {
     SetFillColor(sf::Color::Transparent);
     SetOutlineColor(sf::Color::Transparent);
     SetOutlineThickness(0.0f);
     SetHitTestVisible(false);
 
-    SetOrientation(
-        StackOrientation::Horizontal);
+    SetOrientation(StackOrientation::Horizontal);
 
     SetSpacing(8.0f);
 
-    captionLabel =
-        &CreateChild<Label>(font);
+    captionLabel = &CreateChild<Label>(font);
 
     captionLabel->SetSize({
         82.0f,
@@ -30,8 +25,7 @@ LabeledTextField::LabeledTextField(
 
     captionLabel->SetText(captionText);
     captionLabel->SetCharacterSize(11);
-    captionLabel->SetAlignment(
-        LabelAlignment::Left);
+    captionLabel->SetAlignment(LabelAlignment::Left);
 
     captionLabel->SetHorizontalPadding(4.0f);
 
@@ -41,8 +35,7 @@ LabeledTextField::LabeledTextField(
         180,
     });
 
-    field =
-        &CreateChild<TextField>(font);
+    field = &CreateChild<TextField>(font);
 
     field->SetSize({
         154.0f,
@@ -50,33 +43,17 @@ LabeledTextField::LabeledTextField(
     });
 }
 
-void LabeledTextField::SetCaption(
-    const std::string &caption
-) {
-    captionLabel->SetText(caption);
+void LabeledTextField::SetCaption(const std::string &caption) { captionLabel->SetText(caption); }
+
+void LabeledTextField::SetValue(const std::string &value) { field->SetValue(value); }
+
+const std::string &LabeledTextField::GetValue() const { return field->GetValue(); }
+
+void LabeledTextField::SetOnValueCommitted(TextField::ValueCommittedCallback callback) {
+    field->SetOnValueCommitted(std::move(callback));
 }
 
-void LabeledTextField::SetValue(
-    const std::string &value
-) {
-    field->SetValue(value);
-}
-
-const std::string &
-LabeledTextField::GetValue() const {
-    return field->GetValue();
-}
-
-void LabeledTextField::SetOnValueCommitted(
-    TextField::ValueCommittedCallback callback
-) {
-    field->SetOnValueCommitted(
-        std::move(callback));
-}
-
-bool LabeledTextField::IsEditing() const {
-    return field->HasKeyboardFocus();
-}
+bool LabeledTextField::IsEditing() const { return field->HasKeyboardFocus(); }
 
 void LabeledTextField::OnEnabledChanged() {
     if (field != nullptr) {
@@ -87,11 +64,11 @@ void LabeledTextField::OnEnabledChanged() {
 void LabeledTextField::SetCaptionAbove() {
     SetOrientation(StackOrientation::Vertical);
     SetSpacing(4);
-    SetSizePolicy(SizePolicy::Stretch,SizePolicy::FitContent);
-    captionLabel->SetSize({0,22});
-    captionLabel->SetSizePolicy(SizePolicy::Stretch,SizePolicy::FitContent);
+    SetSizePolicy(SizePolicy::Stretch, SizePolicy::FitContent);
+    captionLabel->SetSize({0, 22});
+    captionLabel->SetSizePolicy(SizePolicy::Stretch, SizePolicy::FitContent);
     captionLabel->SetWrap(true);
-    field->SetSize({0,34});
-    field->SetSizePolicy(SizePolicy::Stretch,SizePolicy::Fixed);
+    field->SetSize({0, 34});
+    field->SetSizePolicy(SizePolicy::Stretch, SizePolicy::Fixed);
     RefreshLayout();
 }

@@ -3,8 +3,7 @@
 #include <cmath>
 #include <stdexcept>
 
-CollapsiblePanel::CollapsiblePanel(const sf::Font &font, const UITheme &theme)
-    : duration(theme.motionNormal) {
+CollapsiblePanel::CollapsiblePanel(const sf::Font &font, const UITheme &theme) : duration(theme.motionNormal) {
     header = &CreateChild<TextButton>(font);
     viewport = &CreateChild<ScrollPanel>();
     content = &viewport->CreateChild<Column>();
@@ -32,7 +31,8 @@ void CollapsiblePanel::SetCaption(std::string value) {
     header->SetText((expanded ? "- " : "+ ") + caption);
 }
 void CollapsiblePanel::SetExpandedHeight(float value) {
-    if (!std::isfinite(value) || value < 0) throw std::invalid_argument("Expanded height must be finite and nonnegative");
+    if (!std::isfinite(value) || value < 0)
+        throw std::invalid_argument("Expanded height must be finite and nonnegative");
     expandedHeight = value;
     if (expanded) {
         height.SetTarget(value, IsReducedMotion());
@@ -49,14 +49,19 @@ void CollapsiblePanel::SetExpanded(bool value, bool animate) {
 bool CollapsiblePanel::IsExpanded() const { return expanded; }
 void CollapsiblePanel::SetReducedMotion(bool reduced) {
     Column::SetReducedMotion(reduced);
-    if (reduced) { height.SetTarget(expanded ? expandedHeight : 0, true); ApplyHeight(); }
+    if (reduced) {
+        height.SetTarget(expanded ? expandedHeight : 0, true);
+        ApplyHeight();
+    }
 }
 void CollapsiblePanel::OnUpdate(float delta) {
-    if (height.Update(delta, IsReducedMotion() ? 0 : duration)) ApplyHeight();
+    if (height.Update(delta, IsReducedMotion() ? 0 : duration))
+        ApplyHeight();
 }
 void CollapsiblePanel::OnGeometryChanged() {
     Column::OnGeometryChanged();
-    if (!content) return;
+    if (!content)
+        return;
     const auto desired = content->Measure({{0, 0}, {GetSize().x, std::numeric_limits<float>::infinity()}});
     content->SetSize({GetSize().x, desired.y});
 }

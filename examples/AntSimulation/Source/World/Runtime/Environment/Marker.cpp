@@ -2,28 +2,14 @@
 
 namespace ant_simulation {
 
-Marker::Marker(
-    const ColonyId sourceColonyId,
-    const float initialIntensity,
-    const bool isPersistent
-)
-    : colonyId(sourceColonyId),
-      intensity(initialIntensity),
-      persistent(isPersistent) {
-}
+Marker::Marker(const ColonyId sourceColonyId, const float initialIntensity, const bool isPersistent)
+    : colonyId(sourceColonyId), intensity(initialIntensity), persistent(isPersistent) {}
 
-bool Marker::HasOwner() const {
-    return colonyId != InvalidColonyId;
-}
+bool Marker::HasOwner() const { return colonyId != InvalidColonyId; }
 
-bool Marker::IsActive(const float threshold) const {
-    return HasOwner() && intensity > threshold;
-}
+bool Marker::IsActive(const float threshold) const { return HasOwner() && intensity > threshold; }
 
-void Marker::Decay(
-    const float rate,
-    const float deltaTime
-) {
+void Marker::Decay(const float rate, const float deltaTime) {
     if (persistent) {
         return;
     }

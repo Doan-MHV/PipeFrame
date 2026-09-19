@@ -3,8 +3,7 @@
 #include <algorithm>
 #include <utility>
 
-Toggle::Toggle(const UITheme &newTheme)
-    : knob(CreateChild<Panel>()), theme(newTheme) {
+Toggle::Toggle(const UITheme &newTheme) : knob(CreateChild<Panel>()), theme(newTheme) {
     SetSize({44.0f, 24.0f});
     SetCornerRadius(theme.radiusPill);
     SetNormalColor(theme.controlNormal);

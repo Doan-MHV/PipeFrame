@@ -1,8 +1,59 @@
-BasedOnStyle: LLVM
+---
+# ==============================================================
+# Clang-Format Configuration
+# Base Style: Google (overridden to 4-space indentation)
+# Standard: C++20
+# ==============================================================
+Language: Cpp
+BasedOnStyle: Google
+
+# Indentation (Google default is 2, overridden to 4)
 IndentWidth: 4
 TabWidth: 4
 UseTab: Never
+AccessModifierOffset: -4
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+
+# Line Length
 ColumnLimit: 120
+
+# C++ Standard
+Standard: c++20
+
+# Bracing Style
 BreakBeforeBraces: Attach
-PointerAlignment: Right
-ReferenceAlignment: Right
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+
+# Pointer / Reference Alignment (e.g. Type* ptr, Type& ref)
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# Spaces
+SpaceBeforeParens: ControlStatements
+SpaceBeforeAssignmentOperators: true
+SpaceAfterCStyleCast: false
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInSquareBrackets: false
+
+# Alignment
+AlignConsecutiveAssignments: None
+AlignConsecutiveDeclarations: None
+AlignEscapedNewlines: Left
+AlignOperands: Align
+AlignTrailingComments: true
+
+# Namespaces
+NamespaceIndentation: None
+FixNamespaceComments: true
+
+# Includes Organization
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+...

@@ -451,6 +451,11 @@ void ProjectRuntimeHost::Render(RenderContext &context) {
     }
 }
 
+void ProjectRuntimeHost::RenderDebug(RenderContext &context, WorldDebugOptions options) {
+    if(!runtime || (!options.physics&&!options.mesh))return;
+    WorldDebugDraw draw;runtime->CollectWorldDebug(draw,options);draw.Draw(context.GetCanvas());
+}
+
 void ProjectRuntimeHost::RenderScreen(RenderContext &context) {
     for(const auto &command:screenRenderSubmissions)backend::sfml::DrawGeometry(pipeframe::backend::sfml::GetTarget(context),command);
     screenRenderSubmissions.clear();

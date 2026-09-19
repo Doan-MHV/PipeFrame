@@ -1,39 +1,28 @@
 #pragma once
-#include <PipeFrame/ECS/ComponentView.h>
-#include <PipeFrame/Components/Transform2DComponent.h>
-#include <PipeFrame/Components/EnergyComponent.h>
+#include "Components/AntEncounterComponent.h"
 #include "Components/AntIdentityComponent.h"
 #include "Components/AntPoseComponent.h"
-#include "Components/AntEncounterComponent.h"
 #include "Components/ForagingComponent.h"
 #include "Configuration/AntConfiguration.h"
+#include <PipeFrame/Components/EnergyComponent.h>
+#include <PipeFrame/Components/Transform2DComponent.h>
+#include <PipeFrame/ECS/ComponentView.h>
 namespace ant_simulation {
 // Non-owning scene view. Copies refer to the same entity; components own all state.
-class AntView : public pipeframe::ComponentView<AntIdentityComponent, AntPoseComponent, pipeframe::EnergyComponent, ForagingComponent, AntEncounterComponent, pipeframe::Transform2DComponent, pipeframe::Motion2DComponent> {
+class AntView : public pipeframe::ComponentView<AntIdentityComponent, AntPoseComponent, pipeframe::EnergyComponent,
+                                                ForagingComponent, AntEncounterComponent,
+                                                pipeframe::Transform2DComponent, pipeframe::Motion2DComponent> {
   public:
-    static constexpr float MarkerTimeoutCoefficient{
-        10.0f
-    };
+    static constexpr float MarkerTimeoutCoefficient{10.0f};
 
-    static constexpr float BaseMass{
-        0.1f
-    };
+    static constexpr float BaseMass{0.1f};
 
-    static constexpr float FoodMass{
-        0.2f
-    };
+    static constexpr float FoodMass{0.2f};
 
     explicit AntView(pipeframe::SceneObject object) : ComponentView(object) {}
     pipeframe::SceneObject GetObject() const { return object; }
-    void Initialize(
-        AntId id,
-        ColonyId colonyId,
-        AntRole role,
-        pipeframe::Vector2f position,
-        float initialAngle,
-        float initialMarkerOffset,
-        const AntConfiguration &configuration
-    );
+    void Initialize(AntId id, ColonyId colonyId, AntRole role, pipeframe::Vector2f position, float initialAngle,
+                    float initialMarkerOffset, const AntConfiguration &configuration);
 
     void Update(float deltaTime);
 
@@ -41,20 +30,13 @@ class AntView : public pipeframe::ComponentView<AntIdentityComponent, AntPoseCom
 
     void SetPosition(pipeframe::Vector2f position);
 
-    void SetDirection(
-        pipeframe::Vector2f direction
-    );
+    void SetDirection(pipeframe::Vector2f direction);
 
     void SetAngleInstant(float angle);
 
-    void SetTarget(
-        pipeframe::Vector2f target
-    );
+    void SetTarget(pipeframe::Vector2f target);
 
-    void SetTarget(
-        pipeframe::Vector2f target,
-        float distance
-    );
+    void SetTarget(pipeframe::Vector2f target, float distance);
 
     void SetState(ForagingState state);
 
@@ -62,9 +44,7 @@ class AntView : public pipeframe::ComponentView<AntIdentityComponent, AntPoseCom
     bool IsTargetReached() const;
 
     [[nodiscard]]
-    bool IsMarkerReady(
-        float markerDistance
-    ) const;
+    bool IsMarkerReady(float markerDistance) const;
 
     [[nodiscard]]
     MarkerKind GetDropMarkerKind() const;
@@ -76,24 +56,16 @@ class AntView : public pipeframe::ComponentView<AntIdentityComponent, AntPoseCom
     MarkerKind GetMarkerFocus() const;
 
     [[nodiscard]]
-    bool IsBlocked(
-        const AntConfiguration &configuration
-    ) const;
+    bool IsBlocked(const AntConfiguration &configuration) const;
 
     [[nodiscard]]
-    float GetBlockedRatio(
-        const AntConfiguration &configuration
-    ) const;
+    float GetBlockedRatio(const AntConfiguration &configuration) const;
 
     [[nodiscard]]
-    float GetMarkerIntensity(
-        const AntConfiguration &configuration
-    ) const;
+    float GetMarkerIntensity(const AntConfiguration &configuration) const;
 
     [[nodiscard]]
-    float GetEnemyMarkerIntensity(
-        const AntConfiguration &configuration
-    ) const;
+    float GetEnemyMarkerIntensity(const AntConfiguration &configuration) const;
 
     [[nodiscard]]
     bool IsDead() const;
@@ -102,9 +74,7 @@ class AntView : public pipeframe::ComponentView<AntIdentityComponent, AntPoseCom
 
     void ConsumeEnergy(float amount);
 
-    void RefillEnergy(
-        const AntConfiguration &configuration
-    );
+    void RefillEnergy(const AntConfiguration &configuration);
 
     [[nodiscard]]
     bool IsCarryingFood() const;
@@ -166,8 +136,8 @@ class AntView : public pipeframe::ComponentView<AntIdentityComponent, AntPoseCom
     AntPoseComponent &Pose() const { return Require<AntPoseComponent>(); }
     pipeframe::Transform2DComponent &Transform() const { return Require<pipeframe::Transform2DComponent>(); }
     pipeframe::Motion2DComponent &Motion() const { return Require<pipeframe::Motion2DComponent>(); }
-private:
 
+  private:
     void CreateLegs();
     static pipeframe::Vector2f Normalize(pipeframe::Vector2f);
     static float Distance(pipeframe::Vector2f, pipeframe::Vector2f);

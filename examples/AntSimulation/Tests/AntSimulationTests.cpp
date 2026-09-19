@@ -3,8 +3,8 @@
 #include "Runtime/AntTypeIds.h"
 
 #include <cstdlib>
-#include <fstream>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <optional>
 #include <ranges>
@@ -17,10 +17,14 @@ namespace {
 
 struct ExtensionComponent {
     double value{3};
-    static auto Schema() {return pipeframe::ComponentSchema<ExtensionComponent>("test.extension","Extension")
-        .Editable({.key="value",.displayName="Value",.kind=pipeframe::PropertyKind::Number,.defaultValue=3.0},&ExtensionComponent::value);}
+    static auto Schema() {
+        return pipeframe::ComponentSchema<ExtensionComponent>("test.extension", "Extension")
+            .Editable(
+                {.key = "value", .displayName = "Value", .kind = pipeframe::PropertyKind::Number, .defaultValue = 3.0},
+                &ExtensionComponent::value);
+    }
 };
-using ExtensionEntity=pipeframe::ComponentEntity<pipeframe::Transform2DComponent,ExtensionComponent>;
+using ExtensionEntity = pipeframe::ComponentEntity<pipeframe::Transform2DComponent, ExtensionComponent>;
 void Require(const bool condition, const char *message) {
     if (!condition) {
         std::cerr << "FAILED: " << message << '\n';
@@ -41,10 +45,11 @@ int main() {
 
     Require(errorMessage.empty(), "Successful load should not report an error.");
 
-    const auto registered=AntEntityTypes().Describe(true);
-    Require(registered.size()==6,"Registry includes Ant, Colony, Food, Settings and Beacon");
-    Require(std::ranges::any_of(registered,[](const auto &t){return t.typeId=="ant.agent";}),"Runtime-spawned Ant is registered");
-    Require(AntEntityTypes().Describe().size()==5,"Runtime Ant stays out of editor creation menu");
+    const auto registered = AntEntityTypes().Describe(true);
+    Require(registered.size() == 6, "Registry includes Ant, Colony, Food, Settings and Beacon");
+    Require(std::ranges::any_of(registered, [](const auto &t) { return t.typeId == "ant.agent"; }),
+            "Runtime-spawned Ant is registered");
+    Require(AntEntityTypes().Describe().size() == 5, "Runtime Ant stays out of editor creation menu");
     const auto types = runtime.GetSceneObjectTypes();
 
     Require(types.size() == 5, "Runtime should expose colony, food, settings and beacon types.");
@@ -61,8 +66,7 @@ int main() {
 
     const auto allComponentTypes = runtime.GetAllSceneComponentTypes();
     const auto findComponent = [&](const std::string_view id) {
-        return std::ranges::find(allComponentTypes, id,
-                                 &pipeframe::SceneComponentTypeDescriptor::typeId);
+        return std::ranges::find(allComponentTypes, id, &pipeframe::SceneComponentTypeDescriptor::typeId);
     };
     Require(findComponent(pipeframe::Transform2DComponentTypeId) != allComponentTypes.end(),
             "PipeFrame Transform must be available to Ant objects.");
@@ -71,15 +75,14 @@ int main() {
     const auto colonySchema = findComponent(ColonyTypeId);
     Require(colonySchema != allComponentTypes.end() && colonySchema->properties.size() == 7,
             "Colony metadata must expose all authored properties.");
-    Require(colonySchema->properties[0].minimum == 0.0 &&
-            colonySchema->properties[0].maximum == 1'000'000.0,
+    Require(colonySchema->properties[0].minimum == 0.0 && colonySchema->properties[0].maximum == 1'000'000.0,
             "Editor metadata must retain validation ranges.");
 
     pipeframe::SceneObjectData colony = runtime.CreateDefaultObject(ColonyTypeId);
 
-    Require(std::ranges::any_of(colony.components, [](const auto &component) {
-                return component.typeId == ColonyTypeId;
-            }), "Colony settings must be stored in a project component.");
+    Require(
+        std::ranges::any_of(colony.components, [](const auto &component) { return component.typeId == ColonyTypeId; }),
+        "Colony settings must be stored in a project component.");
 
     colony.id = 1;
 
@@ -109,17 +112,30 @@ int main() {
 
     food.properties[FoodRadiusKey] = 1.5;
 
-    const auto fixtureRoot=std::filesystem::temp_directory_path()/"pipeframe-ant-runtime-map-test";
-    std::filesystem::remove_all(fixtureRoot);std::filesystem::create_directories(fixtureRoot);
-    const auto mapPath=fixtureRoot/"Runtime.pftilemap";
-    pipeframe::Tilemap2D map(32,24);map.DefineTile({1,{45,42,38,255},true});map.AddLayer("Terrain");
-    map.SetTile(0,{12,12},1);map.AddDataLayer("ant.food-density",0,10000);map.SetData("ant.food-density",{13,12},7);
-    {std::ofstream out(mapPath);Require(pipeframe::TilemapSerializer::Save(map,out),"Save runtime tilemap fixture");}
-    pipeframe::assets::AssetDatabase fixtureDatabase;Require(fixtureDatabase.Open(fixtureRoot,&errorMessage),"Open fixture assets");
-    auto fixtureMap=fixtureDatabase.ImportNow({mapPath},&errorMessage);Require(bool(fixtureMap),"Import fixture tilemap");
-    pipeframe::ServiceRegistry fixtureServices;fixtureServices.Provide(fixtureDatabase);
-    pipeframe::ProjectRuntimeContext fixtureContext;fixtureContext.services=&fixtureServices;
-    runtime.Unload();Require(runtime.Load(fixtureContext,errorMessage),"Load runtime with typed map services");
+    const auto fixtureRoot = std::filesystem::temp_directory_path() / "pipeframe-ant-runtime-map-test";
+    std::filesystem::remove_all(fixtureRoot);
+    std::filesystem::create_directories(fixtureRoot);
+    const auto mapPath = fixtureRoot / "Runtime.pftilemap";
+    pipeframe::Tilemap2D map(32, 24);
+    map.DefineTile({1, {45, 42, 38, 255}, true});
+    map.AddLayer("Terrain");
+    map.SetTile(0, {12, 12}, 1);
+    map.AddDataLayer("ant.food-density", 0, 10000);
+    map.SetData("ant.food-density", {13, 12}, 7);
+    {
+        std::ofstream out(mapPath);
+        Require(pipeframe::TilemapSerializer::Save(map, out), "Save runtime tilemap fixture");
+    }
+    pipeframe::assets::AssetDatabase fixtureDatabase;
+    Require(fixtureDatabase.Open(fixtureRoot, &errorMessage), "Open fixture assets");
+    auto fixtureMap = fixtureDatabase.ImportNow({mapPath}, &errorMessage);
+    Require(bool(fixtureMap), "Import fixture tilemap");
+    pipeframe::ServiceRegistry fixtureServices;
+    fixtureServices.Provide(fixtureDatabase);
+    pipeframe::ProjectRuntimeContext fixtureContext;
+    fixtureContext.services = &fixtureServices;
+    runtime.Unload();
+    Require(runtime.Load(fixtureContext, errorMessage), "Load runtime with typed map services");
 
     pipeframe::SceneObjectData settings = runtime.CreateDefaultObject(SimulationSettingsTypeId);
 
@@ -243,11 +259,16 @@ int main() {
     Require(statistics.available, "Loaded runtime statistics should be available.");
 
     runtime.RegisterComponent<ExtensionComponent>();
-    runtime.RegisterEntity<ExtensionEntity>({"test.extension-entity","Extension",{}, {"test.extension"}});
-    Require(std::ranges::any_of(runtime.GetSceneObjectTypes(),[](const auto &type){return type.typeId=="test.extension-entity";}),"New registered extension appears without runtime branches");
-    auto extension=runtime.CreateDefaultObject("test.extension-entity");extension.id=100;
-    std::vector<pipeframe::SceneObjectData> extensionScene{extension};runtime.SynchronizeScene(extensionScene);
-    Require(runtime.ResolveSceneObject(100).GetComponent<ExtensionComponent>()->value==3,"Ant runtime instantiates arbitrary registered composition");
+    runtime.RegisterEntity<ExtensionEntity>({"test.extension-entity", "Extension", {}, {"test.extension"}});
+    Require(std::ranges::any_of(runtime.GetSceneObjectTypes(),
+                                [](const auto &type) { return type.typeId == "test.extension-entity"; }),
+            "New registered extension appears without runtime branches");
+    auto extension = runtime.CreateDefaultObject("test.extension-entity");
+    extension.id = 100;
+    std::vector<pipeframe::SceneObjectData> extensionScene{extension};
+    runtime.SynchronizeScene(extensionScene);
+    Require(runtime.ResolveSceneObject(100).GetComponent<ExtensionComponent>()->value == 3,
+            "Ant runtime instantiates arbitrary registered composition");
     runtime.Unload();
 
     Require(runtime.GetSimulationWorld() == nullptr, "Unload should release simulation world.");
@@ -263,7 +284,10 @@ int main() {
     painted.AddLayer("Terrain");
     painted.SetTile(0, {12, 12}, 1);
     const auto source = assetRoot / "painted.pftilemap";
-    { std::ofstream out(source); Require(pipeframe::TilemapSerializer::Save(painted, out), "Save authored map"); }
+    {
+        std::ofstream out(source);
+        Require(pipeframe::TilemapSerializer::Save(painted, out), "Save authored map");
+    }
     const auto asset = database.ImportNow({source}, &errorMessage);
     Require(asset.has_value(), "Import Ant map");
     pipeframe::ServiceRegistry services;
@@ -280,11 +304,14 @@ int main() {
             "Typed map supplies Ant walls");
     painted.SetTile(0, {12, 12}, 0);
     painted.SetTile(0, {14, 12}, 1);
-    { std::ofstream out(assetRoot / database.Find(*asset)->sourcePath); pipeframe::TilemapSerializer::Save(painted, out); }
+    {
+        std::ofstream out(assetRoot / database.Find(*asset)->sourcePath);
+        pipeframe::TilemapSerializer::Save(painted, out);
+    }
     Require(database.Reimport(*asset, &errorMessage), "Reimport painted Ant map");
     runtime.Reset();
     Require(!runtime.GetSimulationWorld()->GetEnvironment().TryGetCell(12, 12)->wall &&
-            runtime.GetSimulationWorld()->GetEnvironment().TryGetCell(14, 12)->wall,
+                runtime.GetSimulationWorld()->GetEnvironment().TryGetCell(14, 12)->wall,
             "Reset resolves the newly saved asset revision");
     runtime.Unload();
     std::filesystem::remove_all(assetRoot);

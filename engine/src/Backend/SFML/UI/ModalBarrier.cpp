@@ -12,9 +12,7 @@ ModalBarrier::ModalBarrier(const UITheme &theme) {
     SetInputBarrier(true);
 }
 
-void ModalBarrier::SetDismissOnBackgroundClick(const bool dismiss) {
-    dismissOnBackgroundClick = dismiss;
-}
+void ModalBarrier::SetDismissOnBackgroundClick(const bool dismiss) { dismissOnBackgroundClick = dismiss; }
 
 bool ModalBarrier::DismissesOnBackgroundClick() const { return dismissOnBackgroundClick; }
 
@@ -24,12 +22,14 @@ bool ModalBarrier::OnEvent(const sf::Event &event) {
     const auto background = [&](sf::Vector2i point) {
         for (std::size_t i = 0; i < GetChildCount(); ++i) {
             const auto *child = GetChild(i);
-            if (child->IsVisible() && child->Contains(sf::Vector2f(point))) return false;
+            if (child->IsVisible() && child->Contains(sf::Vector2f(point)))
+                return false;
         }
         return Contains(sf::Vector2f(point));
     };
     if (const auto *key = event.getIf<sf::Event::KeyPressed>(); key && key->code == sf::Keyboard::Key::Escape) {
-        if (onDismiss) onDismiss();
+        if (onDismiss)
+            onDismiss();
         return true;
     }
     if (const auto *pressed = event.getIf<sf::Event::MouseButtonPressed>()) {

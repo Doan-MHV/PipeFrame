@@ -1,5 +1,6 @@
 #pragma once
 #include <PipeFrame/UI/View.h>
+
 #include <cstdint>
 
 namespace pipeframe::ui {
@@ -8,9 +9,9 @@ namespace pipeframe::ui {
 class ViewSource {
 public:
     virtual ~ViewSource() = default;
-    virtual const View &Build() = 0;
+    virtual const View& Build() = 0;
     virtual std::uint64_t Revision() const = 0;
     virtual void Mount() = 0;
     virtual void Unmount() noexcept = 0;
 };
-}
+}  // namespace pipeframe::ui

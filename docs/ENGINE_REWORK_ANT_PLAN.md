@@ -254,3 +254,29 @@ Do not resume SailBoat work/tests unless the user asks. Milestone 19 remains sep
 
 
 R3 implementation and evidence: [runtime audit](rework/R3_RUNTIME_AUDIT.md). Full reference/visual equivalence is not claimed by the runtime migration.
+
+## Default sprite and physics follow-up (2026-09-13)
+
+See [shared sprite and kinematic authoring](rework/SPRITE_AND_KINEMATIC_AUTHORING.md)
+for the generated-project defaults, custom rendering extension path, editor workflow
+and explicit limits before Milestone 19. This provides textured entities and box
+kinematic collision; force-driven vehicle dynamics are not implied.
+
+### Generated world structure
+
+New Project now generates explicit World/Runtime, World/Physics and World/Rendering modules derived from PipeFrame bases, with the shared editor scene and default simulation/render paths wired through them. See [Generated project worlds](rework/GENERATED_PROJECT_WORLDS.md) for scheduling, custom solvers, texture rendering and migration scope.
+
+### Shared world visualization
+
+PHYSICS/MESH viewport controls now request project-supplied debug geometry through
+`ProjectRuntime::CollectWorldDebug`. Ant's physics/rendering worlds supply their
+actual bodies, wall boundaries and triangle geometry. New world templates expose
+the same hooks alongside default scene geometry. Source/Runtime remains explicitly
+documented as the editor integration boundary. See GENERATED_PROJECT_WORLDS.md.
+
+### Ant outer runtime responsibility cleanup
+
+AntWorld now constructs authored simulation worlds; AntRenderingWorld owns renderer
+assets/options, geometry and draw ordering; AntEnvironment owns food-radius queries.
+Dashboard hosting moved to Editor. Runtime retains editor/host integration and
+registration, with existing public interfaces and project paths preserved.

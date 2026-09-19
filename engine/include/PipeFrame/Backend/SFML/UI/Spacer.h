@@ -4,11 +4,11 @@
 #include <PipeFrame/Backend/SFML/UI/Widget.h>
 
 class Spacer final : public Widget {
-  public:
+public:
     Spacer() { SetSizePolicy(SizePolicy::Stretch, SizePolicy::Stretch); }
 
-  protected:
-    void OnRender(sf::RenderTarget &target) const override { (void)target; }
+protected:
+    void OnRender(sf::RenderTarget& target) const override { (void)target; }
 };
 
 #endif

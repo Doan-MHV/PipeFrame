@@ -8,38 +8,26 @@ inline void StepAntLegs(AntPoseComponent &pose, const pipeframe::Transform2DComp
     }
 
     bool canMove[2]{
-        pose.legs[0].IsDone() &&
-            pose.legs[2].IsDone() &&
-            pose.legs[4].IsDone(),
-        pose.legs[1].IsDone() &&
-            pose.legs[3].IsDone() &&
-            pose.legs[5].IsDone(),
+        pose.legs[0].IsDone() && pose.legs[2].IsDone() && pose.legs[4].IsDone(),
+        pose.legs[1].IsDone() && pose.legs[3].IsDone() && pose.legs[5].IsDone(),
     };
 
-    for (std::size_t index = 0;
-         index < pose.legs.size();
-         ++index) {
+    for (std::size_t index = 0; index < pose.legs.size(); ++index) {
         AntLegPose &leg = pose.legs[index];
 
-        const std::size_t group =
-            index % 2;
+        const std::size_t group = index % 2;
 
         if (!canMove[group]) {
             continue;
         }
 
-        const std::size_t alternativeIndex =
-            group != 0
-                ? index - 1
-                : index + 1;
+        const std::size_t alternativeIndex = group != 0 ? index - 1 : index + 1;
 
         if (!pose.legs[alternativeIndex].IsDone()) {
             continue;
         }
 
-        leg.UpdateReference(
-            transform.position,
-            pose.direction.GetAngle());
+        leg.UpdateReference(transform.position, pose.direction.GetAngle());
 
         if (!leg.IsDone()) {
             canMove[group] = false;
@@ -59,9 +47,7 @@ inline void InitializeAntLegs(AntPoseComponent &pose, const pipeframe::Transform
         0.45f,
     };
 
-    for (std::size_t index = 0;
-         index < 3;
-         ++index) {
+    for (std::size_t index = 0; index < 3; ++index) {
         pose.legs[index * 2].Initialize(
             {
                 referenceX[index].x,

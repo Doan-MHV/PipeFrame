@@ -41,32 +41,31 @@ struct WorkspaceLayout {
 
 class WorkspaceManager final {
 public:
-    bool RegisterPanel(DockPanelLayout panel, std::string *error = nullptr);
-    bool Show(const std::string &id, bool visible);
-    bool Dock(const std::string &id, DockSite site, std::string tabGroup = {});
-    bool Float(const std::string &id, Rectanglef bounds, std::string displayId = {});
-    bool Resize(const std::string &id, float size);
-    bool SelectTab(const std::string &id);
-    bool RemovePanel(const std::string &id);
+    bool RegisterPanel(DockPanelLayout panel, std::string* error = nullptr);
+    bool Show(const std::string& id, bool visible);
+    bool Dock(const std::string& id, DockSite site, std::string tabGroup = {});
+    bool Float(const std::string& id, Rectanglef bounds, std::string displayId = {});
+    bool Resize(const std::string& id, float size);
+    bool SelectTab(const std::string& id);
+    bool RemovePanel(const std::string& id);
 
-    const DockPanelLayout *Find(const std::string &id) const;
-    const WorkspaceLayout &GetLayout() const;
+    const DockPanelLayout* Find(const std::string& id) const;
+    const WorkspaceLayout& GetLayout() const;
     void SetLayout(WorkspaceLayout layout);
     void Reset();
-    void Reconcile(const std::vector<std::string> &availablePanelIds,
-                   const std::vector<DisplayArea> &displays,
+    void Reconcile(const std::vector<std::string>& availablePanelIds, const std::vector<DisplayArea>& displays,
                    Rectanglef primaryWorkArea);
     std::vector<std::string> Validate() const;
 
-    bool Save(const std::filesystem::path &path, std::string *error = nullptr) const;
-    bool Load(const std::filesystem::path &path, std::string *error = nullptr);
+    bool Save(const std::filesystem::path& path, std::string* error = nullptr) const;
+    bool Load(const std::filesystem::path& path, std::string* error = nullptr);
 
 private:
-    static void SetError(std::string *error, std::string message);
-    DockPanelLayout *FindMutable(const std::string &id);
+    static void SetError(std::string* error, std::string message);
+    DockPanelLayout* FindMutable(const std::string& id);
     WorkspaceLayout layout;
 };
 
-} // namespace pipeframe::editor_workspace
+}  // namespace pipeframe::editor_workspace
 
 #endif

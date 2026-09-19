@@ -6,26 +6,26 @@
 #include <unordered_map>
 
 class OverlayPanel : public Panel {
-  public:
+public:
     void SetPadding(Thickness padding);
     Thickness GetPadding() const;
 
-    void SetChildAlignment(Widget &child, Alignment alignment);
-    Alignment GetChildAlignment(const Widget &child) const;
+    void SetChildAlignment(Widget& child, Alignment alignment);
+    Alignment GetChildAlignment(const Widget& child) const;
 
     void RefreshLayout();
 
-  protected:
+protected:
     void OnGeometryChanged() override;
-    void OnChildGeometryChanged(Widget &child) override;
-    void OnChildRemoved(Widget &child) override;
-    sf::Vector2f OnMeasure(const BoxConstraints &constraints) override;
+    void OnChildGeometryChanged(Widget& child) override;
+    void OnChildRemoved(Widget& child) override;
+    sf::Vector2f OnMeasure(const BoxConstraints& constraints) override;
 
-  private:
+private:
     void ArrangeChildren();
 
     Thickness padding;
-    std::unordered_map<const Widget *, Alignment> childAlignments;
+    std::unordered_map<const Widget*, Alignment> childAlignments;
     bool layoutInProgress = false;
 };
 

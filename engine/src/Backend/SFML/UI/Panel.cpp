@@ -5,8 +5,8 @@
 
 namespace {
 sf::Color ApplyOpacity(sf::Color color, const float opacity) {
-    color.a = static_cast<std::uint8_t>(std::clamp(
-        std::lround(static_cast<float>(color.a) * std::clamp(opacity, 0.0f, 1.0f)), 0l, 255l));
+    color.a = static_cast<std::uint8_t>(
+        std::clamp(std::lround(static_cast<float>(color.a) * std::clamp(opacity, 0.0f, 1.0f)), 0l, 255l));
     return color;
 }
 } // namespace

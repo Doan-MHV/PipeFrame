@@ -15,7 +15,7 @@
 namespace ant_simulation {
 
 class ShadowRenderer final : public pipeframe::RenderLayer {
-public:
+  public:
     static constexpr pipeframe::Vector2f DefaultOffset{
         0.1f,
         0.1f,
@@ -28,10 +28,7 @@ public:
         105,
     };
 
-    bool LoadAssets(
-        const std::filesystem::path &assetRoot,
-        std::string &errorMessage
-    );
+    bool LoadAssets(const std::filesystem::path &assetRoot, std::string &errorMessage);
 
     void SetEnabled(bool enabled);
 
@@ -39,16 +36,9 @@ public:
 
     void SetColor(pipeframe::Color color);
 
-    void Update(
-        const AntGeometry &sourceGeometry,
-        AntRenderingMode mode
-    );
+    void Update(const AntGeometry &sourceGeometry, AntRenderingMode mode);
 
-    void Draw(
-        pipeframe::Canvas target,
-        pipeframe::RenderState states =
-            pipeframe::RenderState::Default
-    ) const override;
+    void Draw(pipeframe::Canvas target, pipeframe::RenderState states = pipeframe::RenderState::Default) const override;
 
     [[nodiscard]]
     bool IsEnabled() const;
@@ -57,51 +47,36 @@ public:
     bool AreAssetsLoaded() const;
 
     [[nodiscard]]
-    std::span<const pipeframe::Vertex2D>
-    GetBodyVertices() const;
+    std::span<const pipeframe::Vertex2D> GetBodyVertices() const;
 
     [[nodiscard]]
-    std::span<const pipeframe::Vertex2D>
-    GetLegVertices() const;
+    std::span<const pipeframe::Vertex2D> GetLegVertices() const;
 
     [[nodiscard]]
-    std::span<const pipeframe::Vertex2D>
-    GetFoodVertices() const;
+    std::span<const pipeframe::Vertex2D> GetFoodVertices() const;
 
-private:
-    void CopyAndTransform(
-        std::span<const pipeframe::Vertex2D> source,
-        std::vector<pipeframe::Vertex2D> &destination
-    ) const;
+  private:
+    void CopyAndTransform(std::span<const pipeframe::Vertex2D> source,
+                          std::vector<pipeframe::Vertex2D> &destination) const;
 
-    static void DrawVertices(
-        pipeframe::Canvas target,
-        std::span<const pipeframe::Vertex2D> vertices,
-        pipeframe::TextureBinding texture,
-        pipeframe::RenderState states
-    );
+    static void DrawVertices(pipeframe::Canvas target, std::span<const pipeframe::Vertex2D> vertices,
+                             pipeframe::TextureBinding texture, pipeframe::RenderState states);
 
     bool enabled{true};
     bool assetsLoaded{false};
 
-    AntRenderingMode mode{
-        AntRenderingMode::Points
-    };
+    AntRenderingMode mode{AntRenderingMode::Points};
 
-    pipeframe::Vector2f offset{
-        DefaultOffset
-    };
+    pipeframe::Vector2f offset{DefaultOffset};
 
-    pipeframe::Color color{
-        DefaultColor
-    };
+    pipeframe::Color color{DefaultColor};
 
     std::vector<pipeframe::Vertex2D> bodyVertices;
     std::vector<pipeframe::Vertex2D> legVertices;
     std::vector<pipeframe::Vertex2D> foodVertices;
 
     pipeframe::GraphicsResourceService resources;
-    pipeframe::TextureHandle bodyShadowTexture,legShadowTexture,circleTexture,fullAntTexture;
+    pipeframe::TextureHandle bodyShadowTexture, legShadowTexture, circleTexture, fullAntTexture;
     pipeframe::ShaderHandle alphaMaskShader;
     bool shaderLoaded{false};
 };

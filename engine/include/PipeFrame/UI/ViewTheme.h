@@ -62,12 +62,11 @@ struct ThemeTokens {
     unsigned int bodyTextSize = 14;
     unsigned int headingTextSize = 16;
 
-    static const ThemeTokens &Dark() {
+    static const ThemeTokens& Dark() {
         static const ThemeTokens theme;
         return theme;
     }
 };
 
-
-using ViewTheme=ThemeTokens<pipeframe::Color,pipeframe::Vector2f>;
-}
+using ViewTheme = ThemeTokens<pipeframe::Color, pipeframe::Vector2f>;
+}  // namespace pipeframe::ui

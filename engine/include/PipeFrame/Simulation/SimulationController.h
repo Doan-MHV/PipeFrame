@@ -3,17 +3,9 @@
 
 #include <cstdint>
 
-enum class SimulationState {
-    Playing,
-    Paused
-};
+enum class SimulationState { Playing, Paused };
 
-enum class SimulationSpeed {
-    Realtime,
-    Double,
-    Quadruple,
-    Maximum
-};
+enum class SimulationSpeed { Realtime, Double, Quadruple, Maximum };
 
 class SimulationController {
 public:
@@ -32,7 +24,7 @@ public:
     void CycleSpeed();
     SimulationSpeed GetSpeed() const;
     float GetTimeScale() const;
-    const char *GetSpeedName() const;
+    const char* GetSpeedName() const;
 
     void SetFullSpeed(bool enabled);
     void ToggleFullSpeed();

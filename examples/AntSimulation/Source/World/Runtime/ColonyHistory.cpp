@@ -1,8 +1,8 @@
 #include "World/Runtime/ColonyHistory.h"
 
 #include <algorithm>
-#include <cstddef>
 #include <cmath>
+#include <cstddef>
 
 namespace ant_simulation {
 

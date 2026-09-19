@@ -10,7 +10,7 @@ these view builders.
 - Use the component registry and `SchemaInspector` for discoverable component data.
 - Keep world tools/model logic in their existing editor tool/inspector classes.
 
-`Source/Runtime/AntUIHost.cpp` composes the neutral SimulationDashboard. Native
+`Source/Editor/AntUIHost.cpp` composes the neutral SimulationDashboard. Native
 embedding lives in the engine/backend host and is isolated by compile checks. The detailed migration, limitations and engine/editor
 examples are in [R5 UI migration](../../../../docs/rework/R5_UI_MIGRATION.md).
 

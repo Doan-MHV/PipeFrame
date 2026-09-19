@@ -176,7 +176,7 @@ int main(int argc,char **argv){try {
     SceneProjectRuntime registered("Registered archetypes");registered.RegisterComponent<SoldierSettings>();
     registered.RegisterEntity<RegisteredSoldier>({"fixture.soldier","Soldier",{}, {Transform2DComponentTypeId,"project.SoldierSettings"}});
     registered.RegisterEntity<OtherEntity>({"fixture.other","Other",{}, {Transform2DComponentTypeId}});
-    Check(registered.GetSceneObjectTypes().size()==4,"Entity registration supplies editor entries including the built-in environment obstacle");
+    Check(registered.GetSceneObjectTypes().size()==5,"Entity registration includes built-in sprite, playground and obstacle entries");
     auto soldier=registered.CreateDefaultObject("fixture.soldier");soldier.id=1;
     auto other=registered.CreateDefaultObject("fixture.other");other.id=2;
     std::vector<SceneObjectData> registeredData{soldier,other};registered.SynchronizeScene(registeredData);

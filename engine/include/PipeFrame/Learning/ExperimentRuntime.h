@@ -16,7 +16,7 @@
 namespace pipeframe::learning {
 
 class ExperimentClock {
-  public:
+public:
     explicit ExperimentClock(float limitSeconds = 0.0f);
     void Reset();
     void Advance(float deltaTime);
@@ -26,7 +26,7 @@ class ExperimentClock {
     [[nodiscard]] float Progress() const;
     [[nodiscard]] bool Expired() const;
 
-  private:
+private:
     float elapsed{};
     float limit{};
 };
@@ -45,14 +45,14 @@ struct ExperimentHistorySample {
 };
 
 class ExperimentHistory {
-  public:
+public:
     void Add(ExperimentHistorySample sample);
     void Clear();
     [[nodiscard]] std::span<const ExperimentHistorySample> Samples() const;
-    bool SaveCsv(const std::filesystem::path &path, std::string &errorMessage) const;
-    bool LoadCsv(const std::filesystem::path &path, std::string &errorMessage);
+    bool SaveCsv(const std::filesystem::path& path, std::string& errorMessage) const;
+    bool LoadCsv(const std::filesystem::path& path, std::string& errorMessage);
 
-  private:
+private:
     std::vector<ExperimentHistorySample> samples;
 };
 
@@ -65,20 +65,20 @@ struct CheckpointMetadata {
     std::size_t population{};
     std::map<std::string, std::string> values;
 
-    bool Save(const std::filesystem::path &path, std::string &errorMessage) const;
-    bool Load(const std::filesystem::path &path, std::string &errorMessage);
+    bool Save(const std::filesystem::path& path, std::string& errorMessage) const;
+    bool Load(const std::filesystem::path& path, std::string& errorMessage);
 };
 
 template <typename Result>
 class BackgroundEvaluation {
-  public:
+public:
     BackgroundEvaluation() = default;
     ~BackgroundEvaluation() { Wait(); }
-    BackgroundEvaluation(const BackgroundEvaluation &) = delete;
-    BackgroundEvaluation &operator=(const BackgroundEvaluation &) = delete;
+    BackgroundEvaluation(const BackgroundEvaluation&) = delete;
+    BackgroundEvaluation& operator=(const BackgroundEvaluation&) = delete;
 
     template <typename Work>
-    bool Start(Work &&work) {
+    bool Start(Work&& work) {
         if (Busy()) {
             return false;
         }
@@ -98,10 +98,10 @@ class BackgroundEvaluation {
         }
     }
 
-  private:
+private:
     std::future<Result> future;
 };
 
-} // namespace pipeframe::learning
+}  // namespace pipeframe::learning
 
 #endif

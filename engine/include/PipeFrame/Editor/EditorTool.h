@@ -13,6 +13,6 @@ public:
     [[nodiscard]] virtual bool IsEnabled() const = 0;
 };
 
-} // namespace pipeframe
+}  // namespace pipeframe
 
 #endif

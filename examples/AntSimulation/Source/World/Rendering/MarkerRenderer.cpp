@@ -13,9 +13,11 @@ MarkerRenderer::MarkerRenderer(const AntConfiguration &newConfiguration) : confi
 bool MarkerRenderer::LoadAssets(const std::filesystem::path &assetRoot, std::string &errorMessage) {
     const std::filesystem::path path = assetRoot / "Textures" / "marker.png";
 
-    resources.Clear();markerTexture=resources.LoadTexture(path.string(),true,&errorMessage);
-    assetsLoaded=resources.State(markerTexture)==pipeframe::ResourceState::Ready;
-    if(!assetsLoaded)return false;
+    resources.Clear();
+    markerTexture = resources.LoadTexture(path.string(), true, &errorMessage);
+    assetsLoaded = resources.State(markerTexture) == pipeframe::ResourceState::Ready;
+    if (!assetsLoaded)
+        return false;
     errorMessage.clear();
 
     return true;
@@ -104,7 +106,7 @@ void MarkerRenderer::Draw(pipeframe::Canvas target, pipeframe::RenderState state
         return;
     }
 
-    states.texture=assetsLoaded?pipeframe::TextureBinding(resources,markerTexture):nullptr;
+    states.texture = assetsLoaded ? pipeframe::TextureBinding(resources, markerTexture) : nullptr;
 
     states.blendMode = pipeframe::BlendMode::Add;
 
@@ -169,14 +171,14 @@ pipeframe::Color MarkerRenderer::GetCellColor(const AntWorldCell &cell) const {
 
 void MarkerRenderer::AddMarkerQuad(const pipeframe::Vector2f center, const pipeframe::Color color) {
     const pipeframe::Vector2f minimum = center - pipeframe::Vector2f{
-                                              MarkerHalfSize,
-                                              MarkerHalfSize,
-                                          };
+                                                     MarkerHalfSize,
+                                                     MarkerHalfSize,
+                                                 };
 
     const pipeframe::Vector2f maximum = center + pipeframe::Vector2f{
-                                              MarkerHalfSize,
-                                              MarkerHalfSize,
-                                          };
+                                                     MarkerHalfSize,
+                                                     MarkerHalfSize,
+                                                 };
 
     const std::array<pipeframe::Vector2f, 4> positions{
         pipeframe::Vector2f{minimum.x, minimum.y},

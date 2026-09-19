@@ -471,6 +471,16 @@ int main(int argc,char **argv) {
     passed &= Check(project.GetSelectedObject()->transform.position.x!=0 && project.CanUndo(),"Dragging during simulation must commit an undoable edit");
     project.Undo();
     passed &= Check(project.GetSelectedObject()->transform.position==pipeframe::Vector2f{},"Undo must restore the live authored transform");
+    auto *physicsToggle=FindAction(shell.Toolbar(),"PHYSICS OFF");
+    passed &= Check(physicsToggle!=nullptr,"Shared physics visualization action exists");
+    if(physicsToggle)click(*physicsToggle);
+    passed &= Check(view.GetWorldDebugOptions().physics,"Physics button enables debug geometry");
+    physicsToggle=FindAction(shell.Toolbar(),"PHYSICS ON");if(physicsToggle)click(*physicsToggle);
+    auto *meshToggle=FindAction(shell.Toolbar(),"MESH OFF");
+    passed &= Check(meshToggle!=nullptr,"Shared mesh visualization action exists");
+    if(meshToggle)click(*meshToggle);
+    passed &= Check(view.GetWorldDebugOptions().mesh&&!view.GetWorldDebugOptions().physics,"Debug channels toggle independently");
+    meshToggle=FindAction(shell.Toolbar(),"MESH ON");if(meshToggle)click(*meshToggle);
     auto *gridToggle=FindAction(shell.Toolbar(),"GRID ON");
     passed &= Check(gridToggle!=nullptr && view.IsGridVisible(),"The adaptive editor grid must start visible");
     if(gridToggle) click(*gridToggle);
@@ -854,7 +864,7 @@ int main(int argc,char **argv) {
         if(view.IsAssetBrowserVisible())view.ToggleAssetsPanel();
         view.Layout({1100,800},context);
     }
-    const std::filesystem::path evidence=argc>2 && std::string(argv[1])=="--r5-evidence"?argv[2]:"";
+    const std::filesystem::path evidence=argc>2 && (std::string(argv[1])=="--r5-evidence"||std::string(argv[1])=="--portfolio-capture")?argv[2]:"";
     if(!evidence.empty()) {
         std::filesystem::create_directories(evidence);
         for(const sf::Vector2u size:{sf::Vector2u{1440,900},sf::Vector2u{800,700}}) {
@@ -1045,6 +1055,43 @@ int main(int argc,char **argv) {
             integrationProject.GetRuntime().Render(capture);view.RenderWorldOverlay(capture);capture.BeginScreen();
             integrationProject.GetRuntime().RenderScreen(capture);view.RenderScreen(capture,integrationSimulation);target.display();
             passed &= Check(target.getTexture().copyToImage().saveToFile(evidence/"ant-workbench.png"),"Save real Ant project in editor");
+            for(int tick=0;tick<600;++tick)integrationSimulation.FixedUpdate(1.0f/60.0f);
+            for(const auto &[label,options]:std::array<std::pair<const char*,WorldDebugOptions>,2>{{
+                {"physics",{true,false}},{"mesh",{false,true}}}}){
+                if(auto *button=FindAction(shell.Toolbar(),options.physics?"PHYSICS OFF":"MESH OFF"))click(*button);
+                view.Update(.01f);
+                // Ant point LOD has no triangles. Zoom into detailed geometry for mesh evidence.
+                if(options.mesh){capture.SetCameraCenter({110,108});capture.SetCameraSize({40,25});capture.SetCameraZoom(1);}
+                target.clear(sf::Color{18,20,24});capture.BeginWorld();view.RenderWorldBackground(capture);
+                integrationProject.GetRuntime().Render(capture);
+                integrationProject.GetRuntime().RenderDebug(capture,view.GetWorldDebugOptions());
+                view.RenderWorldOverlay(capture);capture.BeginScreen();
+                integrationProject.GetRuntime().RenderScreen(capture);view.RenderScreen(capture,integrationSimulation);target.display();
+                passed &= Check(target.getTexture().copyToImage().saveToFile(evidence/(std::string("ant-debug-")+label+".png")),"Save Ant debug overlay evidence");
+                if(auto *button=FindAction(shell.Toolbar(),options.physics?"PHYSICS ON":"MESH ON"))click(*button);
+                view.Update(.01f);
+            }
+            if(std::string(argv[1])=="--portfolio-capture") {
+                std::filesystem::create_directories(evidence/"editor-frames");
+                std::filesystem::create_directories(evidence/"ant-frames");
+                sf::RenderTexture antTarget({960,600});auto antCapture=pipeframe::backend::sfml::MakeRenderContext(antTarget);
+                antCapture.SetCameraCenter({96,108});antCapture.SetCameraSize({145,90.625f});
+                capture.SetCameraCenter({96,108});capture.SetCameraSize({170,118});capture.SetCameraZoom(1);
+                for(int frame=0;frame<90;++frame) {
+                    for(int step=0;step<4;++step)integrationSimulation.FixedUpdate(1.f/60.f);
+                    if(frame==30)if(auto *button=FindAction(shell.Toolbar(),"PHYSICS OFF"))click(*button);
+                    if(frame==60)if(auto *button=FindAction(shell.Toolbar(),"PHYSICS ON"))click(*button);
+                    view.Refresh(integrationProject,integrationSimulation,false);view.Update(1.f/15.f);
+                    target.clear(sf::Color{18,20,24});capture.BeginWorld();view.RenderWorldBackground(capture);
+                    integrationProject.GetRuntime().Render(capture);integrationProject.GetRuntime().RenderDebug(capture,view.GetWorldDebugOptions());
+                    view.RenderWorldOverlay(capture);capture.BeginScreen();integrationProject.GetRuntime().RenderScreen(capture);
+                    view.RenderScreen(capture,integrationSimulation);target.display();
+                    const auto file=std::to_string(1000+frame)+".png";
+                    passed &= Check(target.getTexture().copyToImage().saveToFile(evidence/"editor-frames"/file),"Capture editor portfolio frame");
+                    antTarget.clear(sf::Color{18,20,24});antCapture.BeginWorld();integrationProject.GetRuntime().Render(antCapture);antTarget.display();
+                    passed &= Check(antTarget.getTexture().copyToImage().saveToFile(evidence/"ant-frames"/file),"Capture Ant portfolio frame");
+                }
+            }
             view.Layout(window.getSize(),context);
         }
         if(std::string(runtimeProject.id)=="pipeframe.ant-simulation") {

@@ -11,7 +11,7 @@ namespace pipeframe {
 struct GridCoordinate {
     int column{};
     int row{};
-    constexpr bool operator==(const GridCoordinate &) const = default;
+    constexpr bool operator==(const GridCoordinate&) const = default;
 };
 
 struct GridCellRange {
@@ -26,9 +26,9 @@ template <typename T>
 class Grid2D {
 public:
     Grid2D() = default;
-    Grid2D(int columns, int rows, const T &value = T{}) { Resize(columns, rows, value); }
+    Grid2D(int columns, int rows, const T& value = T{}) { Resize(columns, rows, value); }
 
-    void Resize(int columns, int rows, const T &value = T{}) {
+    void Resize(int columns, int rows, const T& value = T{}) {
         if (columns < 0 || rows < 0) throw std::invalid_argument("Grid dimensions cannot be negative");
         columnCount = columns;
         rowCount = rows;
@@ -39,19 +39,20 @@ public:
     [[nodiscard]] int Rows() const { return rowCount; }
     [[nodiscard]] std::size_t Size() const { return cells.size(); }
     [[nodiscard]] bool InBounds(GridCoordinate coordinate) const {
-        return coordinate.column >= 0 && coordinate.column < columnCount &&
-               coordinate.row >= 0 && coordinate.row < rowCount;
+        return coordinate.column >= 0 && coordinate.column < columnCount && coordinate.row >= 0 &&
+               coordinate.row < rowCount;
     }
     [[nodiscard]] GridCoordinate Clamp(GridCoordinate coordinate) const {
         if (cells.empty()) return {};
-        return {std::clamp(coordinate.column, 0, columnCount - 1),
-                std::clamp(coordinate.row, 0, rowCount - 1)};
+        return {std::clamp(coordinate.column, 0, columnCount - 1), std::clamp(coordinate.row, 0, rowCount - 1)};
     }
-    T &At(GridCoordinate coordinate) { return cells.at(Index(coordinate)); }
-    const T &At(GridCoordinate coordinate) const { return cells.at(Index(coordinate)); }
-    T *TryGet(GridCoordinate coordinate) { return InBounds(coordinate) ? &cells[Index(coordinate)] : nullptr; }
-    const T *TryGet(GridCoordinate coordinate) const { return InBounds(coordinate) ? &cells[Index(coordinate)] : nullptr; }
-    void Fill(const T &value) { std::fill(cells.begin(), cells.end(), value); }
+    T& At(GridCoordinate coordinate) { return cells.at(Index(coordinate)); }
+    const T& At(GridCoordinate coordinate) const { return cells.at(Index(coordinate)); }
+    T* TryGet(GridCoordinate coordinate) { return InBounds(coordinate) ? &cells[Index(coordinate)] : nullptr; }
+    const T* TryGet(GridCoordinate coordinate) const {
+        return InBounds(coordinate) ? &cells[Index(coordinate)] : nullptr;
+    }
+    void Fill(const T& value) { std::fill(cells.begin(), cells.end(), value); }
 
 private:
     [[nodiscard]] std::size_t Index(GridCoordinate coordinate) const {
@@ -64,5 +65,5 @@ private:
     std::vector<T> cells;
 };
 
-} // namespace pipeframe
+}  // namespace pipeframe
 #endif

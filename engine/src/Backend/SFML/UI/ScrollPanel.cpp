@@ -1,7 +1,7 @@
 #include <PipeFrame/Backend/SFML/UI/ScrollPanel.h>
 
-#include <SFML/Graphics/View.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/View.hpp>
 
 #include <algorithm>
 #include <cmath>
@@ -78,8 +78,8 @@ void ScrollPanel::Render(sf::RenderTarget &target) const {
     const auto end = target.mapCoordsToPixel(screenPosition + panelSize);
     const sf::FloatRect panelScissor{
         {static_cast<float>(start.x) / targetSize.x, static_cast<float>(start.y) / targetSize.y},
-        {static_cast<float>(std::max(0,end.x-start.x)) / targetSize.x,
-         static_cast<float>(std::max(0,end.y-start.y)) / targetSize.y}};
+        {static_cast<float>(std::max(0, end.x - start.x)) / targetSize.x,
+         static_cast<float>(std::max(0, end.y - start.y)) / targetSize.y}};
 
     const auto intersection = previousView.getScissor().findIntersection(panelScissor);
 
@@ -95,8 +95,8 @@ void ScrollPanel::Render(sf::RenderTarget &target) const {
     const float maximum = GetMaximumScrollOffset();
     if (maximum > 0 && panelSize.x >= 8 && panelSize.y > 8) {
         const float trackHeight = panelSize.y - 8;
-        const float thumbHeight = std::min(trackHeight, std::max(24.0f,
-            trackHeight * panelSize.y / (panelSize.y + maximum)));
+        const float thumbHeight =
+            std::min(trackHeight, std::max(24.0f, trackHeight * panelSize.y / (panelSize.y + maximum)));
         sf::RectangleShape indicator({4, trackHeight});
         indicator.setPosition(screenPosition + sf::Vector2f{panelSize.x - 6, 4});
         indicator.setFillColor(sf::Color{65, 73, 88, static_cast<std::uint8_t>(180 * GetOpacity())});
@@ -153,4 +153,9 @@ void ScrollPanel::RefreshContentPosition() {
     });
 }
 
-void ScrollPanel::OnChildRemoved(Widget &child) { if (content == &child) { content = nullptr; scrollOffset = 0; } }
+void ScrollPanel::OnChildRemoved(Widget &child) {
+    if (content == &child) {
+        content = nullptr;
+        scrollOffset = 0;
+    }
+}

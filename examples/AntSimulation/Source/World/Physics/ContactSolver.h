@@ -1,11 +1,11 @@
 #ifndef ANT_CONTACT_SOLVER_H
 #define ANT_CONTACT_SOLVER_H
 
-#include <cstddef>
-#include <PipeFrame/Simulation/System.h>
-#include "World/Runtime/AntQuery.h"
 #include "World/Physics/AntBodySystem.h"
+#include "World/Runtime/AntQuery.h"
 #include "World/Runtime/Environment/AntEnvironment.h"
+#include <PipeFrame/Simulation/System.h>
+#include <cstddef>
 
 namespace ant_simulation {
 
@@ -15,25 +15,16 @@ struct ContactSolverResult {
 };
 
 class ContactSolver final : public pipeframe::PhysicsSolver<AntBodySystem, ContactSolverResult> {
-public:
-    static constexpr float ContactDistance{
-        1.0f
-    };
+  public:
+    static constexpr float ContactDistance{1.0f};
 
-    ContactSolver(
-        AntQuery &antStore,
-        AntEnvironment &environment
-    );
+    ContactSolver(AntQuery &antStore, AntEnvironment &environment);
 
     [[nodiscard]] std::string_view GetSystemId() const override { return "ant.contact-solver"; }
-    ContactSolverResult Solve(
-        AntBodySystem &physicsWorld
-    ) override;
+    ContactSolverResult Solve(AntBodySystem &physicsWorld) override;
 
-private:
-    bool SolveWallConstraint(
-        AntPhysicsBody &body
-    ) const;
+  private:
+    bool SolveWallConstraint(AntPhysicsBody &body) const;
 
     AntEnvironment &environment;
     pipeframe::CircleContactWorkspace contacts;

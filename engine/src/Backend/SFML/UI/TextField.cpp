@@ -6,10 +6,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Mouse.hpp>
 
-TextField::TextField(
-    const sf::Font &font
-)
-    : text(font, "", 14) {
+TextField::TextField(const sf::Font &font) : text(font, "", 14) {
     SetFocusable(true);
 
     SetFillColor({
@@ -36,9 +33,7 @@ TextField::TextField(
     RefreshVisual();
 }
 
-void TextField::SetValue(
-    const std::string &newValue
-) {
+void TextField::SetValue(const std::string &newValue) {
     value = newValue;
 
     if (!HasKeyboardFocus()) {
@@ -47,21 +42,11 @@ void TextField::SetValue(
     }
 }
 
-const std::string &
-TextField::GetValue() const {
-    return value;
-}
+const std::string &TextField::GetValue() const { return value; }
 
-void TextField::SetOnValueCommitted(
-    ValueCommittedCallback callback
-) {
-    onValueCommitted =
-        std::move(callback);
-}
+void TextField::SetOnValueCommitted(ValueCommittedCallback callback) { onValueCommitted = std::move(callback); }
 
-void TextField::OnRender(
-    sf::RenderTarget &target
-) const {
+void TextField::OnRender(sf::RenderTarget &target) const {
     Panel::OnRender(target);
     target.draw(text);
 }
@@ -71,27 +56,17 @@ void TextField::OnGeometryChanged() {
     RefreshText();
 }
 
-bool TextField::OnEvent(
-    const sf::Event &event
-) {
-    if (const auto *pressed =
-            event.getIf<
-                sf::Event::MouseButtonPressed>()) {
-        return
-            pressed->button ==
-            sf::Mouse::Button::Left;
+bool TextField::OnEvent(const sf::Event &event) {
+    if (const auto *pressed = event.getIf<sf::Event::MouseButtonPressed>()) {
+        return pressed->button == sf::Mouse::Button::Left;
     }
 
-    if (const auto *textEntered =
-            event.getIf<
-                sf::Event::TextEntered>()) {
-        const char32_t character =
-            textEntered->unicode;
+    if (const auto *textEntered = event.getIf<sf::Event::TextEntered>()) {
+        const char32_t character = textEntered->unicode;
 
         // Current project paths use UTF-8-compatible ASCII.
         // Full Unicode text handling can be generalized later.
-        if (character < U' ' ||
-            character > U'~') {
+        if (character < U' ' || character > U'~') {
             return false;
         }
 
@@ -100,18 +75,14 @@ bool TextField::OnEvent(
             replaceOnNextText = false;
         }
 
-        editBuffer.push_back(
-            static_cast<char>(character));
+        editBuffer.push_back(static_cast<char>(character));
 
         RefreshText();
         return true;
     }
 
-    if (const auto *pressed =
-            event.getIf<
-                sf::Event::KeyPressed>()) {
-        if (pressed->code ==
-            sf::Keyboard::Key::Backspace) {
+    if (const auto *pressed = event.getIf<sf::Event::KeyPressed>()) {
+        if (pressed->code == sf::Keyboard::Key::Backspace) {
             if (replaceOnNextText) {
                 editBuffer.clear();
                 replaceOnNextText = false;
@@ -123,14 +94,12 @@ bool TextField::OnEvent(
             return true;
         }
 
-        if (pressed->code ==
-            sf::Keyboard::Key::Enter) {
+        if (pressed->code == sf::Keyboard::Key::Enter) {
             Commit();
             return true;
         }
 
-        if (pressed->code ==
-            sf::Keyboard::Key::Escape) {
+        if (pressed->code == sf::Keyboard::Key::Escape) {
             CancelEditing();
             return true;
         }
@@ -152,9 +121,7 @@ void TextField::OnKeyboardFocusLost() {
     RefreshVisual();
 }
 
-void TextField::OnEnabledChanged() {
-    RefreshVisual();
-}
+void TextField::OnEnabledChanged() { RefreshVisual(); }
 
 void TextField::Commit() {
     value = editBuffer;
@@ -180,24 +147,16 @@ void TextField::RefreshText() {
 }
 
 void TextField::RefreshTextPosition() {
-    const sf::FloatRect bounds =
-        text.getLocalBounds();
+    const sf::FloatRect bounds = text.getLocalBounds();
 
-    const sf::Vector2f position =
-        GetScreenPosition();
+    const sf::Vector2f position = GetScreenPosition();
 
-    const sf::Vector2f size =
-        GetSize();
+    const sf::Vector2f size = GetSize();
 
     text.setPosition({
-        position.x +
-            8.0f -
-            bounds.position.x,
+        position.x + 8.0f - bounds.position.x,
 
-        position.y +
-            (size.y - bounds.size.y) *
-                0.5f -
-            bounds.position.y,
+        position.y + (size.y - bounds.size.y) * 0.5f - bounds.position.y,
     });
 }
 
@@ -258,30 +217,15 @@ void TextField::RefreshVisual() {
 }
 
 std::string TextField::GetDisplayText() const {
-    const std::string &source =
-        HasKeyboardFocus()
-            ? editBuffer
-            : value;
+    const std::string &source = HasKeyboardFocus() ? editBuffer : value;
 
-    const float availableWidth =
-        std::max(
-            1.0f,
-            GetSize().x - 16.0f);
+    const float availableWidth = std::max(1.0f, GetSize().x - 16.0f);
 
-    const std::size_t maximumCharacters =
-        std::max<std::size_t>(
-            4,
-            static_cast<std::size_t>(
-                availableWidth / 8.0f));
+    const std::size_t maximumCharacters = std::max<std::size_t>(4, static_cast<std::size_t>(availableWidth / 8.0f));
 
-    if (source.size() <=
-        maximumCharacters) {
+    if (source.size() <= maximumCharacters) {
         return source;
     }
 
-    return
-        "..." +
-        source.substr(
-            source.size() -
-            (maximumCharacters - 3));
+    return "..." + source.substr(source.size() - (maximumCharacters - 3));
 }

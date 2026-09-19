@@ -6,14 +6,14 @@
 #include <span>
 #include <vector>
 
+#include <PipeFrame/ECS/Scene.h>
 #include <PipeFrame/Foundation/MathTypes.h>
 #include <PipeFrame/Simulation/System.h>
-#include <PipeFrame/ECS/Scene.h>
 
-#include "World/Runtime/AntView.h"
-#include "World/Runtime/AntQuery.h"
-#include "World/Runtime/ColonyView.h"
 #include "Configuration/AntConfiguration.h"
+#include "World/Runtime/AntQuery.h"
+#include "World/Runtime/AntView.h"
+#include "World/Runtime/ColonyView.h"
 #include "World/Runtime/Environment/AntEnvironment.h"
 #include "World/Runtime/Environment/Marker.h"
 
@@ -21,42 +21,25 @@ namespace ant_simulation {
 
 class ColonyLifecycleSystem final : public pipeframe::FixedUpdateSystem<void> {
   public:
-    static constexpr std::size_t AntNameCount{
-        865
-    };
+    static constexpr std::size_t AntNameCount{865};
 
-    static constexpr float HomeMarkerIntensity{
-        20'000.0f
-    };
+    static constexpr float HomeMarkerIntensity{20'000.0f};
 
-    ColonyLifecycleSystem(
-        AntEnvironment &environment,
-        AntQuery &antStore,
-        const AntConfiguration &configuration,
-        std::uint32_t randomSeed = 0
-    );
+    ColonyLifecycleSystem(AntEnvironment &environment, AntQuery &antStore, const AntConfiguration &configuration,
+                          std::uint32_t randomSeed = 0);
 
     ~ColonyLifecycleSystem();
 
-    ColonyView &CreateColony(
-        ColonyId id,
-        pipeframe::Vector2f position,
-        pipeframe::Color color
-    );
+    ColonyView &CreateColony(ColonyId id, pipeframe::Vector2f position, pipeframe::Color color);
 
-    ColonyView &CreateColony(
-        pipeframe::Vector2f position,
-        pipeframe::Color color
-    );
+    ColonyView &CreateColony(pipeframe::Vector2f position, pipeframe::Color color);
 
     [[nodiscard]]
     ColonyView *FindColony(ColonyId id);
     pipeframe::SceneObject GetColonyObject(ColonyId id) const;
 
     [[nodiscard]]
-    const ColonyView *FindColony(
-        ColonyId id
-    ) const;
+    const ColonyView *FindColony(ColonyId id) const;
 
     [[nodiscard]]
     std::span<ColonyView> GetColonies();
@@ -80,22 +63,15 @@ class ColonyLifecycleSystem final : public pipeframe::FixedUpdateSystem<void> {
     void RecountAntsAndUpdateRadii();
     void ApplySettings(ColonyId id, bool initialize);
 
-    void StampInitialHomeMarkers(
-        const ColonyView &colony
-    );
+    void StampInitialHomeMarkers(const ColonyView &colony);
 
-    void RefreshHomeMarkers(
-        const ColonyView &colony
-    );
+    void RefreshHomeMarkers(const ColonyView &colony);
 
     void Clear();
 
   private:
     [[nodiscard]]
-    float RandomFloat(std::mt19937 &generator,
-        float minimum,
-        float maximum
-    );
+    float RandomFloat(std::mt19937 &generator, float minimum, float maximum);
 
     [[nodiscard]]
     std::size_t RandomNameIndex(std::mt19937 &generator);

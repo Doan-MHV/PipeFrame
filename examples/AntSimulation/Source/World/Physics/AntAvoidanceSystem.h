@@ -1,67 +1,48 @@
 #ifndef ANT_AVOIDANCE_SYSTEM_H
 #define ANT_AVOIDANCE_SYSTEM_H
 
+#include <PipeFrame/Simulation/System.h>
 #include <cstddef>
 #include <optional>
 #include <vector>
-#include <PipeFrame/Simulation/System.h>
 
-#include "World/Runtime/AntQuery.h"
 #include "Configuration/AntConfiguration.h"
 #include "World/Physics/AntBodySystem.h"
+#include "World/Runtime/AntQuery.h"
 #include <PipeFrame/Spatial/UniformSpatialIndex.h>
 
 namespace ant_simulation {
 
 class AntAvoidanceSystem final : public pipeframe::FixedUpdateSystem<std::size_t> {
-public:
-    static constexpr float MaximumTimeToCollision{
-        2.0f
-    };
+  public:
+    static constexpr float MaximumTimeToCollision{2.0f};
 
-    static constexpr std::size_t SliceCount{
-        2
-    };
+    static constexpr std::size_t SliceCount{2};
 
     struct FutureCollision {
-        PhysicsBodyId firstBodyId{
-            InvalidPhysicsBodyId
-        };
+        PhysicsBodyId firstBodyId{InvalidPhysicsBodyId};
 
-        PhysicsBodyId secondBodyId{
-            InvalidPhysicsBodyId
-        };
+        PhysicsBodyId secondBodyId{InvalidPhysicsBodyId};
 
         float timeToCollision{-1.0f};
     };
 
-    AntAvoidanceSystem(
-        AntQuery &antStore,
-        AntBodySystem &physicsWorld,
-        const AntConfiguration &configuration
-    );
+    AntAvoidanceSystem(AntQuery &antStore, AntBodySystem &physicsWorld, const AntConfiguration &configuration);
 
     [[nodiscard]] std::string_view GetSystemId() const override { return "ant.collision-avoidance"; }
     std::size_t Update(float deltaTime) override;
 
     [[nodiscard]]
-    const std::vector<FutureCollision> &
-    GetFutureCollisions() const;
+    const std::vector<FutureCollision> &GetFutureCollisions() const;
 
     [[nodiscard]]
-    static std::optional<float>
-    CalculateTimeToCollision(
-        const AntPhysicsBody &first,
-        const AntPhysicsBody &second,
-        float combinedRadius = 1.0f
-    );
+    static std::optional<float> CalculateTimeToCollision(const AntPhysicsBody &first, const AntPhysicsBody &second,
+                                                         float combinedRadius = 1.0f);
 
-private:
+  private:
     void FindFutureCollisions();
 
-    void SolveFutureCollisions(
-        float deltaTime
-    );
+    void SolveFutureCollisions(float deltaTime);
 
     AntQuery &antStore;
     AntBodySystem &physicsWorld;
@@ -73,8 +54,7 @@ private:
     pipeframe::UniformSpatialIndex<AntPhysicsBody *> collisionGrid;
     std::vector<pipeframe::UniformSpatialIndex<AntPhysicsBody *>::Entry> gridEntries;
 
-    std::vector<FutureCollision>
-        futureCollisions;
+    std::vector<FutureCollision> futureCollisions;
 
     std::size_t currentSlice{0};
 };

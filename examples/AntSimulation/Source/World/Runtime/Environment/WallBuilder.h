@@ -16,34 +16,19 @@ enum class WallType {
 };
 
 class WallBuilder {
-public:
-    static void CreateBorderWalls(
-        AntEnvironment &environment
-    );
+  public:
+    static void CreateBorderWalls(AntEnvironment &environment);
 
-    static void RebuildSamplingCoefficients(
-        AntEnvironment &environment
-    );
+    static void RebuildSamplingCoefficients(AntEnvironment &environment);
 
     [[nodiscard]]
-    static bool IsWallBorder(
-        const AntEnvironment &environment,
-        pipeframe::Vector2i position,
-        int maximumDistance = 1
-    );
+    static bool IsWallBorder(const AntEnvironment &environment, pipeframe::Vector2i position, int maximumDistance = 1);
 
     [[nodiscard]]
-    static int GetDistanceToWall(
-        const AntEnvironment &environment,
-        pipeframe::Vector2i position,
-        int maximumDistance
-    );
+    static int GetDistanceToWall(const AntEnvironment &environment, pipeframe::Vector2i position, int maximumDistance);
 
     [[nodiscard]]
-    static WallType GetWallType(
-        const AntEnvironment &environment,
-        pipeframe::Vector2i position
-    );
+    static WallType GetWallType(const AntEnvironment &environment, pipeframe::Vector2i position);
 };
 
 } // namespace ant_simulation

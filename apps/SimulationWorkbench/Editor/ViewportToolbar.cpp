@@ -26,6 +26,8 @@ ViewportToolbar::ViewportToolbar()  {
     actions["rotationSnapButton"].text="ANG OFF";
     actions["scaleSnapButton"].text="SCL OFF";
     actions["frameButton"].text="FRAME";
+    actions["physicsDebugButton"].text="PHYSICS OFF";
+    actions["meshDebugButton"].text="MESH OFF";
 }
 View ViewportToolbar::BuildView() {
     const auto row=[&](const char *key, std::initializer_list<const char *> ids) {
@@ -37,7 +39,7 @@ View ViewportToolbar::BuildView() {
     return views::Scroll("toolbar-scroll",views::Column("toolbar",{
         views::Row("identity",{views::Text("title",title).FitHeight(),views::Text("status",status).FitHeight()}),
         row("actions",{"newProjectButton","openProjectButton","undoButton","redoButton","saveButton","saveAsButton"}),
-        row("workspace",{"viewModeButton","assetsButton","panelsButton","buildButton","reloadButton","metricsButton"}),
+        row("workspace",{"viewModeButton","assetsButton","panelsButton","buildButton","reloadButton","metricsButton","physicsDebugButton","meshDebugButton"}),
         row("tools",{"toolButton","transformSpaceButton","pivotButton","gridButton","gridStepButton","gridOriginButton","snapButton","rotationSnapButton","scaleSnapButton","frameButton"})
     }).Padding(8).Spacing(4)).FillHeight();
 }
@@ -127,9 +129,14 @@ void ViewportToolbar::SetStatusText(const std::string &text) { if (status != (te
 
 float ViewportToolbar::PreferredHeight(float width) {
     const float columns=std::max(1.0f,std::floor((width-16+4)/92));
-    const float lines=std::ceil(6/columns)+std::ceil(5/columns)+std::ceil(10/columns);
+    const float lines=std::ceil(6/columns)+std::ceil(8/columns)+std::ceil(10/columns);
     return 40+lines*36;
 }
 
 void ViewportToolbar::SetOnBuild(ActionCallback callback){actions["buildButton"].callback=std::move(callback);InvalidateView();}
 void ViewportToolbar::SetBuildRunning(bool running){const std::string text=running?"CANCEL BUILD":"BUILD & RELOAD";if(actions["buildButton"].text!=text){actions["buildButton"].text=text;InvalidateView();}}
+
+void ViewportToolbar::SetOnPhysicsDebug(ActionCallback callback){actions["physicsDebugButton"].callback=std::move(callback);InvalidateView();}
+void ViewportToolbar::SetOnMeshDebug(ActionCallback callback){actions["meshDebugButton"].callback=std::move(callback);InvalidateView();}
+void ViewportToolbar::SetPhysicsDebugVisible(bool value){actions["physicsDebugButton"].text=value?"PHYSICS ON":"PHYSICS OFF";InvalidateView();}
+void ViewportToolbar::SetMeshDebugVisible(bool value){actions["meshDebugButton"].text=value?"MESH ON":"MESH OFF";InvalidateView();}

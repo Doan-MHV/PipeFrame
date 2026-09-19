@@ -7,8 +7,7 @@
 #include "PipeFrame/Input/Key.h"
 #include "PipeFrame/Input/MouseButton.h"
 
-class Input
-{
+class Input {
 public:
     static void BeginFrame();
     static void HandleEvent(const sf::Event& event);

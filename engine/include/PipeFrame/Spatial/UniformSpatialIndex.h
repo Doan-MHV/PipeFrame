@@ -15,7 +15,10 @@ namespace pipeframe {
 template <typename Id, typename Hash = std::hash<Id>>
 class UniformSpatialIndex {
 public:
-    struct Entry { Id id{}; Vector2f position{}; };
+    struct Entry {
+        Id id{};
+        Vector2f position{};
+    };
 
     void Initialize(Rectanglef newBounds, float newCellSize) {
         bounds = newBounds;
@@ -32,7 +35,8 @@ public:
         cells.Fill({});
         positions.clear();
         positions.reserve(entries.size());
-        for (const auto &entry : entries) Insert(entry.id, entry.position);
+        for (const auto& entry : entries)
+            Insert(entry.id, entry.position);
     }
 
     bool Insert(Id id, Vector2f position) {
@@ -48,7 +52,7 @@ public:
         const auto oldCoordinate = CoordinateOf(found->second);
         const auto newCoordinate = CoordinateOf(position);
         if (oldCoordinate != newCoordinate) {
-            auto &oldCell = cells.At(oldCoordinate);
+            auto& oldCell = cells.At(oldCoordinate);
             std::erase(oldCell, id);
             cells.At(newCoordinate).push_back(id);
         }
@@ -59,7 +63,7 @@ public:
     bool Remove(Id id) {
         const auto found = positions.find(id);
         if (found == positions.end()) return false;
-        auto &cell = cells.At(CoordinateOf(found->second));
+        auto& cell = cells.At(CoordinateOf(found->second));
         std::erase(cell, id);
         positions.erase(found);
         return true;
@@ -72,7 +76,7 @@ public:
     }
 
     [[nodiscard]] std::span<const Id> GetIds(GridCoordinate coordinate) const {
-        const auto *cell = cells.TryGet(coordinate);
+        const auto* cell = cells.TryGet(coordinate);
         return cell ? std::span<const Id>(*cell) : std::span<const Id>{};
     }
 
@@ -112,5 +116,5 @@ private:
     std::unordered_map<Id, Vector2f, Hash> positions;
 };
 
-} // namespace pipeframe
+}  // namespace pipeframe
 #endif

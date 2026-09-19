@@ -1,12 +1,12 @@
 #ifndef PIPEFRAME_LEARNING_NETWORK_H
 #define PIPEFRAME_LEARNING_NETWORK_H
 
+#include <PipeFrame/Learning/Activation.h>
+
 #include <cstddef>
 #include <cstdint>
 #include <span>
 #include <vector>
-
-#include <PipeFrame/Learning/Activation.h>
 
 namespace pipeframe::learning {
 
@@ -54,7 +54,7 @@ public:
     bool Execute(std::span<const float> inputs);
 
     [[nodiscard]] std::span<const float> GetOutputs() const;
-    [[nodiscard]] const std::vector<NetworkNode> &GetNodes() const;
+    [[nodiscard]] const std::vector<NetworkNode>& GetNodes() const;
     [[nodiscard]] std::size_t GetConnectionCount() const;
     [[nodiscard]] InferenceSnapshot GetInferenceSnapshot() const;
 
@@ -69,6 +69,6 @@ private:
     std::size_t connectionCount{0};
 };
 
-} // namespace pipeframe::learning
+}  // namespace pipeframe::learning
 
 #endif

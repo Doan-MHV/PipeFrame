@@ -4,21 +4,28 @@
 
 namespace {
 bool IsWithin(const Widget *widget, const Widget *ancestor) {
-    for (; widget; widget = widget->GetParent()) if (widget == ancestor) return true;
+    for (; widget; widget = widget->GetParent())
+        if (widget == ancestor)
+            return true;
     return false;
 }
 Widget *FindBarrier(Widget &widget) {
-    if (!widget.IsVisible() || !widget.IsEnabled()) return nullptr;
+    if (!widget.IsVisible() || !widget.IsEnabled())
+        return nullptr;
     for (std::size_t i = widget.GetChildCount(); i > 0; --i)
-        if (auto *barrier = FindBarrier(*widget.GetChild(i - 1))) return barrier;
+        if (auto *barrier = FindBarrier(*widget.GetChild(i - 1)))
+            return barrier;
     return widget.IsInputBarrier() ? &widget : nullptr;
 }
 void CollectFocusable(Widget &widget, std::vector<Widget *> &result) {
-    if (!widget.IsVisible() || !widget.IsEnabled()) return;
-    if (widget.IsFocusable()) result.push_back(&widget);
-    for (std::size_t i = 0; i < widget.GetChildCount(); ++i) CollectFocusable(*widget.GetChild(i), result);
+    if (!widget.IsVisible() || !widget.IsEnabled())
+        return;
+    if (widget.IsFocusable())
+        result.push_back(&widget);
+    for (std::size_t i = 0; i < widget.GetChildCount(); ++i)
+        CollectFocusable(*widget.GetChild(i), result);
 }
-}
+} // namespace
 
 bool UIManager::HandleEvent(const sf::Event &event) {
     Update(0);
@@ -39,23 +46,31 @@ bool UIManager::HandleEvent(const sf::Event &event) {
     }
 
     Widget *barrier = nullptr;
-    for (auto it = roots.rbegin(); it != roots.rend() && !barrier; ++it) barrier = FindBarrier(**it);
+    for (auto it = roots.rbegin(); it != roots.rend() && !barrier; ++it)
+        barrier = FindBarrier(**it);
     if (barrier) {
-        if (!IsWithin(capturedWidget, barrier)) capturedWidget = nullptr;
-        if (!IsWithin(hoveredWidget, barrier)) UpdateHoveredWidget(nullptr);
-        if (!IsWithin(focusedWidget, barrier)) SetKeyboardFocus(FindFocusableAncestor(barrier));
+        if (!IsWithin(capturedWidget, barrier))
+            capturedWidget = nullptr;
+        if (!IsWithin(hoveredWidget, barrier))
+            UpdateHoveredWidget(nullptr);
+        if (!IsWithin(focusedWidget, barrier))
+            SetKeyboardFocus(FindFocusableAncestor(barrier));
     }
     if (const auto *key = event.getIf<sf::Event::KeyPressed>(); key && key->code == sf::Keyboard::Key::Tab) {
         std::vector<Widget *> candidates;
-        if (barrier) CollectFocusable(*barrier, candidates);
-        else for (auto &root : roots) CollectFocusable(*root, candidates);
-        if (candidates.empty()) return barrier != nullptr;
+        if (barrier)
+            CollectFocusable(*barrier, candidates);
+        else
+            for (auto &root : roots)
+                CollectFocusable(*root, candidates);
+        if (candidates.empty())
+            return barrier != nullptr;
         auto it = std::find(candidates.begin(), candidates.end(), focusedWidget);
         std::size_t index = key->shift ? candidates.size() - 1 : 0;
         if (it != candidates.end()) {
             const auto current = static_cast<std::size_t>(it - candidates.begin());
-            index = key->shift ? (current + candidates.size() - 1) % candidates.size()
-                               : (current + 1) % candidates.size();
+            index =
+                key->shift ? (current + candidates.size() - 1) % candidates.size() : (current + 1) % candidates.size();
         }
         SetKeyboardFocus(candidates[index]);
         return true;
@@ -80,7 +95,8 @@ bool UIManager::HandleEvent(const sf::Event &event) {
     }
 
     Widget *hitWidget = FindTopmostAt(*pointerPosition);
-    if (barrier && !IsWithin(hitWidget, barrier)) hitWidget = barrier;
+    if (barrier && !IsWithin(hitWidget, barrier))
+        hitWidget = barrier;
 
     if (event.is<sf::Event::MouseMoved>()) {
         UpdateHoveredWidget(hitWidget);
@@ -175,22 +191,31 @@ void UIManager::Render(sf::RenderTarget &target) const {
 }
 
 void UIManager::Update(const float realDeltaSeconds) {
-    if (updating) throw std::logic_error("UI updates cannot be nested");
-    updating=true;
-    const auto finish=[&] {
-        updating=false;
-        for (auto &root : pendingRoots) roots.push_back(std::move(root));
+    if (updating)
+        throw std::logic_error("UI updates cannot be nested");
+    updating = true;
+    const auto finish = [&] {
+        updating = false;
+        for (auto &root : pendingRoots)
+            roots.push_back(std::move(root));
         pendingRoots.clear();
     };
     try {
         PruneExpiredInput();
-        for (const auto &root : roots) root->Update(realDeltaSeconds);
+        for (const auto &root : roots)
+            root->Update(realDeltaSeconds);
         std::erase_if(roots, [](const auto &root) { return root->IsDisposed(); });
         PruneExpiredInput();
-        if (!IsInteractiveInTree(hoveredWidget)) UpdateHoveredWidget(nullptr);
-        if (!IsInteractiveInTree(capturedWidget)) capturedWidget=nullptr;
-        if (!IsInteractiveInTree(focusedWidget)) SetKeyboardFocus(nullptr);
-    } catch (...) { finish(); throw; }
+        if (!IsInteractiveInTree(hoveredWidget))
+            UpdateHoveredWidget(nullptr);
+        if (!IsInteractiveInTree(capturedWidget))
+            capturedWidget = nullptr;
+        if (!IsInteractiveInTree(focusedWidget))
+            SetKeyboardFocus(nullptr);
+    } catch (...) {
+        finish();
+        throw;
+    }
     finish();
 }
 
@@ -288,7 +313,10 @@ void UIManager::SetKeyboardFocus(Widget *widget) {
 
 bool UIManager::HasKeyboardFocus() const { return focusedWidget != nullptr && !focusedLifetime.expired(); }
 void UIManager::PruneExpiredInput() {
-    if (hoveredLifetime.expired()) hoveredWidget = nullptr;
-    if (capturedLifetime.expired()) capturedWidget = nullptr;
-    if (focusedLifetime.expired()) focusedWidget = nullptr;
+    if (hoveredLifetime.expired())
+        hoveredWidget = nullptr;
+    if (capturedLifetime.expired())
+        capturedWidget = nullptr;
+    if (focusedLifetime.expired())
+        focusedWidget = nullptr;
 }

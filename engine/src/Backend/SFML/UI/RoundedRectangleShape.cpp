@@ -44,9 +44,7 @@ void RoundedRectangleShape::setCornerPointCount(const std::size_t newCount) {
 
 std::size_t RoundedRectangleShape::getCornerPointCount() const { return cornerPointCount; }
 
-std::size_t RoundedRectangleShape::getPointCount() const {
-    return cornerRadius <= 0.0f ? 4 : cornerPointCount * 4;
-}
+std::size_t RoundedRectangleShape::getPointCount() const { return cornerRadius <= 0.0f ? 4 : cornerPointCount * 4; }
 
 sf::Vector2f RoundedRectangleShape::getPoint(const std::size_t index) const {
     const float radius = std::min({cornerRadius, size.x * 0.5f, size.y * 0.5f});
@@ -67,8 +65,7 @@ sf::Vector2f RoundedRectangleShape::getPoint(const std::size_t index) const {
     const std::size_t cornerIndex = index % cornerPointCount;
     const float quarterTurn = std::numbers::pi_v<float> * 0.5f;
     const float angle = std::numbers::pi_v<float> + static_cast<float>(corner) * quarterTurn +
-                        static_cast<float>(cornerIndex) * quarterTurn /
-                            static_cast<float>(cornerPointCount - 1);
+                        static_cast<float>(cornerIndex) * quarterTurn / static_cast<float>(cornerPointCount - 1);
 
     sf::Vector2f center;
     switch (corner) {

@@ -10,18 +10,15 @@ enum class SeparatorOrientation {
 };
 
 class Separator final : public Panel {
-  public:
+public:
     explicit Separator(const SeparatorOrientation orientation = SeparatorOrientation::Horizontal,
-                       const UITheme &theme = UITheme::Dark()) {
+                       const UITheme& theme = UITheme::Dark()) {
         SetFillColor(theme.subtleBorder);
         SetOutlineThickness(0.0f);
         SetHitTestVisible(false);
-        SetSize(orientation == SeparatorOrientation::Horizontal ? sf::Vector2f{1.0f, 1.0f}
-                                                                : sf::Vector2f{1.0f, 1.0f});
-        SetSizePolicy(orientation == SeparatorOrientation::Horizontal ? SizePolicy::Stretch
-                                                                      : SizePolicy::Fixed,
-                      orientation == SeparatorOrientation::Horizontal ? SizePolicy::Fixed
-                                                                      : SizePolicy::Stretch);
+        SetSize(orientation == SeparatorOrientation::Horizontal ? sf::Vector2f{1.0f, 1.0f} : sf::Vector2f{1.0f, 1.0f});
+        SetSizePolicy(orientation == SeparatorOrientation::Horizontal ? SizePolicy::Stretch : SizePolicy::Fixed,
+                      orientation == SeparatorOrientation::Horizontal ? SizePolicy::Fixed : SizePolicy::Stretch);
     }
 };
 

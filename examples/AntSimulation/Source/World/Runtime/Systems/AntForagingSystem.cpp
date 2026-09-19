@@ -1,9 +1,8 @@
 #include "World/Runtime/Systems/AntForagingSystem.h"
 
 namespace ant_simulation {
-AntForagingSystem::AntForagingSystem(AntQuery &store, ColonyLifecycleSystem &colonies,
-                                    AntEnvironment &environment, const AntConfiguration &config,
-                                    std::uint32_t seed)
+AntForagingSystem::AntForagingSystem(AntQuery &store, ColonyLifecycleSystem &colonies, AntEnvironment &environment,
+                                     const AntConfiguration &config, std::uint32_t seed)
     : store(store), colonies(colonies), worker(environment, config), random(seed) {}
 
 void AntForagingSystem::Update(float delta) {
@@ -13,9 +12,13 @@ void AntForagingSystem::Update(float delta) {
     for (AntView &ant : store.GetAnts()) {
         auto *energy = energyAccess.Get(ant.GetId());
         auto *encounter = encounters.Get(ant.GetId());
-        if (!energy || !encounter || energy->IsDepleted() || encounter->opponentId) continue;
+        if (!energy || !encounter || energy->IsDepleted() || encounter->opponentId)
+            continue;
         auto *colony = colonies.FindColony(ant.GetColonyId());
-        if (!colony) { energy->Deplete(); continue; }
+        if (!colony) {
+            energy->Deplete();
+            continue;
+        }
         auto *foraging = foragingAccess.Get(ant.GetId());
         if (foraging && ant.GetRole() != AntRole::Soldier)
             worker.Update(ant, *foraging, *colony, delta, random);

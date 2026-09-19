@@ -7,37 +7,24 @@
 #include <span>
 #include <vector>
 
-
-#include "World/Runtime/AntView.h"
 #include "World/Physics/AntBodySystem.h"
+#include "World/Runtime/AntView.h"
 
 namespace ant_simulation {
 
 class AntDebugRenderer final : public pipeframe::RenderLayer {
-public:
-    static constexpr std::size_t CircleSegmentCount{
-        64
-    };
+  public:
+    static constexpr std::size_t CircleSegmentCount{64};
 
-    static constexpr std::size_t PhysicsCircleSegmentCount{
-        24
-    };
+    static constexpr std::size_t PhysicsCircleSegmentCount{24};
 
-    static constexpr float SelectionRadius{
-        1.0f
-    };
+    static constexpr float SelectionRadius{1.0f};
 
-    static constexpr float SelectionThickness{
-        0.1f
-    };
+    static constexpr float SelectionThickness{0.1f};
 
-    static constexpr float TargetRadius{
-        0.25f
-    };
+    static constexpr float TargetRadius{0.25f};
 
-    static constexpr float PhysicsBodyRadius{
-        0.5f
-    };
+    static constexpr float PhysicsBodyRadius{0.5f};
 
     static constexpr pipeframe::Color SelectionColor{
         255,
@@ -67,29 +54,19 @@ public:
         255,
     };
 
-    void SetSelectedAnt(
-        std::optional<AntId> antId
-    );
+    void SetSelectedAnt(std::optional<AntId> antId);
 
     void SetTargetVisible(bool visible);
 
     void SetPhysicsDebugVisible(bool visible);
 
-    void Update(
-        std::span<const AntView> ants,
-        std::span<const AntPhysicsBody> bodies,
-        const pipeframe::Rectanglef &viewport
-    );
+    void Update(std::span<const AntView> ants, std::span<const AntPhysicsBody> bodies,
+                const pipeframe::Rectanglef &viewport);
 
-    void Draw(
-        pipeframe::Canvas target,
-        pipeframe::RenderState states =
-            pipeframe::RenderState::Default
-    ) const override;
+    void Draw(pipeframe::Canvas target, pipeframe::RenderState states = pipeframe::RenderState::Default) const override;
 
     [[nodiscard]]
-    std::optional<AntId>
-    GetSelectedAnt() const;
+    std::optional<AntId> GetSelectedAnt() const;
 
     [[nodiscard]]
     bool IsTargetVisible() const;
@@ -104,41 +81,23 @@ public:
     std::size_t GetVisiblePhysicsBodyCount() const;
 
     [[nodiscard]]
-    std::span<const pipeframe::Vertex2D>
-    GetSelectionVertices() const;
+    std::span<const pipeframe::Vertex2D> GetSelectionVertices() const;
 
     [[nodiscard]]
-    std::span<const pipeframe::Vertex2D>
-    GetTargetVertices() const;
+    std::span<const pipeframe::Vertex2D> GetTargetVertices() const;
 
     [[nodiscard]]
-    std::span<const pipeframe::Vertex2D>
-    GetPhysicsVertices() const;
+    std::span<const pipeframe::Vertex2D> GetPhysicsVertices() const;
 
-private:
-    static void AddCircle(
-        std::vector<pipeframe::Vertex2D> &vertices,
-        pipeframe::Vector2f center,
-        float radius,
-        pipeframe::Color color,
-        std::size_t segmentCount
-    );
+  private:
+    static void AddCircle(std::vector<pipeframe::Vertex2D> &vertices, pipeframe::Vector2f center, float radius,
+                          pipeframe::Color color, std::size_t segmentCount);
 
-    static void AddRing(
-        std::vector<pipeframe::Vertex2D> &vertices,
-        pipeframe::Vector2f center,
-        float outerRadius,
-        float innerRadius,
-        pipeframe::Color color,
-        std::size_t segmentCount
-    );
+    static void AddRing(std::vector<pipeframe::Vertex2D> &vertices, pipeframe::Vector2f center, float outerRadius,
+                        float innerRadius, pipeframe::Color color, std::size_t segmentCount);
 
     [[nodiscard]]
-    static bool IsVisible(
-        pipeframe::Vector2f center,
-        float radius,
-        const pipeframe::Rectanglef &viewport
-    );
+    static bool IsVisible(pipeframe::Vector2f center, float radius, const pipeframe::Rectanglef &viewport);
 
     std::optional<AntId> selectedAntId;
 

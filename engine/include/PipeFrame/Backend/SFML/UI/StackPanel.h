@@ -25,7 +25,7 @@ enum class CrossAxisAlignment {
 };
 
 class StackPanel : public Panel {
-  public:
+public:
     void SetOrientation(StackOrientation newOrientation);
 
     StackOrientation GetOrientation() const;
@@ -44,21 +44,21 @@ class StackPanel : public Panel {
 
     CrossAxisAlignment GetCrossAxisAlignment() const;
 
-    void SetChildFlex(Widget &child, float flex);
+    void SetChildFlex(Widget& child, float flex);
 
-    float GetChildFlex(const Widget &child) const;
+    float GetChildFlex(const Widget& child) const;
 
     void RefreshLayout();
 
-  protected:
+protected:
     void OnGeometryChanged() override;
 
-    void OnChildGeometryChanged(Widget &child) override;
-    void OnChildRemoved(Widget &child) override;
+    void OnChildGeometryChanged(Widget& child) override;
+    void OnChildRemoved(Widget& child) override;
 
-    sf::Vector2f OnMeasure(const BoxConstraints &constraints) override;
+    sf::Vector2f OnMeasure(const BoxConstraints& constraints) override;
 
-  private:
+private:
     void LayoutVertical();
     void LayoutHorizontal();
 
@@ -75,13 +75,13 @@ class StackPanel : public Panel {
     Thickness padding;
     float spacing = 0.0f;
 
-    std::unordered_map<const Widget *, float> childFlex;
+    std::unordered_map<const Widget*, float> childFlex;
 
     bool layoutInProgress = false;
 };
 
 class Row : public StackPanel {
-  public:
+public:
     Row() { SetOrientation(StackOrientation::Horizontal); }
 };
 

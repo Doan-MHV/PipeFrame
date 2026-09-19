@@ -5,16 +5,13 @@
 #include <string>
 
 #include <PipeFrame/Foundation/MathTypes.h>
-#include <PipeFrame/Foundation/MathTypes.h>
 
 namespace ant_simulation {
 
 struct AntConfiguration {
     static constexpr float Pi = 3.14159265358979323846f;
 
-    static constexpr float DegreesToRadians(const float degrees) {
-        return degrees * Pi / 180.0f;
-    }
+    static constexpr float DegreesToRadians(const float degrees) { return degrees * Pi / 180.0f; }
 
     // World
     pipeframe::Vector2i worldSize{
@@ -38,13 +35,9 @@ struct AntConfiguration {
     float antCost{8.0f};
     float antSoldierCost{24.0f};
 
-    float antFieldOfView{
-        DegreesToRadians(135.0f)
-    };
+    float antFieldOfView{DegreesToRadians(135.0f)};
 
-    float antExploreFieldOfView{
-        DegreesToRadians(90.0f)
-    };
+    float antExploreFieldOfView{DegreesToRadians(90.0f)};
 
     float antMarkerDistance{3.0f};
 

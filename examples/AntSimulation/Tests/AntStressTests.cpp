@@ -27,12 +27,8 @@ ant_simulation::AntConfiguration CreateStressConfiguration() {
     return configuration;
 }
 
-void Populate(
-    ant_simulation::AntWorld &world,
-    const std::size_t count,
-    const std::size_t columns,
-    const float spacing
-) {
+void Populate(ant_simulation::AntWorld &world, const std::size_t count, const std::size_t columns,
+              const float spacing) {
     using namespace ant_simulation;
 
     AntQuery &store = world.GetAntQuery();
@@ -44,13 +40,9 @@ void Populate(
             8.0f + static_cast<float>(index / columns) * spacing,
         };
 
-        AntView ant = store.Create(
-            1,
-            AntRole::Follower,
-            position,
-            static_cast<float>(index % 360) * AntConfiguration::DegreesToRadians(1.0f),
-            static_cast<float>(index % 31) / 31.0f,
-            configuration);
+        AntView ant = store.Create(1, AntRole::Follower, position,
+                                   static_cast<float>(index % 360) * AntConfiguration::DegreesToRadians(1.0f),
+                                   static_cast<float>(index % 31) / 31.0f, configuration);
         ant.Identity().color = configuration.toFoodAntColor;
     }
 
@@ -64,14 +56,11 @@ void VerifyFiniteForagingState(const ant_simulation::AntWorld &world) {
         const pipeframe::Vector2f position = ant.GetPosition();
         const pipeframe::Vector2f direction = ant.GetDirection();
 
-        Require(
-            std::isfinite(position.x) && std::isfinite(position.y) &&
-                std::isfinite(direction.x) && std::isfinite(direction.y),
-            "Ant state must remain finite under load.");
-        Require(
-            position.x >= 0.0f && position.y >= 0.0f &&
-                position.x <= worldSize.x && position.y <= worldSize.y,
-            "Ants must remain inside the guarded world border under load.");
+        Require(std::isfinite(position.x) && std::isfinite(position.y) && std::isfinite(direction.x) &&
+                    std::isfinite(direction.y),
+                "Ant state must remain finite under load.");
+        Require(position.x >= 0.0f && position.y >= 0.0f && position.x <= worldSize.x && position.y <= worldSize.y,
+                "Ants must remain inside the guarded world border under load.");
     }
 }
 
@@ -90,9 +79,7 @@ void RunCapacityGate() {
     Require(world.GetAntQuery().GetCount() == 100'000, "Ant store should hold 100K ants.");
     Require(world.GetPhysicsBodies().GetBodyCount() == 100'000, "Physics should synchronize 100K bodies.");
 
-    std::cout << "100K capacity: "
-              << std::chrono::duration<double, std::milli>(elapsed).count()
-              << " ms\n";
+    std::cout << "100K capacity: " << std::chrono::duration<double, std::milli>(elapsed).count() << " ms\n";
 }
 
 void RunThroughputGate() {
@@ -125,17 +112,13 @@ void RunThroughputGate() {
     Require(world.GetAntQuery().GetCount() == AntCount, "10K ants should survive the throughput run.");
     VerifyFiniteForagingState(world);
 
-    const double updatesPerSecond =
-        static_cast<double>(AntCount * TickCount) / elapsedSeconds;
-    std::cout << "10K throughput: " << updatesPerSecond
-              << " ant updates/s (" << elapsedSeconds << " s)\n"
-              << "Average phases: preparation "
-              << accumulatedTimings.preparationTimeMs / TickCount
-              << " ms, avoidance " << accumulatedTimings.avoidanceTimeMs / TickCount
-              << " ms, physics/contact " << accumulatedTimings.physicsTimeMs / TickCount
-              << " ms, behavior " << accumulatedTimings.behaviorTimeMs / TickCount
-              << " ms, cleanup " << accumulatedTimings.cleanupTimeMs / TickCount
-              << " ms\n";
+    const double updatesPerSecond = static_cast<double>(AntCount * TickCount) / elapsedSeconds;
+    std::cout << "10K throughput: " << updatesPerSecond << " ant updates/s (" << elapsedSeconds << " s)\n"
+              << "Average phases: preparation " << accumulatedTimings.preparationTimeMs / TickCount << " ms, avoidance "
+              << accumulatedTimings.avoidanceTimeMs / TickCount << " ms, physics/contact "
+              << accumulatedTimings.physicsTimeMs / TickCount << " ms, behavior "
+              << accumulatedTimings.behaviorTimeMs / TickCount << " ms, cleanup "
+              << accumulatedTimings.cleanupTimeMs / TickCount << " ms\n";
 }
 
 void RunSoakGate() {
@@ -161,8 +144,7 @@ void RunSoakGate() {
     Require(world.GetPhysicsBodies().GetBodyCount() == AntCount, "Physics count should remain stable during soak.");
     VerifyFiniteForagingState(world);
 
-    std::cout << "Soak: " << AntCount << " ants x " << TickCount
-              << " ticks in " << elapsedSeconds << " s\n";
+    std::cout << "Soak: " << AntCount << " ants x " << TickCount << " ticks in " << elapsedSeconds << " s\n";
 }
 
 } // namespace

@@ -3,8 +3,7 @@
 #include <algorithm>
 #include <utility>
 
-Toast::Toast(const UITheme &newTheme)
-    : Surface(SurfaceVariant::Floating, newTheme), theme(newTheme) {
+Toast::Toast(const UITheme &newTheme) : Surface(SurfaceVariant::Floating, newTheme), theme(newTheme) {
     SetSize({280.0f, 52.0f});
     SetHitTestVisible(false);
     SetVisible(false);

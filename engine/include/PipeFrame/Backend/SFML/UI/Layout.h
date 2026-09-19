@@ -1,11 +1,10 @@
 #ifndef PIPEFRAME_UI_LAYOUT_H
 #define PIPEFRAME_UI_LAYOUT_H
 
+#include <SFML/System/Vector2.hpp>
 #include <algorithm>
 #include <cmath>
 #include <limits>
-
-#include <SFML/System/Vector2.hpp>
 
 enum class SizePolicy {
     Fixed,

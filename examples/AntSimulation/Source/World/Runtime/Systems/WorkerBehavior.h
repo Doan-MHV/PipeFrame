@@ -15,37 +15,18 @@ struct AntConfiguration;
 struct AntWorldCell;
 
 class WorkerBehavior {
-public:
-    WorkerBehavior(
-        AntEnvironment &environment,
-        const AntConfiguration &configuration
-    );
+  public:
+    WorkerBehavior(AntEnvironment &environment, const AntConfiguration &configuration);
 
-    void Update(
-        AntView &ant,
-        ForagingComponent &foraging,
-        ColonyView &colony,
-        float deltaTime,
-        std::mt19937 &randomGenerator
-    ) const;
+    void Update(AntView &ant, ForagingComponent &foraging, ColonyView &colony, float deltaTime,
+                std::mt19937 &randomGenerator) const;
 
-private:
-    void CollectFood(
-        AntView &ant,
-        ForagingComponent &foraging
-    ) const;
+  private:
+    void CollectFood(AntView &ant, ForagingComponent &foraging) const;
 
-    void CheckDistanceToColony(
-        AntView &ant,
-        ForagingComponent &foraging,
-        ColonyView &colony
-    ) const;
+    void CheckDistanceToColony(AntView &ant, ForagingComponent &foraging, ColonyView &colony) const;
 
-    void UpdateAntMarker(
-        AntView &ant,
-        ForagingComponent &foraging,
-        AntWorldCell &cell
-    ) const;
+    void UpdateAntMarker(AntView &ant, ForagingComponent &foraging, AntWorldCell &cell) const;
 
     AntEnvironment &environment;
     const AntConfiguration &configuration;

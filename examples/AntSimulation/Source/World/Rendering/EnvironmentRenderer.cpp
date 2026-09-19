@@ -13,8 +13,12 @@ EnvironmentRenderer::EnvironmentRenderer(const AntConfiguration &newConfiguratio
 bool EnvironmentRenderer::LoadAssets(const std::filesystem::path &assetRoot, std::string &errorMessage) {
     const std::filesystem::path circlePath = assetRoot / "Textures" / "circle.png";
 
-    resources.Clear();circleTexture=resources.LoadTexture(circlePath.string(),true,&errorMessage);
-    if(resources.State(circleTexture)!=pipeframe::ResourceState::Ready){assetsLoaded=false;return false;}
+    resources.Clear();
+    circleTexture = resources.LoadTexture(circlePath.string(), true, &errorMessage);
+    if (resources.State(circleTexture) != pipeframe::ResourceState::Ready) {
+        assetsLoaded = false;
+        return false;
+    }
 
     if (!markerRenderer.LoadAssets(assetRoot, errorMessage)) {
         assetsLoaded = false;
@@ -59,25 +63,32 @@ void EnvironmentRenderer::Draw(pipeframe::Canvas target, pipeframe::RenderState 
     states.texture = nullptr;
     states.blendMode = pipeframe::BlendMode::Alpha;
 
-    if(authoredGround){auto surface=*authoredGround;surface.showGrid=false;pipeframe::DrawPlayground(target,{},surface,groundState,groundUv);}
-    else if (!backgroundVertices.empty()) {
-        target.Draw(backgroundVertices.data(), backgroundVertices.size(), pipeframe::PrimitiveTopology::Triangles, states);
+    if (authoredGround) {
+        auto surface = *authoredGround;
+        surface.showGrid = false;
+        pipeframe::DrawPlayground(target, {}, surface, groundState, groundUv);
+    } else if (!backgroundVertices.empty()) {
+        target.Draw(backgroundVertices.data(), backgroundVertices.size(), pipeframe::PrimitiveTopology::Triangles,
+                    states);
     }
 
-    if (gridEnabled && (!authoredGround||authoredGround->showGrid) && !gridVertices.empty()) {
+    if (gridEnabled && (!authoredGround || authoredGround->showGrid) && !gridVertices.empty()) {
         target.Draw(gridVertices.data(), gridVertices.size(), pipeframe::PrimitiveTopology::Lines, states);
     }
 
     if (!colonyShadowVertices.empty()) {
-        target.Draw(colonyShadowVertices.data(), colonyShadowVertices.size(), pipeframe::PrimitiveTopology::Triangles, states);
+        target.Draw(colonyShadowVertices.data(), colonyShadowVertices.size(), pipeframe::PrimitiveTopology::Triangles,
+                    states);
     }
 
     if (!colonyFillVertices.empty()) {
-        target.Draw(colonyFillVertices.data(), colonyFillVertices.size(), pipeframe::PrimitiveTopology::Triangles, states);
+        target.Draw(colonyFillVertices.data(), colonyFillVertices.size(), pipeframe::PrimitiveTopology::Triangles,
+                    states);
     }
 
     if (!colonyOutlineVertices.empty()) {
-        target.Draw(colonyOutlineVertices.data(), colonyOutlineVertices.size(), pipeframe::PrimitiveTopology::Triangles, states);
+        target.Draw(colonyOutlineVertices.data(), colonyOutlineVertices.size(), pipeframe::PrimitiveTopology::Triangles,
+                    states);
     }
 
     markerRenderer.Draw(target, states);
@@ -85,12 +96,13 @@ void EnvironmentRenderer::Draw(pipeframe::Canvas target, pipeframe::RenderState 
     if (terrainVisible && !foodVertices.empty()) {
         pipeframe::RenderState foodStates = states;
 
-        foodStates.texture=assetsLoaded?pipeframe::TextureBinding(resources,circleTexture):nullptr;
+        foodStates.texture = assetsLoaded ? pipeframe::TextureBinding(resources, circleTexture) : nullptr;
 
         target.Draw(foodVertices.data(), foodVertices.size(), pipeframe::PrimitiveTopology::Triangles, foodStates);
     }
 
-    if(terrainVisible)wallRenderer.Draw(target, states);
+    if (terrainVisible)
+        wallRenderer.Draw(target, states);
 }
 
 bool EnvironmentRenderer::AreAssetsLoaded() const { return assetsLoaded; }
@@ -109,9 +121,13 @@ std::span<const pipeframe::Vertex2D> EnvironmentRenderer::GetFoodVertices() cons
 
 std::span<const pipeframe::Vertex2D> EnvironmentRenderer::GetColonyFillVertices() const { return colonyFillVertices; }
 
-std::span<const pipeframe::Vertex2D> EnvironmentRenderer::GetColonyOutlineVertices() const { return colonyOutlineVertices; }
+std::span<const pipeframe::Vertex2D> EnvironmentRenderer::GetColonyOutlineVertices() const {
+    return colonyOutlineVertices;
+}
 
-std::span<const pipeframe::Vertex2D> EnvironmentRenderer::GetColonyShadowVertices() const { return colonyShadowVertices; }
+std::span<const pipeframe::Vertex2D> EnvironmentRenderer::GetColonyShadowVertices() const {
+    return colonyShadowVertices;
+}
 
 const MarkerRenderer &EnvironmentRenderer::GetMarkerRenderer() const { return markerRenderer; }
 
@@ -210,7 +226,8 @@ void EnvironmentRenderer::BuildFood(const AntEnvironment &environment, const pip
     }
 }
 
-void EnvironmentRenderer::BuildColonies(const std::span<const ColonyView> colonies, const pipeframe::Rectanglef &viewport) {
+void EnvironmentRenderer::BuildColonies(const std::span<const ColonyView> colonies,
+                                        const pipeframe::Rectanglef &viewport) {
     colonyFillVertices.clear();
     colonyOutlineVertices.clear();
     colonyShadowVertices.clear();
@@ -248,7 +265,8 @@ void EnvironmentRenderer::BuildColonies(const std::span<const ColonyView> coloni
 }
 
 void EnvironmentRenderer::AddQuad(std::vector<pipeframe::Vertex2D> &vertices, const pipeframe::Vector2f center,
-                                  const pipeframe::Vector2f halfSize, const pipeframe::Color color, const bool textured) {
+                                  const pipeframe::Vector2f halfSize, const pipeframe::Color color,
+                                  const bool textured) {
     const pipeframe::Vector2f northWest{
         center.x - halfSize.x,
         center.y - halfSize.y,
@@ -303,8 +321,8 @@ void EnvironmentRenderer::AddQuad(std::vector<pipeframe::Vertex2D> &vertices, co
     }
 }
 
-void EnvironmentRenderer::AddCircle(std::vector<pipeframe::Vertex2D> &vertices, const pipeframe::Vector2f center, const float radius,
-                                    const pipeframe::Color color) {
+void EnvironmentRenderer::AddCircle(std::vector<pipeframe::Vertex2D> &vertices, const pipeframe::Vector2f center,
+                                    const float radius, const pipeframe::Color color) {
     if (radius <= 0.0f) {
         return;
     }
@@ -345,8 +363,8 @@ void EnvironmentRenderer::AddCircle(std::vector<pipeframe::Vertex2D> &vertices, 
     }
 }
 
-void EnvironmentRenderer::AddRing(std::vector<pipeframe::Vertex2D> &vertices, const pipeframe::Vector2f center, const float outerRadius,
-                                  const float innerRadius, const pipeframe::Color color) {
+void EnvironmentRenderer::AddRing(std::vector<pipeframe::Vertex2D> &vertices, const pipeframe::Vector2f center,
+                                  const float outerRadius, const float innerRadius, const pipeframe::Color color) {
     if (outerRadius <= 0.0f || innerRadius < 0.0f || innerRadius >= outerRadius) {
         return;
     }
@@ -393,7 +411,8 @@ void EnvironmentRenderer::AddRing(std::vector<pipeframe::Vertex2D> &vertices, co
     }
 }
 
-bool EnvironmentRenderer::IsVisible(const pipeframe::Vector2f center, const float radius, const pipeframe::Rectanglef &viewport) {
+bool EnvironmentRenderer::IsVisible(const pipeframe::Vector2f center, const float radius,
+                                    const pipeframe::Rectanglef &viewport) {
     const float viewportLeft = viewport.position.x;
 
     const float viewportTop = viewport.position.y;

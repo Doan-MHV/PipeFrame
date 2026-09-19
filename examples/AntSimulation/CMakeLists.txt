@@ -1,24 +1,26 @@
 # Discover the first generated registration header as well as subsequent edits.
 # A previously-false __has_include is not itself a compiler depfile dependency.
 file(GLOB ANT_GENERATED_REGISTRATION CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/Source/Runtime/GeneratedRegistration.h")
-if(ANT_GENERATED_REGISTRATION)
+        "${CMAKE_CURRENT_SOURCE_DIR}/Source/Runtime/GeneratedRegistration.h")
+if (ANT_GENERATED_REGISTRATION)
     set_property(SOURCE Source/Runtime/AntSimulationRuntime.cpp APPEND PROPERTY
-        OBJECT_DEPENDS "${ANT_GENERATED_REGISTRATION}")
-endif()
+            OBJECT_DEPENDS "${ANT_GENERATED_REGISTRATION}")
+endif ()
 
 set(ANT_SIMULATION_SOURCES
         Source/World/AntWorld.cpp
         Source/Runtime/AntSimulationRuntime.cpp
+        Source/World/Runtime/AntWorldAuthoring.cpp
+        Source/World/Rendering/AntRenderingWorld.cpp
         Source/Editor/AntDashboard.cpp
-        Source/Runtime/AntUIHost.cpp
+        Source/Editor/AntUIHost.cpp
         Source/Configuration/AntConfiguration.cpp
         Source/World/Runtime/Environment/Marker.cpp
         Source/World/Runtime/Environment/AntEnvironment.cpp
         Source/World/Runtime/Environment/WallBuilder.cpp
         Source/World/Runtime/Environment/WorldMapLoader.cpp
         Source/Runtime/AntRegistration.cpp
-        
+
         Source/World/Physics/AntLegPose.cpp
         Source/World/Runtime/AntView.cpp
         Source/World/Runtime/Environment/GridRaycast.cpp
@@ -34,7 +36,7 @@ set(ANT_SIMULATION_SOURCES
         Source/World/Physics/AntMovementSystem.cpp
         Source/World/Runtime/Systems/AntForagingSystem.cpp
         Source/World/Runtime/Systems/AntCleanupSystem.cpp
-            Source/World/Physics/AntAvoidanceSystem.cpp
+        Source/World/Physics/AntAvoidanceSystem.cpp
         Source/World/Rendering/AntGeometry.cpp
         Source/World/Rendering/AntRenderer.cpp
         Source/World/Rendering/ShadowRenderer.cpp
@@ -93,8 +95,8 @@ set_target_properties(AntSimulationRuntime
 
 if (BUILD_TESTING)
     add_executable(AntEnvironmentAuthoringTests Tests/AntEnvironmentAuthoringTests.cpp ${ANT_SIMULATION_SOURCES}
-        ${PROJECT_SOURCE_DIR}/apps/SimulationWorkbench/Editor/SceneDocument.cpp
-        ${PROJECT_SOURCE_DIR}/apps/SimulationWorkbench/Editor/SceneSerializer.cpp)
+            ${PROJECT_SOURCE_DIR}/apps/SimulationWorkbench/Editor/SceneDocument.cpp
+            ${PROJECT_SOURCE_DIR}/apps/SimulationWorkbench/Editor/SceneSerializer.cpp)
     target_compile_features(AntEnvironmentAuthoringTests PRIVATE cxx_std_20)
     target_include_directories(AntEnvironmentAuthoringTests PRIVATE Source ${PROJECT_SOURCE_DIR}/apps/SimulationWorkbench/Editor)
     target_link_libraries(AntEnvironmentAuthoringTests PRIVATE PipeFrame::Engine)
@@ -292,7 +294,7 @@ if (BUILD_TESTING)
             Tests/AntBehaviorTests.cpp
             Source/Configuration/AntConfiguration.cpp
             Source/World/Runtime/Environment/Marker.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
     )
@@ -324,7 +326,7 @@ if (BUILD_TESTING)
             Source/World/Runtime/Environment/AntEnvironment.cpp
             Source/World/Runtime/Environment/WallBuilder.cpp
             Source/World/Runtime/Environment/GridRaycast.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/Systems/MarkerSampler.cpp
@@ -356,7 +358,7 @@ if (BUILD_TESTING)
             Source/World/Runtime/Environment/Marker.cpp
             Source/World/Runtime/Environment/AntEnvironment.cpp
             Source/World/Runtime/Environment/WallBuilder.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -390,7 +392,7 @@ if (BUILD_TESTING)
             Source/World/Runtime/Environment/Marker.cpp
             Source/World/Runtime/Environment/AntEnvironment.cpp
             Source/World/Runtime/Environment/GridRaycast.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/Systems/MarkerSampler.cpp
@@ -423,7 +425,7 @@ if (BUILD_TESTING)
             Tests/AntContactSystemTests.cpp
             Source/Configuration/AntConfiguration.cpp
             Source/World/Runtime/Environment/Marker.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -455,7 +457,7 @@ if (BUILD_TESTING)
             Tests/AntPhysicsWorldTests.cpp
             Source/Configuration/AntConfiguration.cpp
             Source/World/Runtime/Environment/Marker.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -488,7 +490,7 @@ if (BUILD_TESTING)
             Source/World/Runtime/Environment/Marker.cpp
             Source/World/Runtime/Environment/AntEnvironment.cpp
             Source/World/Runtime/Environment/WallBuilder.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -524,7 +526,7 @@ if (BUILD_TESTING)
             Source/World/Runtime/Environment/AntEnvironment.cpp
             Source/World/Runtime/Environment/WallBuilder.cpp
             Source/World/Runtime/Environment/GridRaycast.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -534,7 +536,7 @@ if (BUILD_TESTING)
             Source/World/Physics/AntMovementSystem.cpp
             Source/World/Runtime/Systems/AntForagingSystem.cpp
             Source/World/Runtime/Systems/AntCleanupSystem.cpp
-                    Source/World/Runtime/ColonyView.cpp
+            Source/World/Runtime/ColonyView.cpp
             Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp
             Source/World/Physics/CollisionGrid.cpp
             Source/World/Physics/AntBodySystem.cpp
@@ -566,7 +568,7 @@ if (BUILD_TESTING)
             Tests/AntAvoidanceSystemTests.cpp
             Source/Configuration/AntConfiguration.cpp
             Source/World/Runtime/Environment/Marker.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -599,7 +601,7 @@ if (BUILD_TESTING)
             Tests/AntGeometryTests.cpp
             Source/Configuration/AntConfiguration.cpp
             Source/World/Runtime/Environment/Marker.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Rendering/AntGeometry.cpp
@@ -629,7 +631,7 @@ if (BUILD_TESTING)
             Tests/AntRendererTests.cpp
             Source/Configuration/AntConfiguration.cpp
             Source/World/Runtime/Environment/Marker.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -661,7 +663,7 @@ if (BUILD_TESTING)
             Tests/ShadowRendererTests.cpp
             Source/Configuration/AntConfiguration.cpp
             Source/World/Runtime/Environment/Marker.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Rendering/AntGeometry.cpp
@@ -783,7 +785,7 @@ if (BUILD_TESTING)
             Tests/AntDebugRendererTests.cpp
             Source/Configuration/AntConfiguration.cpp
             Source/World/Runtime/Environment/Marker.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -873,7 +875,7 @@ if (BUILD_TESTING)
             Tests/AntInspectorTests.cpp
             Source/Configuration/AntConfiguration.cpp
             Source/World/Runtime/Environment/Marker.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -936,7 +938,7 @@ if (BUILD_TESTING)
             Source/World/Runtime/Environment/AntEnvironment.cpp
             Source/World/Runtime/Environment/WallBuilder.cpp
             Source/World/Runtime/Environment/GridRaycast.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -947,7 +949,7 @@ if (BUILD_TESTING)
             Source/World/Physics/AntMovementSystem.cpp
             Source/World/Runtime/Systems/AntForagingSystem.cpp
             Source/World/Runtime/Systems/AntCleanupSystem.cpp
-                    Source/World/Runtime/ColonyView.cpp
+            Source/World/Runtime/ColonyView.cpp
             Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp
             Source/World/Physics/CollisionGrid.cpp
             Source/World/Physics/AntBodySystem.cpp
@@ -982,7 +984,7 @@ if (BUILD_TESTING)
             Source/World/Runtime/Environment/AntEnvironment.cpp
             Source/World/Runtime/Environment/WallBuilder.cpp
             Source/World/Runtime/Environment/GridRaycast.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -993,7 +995,7 @@ if (BUILD_TESTING)
             Source/World/Physics/AntMovementSystem.cpp
             Source/World/Runtime/Systems/AntForagingSystem.cpp
             Source/World/Runtime/Systems/AntCleanupSystem.cpp
-                    Source/World/Runtime/ColonyView.cpp
+            Source/World/Runtime/ColonyView.cpp
             Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp
             Source/World/Physics/CollisionGrid.cpp
             Source/World/Physics/AntBodySystem.cpp
@@ -1014,7 +1016,7 @@ if (BUILD_TESTING)
             Source/World/Runtime/Environment/AntEnvironment.cpp
             Source/World/Runtime/Environment/WallBuilder.cpp
             Source/World/Runtime/Environment/GridRaycast.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -1025,7 +1027,7 @@ if (BUILD_TESTING)
             Source/World/Physics/AntMovementSystem.cpp
             Source/World/Runtime/Systems/AntForagingSystem.cpp
             Source/World/Runtime/Systems/AntCleanupSystem.cpp
-                    Source/World/Runtime/ColonyView.cpp
+            Source/World/Runtime/ColonyView.cpp
             Source/World/Runtime/Systems/ColonyLifecycleSystem.cpp
             Source/World/Physics/CollisionGrid.cpp
             Source/World/Physics/AntBodySystem.cpp
@@ -1048,7 +1050,7 @@ if (BUILD_TESTING)
             Source/World/Runtime/Environment/Marker.cpp
             Source/World/Runtime/Environment/AntEnvironment.cpp
             Source/World/Runtime/Environment/WallBuilder.cpp
-            
+
             Source/World/Physics/AntLegPose.cpp
             Source/World/Runtime/AntView.cpp
             Source/World/Runtime/AntQuery.cpp
@@ -1108,27 +1110,27 @@ if (BUILD_TESTING)
 
 endif ()
 
-if(BUILD_TESTING)
+if (BUILD_TESTING)
     add_executable(AntDashboardTests Tests/AntDashboardTests.cpp)
     target_include_directories(AntDashboardTests PRIVATE Source)
     target_link_libraries(AntDashboardTests PRIVATE AntSimulationRuntime PipeFrame::Engine)
     target_compile_definitions(AntDashboardTests PRIVATE PIPEFRAME_ANT_SOURCE="${CMAKE_CURRENT_SOURCE_DIR}")
     add_test(NAME AntDashboardAcceptance COMMAND AntDashboardTests "${CMAKE_BINARY_DIR}/ant-rework-baseline.png")
-endif()
+endif ()
 
 # Compile actual author-facing UI code without Engine's native include directories.
-if(BUILD_TESTING)
+if (BUILD_TESTING)
     add_library(AntUIBoundaryCompile OBJECT
-        Source/Runtime/AntUIHost.cpp Source/Editor/AntDashboard.cpp)
+            Source/Editor/AntUIHost.cpp Source/Editor/AntDashboard.cpp)
     target_include_directories(AntUIBoundaryCompile PRIVATE
-        "${PROJECT_SOURCE_DIR}/engine/include" "${CMAKE_CURRENT_SOURCE_DIR}/Source")
+            "${PROJECT_SOURCE_DIR}/engine/include" "${CMAKE_CURRENT_SOURCE_DIR}/Source")
     target_compile_features(AntUIBoundaryCompile PRIVATE cxx_std_20)
-endif()
+endif ()
 
 # Native hosts/tests opt in explicitly; Engine no longer exports backend dependencies.
-if(TARGET AntRenderPerformanceTests)
+if (TARGET AntRenderPerformanceTests)
     target_link_libraries(AntRenderPerformanceTests PRIVATE PipeFrame::BackendSFML)
-endif()
-if(TARGET AntDashboardTests)
+endif ()
+if (TARGET AntDashboardTests)
     target_link_libraries(AntDashboardTests PRIVATE PipeFrame::BackendSFML)
-endif()
+endif ()

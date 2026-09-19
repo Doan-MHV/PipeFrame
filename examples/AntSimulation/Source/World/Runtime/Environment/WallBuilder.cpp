@@ -8,30 +8,19 @@
 
 namespace ant_simulation {
 
-void WallBuilder::CreateBorderWalls(
-    AntEnvironment &environment
-) {
-    const int margin =
-        AntEnvironment::BorderMargin;
+void WallBuilder::CreateBorderWalls(AntEnvironment &environment) {
+    const int margin = AntEnvironment::BorderMargin;
 
-    for (int y = 0;
-         y < environment.GetHeight();
-         ++y) {
-        for (int x = 0;
-             x < environment.GetWidth();
-             ++x) {
-            const bool borderCell =
-                x < margin ||
-                y < margin ||
-                x >= environment.GetWidth() - margin ||
-                y >= environment.GetHeight() - margin;
+    for (int y = 0; y < environment.GetHeight(); ++y) {
+        for (int x = 0; x < environment.GetWidth(); ++x) {
+            const bool borderCell = x < margin || y < margin || x >= environment.GetWidth() - margin ||
+                                    y >= environment.GetHeight() - margin;
 
             if (!borderCell) {
                 continue;
             }
 
-            AntWorldCell *cell =
-                environment.TryGetCell(x, y);
+            AntWorldCell *cell = environment.TryGetCell(x, y);
 
             if (cell != nullptr) {
                 cell->wall = true;
@@ -40,89 +29,57 @@ void WallBuilder::CreateBorderWalls(
     }
 }
 
-void WallBuilder::RebuildSamplingCoefficients(
-    AntEnvironment &environment
-) {
+void WallBuilder::RebuildSamplingCoefficients(AntEnvironment &environment) {
     constexpr int MaximumDistance{2};
 
-    const int maximumManhattanDistance =
-        MaximumDistance * 2;
+    const int maximumManhattanDistance = MaximumDistance * 2;
 
-    const int margin =
-        AntEnvironment::BorderMargin;
+    const int margin = AntEnvironment::BorderMargin;
 
-    for (int y = margin;
-         y < environment.GetHeight() - margin;
-         ++y) {
-        for (int x = margin;
-             x < environment.GetWidth() - margin;
-             ++x) {
-            AntWorldCell *cell =
-                environment.TryGetCell(x, y);
+    for (int y = margin; y < environment.GetHeight() - margin; ++y) {
+        for (int x = margin; x < environment.GetWidth() - margin; ++x) {
+            AntWorldCell *cell = environment.TryGetCell(x, y);
 
             if (cell == nullptr) {
                 continue;
             }
 
             if (cell->wall) {
-                cell->markerSamplingCoefficient =
-                    0.0f;
+                cell->markerSamplingCoefficient = 0.0f;
 
                 continue;
             }
 
-            const int distanceToWall =
-                GetDistanceToWall(
-                    environment,
-                    {x, y},
-                    MaximumDistance);
+            const int distanceToWall = GetDistanceToWall(environment, {x, y}, MaximumDistance);
 
             cell->markerSamplingCoefficient =
-                static_cast<float>(
-                    distanceToWall - 1) /
-                static_cast<float>(
-                    maximumManhattanDistance - 1);
+                static_cast<float>(distanceToWall - 1) / static_cast<float>(maximumManhattanDistance - 1);
 
-            cell->markerSamplingCoefficient =
-                std::clamp(
-                    cell->markerSamplingCoefficient,
-                    0.0f,
-                    1.0f);
+            cell->markerSamplingCoefficient = std::clamp(cell->markerSamplingCoefficient, 0.0f, 1.0f);
         }
     }
 }
 
-bool WallBuilder::IsWallBorder(
-    const AntEnvironment &environment,
-    const pipeframe::Vector2i position,
-    const int maximumDistance
-) {
+bool WallBuilder::IsWallBorder(const AntEnvironment &environment, const pipeframe::Vector2i position,
+                               const int maximumDistance) {
     if (maximumDistance < 0) {
         return false;
     }
 
-    const AntWorldCell *centerCell =
-        environment.TryGetCell(position);
+    const AntWorldCell *centerCell = environment.TryGetCell(position);
 
-    if (centerCell == nullptr ||
-        !centerCell->wall) {
+    if (centerCell == nullptr || !centerCell->wall) {
         return false;
     }
 
-    for (int deltaX = -maximumDistance;
-         deltaX <= maximumDistance;
-         ++deltaX) {
-        for (int deltaY = -maximumDistance;
-             deltaY <= maximumDistance;
-             ++deltaY) {
+    for (int deltaX = -maximumDistance; deltaX <= maximumDistance; ++deltaX) {
+        for (int deltaY = -maximumDistance; deltaY <= maximumDistance; ++deltaY) {
             const pipeframe::Vector2i neighborPosition{
                 position.x + deltaX,
                 position.y + deltaY,
             };
 
-            const AntWorldCell *neighbor =
-                environment.TryGetCell(
-                    neighborPosition);
+            const AntWorldCell *neighbor = environment.TryGetCell(neighborPosition);
 
             if (neighbor == nullptr) {
                 continue;
@@ -137,102 +94,59 @@ bool WallBuilder::IsWallBorder(
     return false;
 }
 
-int WallBuilder::GetDistanceToWall(
-    const AntEnvironment &environment,
-    const pipeframe::Vector2i position,
-    const int maximumDistance
-) {
+int WallBuilder::GetDistanceToWall(const AntEnvironment &environment, const pipeframe::Vector2i position,
+                                   const int maximumDistance) {
     if (maximumDistance <= 0) {
         return 0;
     }
 
-    int distance =
-        maximumDistance * 2;
+    int distance = maximumDistance * 2;
 
-    for (int deltaX = -maximumDistance;
-         deltaX <= maximumDistance;
-         ++deltaX) {
-        for (int deltaY = -maximumDistance;
-             deltaY <= maximumDistance;
-             ++deltaY) {
+    for (int deltaX = -maximumDistance; deltaX <= maximumDistance; ++deltaX) {
+        for (int deltaY = -maximumDistance; deltaY <= maximumDistance; ++deltaY) {
             const pipeframe::Vector2i neighborPosition{
                 position.x + deltaX,
                 position.y + deltaY,
             };
 
-            const AntWorldCell *neighbor =
-                environment.TryGetCell(
-                    neighborPosition);
+            const AntWorldCell *neighbor = environment.TryGetCell(neighborPosition);
 
-            if (neighbor == nullptr ||
-                !neighbor->wall) {
+            if (neighbor == nullptr || !neighbor->wall) {
                 continue;
             }
 
-            const int manhattanDistance =
-                std::abs(deltaX) +
-                std::abs(deltaY);
+            const int manhattanDistance = std::abs(deltaX) + std::abs(deltaY);
 
-            distance =
-                std::min(
-                    distance,
-                    manhattanDistance);
+            distance = std::min(distance, manhattanDistance);
         }
     }
 
     return distance;
 }
 
-WallType WallBuilder::GetWallType(
-    const AntEnvironment &environment,
-    const pipeframe::Vector2i position
-) {
-    if (!environment.ContainsCell(
-            position.x,
-            position.y)) {
+WallType WallBuilder::GetWallType(const AntEnvironment &environment, const pipeframe::Vector2i position) {
+    if (!environment.ContainsCell(position.x, position.y)) {
         return WallType::Full;
     }
 
-    if (position.x == 0 ||
-        position.y == 0 ||
-        position.x ==
-            environment.GetWidth() - 1 ||
-        position.y ==
-            environment.GetHeight() - 1) {
+    if (position.x == 0 || position.y == 0 || position.x == environment.GetWidth() - 1 ||
+        position.y == environment.GetHeight() - 1) {
         return WallType::Full;
     }
 
-    const auto IsWall =
-        [&environment](
-            const int x,
-            const int y
-        ) {
-            const AntWorldCell *cell =
-                environment.TryGetCell(x, y);
+    const auto IsWall = [&environment](const int x, const int y) {
+        const AntWorldCell *cell = environment.TryGetCell(x, y);
 
-            return cell != nullptr &&
-                   cell->wall;
-        };
+        return cell != nullptr && cell->wall;
+    };
 
-    const bool left =
-        IsWall(
-            position.x - 1,
-            position.y);
+    const bool left = IsWall(position.x - 1, position.y);
 
-    const bool right =
-        IsWall(
-            position.x + 1,
-            position.y);
+    const bool right = IsWall(position.x + 1, position.y);
 
-    const bool top =
-        IsWall(
-            position.x,
-            position.y - 1);
+    const bool top = IsWall(position.x, position.y - 1);
 
-    const bool bottom =
-        IsWall(
-            position.x,
-            position.y + 1);
+    const bool bottom = IsWall(position.x, position.y + 1);
 
     if (left && top && !right && !bottom) {
         return WallType::SouthEast;

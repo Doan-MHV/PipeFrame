@@ -6,9 +6,7 @@
 
 #include <PipeFrame/Backend/SFML/UI/Label.h>
 
-LabeledNumericField::LabeledNumericField(
-    const sf::Font &font,
-    const std::string &captionText) {
+LabeledNumericField::LabeledNumericField(const sf::Font &font, const std::string &captionText) {
 
     SetFillColor(sf::Color::Transparent);
     SetOutlineColor(sf::Color::Transparent);
@@ -31,31 +29,23 @@ LabeledNumericField::LabeledNumericField(
     field->SetSize({154.0f, 0.0f});
 }
 
-void LabeledNumericField::SetCaption(
-    const std::string &caption) {
+void LabeledNumericField::SetCaption(const std::string &caption) {
 
     if (captionLabel != nullptr) {
         captionLabel->SetText(caption);
     }
 }
 
-void LabeledNumericField::SetValue(const float value) {
-    field->SetValue(value);
-}
+void LabeledNumericField::SetValue(const float value) { field->SetValue(value); }
 
-float LabeledNumericField::GetValue() const {
-    return field->GetValue();
-}
+float LabeledNumericField::GetValue() const { return field->GetValue(); }
 
-void LabeledNumericField::SetOnValueCommitted(
-    NumericField::ValueCommittedCallback callback) {
+void LabeledNumericField::SetOnValueCommitted(NumericField::ValueCommittedCallback callback) {
 
     field->SetOnValueCommitted(std::move(callback));
 }
 
-bool LabeledNumericField::IsEditing() const {
-    return field->HasKeyboardFocus();
-}
+bool LabeledNumericField::IsEditing() const { return field->HasKeyboardFocus(); }
 
 void LabeledNumericField::OnEnabledChanged() {
     if (field != nullptr) {
@@ -65,11 +55,11 @@ void LabeledNumericField::OnEnabledChanged() {
 void LabeledNumericField::SetCaptionAbove() {
     SetOrientation(StackOrientation::Vertical);
     SetSpacing(4);
-    SetSizePolicy(SizePolicy::Stretch,SizePolicy::FitContent);
-    captionLabel->SetSize({0,22});
-    captionLabel->SetSizePolicy(SizePolicy::Stretch,SizePolicy::FitContent);
+    SetSizePolicy(SizePolicy::Stretch, SizePolicy::FitContent);
+    captionLabel->SetSize({0, 22});
+    captionLabel->SetSizePolicy(SizePolicy::Stretch, SizePolicy::FitContent);
     captionLabel->SetWrap(true);
-    field->SetSize({0,34});
-    field->SetSizePolicy(SizePolicy::Stretch,SizePolicy::Fixed);
+    field->SetSize({0, 34});
+    field->SetSizePolicy(SizePolicy::Stretch, SizePolicy::Fixed);
     RefreshLayout();
 }

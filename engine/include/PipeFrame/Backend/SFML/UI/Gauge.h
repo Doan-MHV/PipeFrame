@@ -1,17 +1,16 @@
 #ifndef PIPEFRAME_UI_GAUGE_H
 #define PIPEFRAME_UI_GAUGE_H
 
-#include <vector>
+#include <PipeFrame/Backend/SFML/UI/Motion.h>
+#include <PipeFrame/Backend/SFML/UI/UITheme.h>
+#include <PipeFrame/Backend/SFML/UI/Widget.h>
 
 #include <SFML/Graphics/Vertex.hpp>
-
-#include <PipeFrame/Backend/SFML/UI/Motion.h>
-#include <PipeFrame/Backend/SFML/UI/Widget.h>
-#include <PipeFrame/Backend/SFML/UI/UITheme.h>
+#include <vector>
 
 class Gauge final : public Widget {
-  public:
-    explicit Gauge(const UITheme &theme = UITheme::Dark());
+public:
+    explicit Gauge(const UITheme& theme = UITheme::Dark());
 
     void SetRange(float minimum, float maximum);
     void SetValue(float value, bool animate = true);
@@ -24,13 +23,13 @@ class Gauge final : public Widget {
     void SetTransitionDuration(float seconds);
     void SetReducedMotion(bool reducedMotion) override;
 
-  protected:
-    void OnRender(sf::RenderTarget &target) const override;
+protected:
+    void OnRender(sf::RenderTarget& target) const override;
     void OnGeometryChanged() override;
     void OnOpacityChanged() override;
     void OnUpdate(float realDeltaSeconds) override;
 
-  private:
+private:
     void RebuildGeometry();
     float NormalizedVisualValue() const;
 

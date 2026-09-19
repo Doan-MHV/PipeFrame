@@ -1081,6 +1081,8 @@ void WorkbenchView::BindCallbacks() {
         if(callbacks.cancelAssetOperation)callbacks.cancelAssetOperation(operationId);
     });
 
+    toolbar->SetOnPhysicsDebug([this] { worldDebugOptions.physics=!worldDebugOptions.physics; toolbar->SetPhysicsDebugVisible(worldDebugOptions.physics); });
+    toolbar->SetOnMeshDebug([this] { worldDebugOptions.mesh=!worldDebugOptions.mesh; toolbar->SetMeshDebugVisible(worldDebugOptions.mesh); });
     toolbar->SetOnGrid([this]() {
         gridVisible = !gridVisible;
         toolbar->SetGridVisible(gridVisible);

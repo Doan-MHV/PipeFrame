@@ -1,9 +1,9 @@
 #ifndef ANT_COLONY_HISTORY_H
 #define ANT_COLONY_HISTORY_H
 
+#include <PipeFrame/Data/SampleHistory.h>
 #include <cstddef>
 #include <span>
-#include <PipeFrame/Data/SampleHistory.h>
 
 #include "World/Runtime/ColonyView.h"
 
@@ -20,22 +20,15 @@ struct ColonyHistorySample {
 };
 
 class ColonyHistory final : public pipeframe::SampleHistory<ColonyHistorySample> {
-public:
-    explicit ColonyHistory(
-        std::size_t maximumSamples = 240,
-        float samplePeriod = 0.1f
-    );
+  public:
+    explicit ColonyHistory(std::size_t maximumSamples = 240, float samplePeriod = 0.1f);
 
     void Reset();
 
-    void Update(
-        const ColonyView &colony,
-        float deltaTime
-    );
+    void Update(const ColonyView &colony, float deltaTime);
 
     [[nodiscard]]
-    std::span<const ColonyHistorySample>
-    GetSamples() const;
+    std::span<const ColonyHistorySample> GetSamples() const;
 
     [[nodiscard]]
     std::size_t GetMaximumSamples() const;
@@ -43,7 +36,7 @@ public:
     [[nodiscard]]
     float GetSamplePeriod() const;
 
-private:
+  private:
     void AddSample(const ColonyView &colony);
 
     float samplePeriod{0.1f};

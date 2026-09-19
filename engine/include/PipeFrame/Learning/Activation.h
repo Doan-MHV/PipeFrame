@@ -16,19 +16,18 @@ enum class Activation : std::uint8_t {
 
 [[nodiscard]] inline float Activate(const Activation activation, const float value) {
     switch (activation) {
-    case Activation::Sigmoid:
-        return 1.0f / (1.0f + std::exp(-4.9f * value));
-    case Activation::Relu:
-        return std::max(0.0f, value);
-    case Activation::Tanh:
-        return std::tanh(value);
-    case Activation::None:
-    default:
-        return value;
+        case Activation::Sigmoid:
+            return 1.0f / (1.0f + std::exp(-4.9f * value));
+        case Activation::Relu:
+            return std::max(0.0f, value);
+        case Activation::Tanh:
+            return std::tanh(value);
+        case Activation::None:
+        default:
+            return value;
     }
 }
 
-} // namespace pipeframe::learning
+}  // namespace pipeframe::learning
 
 #endif
-

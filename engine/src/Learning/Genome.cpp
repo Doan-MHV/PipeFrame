@@ -12,14 +12,12 @@ constexpr std::uint32_t FileMagic = 0x50464E54;
 constexpr std::uint32_t FileVersion = 2;
 constexpr std::uint64_t MaximumSerializedItems = 1'000'000;
 
-template <typename ValueType>
-bool Write(std::ofstream &stream, const ValueType value) {
+template <typename ValueType> bool Write(std::ofstream &stream, const ValueType value) {
     stream.write(reinterpret_cast<const char *>(&value), sizeof(value));
     return stream.good();
 }
 
-template <typename ValueType>
-bool Read(std::ifstream &stream, ValueType &value) {
+template <typename ValueType> bool Read(std::ifstream &stream, ValueType &value) {
     stream.read(reinterpret_cast<char *>(&value), sizeof(value));
     return stream.good();
 }
@@ -42,8 +40,7 @@ std::size_t Genome::AddHiddenNode(const Activation activation, const float bias)
 }
 
 bool Genome::AddConnection(const std::size_t from, const std::size_t to, const float weight) {
-    if (from >= nodes.size() || to >= nodes.size() || IsOutput(from) || IsInput(to) ||
-        !graph.AddConnection(from, to)) {
+    if (from >= nodes.size() || to >= nodes.size() || IsOutput(from) || IsInput(to) || !graph.AddConnection(from, to)) {
         return false;
     }
     connections.push_back({from, to, weight});
@@ -71,16 +68,19 @@ bool Genome::SplitConnection(const std::size_t connectionIndex) {
         return false;
     }
     const std::size_t hidden = AddHiddenNode();
-    return AddConnection(original.from, hidden, original.weight) &&
-           AddConnection(hidden, original.to, 1.0f);
+    return AddConnection(original.from, hidden, original.weight) && AddConnection(hidden, original.to, 1.0f);
 }
 
 std::size_t Genome::GetInputCount() const { return inputCount; }
 std::size_t Genome::GetOutputCount() const { return outputCount; }
 std::size_t Genome::GetHiddenCount() const { return nodes.size() - inputCount - outputCount; }
 std::size_t Genome::GetNodeCount() const { return nodes.size(); }
-bool Genome::IsInput(const std::size_t node) const { return node < nodes.size() && nodes[node].kind == NodeKind::Input; }
-bool Genome::IsOutput(const std::size_t node) const { return node < nodes.size() && nodes[node].kind == NodeKind::Output; }
+bool Genome::IsInput(const std::size_t node) const {
+    return node < nodes.size() && nodes[node].kind == NodeKind::Input;
+}
+bool Genome::IsOutput(const std::size_t node) const {
+    return node < nodes.size() && nodes[node].kind == NodeKind::Output;
+}
 const std::vector<GenomeNode> &Genome::GetNodes() const { return nodes; }
 std::vector<GenomeNode> &Genome::GetNodes() { return nodes; }
 const std::vector<GenomeConnection> &Genome::GetConnections() const { return connections; }
@@ -91,9 +91,8 @@ std::string Genome::GetSignature() const {
     std::ostringstream signature;
     signature << inputCount << ':' << outputCount;
     for (const GenomeNode &node : nodes) {
-        signature << '|' << static_cast<unsigned int>(node.kind) << ','
-                  << static_cast<unsigned int>(node.activation) << ','
-                  << std::bit_cast<std::uint32_t>(node.bias);
+        signature << '|' << static_cast<unsigned int>(node.kind) << ',' << static_cast<unsigned int>(node.activation)
+                  << ',' << std::bit_cast<std::uint32_t>(node.bias);
     }
     for (const GenomeConnection &connection : connections) {
         signature << '>' << connection.from << ',' << connection.to << ','
@@ -114,9 +113,8 @@ bool Genome::Save(const std::filesystem::path &path, std::string &errorMessage) 
     const std::uint64_t serializedOutputs = outputCount;
     const std::uint64_t nodeCount = nodes.size();
     const std::uint64_t connectionCount = connections.size();
-    if (!Write(stream, FileMagic) || !Write(stream, FileVersion) ||
-        !Write(stream, serializedInputs) || !Write(stream, serializedOutputs) ||
-        !Write(stream, nodeCount) || !Write(stream, connectionCount)) {
+    if (!Write(stream, FileMagic) || !Write(stream, FileVersion) || !Write(stream, serializedInputs) ||
+        !Write(stream, serializedOutputs) || !Write(stream, nodeCount) || !Write(stream, connectionCount)) {
         errorMessage = "Unable to write NEAT genome header.";
         return false;
     }
@@ -183,8 +181,8 @@ bool Genome::Load(const std::filesystem::path &path, std::string &errorMessage) 
         float weight = 0.0f;
         std::uint8_t enabled = 1;
         if (!Read(stream, from) || !Read(stream, to) || !Read(stream, weight) ||
-            (version >= 2 && !Read(stream, enabled)) || enabled > 1 ||
-            from > std::numeric_limits<std::size_t>::max() || to > std::numeric_limits<std::size_t>::max() ||
+            (version >= 2 && !Read(stream, enabled)) || enabled > 1 || from > std::numeric_limits<std::size_t>::max() ||
+            to > std::numeric_limits<std::size_t>::max() ||
             !loaded.AddConnection(static_cast<std::size_t>(from), static_cast<std::size_t>(to), weight)) {
             errorMessage = "Invalid NEAT genome connection data.";
             return false;

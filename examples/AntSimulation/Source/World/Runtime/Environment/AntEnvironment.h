@@ -22,18 +22,13 @@ class AntEnvironment final : public pipeframe::FixedUpdateSystem<void> {
 
     AntEnvironment() = default;
 
-    explicit AntEnvironment(
-        const AntConfiguration &configuration
-    );
+    explicit AntEnvironment(const AntConfiguration &configuration);
 
-    bool Initialize(
-        const AntConfiguration &configuration,
-        std::string &errorMessage
-    );
+    bool Initialize(const AntConfiguration &configuration, std::string &errorMessage);
 
     void Clear();
 
-    std::string_view GetSystemId() const override {return "ant.environment";}
+    std::string_view GetSystemId() const override { return "ant.environment"; }
     void Update(float deltaTime) override;
 
     [[nodiscard]]
@@ -52,57 +47,34 @@ class AntEnvironment final : public pipeframe::FixedUpdateSystem<void> {
     bool IsInitialized() const;
 
     [[nodiscard]]
-    bool ContainsCell(
-        int x,
-        int y
-    ) const;
+    bool ContainsCell(int x, int y) const;
 
     [[nodiscard]]
-    bool IsSimulationPositionValid(
-        pipeframe::Vector2f worldPosition
-    ) const;
+    bool IsSimulationPositionValid(pipeframe::Vector2f worldPosition) const;
 
     [[nodiscard]]
-    static pipeframe::Vector2i WorldToCell(
-        pipeframe::Vector2f worldPosition
-    );
+    static pipeframe::Vector2i WorldToCell(pipeframe::Vector2f worldPosition);
 
     [[nodiscard]]
-    static pipeframe::Vector2f GetCellCenter(
-        pipeframe::Vector2i cellPosition
-    );
+    static pipeframe::Vector2f GetCellCenter(pipeframe::Vector2i cellPosition);
 
     [[nodiscard]]
-    AntWorldCell *TryGetCell(
-        int x,
-        int y
-    );
+    AntWorldCell *TryGetCell(int x, int y);
 
     [[nodiscard]]
-    const AntWorldCell *TryGetCell(
-        int x,
-        int y
-    ) const;
+    const AntWorldCell *TryGetCell(int x, int y) const;
 
     [[nodiscard]]
-    AntWorldCell *TryGetCell(
-        pipeframe::Vector2i cellPosition
-    );
+    AntWorldCell *TryGetCell(pipeframe::Vector2i cellPosition);
 
     [[nodiscard]]
-    const AntWorldCell *TryGetCell(
-        pipeframe::Vector2i cellPosition
-    ) const;
+    const AntWorldCell *TryGetCell(pipeframe::Vector2i cellPosition) const;
 
     [[nodiscard]]
-    AntWorldCell *TryGetCellAtWorldPosition(
-        pipeframe::Vector2f worldPosition
-    );
+    AntWorldCell *TryGetCellAtWorldPosition(pipeframe::Vector2f worldPosition);
 
     [[nodiscard]]
-    const AntWorldCell *TryGetCellAtWorldPosition(
-        pipeframe::Vector2f worldPosition
-    ) const;
+    const AntWorldCell *TryGetCellAtWorldPosition(pipeframe::Vector2f worldPosition) const;
 
     [[nodiscard]]
     std::span<AntWorldCell> GetCells();
@@ -114,73 +86,46 @@ class AntEnvironment final : public pipeframe::FixedUpdateSystem<void> {
     std::span<const Food> GetFoodEntities() const;
 
     [[nodiscard]]
-    const Food *FindFoodEntity(
-        WorldEntityId id
-    ) const;
+    const Food *FindFoodEntity(WorldEntityId id) const;
 
     [[nodiscard]]
     std::size_t GetTotalFoodQuantity() const;
+    std::int64_t GetFoodQuantityInRadius(pipeframe::Vector2f position, float radius) const;
 
     [[nodiscard]]
-    WorldEntityId AddFood(
-        pipeframe::Vector2f worldPosition,
-        std::size_t quantity
-    );
+    WorldEntityId AddFood(pipeframe::Vector2f worldPosition, std::size_t quantity);
 
     [[nodiscard]]
-    std::size_t AddFoodPatch(
-        pipeframe::Vector2f center,
-        float radius,
-        std::size_t quantityPerCell
-    );
+    std::size_t AddFoodPatch(pipeframe::Vector2f center, float radius, std::size_t quantityPerCell);
 
     [[nodiscard]]
-    std::size_t ConsumeFood(
-        pipeframe::Vector2f worldPosition,
-        std::size_t requestedQuantity = 1
-    );
+    std::size_t ConsumeFood(pipeframe::Vector2f worldPosition, std::size_t requestedQuantity = 1);
 
     [[nodiscard]]
-    bool RemoveFood(
-        pipeframe::Vector2f worldPosition
-    );
+    bool RemoveFood(pipeframe::Vector2f worldPosition);
 
     void ClearAllFood();
 
     [[nodiscard]]
-    bool AddWall(
-        pipeframe::Vector2f worldPosition
-    );
+    bool AddWall(pipeframe::Vector2f worldPosition);
 
     [[nodiscard]]
-    bool RemoveWall(
-        pipeframe::Vector2f worldPosition
-    );
+    bool RemoveWall(pipeframe::Vector2f worldPosition);
 
     [[nodiscard]]
     std::size_t GetWallCount() const;
 
     [[nodiscard]]
-    bool MarkCellForWall(
-        pipeframe::Vector2f worldPosition
-    );
+    bool MarkCellForWall(pipeframe::Vector2f worldPosition);
 
     [[nodiscard]]
-    bool MarkCellForErase(
-        pipeframe::Vector2f worldPosition
-    );
+    bool MarkCellForErase(pipeframe::Vector2f worldPosition);
 
     [[nodiscard]]
-    std::size_t MarkWallBrush(
-        pipeframe::Vector2f center,
-        float radius
-    );
+    std::size_t MarkWallBrush(pipeframe::Vector2f center, float radius);
 
     [[nodiscard]]
-    std::size_t MarkEraseBrush(
-        pipeframe::Vector2f center,
-        float radius
-    );
+    std::size_t MarkEraseBrush(pipeframe::Vector2f center, float radius);
 
     [[nodiscard]]
     std::size_t ApplyWallRequests();
@@ -192,29 +137,19 @@ class AntEnvironment final : public pipeframe::FixedUpdateSystem<void> {
 
   private:
     [[nodiscard]]
-    std::size_t GetCellIndex(
-        int x,
-        int y
-    ) const;
+    std::size_t GetCellIndex(int x, int y) const;
 
     [[nodiscard]]
-    WorldEntityId CreateFoodEntity(
-        pipeframe::Vector2f position
-    );
+    WorldEntityId CreateFoodEntity(pipeframe::Vector2f position);
 
-    void RemoveFoodEntity(
-        WorldEntityId id
-    );
+    void RemoveFoodEntity(WorldEntityId id);
 
     AntConfiguration configuration;
     std::vector<AntWorldCell> cells;
 
     std::vector<Food> foodEntities;
 
-    std::unordered_map<
-        WorldEntityId,
-        std::size_t
-    > foodEntityIndices;
+    std::unordered_map<WorldEntityId, std::size_t> foodEntityIndices;
 
     WorldEntityId nextFoodEntityId{1};
 

@@ -4,8 +4,8 @@
 #include <utility>
 
 EdgeDrawer::EdgeDrawer(const DrawerEdge newEdge, const UITheme &newTheme)
-    : Surface(SurfaceVariant::Glass, newTheme), handle(CreateChild<Button>()), theme(newTheme),
-      edge(newEdge), transitionDuration(newTheme.motionNormal) {
+    : Surface(SurfaceVariant::Glass, newTheme), handle(CreateChild<Button>()), theme(newTheme), edge(newEdge),
+      transitionDuration(newTheme.motionNormal) {
     SetSize({280.0f, 400.0f});
     SetHitTestVisible(false);
     handle.SetCornerRadius(theme.radiusSmall);
@@ -68,13 +68,9 @@ Button &EdgeDrawer::GetHandle() { return handle; }
 
 const Button &EdgeDrawer::GetHandle() const { return handle; }
 
-void EdgeDrawer::SetTransitionDuration(const float seconds) {
-    transitionDuration = std::max(0.0f, seconds);
-}
+void EdgeDrawer::SetTransitionDuration(const float seconds) { transitionDuration = std::max(0.0f, seconds); }
 
-void EdgeDrawer::SetOnOpenChanged(OpenChangedCallback callback) {
-    onOpenChanged = std::move(callback);
-}
+void EdgeDrawer::SetOnOpenChanged(OpenChangedCallback callback) { onOpenChanged = std::move(callback); }
 
 void EdgeDrawer::OnGeometryChanged() {
     Surface::OnGeometryChanged();
@@ -113,8 +109,7 @@ void EdgeDrawer::RefreshHandleGeometry() {
     const float horizontalLength = std::min(handleLength, size.x);
     switch (edge) {
     case DrawerEdge::Left:
-        handle.SetPosition({std::max(0.0f, size.x - handleExtent),
-                            std::max(0.0f, (size.y - verticalLength) * 0.5f)});
+        handle.SetPosition({std::max(0.0f, size.x - handleExtent), std::max(0.0f, (size.y - verticalLength) * 0.5f)});
         handle.SetSize({handleExtent, verticalLength});
         break;
     case DrawerEdge::Right:
@@ -122,8 +117,7 @@ void EdgeDrawer::RefreshHandleGeometry() {
         handle.SetSize({handleExtent, verticalLength});
         break;
     case DrawerEdge::Top:
-        handle.SetPosition({std::max(0.0f, (size.x - horizontalLength) * 0.5f),
-                            std::max(0.0f, size.y - handleExtent)});
+        handle.SetPosition({std::max(0.0f, (size.x - horizontalLength) * 0.5f), std::max(0.0f, size.y - handleExtent)});
         handle.SetSize({horizontalLength, handleExtent});
         break;
     case DrawerEdge::Bottom:

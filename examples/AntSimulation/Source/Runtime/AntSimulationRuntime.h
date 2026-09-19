@@ -10,22 +10,22 @@
 #include <string>
 #include <vector>
 
-#include <PipeFrame/Project/ProjectRuntime.h>
 #include <PipeFrame/Environment/TilemapAssetModule.h>
 #include <PipeFrame/Environment/VisualAssetModule.h>
+#include <PipeFrame/Project/ProjectRuntime.h>
 #include <PipeFrame/UI/View.h>
 class SimulationDashboard;
-#include <PipeFrame/Resources/GraphicsResourceService.h>
 #include "World/Runtime/ColonyHistory.h"
-#include <map>
 #include <PipeFrame/Project/EntityRegistry.h>
+#include <PipeFrame/Resources/GraphicsResourceService.h>
+#include <map>
 
-#include "World/AntWorld.h"
 #include "Configuration/AntConfiguration.h"
 #include "Editor/AntEditorTool.h"
 #include "Editor/AntEditorToolRenderer.h"
 #include "Editor/AntInspector.h"
 #include "Editor/ColonyInspector.h"
+#include "World/AntWorld.h"
 #include "World/Rendering/AntDebugRenderer.h"
 #include "World/Rendering/AntRenderingWorld.h"
 #include "World/Rendering/EnvironmentRenderer.h"
@@ -35,44 +35,24 @@ namespace ant_simulation {
 
 class AntSimulationRuntime final : public pipeframe::ProjectRuntime {
   public:
-    struct RenderStatistics {
-        std::size_t candidates{0};
-        std::size_t visible{0};
-        std::size_t vertices{0};
-
-        float movementTimeMs{0.0f};
-        float spatialGridTimeMs{0.0f};
-        float geometryTimeMs{0.0f};
-
-        bool usingQuads{false};
-    };
-
-    struct RenderOptions {
-        bool showGrid{true};
-        bool showMarkers{true};
-        bool showShadows{true};
-        bool showTargets{false};
-        bool showPhysicsDebug{false};
-
-        bool showAnts{true};
-        bool dynamicAntColors{false};
-
-        int markerIntensity{10};
-    };
+    using RenderStatistics = AntRenderingWorld::RenderStatistics;
+    using RenderOptions = AntRenderingWorld::RenderOptions;
 
     AntSimulationRuntime();
     ~AntSimulationRuntime() override;
-    template<class T> void RegisterComponent() {
-        componentRegistry.Register(T::Schema());componentTypes.push_back(T::Schema().Describe());
+    template <class T> void RegisterComponent() {
+        componentRegistry.Register(T::Schema());
+        componentTypes.push_back(T::Schema().Describe());
     }
-    template<class T> void RegisterEntity(pipeframe::SceneObjectTypeDescriptor descriptor) {
+    template <class T> void RegisterEntity(pipeframe::SceneObjectTypeDescriptor descriptor) {
         entityRegistry.Register<T>(std::move(descriptor));
-        objectTypes=entityRegistry.Describe();
+        objectTypes = entityRegistry.Describe();
     }
-    template<class T> void RegisterBehaviour(std::string id,std::string name) {
-        entityRegistry.RegisterBehaviour<T>(componentRegistry,std::move(id),std::move(name));
+    template <class T> void RegisterBehaviour(std::string id, std::string name) {
+        entityRegistry.RegisterBehaviour<T>(componentRegistry, std::move(id), std::move(name));
     }
 
+    void CollectWorldDebug(pipeframe::WorldDebugDraw &, pipeframe::WorldDebugOptions) override;
     const char *GetName() const override;
     pipeframe::ProjectPluginDescriptor GetPluginDescriptor() const override;
     bool RegisterPlugin(pipeframe::PluginRegistrar &registrar, std::string &error) override;
@@ -88,7 +68,7 @@ class AntSimulationRuntime final : public pipeframe::ProjectRuntime {
     const pipeframe::ComponentRegistry *GetComponentRegistry() const override { return &componentRegistry; }
     pipeframe::SceneObject ResolveSceneObject(pipeframe::SceneObjectId id) const override;
     bool ApplyComponentEdits(std::span<const pipeframe::ProjectRuntimeComponentEdit> edits,
-                            pipeframe::ProjectRuntimeAuthoringState state) override;
+                             pipeframe::ProjectRuntimeAuthoringState state) override;
     std::vector<pipeframe::ProjectRuntimeComponentEdit> GetLiveComponentProperties() const override;
 
     void SetSelectedObject(std::optional<pipeframe::SceneObjectId> objectId) override;
@@ -106,7 +86,7 @@ class AntSimulationRuntime final : public pipeframe::ProjectRuntime {
     void RenderScreen(RenderContext &context) override;
     bool HandleUIEvent(const pipeframe::InputEvent &event, RenderContext &context) override;
     bool ConsumesPointerAt(pipeframe::Vector2i position, const RenderContext &context) const override;
-    bool UsesRightClickTool() const override { return viewMode!=pipeframe::ProjectRuntimeViewMode::Zen; }
+    bool UsesRightClickTool() const override { return viewMode != pipeframe::ProjectRuntimeViewMode::Zen; }
     bool HasWorldPointerCapture() const override { return editorTool.IsStrokeActive(); }
     bool HasUIFocus() const override;
     SimulationDashboard *GetDashboard() const { return dashboard.get(); }
@@ -159,9 +139,6 @@ class AntSimulationRuntime final : public pipeframe::ProjectRuntime {
     void DrawAuthoredSelection(RenderContext &context) const;
 
     [[nodiscard]]
-    pipeframe::Rectanglef GetWorldViewport(const RenderContext &context) const;
-
-    [[nodiscard]]
     float GetRenderZoom(const RenderContext &context) const;
 
     [[nodiscard]]
@@ -182,10 +159,10 @@ class AntSimulationRuntime final : public pipeframe::ProjectRuntime {
     pipeframe::GraphicsResourceService uiResources;
     pipeframe::FontHandle uiFont;
     std::unique_ptr<SimulationDashboard> dashboard;
-    std::map<ColonyId,ColonyHistory> histories;
+    std::map<ColonyId, ColonyHistory> histories;
     std::optional<ColonyId> selectedColony;
     std::shared_ptr<pipeframe::GraphicsResourceService> previewResources;
-    pipeframe::TextureHandle previewBody,previewLeg,previewFood;
+    pipeframe::TextureHandle previewBody, previewLeg, previewFood;
     AntGeometry previewGeometry;
     bool showAntComponents{};
     AntConfiguration configuration;
@@ -193,13 +170,8 @@ class AntSimulationRuntime final : public pipeframe::ProjectRuntime {
     std::unique_ptr<AntWorld> simulationWorld;
 
     std::shared_ptr<AntRenderingWorld> renderingWorld;
-    EnvironmentRenderer &environmentRenderer;
-    AntRenderer &antRenderer;
-    ShadowRenderer &shadowRenderer;
-    AntDebugRenderer &debugRenderer;
 
     AntEditorTool editorTool;
-    AntEditorToolRenderer &editorToolRenderer;
 
     AntInspector antInspector;
     ColonyInspector colonyInspector;

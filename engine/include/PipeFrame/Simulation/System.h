@@ -19,8 +19,8 @@ class EntityUpdateSystem {
 public:
     virtual ~EntityUpdateSystem() = default;
     [[nodiscard]] virtual std::string_view GetSystemId() const = 0;
-    virtual void Update(Entity &entity, const Environment &environment,
-                        const Command &command, float fixedDeltaTime) const = 0;
+    virtual void Update(Entity& entity, const Environment& environment, const Command& command,
+                        float fixedDeltaTime) const = 0;
 };
 
 template <typename World, typename Result>
@@ -28,9 +28,9 @@ class PhysicsSolver {
 public:
     virtual ~PhysicsSolver() = default;
     [[nodiscard]] virtual std::string_view GetSystemId() const = 0;
-    virtual Result Solve(World &world) = 0;
+    virtual Result Solve(World& world) = 0;
 };
 
-} // namespace pipeframe
+}  // namespace pipeframe
 
 #endif

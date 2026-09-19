@@ -1,15 +1,13 @@
 #ifndef PIPEFRAME_UI_ROUNDED_RECTANGLE_SHAPE_H
 #define PIPEFRAME_UI_ROUNDED_RECTANGLE_SHAPE_H
 
-#include <cstddef>
-
 #include <SFML/Graphics/Shape.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <cstddef>
 
 class RoundedRectangleShape final : public sf::Shape {
-  public:
-    explicit RoundedRectangleShape(sf::Vector2f size = {}, float cornerRadius = 0.0f,
-                                   std::size_t cornerPointCount = 6);
+public:
+    explicit RoundedRectangleShape(sf::Vector2f size = {}, float cornerRadius = 0.0f, std::size_t cornerPointCount = 6);
 
     void setSize(sf::Vector2f newSize);
     sf::Vector2f getSize() const;
@@ -23,7 +21,7 @@ class RoundedRectangleShape final : public sf::Shape {
     std::size_t getPointCount() const override;
     sf::Vector2f getPoint(std::size_t index) const override;
 
-  private:
+private:
     sf::Vector2f size;
     float cornerRadius = 0.0f;
     std::size_t cornerPointCount = 6;
