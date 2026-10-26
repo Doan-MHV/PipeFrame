@@ -1,0 +1,5 @@
+PIPEFRAME_MODULES 1
+runtime "Source/Integration/AntSimulationRuntime.cpp"
+entry "Source/Plugin.cpp"
+registration "Source/Integration/AntProject.cpp"
+systems "ant.colony-lifecycle" "ant.movement" "ant.behavior" "ant.cleanup" "ant.live-state" "ant.render"

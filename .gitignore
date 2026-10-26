@@ -1,0 +1,49 @@
+.cache/clangd
+.idea/
+.build/
+out/Debug
+vcpkg
+compile_commands.json
+node_modules/
+AntSimulator-master/
+CurrentPlan.md
+AntPezzaSource/
+/AntPezzaSource/
+AreaPezzaSource/
+TimeTrackerPezza/
+SailBoatPezza/
+**/LiveModules/
+/cmake-build-*/
+**/Build/
+
+# Personal documents stay local and must never be published.
+/output/pdf/Don_Vo_Cover_Letter_Oaklin_Lane.pdf
+/output/pdf/Don_Vo_Cover_Letter_Oaklin_Lane.txt
+/docs/PipeFrame_Project_Overview.docx
+/docs/PipeFrame_Project_Plan.docx
+
+# Publish only the top-level README until documentation is reviewed.
+/docs/
+/output/
+*.md
+*.markdown
+*.mdx
+*.rst
+!/README.md
+**/Docs/
+**/ASSET_PROMPTS.json
+
+# Local editor state and generated caches; retain stable scene asset registries.
+**/.pipeframe/*
+!**/.pipeframe/assets.db
+**/.recent-projects
+**/.workbench.layout
+
+# Local AI instructions and credentials do not belong in published source.
+.codex/
+.agents/
+.env
+.env.*
+*.pem
+*.p12
+*.pfx

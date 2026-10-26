@@ -1,0 +1,14 @@
+ROVERLAB_BENCHMARK 1
+# Compare exploration policies on the same room and fixed budget; destination travel always uses time-cost A*.
+ultrasonic-BFS Ultrasonic BFS 42 2 Explore 300 300 0 0 0 0
+ultrasonic-DFS Ultrasonic DFS 42 2 Explore 300 300 0 0 0 0
+ultrasonic-Dijkstra Ultrasonic Dijkstra 42 2 Explore 300 300 0 0 0 0
+ultrasonic-AStar Ultrasonic AStar 42 2 Explore 300 300 0 0 0 0
+ultrasonic-FloodFill Ultrasonic FloodFill 42 2 Explore 300 300 0 0 0 0
+ultrasonic-RightHand Ultrasonic RightHand 42 2 Explore 300 300 0 0 0 0
+lidar-BFS LiDAR BFS 42 2 Explore 300 300 0 0 0 0
+lidar-DFS LiDAR DFS 42 2 Explore 300 300 0 0 0 0
+lidar-Dijkstra LiDAR Dijkstra 42 2 Explore 300 300 0 0 0 0
+lidar-AStar LiDAR AStar 42 2 Explore 300 300 0 0 0 0
+lidar-FloodFill LiDAR FloodFill 42 2 Explore 300 300 0 0 0 0
+lidar-RightHand LiDAR RightHand 42 2 Explore 300 300 0 0 0 0

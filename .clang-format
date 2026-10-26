@@ -1,0 +1,69 @@
+---
+# ==============================================================
+# Clang-Format Configuration
+# Base Style: Google, with compact declarative UI layout
+# Standard: C++20
+# ==============================================================
+Language: Cpp
+BasedOnStyle: Google
+
+# Fixed indentation keeps nested views and callbacks readable.
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+AccessModifierOffset: -2
+ConstructorInitializerIndentWidth: 2
+ContinuationIndentWidth: 2
+
+# Line Length
+ColumnLimit: 100
+
+# C++ Standard
+Standard: c++20
+
+# Bracing Style
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Empty
+AllowShortLambdasOnASingleLine: Inline
+AllowShortCaseLabelsOnASingleLine: false
+
+# Pointer / Reference Alignment (e.g. Type* ptr, Type& ref)
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# Spaces
+SpaceBeforeParens: ControlStatements
+SpaceBeforeAssignmentOperators: true
+SpaceAfterCStyleCast: false
+SpaceInEmptyParentheses: false
+SpacesInAngles: Never
+SpacesInSquareBrackets: false
+
+# Calls and UI child lists
+# Use a trailing comma on multiline view children to keep the list vertical.
+AlignAfterOpenBracket: DontAlign
+BinPackArguments: false
+BinPackParameters: OnePerLine
+BinPackLongBracedList: false
+
+# Alignment
+AlignConsecutiveAssignments: None
+AlignConsecutiveDeclarations: None
+AlignEscapedNewlines: Left
+AlignOperands: Align
+AlignTrailingComments: true
+
+# Namespaces
+NamespaceIndentation: None
+FixNamespaceComments: true
+
+# Includes Organization
+SortIncludes:
+  Enabled: true
+  IgnoreCase: false
+IncludeBlocks: Regroup
+...

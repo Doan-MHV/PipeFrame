@@ -1,0 +1,85 @@
+PIPEFRAME_SCENE 7
+"m" "degrees" "right-handed-y-up"
+3 0
+1 0 0 0 1 1 "Map" "pipeframe.map2d" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 0
+"position" 4 0 0
+"pipeframe.tilemap2d" 1 1 0 2
+"visible" 0 1
+"asset" 6 "asset-00000008"
+2 0.50455832481384277 0.51882660388946533 0 1 1 "RoverEntity" "project.RoverEntity" 0 0 1 0 "Default" 0 0 9 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 0
+"position" 4 0.50455832481384277 0.51882660388946533
+"pipeframe.sprite-renderer2d" 1 1 0 5
+"visible" 0 1
+"sortingOrder" 1 0
+"size" 4 0.30000001192092896 0.30000001192092896
+"tint" 5 255 255 255 255
+"texture" 6 "asset-00000005"
+"pipeframe.environment-collider2d" 1 1 0 9
+"shape" 3 "Box"
+"size" 4 0.30000001192092896 0.20000000298023224
+"start" 4 -0.5 0
+"enabled" 0 1
+"end" 4 0.5 0
+"visible" 0 0
+"layerMask" 1 1
+"trigger" 0 0
+"color" 5 110 120 135 255
+"pipeframe.kinematic-body2d" 1 1 0 4
+"velocity" 4 0 0
+"layerMask" 1 4294967295
+"radius" 2 0.5
+"enabled" 0 1
+"project.RoverDriveComponent" 1 1 0 4
+"enabled" 0 1
+"readingTimeout" 2 0.29999999999999999
+"stopDistance" 2 0.34999999999999998
+"speed" 2 0.16
+"project.RoverSafetyComponent" 1 1 0 3
+"halfLength" 2 0.16
+"halfWidth" 2 0.089999999999999997
+"clearance" 2 0.029999999999999999
+"project.RoverNavigationComponent" 1 1 0 7
+"enabled" 0 0
+"turnRate" 2 1
+"openingDistance" 2 0.75
+"turnDistance" 2 0.55000000000000004
+"wallDistance" 2 0.34999999999999998
+"speed" 2 0.10000000000000001
+"rover" 7 2
+"project.RoverMappingComponent" 1 1 0 4
+"sideCells" 1 160
+"cellSize" 2 0.05000000074505806
+"rangeMargin" 2 0.02
+"enabled" 0 1
+"project.RoverSolverComponent" 1 1 0 7
+"missionMode" 3 "TimedExplore"
+"explorationDuration" 3 "Until complete"
+"enabled" 0 1
+"turnRate" 2 1
+"noNewCellTimeout" 2 120
+"speed" 2 0.10000000000000001
+"algorithm" 3 "AStar"
+8 0.50455832481384277 0.51882660388946533 0 1 1 "LiDAR" "project.LidarSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 0
+"position" 4 0.50455832481384277 0.51882660388946533
+"project.LidarSensorComponent" 1 1 0 12
+"enabled" 0 1
+"randomSeed" 1 42
+"dropoutProbability" 2 0
+"samplesPerScan" 1 360
+"scanRate" 2 10
+"minimumRange" 2 0.02
+"noiseAmplitude" 2 0
+"deliveryDelay" 2 0
+"maximumRange" 2 2
+"localAngleDegrees" 2 0
+"localPosition" 4 0 0
+"parent" 7 2

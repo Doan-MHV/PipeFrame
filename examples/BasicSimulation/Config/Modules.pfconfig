@@ -1,0 +1,8 @@
+PIPEFRAME_MODULES 1
+runtime "Source/BasicSimulationRuntime.cpp"
+entry "Source/Plugin.cpp"
+components "Source/Components/ComponentContract.h"
+system_contract "Source/Systems/SystemContract.h"
+runtime_contract "Source/Runtime/RuntimeContract.h"
+editor "Source/Editor/ExtensionContract.h"
+systems "basic.simulation" "basic.render"

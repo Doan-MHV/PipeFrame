@@ -1,0 +1,46 @@
+PIPEFRAME_SCENE 7
+"m" "degrees" "right-handed-y-up"
+2 0
+1 0 0 0 1 1 "Playground" "pipeframe.playground2d" 0 0 1 0 "Default" 0 0 3 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 0
+"position" 4 0 0
+"pipeframe.playground" 1 1 0 7
+"size" 4 320 240
+"showGrid" 0 1
+"rows" 1 24
+"material" 6 ""
+"cellSize" 2 10
+"color" 5 40 46 52 255
+"columns" 1 32
+"pipeframe.tilemap2d" 1 1 0 2
+"visible" 0 1
+"asset" 6 "asset-00000001"
+2 30.183639526367188 105.17529296875 0 1 1 "Probe" "project.Probe" 0 0 1 0 "Default" 0 0 5 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 0
+"position" 4 30.183639526367188 105.17529296875
+"project.ProbeSettings" 1 1 0 6
+"nearest" 2 -1
+"stopDistance" 2 6
+"blocked" 0 0
+"range" 2 80
+"direction" 4 1 0
+"speed" 2 20
+"pipeframe.kinematic-body2d" 1 1 0 4
+"enabled" 0 1
+"radius" 2 0.5
+"layerMask" 1 4294967295
+"velocity" 4 0 0
+"project.ProbeBehaviour" 1 1 0 0
+"pipeframe.environment-collider2d" 1 1 0 8
+"color" 5 110 120 135 255
+"visible" 0 1
+"layerMask" 1 1
+"end" 4 0.5 0
+"enabled" 0 0
+"start" 4 -0.5 0
+"size" 4 6 6
+"shape" 3 "Box"

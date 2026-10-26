@@ -1,0 +1,85 @@
+PIPEFRAME_SCENE 7
+"m" "degrees" "right-handed-y-up"
+5 0
+1 0 0 0 1 1 "Map" "pipeframe.map2d" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 0 0
+"rotation" 2 0
+"scale" 4 1 1
+"pipeframe.tilemap2d" 1 1 0 2
+"asset" 6 "asset-0000000a"
+"visible" 0 1
+2 6.5 2 0 1 1 "RoverEntity" "project.RoverEntity" 0 0 1 0 "Default" 0 0 5 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 6.5 2
+"rotation" 2 0
+"scale" 4 1 1
+"pipeframe.sprite-renderer2d" 1 1 0 5
+"texture" 6 "asset-00000005"
+"tint" 5 255 255 255 255
+"size" 4 0.30000001192092896 0.30000001192092896
+"sortingOrder" 1 0
+"visible" 0 1
+"pipeframe.environment-collider2d" 1 1 0 9
+"color" 5 110 120 135 255
+"trigger" 0 0
+"layerMask" 1 1
+"visible" 0 0
+"end" 4 0.5 0
+"enabled" 0 1
+"start" 4 -0.5 0
+"size" 4 0.30000001192092896 0.20000000298023224
+"shape" 3 "Box"
+"pipeframe.kinematic-body2d" 1 1 0 4
+"enabled" 0 1
+"radius" 2 0.5
+"layerMask" 1 4294967295
+"velocity" 4 0 0
+"project.RoverDriveComponent" 1 1 0 5
+"frontSensor" 7 4
+"speed" 2 0.16
+"stopDistance" 2 0.34999999999999998
+"readingTimeout" 2 0.29999999999999999
+"enabled" 0 1
+4 6.6599998474121094 2 0 1 1 "UltrasonicSensorEntity" "project.UltrasonicSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 6.6599998474121094 2
+"rotation" 2 0
+"scale" 4 1 1
+"project.UltrasonicSensorComponent" 1 1 0 10
+"parent" 7 2
+"sampleTime" 2 0
+"localPosition" 4 0.15999999642372131 0
+"localAngleDegrees" 2 0
+"maximumRange" 2 2
+"distance" 2 0
+"minimumRange" 2 0.019999999552965164
+"coneAngleDegrees" 2 30
+"status" 3 "Not sampled"
+"enabled" 0 1
+5 6.5 1.8899999856948853 -90 1 1 "UltrasonicSensorEntity 2" "project.UltrasonicSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 -90.000002504478161
+"position" 4 6.5 1.8899999856948853
+"project.UltrasonicSensorComponent" 1 1 0 7
+"enabled" 0 1
+"maximumRange" 2 2
+"localAngleDegrees" 2 -90
+"coneAngleDegrees" 2 30
+"minimumRange" 2 0.019999999552965164
+"localPosition" 4 0 -0.10999999940395355
+"parent" 7 2
+6 6.5 2.1099998950958252 90 1 1 "UltrasonicSensorEntity 3" "project.UltrasonicSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 90.000002504478161
+"position" 4 6.5 2.1099998950958252
+"project.UltrasonicSensorComponent" 1 1 0 7
+"enabled" 0 1
+"maximumRange" 2 2
+"localAngleDegrees" 2 90
+"coneAngleDegrees" 2 30
+"minimumRange" 2 0.019999999552965164
+"localPosition" 4 0 0.10999999940395355
+"parent" 7 2

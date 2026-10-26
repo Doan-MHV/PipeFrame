@@ -1,0 +1,3 @@
+PIPEFRAME_INPUT 1
+action "toggle_dashboard" "U"
+action "toggle_best_boat" "B"

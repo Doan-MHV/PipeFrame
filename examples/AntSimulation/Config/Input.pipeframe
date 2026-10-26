@@ -1,0 +1,3 @@
+PIPEFRAME_INPUT 1
+action "toggle_markers" "M"
+action "toggle_physics_debug" "P"

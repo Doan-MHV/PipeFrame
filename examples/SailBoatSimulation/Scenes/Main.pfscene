@@ -1,0 +1,31 @@
+PIPEFRAME_SCENE 3
+5
+1 500 800 -90 "RACE START" "sailboat.race-start" 1
+"lineLength" 2 80
+2 1100 800 90 "FINISH LINE" "sailboat.finish-line" 1
+"lineLength" 2 100
+3 800 500 0 "WAYPOINT 1" "sailboat.waypoint" 3
+"lineLength" 2 60
+"waypointOrder" 1 1
+"waypointRadius" 2 10
+4 0 0 0 "SAILING ENVIRONMENT" "sailboat.environment" 12
+"audioEnabled" 0 1
+"audioVolume" 2 30
+"drawBestOnly" 0 0
+"drawBestTrajectory" 0 1
+"drawGhostBoats" 0 1
+"drawWaypointLabels" 0 1
+"highlightBest" 0 1
+"showTargetGuide" 0 1
+"waterAnimation" 0 1
+"windDirectionDegrees" 2 0
+"windSpeed" 2 1
+"worldSize" 4 1600 1600
+5 0 0 0 "TRAINING SETTINGS" "sailboat.training-settings" 7
+"angularSpeedDegrees" 2 10
+"asyncTraining" 0 0
+"eliteRatio" 2 0.2
+"maximumIterationTime" 2 900
+"populationSize" 1 1000
+"seedOffset" 1 1
+"simulationSpeedUp" 2 10

@@ -1,0 +1,6 @@
+# Temporary rendering/runtime adapters. Milestone 18G removes this file when the list reaches zero.
+examples/SailBoatSimulation/Source/Rendering/SailBoatRenderer.cpp
+examples/SailBoatSimulation/Source/Rendering/SailBoatRenderer.h
+examples/SailBoatSimulation/Source/Editor/SailBoatDashboard.cpp
+examples/SailBoatSimulation/Source/Runtime/SailBoatSimulationRuntime.cpp
+examples/SailBoatSimulation/Source/Runtime/SailBoatSimulationRuntime.h

@@ -1,0 +1,130 @@
+PIPEFRAME_SCENE 7
+"m" "degrees" "right-handed-y-up"
+7 0
+1 0 0 0 0.25 0.25 "Map" "pipeframe.map2d" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 0 0
+"rotation" 2 0
+"scale" 4 0.25 0.25
+"pipeframe.tilemap2d" 1 1 0 2
+"asset" 6 "asset-00000009"
+"visible" 0 1
+2 0.1875 0.1875 0 1 1 "Micromouse" "project.RoverEntity" 0 0 1 0 "Default" 0 0 10 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 0.1875 0.1875
+"rotation" 2 0
+"scale" 4 1 1
+"pipeframe.sprite-renderer2d" 1 1 0 3
+"texture" 6 "asset-00000005"
+"size" 4 0.10000000149011612 0.070000000298023224
+"visible" 0 1
+"pipeframe.environment-collider2d" 1 1 0 4
+"shape" 3 "Box"
+"size" 4 0.10000000149011612 0.070000000298023224
+"enabled" 0 1
+"trigger" 0 0
+"pipeframe.kinematic-body2d" 1 1 0 3
+"enabled" 0 1
+"radius" 2 0.095000000000000001
+"velocity" 4 0 0
+"project.MicromouseMazeComponent" 1 1 0 5
+"cellPitch" 2 0.34999999999999998
+"rows" 1 8
+"columns" 1 8
+"wallThickness" 2 0.025000000000000001
+"enabled" 0 1
+"project.MicromouseHardwareComponent" 1 1 0 7
+"mass" 2 0.10000000000000001
+"wheelRadius" 2 0.016
+"width" 2 0.070000000000000007
+"length" 2 0.10000000000000001
+"trackWidth" 2 0.055
+"maximumRPM" 2 120
+"wheelTorque" 2 0.001
+"project.RoverDriveComponent" 1 1 0 6
+"speed" 2 0.16
+"stopDistance" 2 0.025000000000000001
+"trackWidth" 2 0.055
+"maximumWheelSpeed" 2 0.20000000000000001
+"readingTimeout" 2 0.29999999999999999
+"enabled" 0 1
+"project.RoverSafetyComponent" 1 1 0 3
+"halfLength" 2 0.050000000000000003
+"halfWidth" 2 0.035000000000000003
+"clearance" 2 0.01
+"project.RoverMappingComponent" 1 1 0 4
+"cellSize" 2 0.025000000000000001
+"sideCells" 1 160
+"rangeMargin" 2 0.0050000000000000001
+"enabled" 0 1
+"project.RoverSolverComponent" 1 1 0 9
+"missionMode" 3 "ArrivalMarker"
+"goalTag" 3 "Finish"
+"searchSpacing" 2 0.10000000000000001
+"algorithm" 3 "AStar"
+"noNewCellTimeout" 2 120
+"runTimeout" 2 1800
+"turnRate" 2 1
+"speed" 2 0.12
+"enabled" 0 1
+4 0.23749999701976776 0.1875 0 1 1 "FrontSensor" "project.UltrasonicSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 0.23749999701976776 0.1875
+"rotation" 2 0
+"scale" 4 1 1
+"project.UltrasonicSensorComponent" 1 1 0 7
+"parent" 7 2
+"localPosition" 4 0.05000000074505806 0
+"minimumRange" 2 0.0050000000000000001
+"coneAngleDegrees" 2 15
+"localAngleDegrees" 2 0
+"maximumRange" 2 0.75
+"enabled" 0 1
+5 0.1875 0.15250000357627869 -90 1 1 "LeftSensor" "project.UltrasonicSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 0.1875 0.15250000357627869
+"rotation" 2 -90.000002504478161
+"scale" 4 1 1
+"project.UltrasonicSensorComponent" 1 1 0 7
+"parent" 7 2
+"localPosition" 4 0 -0.035000000149011612
+"minimumRange" 2 0.0050000000000000001
+"coneAngleDegrees" 2 15
+"localAngleDegrees" 2 -90
+"maximumRange" 2 0.75
+"enabled" 0 1
+6 0.1875 0.22249999642372131 90 1 1 "RightSensor" "project.UltrasonicSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 0.1875 0.22249999642372131
+"rotation" 2 90.000002504478161
+"scale" 4 1 1
+"project.UltrasonicSensorComponent" 1 1 0 7
+"parent" 7 2
+"localPosition" 4 0 0.035000000149011612
+"minimumRange" 2 0.0050000000000000001
+"coneAngleDegrees" 2 15
+"localAngleDegrees" 2 90
+"maximumRange" 2 0.75
+"enabled" 0 1
+7 0.13750000298023224 0.1875 180 1 1 "RearSensor" "project.UltrasonicSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 0.13750000298023224 0.1875
+"rotation" 2 180.00000500895632
+"scale" 4 1 1
+"project.UltrasonicSensorComponent" 1 1 0 7
+"parent" 7 2
+"localPosition" 4 -0.05000000074505806 0
+"minimumRange" 2 0.0050000000000000001
+"coneAngleDegrees" 2 15
+"localAngleDegrees" 2 180
+"maximumRange" 2 0.75
+"enabled" 0 1
+8 2.6399250030517578 2.6362876892089844 0 1 1 "Finish" "project.RoverGoalEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 2.6399250030517578 2.6362876892089844
+"rotation" 2 0
+"scale" 4 1 1
+"project.RoverGoalComponent" 1 1 0 3
+"tag" 3 "Finish"
+"enabled" 0 1
+"radius" 2 0.12

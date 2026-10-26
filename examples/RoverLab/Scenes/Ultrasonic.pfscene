@@ -1,0 +1,129 @@
+PIPEFRAME_SCENE 7
+"m" "degrees" "right-handed-y-up"
+6 0
+1 0 0 0 1 1 "Map" "pipeframe.map2d" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 0 0
+"rotation" 2 0
+"scale" 4 1 1
+"pipeframe.tilemap2d" 1 1 0 2
+"asset" 6 "asset-00000008"
+"visible" 0 1
+2 0.50455832481384277 0.51882660388946533 0 1 1 "RoverEntity" "project.RoverEntity" 0 0 1 0 "Default" 0 0 10 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 0.50455832481384277 0.51882660388946533
+"rotation" 2 0
+"scale" 4 1 1
+"pipeframe.sprite-renderer2d" 1 1 0 5
+"texture" 6 "asset-00000005"
+"tint" 5 255 255 255 255
+"size" 4 0.30000001192092896 0.30000001192092896
+"sortingOrder" 1 0
+"visible" 0 1
+"pipeframe.environment-collider2d" 1 1 0 9
+"color" 5 110 120 135 255
+"trigger" 0 0
+"layerMask" 1 1
+"visible" 0 0
+"end" 4 0.5 0
+"enabled" 0 1
+"start" 4 -0.5 0
+"size" 4 0.30000001192092896 0.20000000298023224
+"shape" 3 "Box"
+"pipeframe.kinematic-body2d" 1 1 0 4
+"enabled" 0 1
+"radius" 2 0.5
+"layerMask" 1 4294967295
+"velocity" 4 0 0
+"project.RoverDriveComponent" 1 1 0 4
+"speed" 2 0.16
+"stopDistance" 2 0.34999999999999998
+"readingTimeout" 2 0.29999999999999999
+"enabled" 0 1
+"project.RoverSafetyComponent" 1 1 0 3
+"clearance" 2 0.029999999999999999
+"halfWidth" 2 0.089999999999999997
+"halfLength" 2 0.16
+"project.RoverNavigationComponent" 1 1 0 7
+"rover" 7 2
+"speed" 2 0.10000000000000001
+"wallDistance" 2 0.34999999999999998
+"turnDistance" 2 0.55000000000000004
+"openingDistance" 2 0.75
+"turnRate" 2 1
+"enabled" 0 0
+"project.UltrasonicScheduleComponent" 1 1 0 4
+"deliveryDelay" 2 0
+"slotPeriod" 2 0.029999999329447746
+"samplePeriod" 2 0.10000000000000001
+"sequential" 0 1
+"project.RoverMappingComponent" 1 1 0 4
+"enabled" 0 1
+"rangeMargin" 2 0.02
+"cellSize" 2 0.05000000074505806
+"sideCells" 1 160
+"project.RoverSolverComponent" 1 1 0 9
+"missionMode" 3 "TimedExplore"
+"explorationDuration" 3 "Until complete"
+"enabled" 0 1
+"runTimeout" 2 1800
+"turnRate" 2 1
+"noNewCellTimeout" 2 120
+"speed" 2 0.10000000000000001
+"algorithm" 3 "AStar"
+"rover" 7 2
+4 0.6645582914352417 0.51882660388946533 0 1 1 "FrontSensor" "project.UltrasonicSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"position" 4 0.6645582914352417 0.51882660388946533
+"rotation" 2 0
+"scale" 4 1 1
+"project.UltrasonicSensorComponent" 1 1 0 10
+"parent" 7 2
+"sampleTime" 2 0
+"localPosition" 4 0.15999999642372131 0
+"localAngleDegrees" 2 0
+"maximumRange" 2 2
+"distance" 2 0
+"minimumRange" 2 0.019999999552965164
+"coneAngleDegrees" 2 30
+"status" 3 "Not sampled"
+"enabled" 0 1
+5 0.50455832481384277 0.42882660031318665 -90 1 1 "LeftSensor" "project.UltrasonicSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 -90.000002504478161
+"position" 4 0.50455832481384277 0.42882660031318665
+"project.UltrasonicSensorComponent" 1 1 0 7
+"enabled" 0 1
+"maximumRange" 2 2
+"localAngleDegrees" 2 -90
+"coneAngleDegrees" 2 30
+"minimumRange" 2 0.019999999552965164
+"localPosition" 4 0 -0.090000003576278687
+"parent" 7 2
+6 0.50455832481384277 0.60882663726806641 90 1 1 "RightSensor" "project.UltrasonicSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 90.000002504478161
+"position" 4 0.50455832481384277 0.60882663726806641
+"project.UltrasonicSensorComponent" 1 1 0 7
+"enabled" 0 1
+"maximumRange" 2 2
+"localAngleDegrees" 2 90
+"coneAngleDegrees" 2 30
+"minimumRange" 2 0.019999999552965164
+"localPosition" 4 0 0.090000003576278687
+"parent" 7 2
+7 0.34455832839012146 0.51882660388946533 180 1 1 "RearSensor" "project.UltrasonicSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 180.00000500895632
+"position" 4 0.34455832839012146 0.51882660388946533
+"project.UltrasonicSensorComponent" 1 1 0 7
+"enabled" 0 1
+"maximumRange" 2 2
+"localAngleDegrees" 2 180
+"coneAngleDegrees" 2 30
+"minimumRange" 2 0.02
+"localPosition" 4 -0.15999999642372131 0
+"parent" 7 2

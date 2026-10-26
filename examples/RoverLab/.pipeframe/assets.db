@@ -1,0 +1,27 @@
+PIPEFRAME_ASSET_DATABASE 2 16
+ASSET "asset-00000001" 1 0 "Assets/Textures/Environment/arena-floor.png" ".pipeframe/cache/asset-00000001/compiled.pfasset" ".pipeframe/cache/asset-00000001/thumbnail.png" ".pipeframe/cache/asset-00000001/preview.png" "pipeframe.texture" 4 1 6597485509206118754 "" 0 0 0
+ENDASSET
+ASSET "asset-00000002" 1 0 "Assets/Textures/Environment/arena-wall.png" ".pipeframe/cache/asset-00000002/compiled.pfasset" ".pipeframe/cache/asset-00000002/thumbnail.png" ".pipeframe/cache/asset-00000002/preview.png" "pipeframe.texture" 4 1 6147355004199900905 "" 0 0 0
+ENDASSET
+ASSET "asset-00000003" 1 0 "Assets/Textures/Robot/led-green.png" ".pipeframe/cache/asset-00000003/compiled.pfasset" ".pipeframe/cache/asset-00000003/thumbnail.png" ".pipeframe/cache/asset-00000003/preview.png" "pipeframe.texture" 4 1 12472050187631350978 "" 0 0 0
+ENDASSET
+ASSET "asset-00000004" 1 0 "Assets/Textures/Robot/lidar-sensor.png" ".pipeframe/cache/asset-00000004/compiled.pfasset" ".pipeframe/cache/asset-00000004/thumbnail.png" ".pipeframe/cache/asset-00000004/preview.png" "pipeframe.texture" 4 1 4816132619188562950 "" 0 0 0
+ENDASSET
+ASSET "asset-00000005" 1 0 "Assets/Textures/Robot/rover-chassis.png" ".pipeframe/cache/asset-00000005/compiled.pfasset" ".pipeframe/cache/asset-00000005/thumbnail.png" ".pipeframe/cache/asset-00000005/preview.png" "pipeframe.texture" 4 1 15686867721964854396 "" 0 0 0
+ENDASSET
+ASSET "asset-00000006" 1 0 "Assets/Textures/Robot/rover-wheel.png" ".pipeframe/cache/asset-00000006/compiled.pfasset" ".pipeframe/cache/asset-00000006/thumbnail.png" ".pipeframe/cache/asset-00000006/preview.png" "pipeframe.texture" 4 1 16530961204559791794 "" 0 0 0
+ENDASSET
+ASSET "asset-00000007" 1 0 "Assets/Textures/Robot/ultrasonic-sensor.png" ".pipeframe/cache/asset-00000007/compiled.pfasset" ".pipeframe/cache/asset-00000007/thumbnail.png" ".pipeframe/cache/asset-00000007/preview.png" "pipeframe.texture" 4 1 15054360984709828387 "" 0 0 0
+ENDASSET
+ASSET "asset-00000008" 9 0 "Assets/Tilemaps/Environment.pftilemap" ".pipeframe/cache/asset-00000008/compiled.pfasset" ".pipeframe/cache/asset-00000008/thumbnail.pfpreview" ".pipeframe/cache/asset-00000008/preview.pfpreview" "pipeframe.tilemap" 3 12 5871266519408781422 "" 0 0 0
+ENDASSET
+ASSET "asset-00000009" 9 0 "Assets/Tilemaps/Maze.pftilemap" ".pipeframe/cache/asset-00000009/compiled.pfasset" ".pipeframe/cache/asset-00000009/thumbnail.pfpreview" ".pipeframe/cache/asset-00000009/preview.pfpreview" "pipeframe.tilemap" 3 5 1016218014969872864 "" 0 0 0
+ENDASSET
+ASSET "asset-0000000a" 9 0 "Assets/Tilemaps/Road.pftilemap" ".pipeframe/cache/asset-0000000a/compiled.pfasset" ".pipeframe/cache/asset-0000000a/thumbnail.pfpreview" ".pipeframe/cache/asset-0000000a/preview.pfpreview" "pipeframe.tilemap" 3 1 13586999022125772190 "" 0 0 0
+ENDASSET
+ASSET "asset-0000000b" 9 0 "Assets/Tilemaps/Environment2.pftilemap" ".pipeframe/cache/asset-0000000b/compiled.pfasset" ".pipeframe/cache/asset-0000000b/thumbnail.pfpreview" ".pipeframe/cache/asset-0000000b/preview.pfpreview" "pipeframe.tilemap" 3 2 1999455648742388322 "" 0 0 0
+ENDASSET
+ASSET "asset-0000000e" 9 0 "Assets/Tilemaps/MicrobotHard.pftilemap" ".pipeframe/cache/asset-0000000e/compiled.pfasset" ".pipeframe/cache/asset-0000000e/thumbnail.pfpreview" ".pipeframe/cache/asset-0000000e/preview.pfpreview" "pipeframe.tilemap" 3 1 2015052683159756 "" 0 0 0
+ENDASSET
+ASSET "asset-0000000f" 9 0 "Assets/Tilemaps/MicrobotMedium.pftilemap" ".pipeframe/cache/asset-0000000f/compiled.pfasset" ".pipeframe/cache/asset-0000000f/thumbnail.pfpreview" ".pipeframe/cache/asset-0000000f/preview.pfpreview" "pipeframe.tilemap" 3 1 6701894143098510260 "" 0 0 0
+ENDASSET

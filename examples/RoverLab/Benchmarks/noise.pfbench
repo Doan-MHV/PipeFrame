@@ -1,0 +1,9 @@
+ROVERLAB_BENCHMARK 1
+# Fixed observation budget: compare new observed area and travel, not full-map success.
+# Optical IR has range noise but no dropout model. It is a separate maze experiment.
+ultrasonic-42 Ultrasonic AStar 42 2 Explore 300 300 0 0 .01 .05
+ultrasonic-43 Ultrasonic AStar 43 2 Explore 300 300 0 0 .01 .05
+lidar-42 LiDAR AStar 42 2 Explore 300 300 0 0 .01 .05
+lidar-43 LiDAR AStar 43 2 Explore 300 300 0 0 .01 .05
+microbot-42 Microbot CellFloodFill 42 2 Maze 1800 0 0 0 .002 0
+microbot-43 Microbot CellFloodFill 43 2 Maze 1800 0 0 0 .002 0

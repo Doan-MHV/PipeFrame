@@ -1,0 +1,4 @@
+PIPEFRAME_PHYSICS_2D 1
+enabled true
+gravity 0 0
+broadphase "domain-ant-contact-grid"

@@ -1,0 +1,10 @@
+PIPEFRAME_SCENE 3
+3
+1 -140 0 0 "DEMO AGENT A" "basic.demo-agent" 1
+"angularSpeed" 2 90
+2 140 60 0 "DEMO AGENT B" "basic.demo-agent" 1
+"angularSpeed" 2 -60
+3 0 0 0 "AGENT POPULATION" "basic.population" 3
+"agentCount" 1 1000000
+"spawnArea" 4 4000 4000
+"randomSeed" 1 1

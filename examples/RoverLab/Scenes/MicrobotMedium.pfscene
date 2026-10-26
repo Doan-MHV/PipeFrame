@@ -1,0 +1,138 @@
+PIPEFRAME_SCENE 7
+"m" "degrees" "right-handed-y-up"
+7 0
+1 0 0 0 0.25 0.25 "Map" "pipeframe.map2d" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 0.25 0.25
+"rotation" 2 0
+"position" 4 0 0
+"pipeframe.tilemap2d" 1 1 0 2
+"visible" 0 1
+"asset" 6 "asset-0000000f"
+2 0.1875 0.1875 0 1 1 "Microbot" "project.RoverEntity" 0 0 1 0 "Default" 0 0 10 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 0
+"position" 4 0.1875 0.1875
+"pipeframe.sprite-renderer2d" 1 1 0 3
+"visible" 0 1
+"size" 4 0.10000000149011612 0.070000000298023224
+"texture" 6 "asset-00000005"
+"pipeframe.environment-collider2d" 1 1 0 4
+"trigger" 0 0
+"enabled" 0 1
+"size" 4 0.10000000149011612 0.070000000298023224
+"shape" 3 "Box"
+"pipeframe.kinematic-body2d" 1 1 0 3
+"velocity" 4 0 0
+"radius" 2 0.095000000000000001
+"enabled" 0 1
+"project.MicromouseMazeComponent" 1 1 0 5
+"enabled" 0 1
+"columns" 1 12
+"rows" 1 12
+"cellPitch" 2 0.35
+"wallThickness" 2 0.025
+"project.MicromouseHardwareComponent" 1 1 0 7
+"wheelTorque" 2 0.001
+"maximumRPM" 2 120
+"trackWidth" 2 0.055
+"length" 2 0.10000000000000001
+"width" 2 0.070000000000000007
+"wheelRadius" 2 0.016
+"mass" 2 0.10000000000000001
+"project.RoverDriveComponent" 1 1 0 6
+"enabled" 0 1
+"readingTimeout" 2 0.29999999999999999
+"maximumWheelSpeed" 2 0.20000000000000001
+"trackWidth" 2 0.055
+"stopDistance" 2 0.025000000000000001
+"speed" 2 0.16
+"project.RoverSafetyComponent" 1 1 0 3
+"clearance" 2 0.01
+"halfWidth" 2 0.035000000000000003
+"halfLength" 2 0.050000000000000003
+"project.RoverMappingComponent" 1 1 0 4
+"enabled" 0 1
+"rangeMargin" 2 0.0050000000000000001
+"sideCells" 1 160
+"cellSize" 2 0.025000000000000001
+"project.RoverSolverComponent" 1 1 0 9
+"enabled" 0 1
+"noNewCellTimeout" 2 120
+"runTimeout" 2 1800
+"turnRate" 2 1
+"speed" 2 0.12
+"algorithm" 3 "AStar"
+"searchSpacing" 2 0.10000000000000001
+"goalTag" 3 "Finish"
+"missionMode" 3 "ArrivalMarker"
+4 0.23749999701976776 0.1875 0 1 1 "Front IR Sensor" "project.InfraredSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 0
+"position" 4 0.23749999701976776 0.1875
+"project.InfraredSensorComponent" 1 1 0 9
+"samplePeriod" 2 0.02
+"noiseAmplitude" 2 0
+"enabled" 0 1
+"coneAngleDegrees" 2 6
+"minimumRange" 2 0.0050000000000000001
+"maximumRange" 2 0.5
+"localAngleDegrees" 2 0
+"localPosition" 4 0.05000000074505806 0
+"parent" 7 2
+5 0.1875 0.15250000357627869 -90 1 1 "Left IR Sensor" "project.InfraredSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 -90.000002504478161
+"position" 4 0.1875 0.15250000357627869
+"project.InfraredSensorComponent" 1 1 0 9
+"samplePeriod" 2 0.02
+"noiseAmplitude" 2 0
+"enabled" 0 1
+"coneAngleDegrees" 2 6
+"minimumRange" 2 0.0050000000000000001
+"maximumRange" 2 0.5
+"localAngleDegrees" 2 -90
+"localPosition" 4 0 -0.035000000149011612
+"parent" 7 2
+6 0.1875 0.22249999642372131 90 1 1 "Right IR Sensor" "project.InfraredSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 90.000002504478161
+"position" 4 0.1875 0.22249999642372131
+"project.InfraredSensorComponent" 1 1 0 9
+"samplePeriod" 2 0.02
+"noiseAmplitude" 2 0
+"enabled" 0 1
+"coneAngleDegrees" 2 6
+"minimumRange" 2 0.0050000000000000001
+"maximumRange" 2 0.5
+"localAngleDegrees" 2 90
+"localPosition" 4 0 0.035000000149011612
+"parent" 7 2
+7 0.13750000298023224 0.1875 180 1 1 "Rear IR Sensor" "project.InfraredSensorEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 180.00000500895632
+"position" 4 0.13750000298023224 0.1875
+"project.InfraredSensorComponent" 1 1 0 9
+"samplePeriod" 2 0.02
+"noiseAmplitude" 2 0
+"enabled" 0 1
+"coneAngleDegrees" 2 6
+"minimumRange" 2 0.0050000000000000001
+"maximumRange" 2 0.5
+"localAngleDegrees" 2 180
+"localPosition" 4 -0.05000000074505806 0
+"parent" 7 2
+8 4.0375 4.0375 0 1 1 "Finish" "project.RoverGoalEntity" 0 0 1 0 "Default" 0 0 2 0
+"pipeframe.transform2d" 1 1 0 3
+"scale" 4 1 1
+"rotation" 2 0
+"position" 4 4.0375 4.0375
+"project.RoverGoalComponent" 1 1 0 3
+"radius" 2 0.12
+"enabled" 0 1
+"tag" 3 "Finish"

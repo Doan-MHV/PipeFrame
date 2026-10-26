@@ -1,0 +1,6 @@
+ROVERLAB_BENCHMARK 1
+# Same robot, sensor noise and deadline; only maze geometry changes.
+# name scene algorithm seed repeats workflow limit explore destinationX destinationY noise dropout
+microbot-original Microbot CellFloodFill 42 1 Maze 1800 0 0 0 0 0
+microbot-medium MicrobotMedium CellFloodFill 42 1 Maze 1800 0 0 0 0 0
+microbot-hard MicrobotHard CellFloodFill 42 1 Maze 1800 0 0 0 0 0
