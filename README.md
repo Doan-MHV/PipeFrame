@@ -10,8 +10,8 @@ PipeFrame is a modular **C++20** simulation engine and desktop editor (**Simulat
 
 | Project | Overview & Key Capabilities |
 | --- | --- |
-| **[RoverLab](examples/RoverLab)** | Autonomous 2D robotics perception, mapping, and motion planning simulation featuring rotating **LiDAR**, **ultrasonic sonar**, **infrared** wall sensors, wheel **odometry** with pose interpolation, log-odds **occupancy grid mapping**, configuration-space obstacle inflation, swept-footprint safety validation, utility-based **frontier exploration**, turn-cost **A\*** / **Dijkstra** / **BFS** / **DFS** / **Flood-Fill** / **Right-Hand** planners, Micromouse maze solving, headless **JSONL/CSV benchmarking**, and **CTest** regression suites. |
-| **[AntSimulation](examples/AntSimulation)** | Interactive multi-agent colony foraging simulation modeling emergent **pheromone trails**, food collection, spatial circle/wall collision resolution, zoom-dependent batched geometry rendering (`LOD`), live environment food/terrain brushes, and per-agent telemetry inspection. |
+| **[RoverLab](examples/RoverLab/README.md)** | Autonomous 2D robotics perception, mapping, and motion planning simulation featuring rotating **LiDAR**, **ultrasonic sonar**, **infrared** wall sensors, wheel **odometry** with pose interpolation, log-odds **occupancy grid mapping**, configuration-space obstacle inflation, swept-footprint safety validation, utility-based **frontier exploration**, turn-cost **A\*** / **Dijkstra** / **BFS** / **DFS** / **Flood-Fill** / **Right-Hand** planners, Micromouse maze solving, headless **JSONL/CSV benchmarking**, and **CTest** regression suites. |
+| **[AntSimulation](examples/AntSimulation/README.md)** | Interactive multi-agent colony foraging simulation modeling emergent **pheromone trails**, food collection, spatial circle/wall collision resolution, zoom-dependent batched geometry rendering (`LOD`), live environment food/terrain brushes, and per-agent telemetry inspection. |
 
 ### RoverLab — Autonomous Mapping, Frontier Exploration & Motion Planning
 

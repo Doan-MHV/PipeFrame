@@ -41,6 +41,8 @@ SailBoatPezza/
 *.mdx
 *.rst
 !/README.md
+!/examples/RoverLab/README.md
+!/examples/AntSimulation/README.md
 **/ASSET_PROMPTS.json
 
 # Local editor state and generated caches; retain stable scene asset registries.
