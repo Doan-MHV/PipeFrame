@@ -28,54 +28,11 @@ struct RoverNavigationComponent : pipeframe::Component<RoverNavigationComponent>
       .RetiredField("openingDistance")
       .OnlyOn("project.RoverEntity")
       .OwnerReference("rover", &RoverNavigationComponent::rover)
-      .Editable(
-        {
-          .key = "speed",
-          .displayName = "Cruise Speed",
-          .kind = PropertyKind::Number,
-          .defaultValue = 0.10,
-          .unit = "metres / second",
-          .minimum = 0.001,
-        },
-        &RoverNavigationComponent::speed)
-      .Editable(
-        {
-          .key = "turnDistance",
-          .displayName = "Front Turn Distance",
-          .kind = PropertyKind::Number,
-          .defaultValue = 0.55,
-          .unit = "metres",
-          .minimum = 0.001,
-        },
-        &RoverNavigationComponent::turnDistance)
-      .Editable(
-        {
-          .key = "passageDistance",
-          .displayName = "Minimum Passage Reading",
-          .kind = PropertyKind::Number,
-          .defaultValue = 0.60,
-          .unit = "metres",
-          .minimum = 0.001,
-        },
-        &RoverNavigationComponent::passageDistance)
-      .Editable(
-        {
-          .key = "turnRate",
-          .displayName = "Turn Rate",
-          .kind = PropertyKind::Number,
-          .defaultValue = 1.0,
-          .unit = "radians / second",
-          .minimum = 0.001,
-        },
-        &RoverNavigationComponent::turnRate)
-      .Editable(
-        {
-          .key = "enabled",
-          .displayName = "Enabled",
-          .kind = PropertyKind::Boolean,
-          .defaultValue = true,
-        },
-        &RoverNavigationComponent::enabled)
+      .Editable("speed", "Cruise Speed", &RoverNavigationComponent::speed, {.unit = "metres / second", .minimum = 0.001})
+      .Editable("turnDistance", "Front Turn Distance", &RoverNavigationComponent::turnDistance, {.unit = "metres", .minimum = 0.001})
+      .Editable("passageDistance", "Minimum Passage Reading", &RoverNavigationComponent::passageDistance, {.unit = "metres", .minimum = 0.001})
+      .Editable("turnRate", "Turn Rate", &RoverNavigationComponent::turnRate, {.unit = "radians / second", .minimum = 0.001})
+      .Editable("enabled", "Enabled", &RoverNavigationComponent::enabled)
       .Validate(
         "Use finite positive settings; "
         "passage distance must exceed turn distance",

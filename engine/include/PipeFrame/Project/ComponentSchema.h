@@ -10,6 +10,15 @@
 
 namespace pipeframe {
 
+struct FieldOptions {
+    std::string unit{};
+    std::optional<double> minimum{};
+    std::optional<double> maximum{};
+    std::optional<double> step{};
+    std::vector<std::string> enumOptions{};
+    std::string editorHint{};
+};
+
 // One typed field declaration supplies Inspector metadata, serialization and
 // validated assignment. No offsets, casts or project-specific property readers.
 template <typename Component>
@@ -49,6 +58,54 @@ public:
     ComponentSchema& ReadOnly(PropertyDescriptor property, Value Component::* member) {
         property.editable = false;
         return Field(std::move(property), member);
+    }
+    template <typename Value>
+    static constexpr PropertyKind DeducePropertyKind(const FieldOptions& options = {}) {
+        if (!options.enumOptions.empty()) return PropertyKind::Enum;
+        if constexpr (std::is_same_v<Value, bool>) return PropertyKind::Boolean;
+        else if constexpr (std::is_same_v<Value, std::int64_t>) return PropertyKind::Integer;
+        else if constexpr (std::is_same_v<Value, float> || std::is_same_v<Value, double>)
+            return PropertyKind::Number;
+        else if constexpr (std::is_same_v<Value, std::string>) return PropertyKind::String;
+        else if constexpr (std::is_same_v<Value, Vector2f>) return PropertyKind::Vector2;
+        else if constexpr (std::is_same_v<Value, Color>) return PropertyKind::Color;
+        else if constexpr (std::is_same_v<Value, AssetReference>) return PropertyKind::AssetReference;
+        else return PropertyKind::ObjectReference;
+    }
+    template <typename Value>
+    static PropertyDescriptor MakeDescriptor(std::string key, std::string displayName,
+                                             Value Component::* member, bool editable,
+                                             FieldOptions options) {
+        using Stored = std::conditional_t<std::is_same_v<Value, float>, double, Value>;
+        const Component defaults{};
+        PropertyDescriptor property;
+        property.key = std::move(key);
+        property.displayName = std::move(displayName);
+        property.kind = DeducePropertyKind<Value>(options);
+        property.defaultValue = static_cast<Stored>(defaults.*member);
+        property.editable = editable;
+        property.unit = std::move(options.unit);
+        property.minimum = options.minimum;
+        property.maximum = options.maximum;
+        property.step = options.step;
+        property.enumOptions = std::move(options.enumOptions);
+        property.editorHint = std::move(options.editorHint);
+        return property;
+    }
+    template <typename Value>
+    ComponentSchema& Editable(std::string key, std::string displayName, Value Component::* member,
+                              FieldOptions options = {}) {
+        return Editable(
+            MakeDescriptor(std::move(key), std::move(displayName), member, true, std::move(options)),
+            member);
+    }
+    template <typename Value>
+    ComponentSchema& ReadOnly(std::string key, std::string displayName, Value Component::* member,
+                              FieldOptions options = {}) {
+        if (options.editorHint.empty()) options.editorHint = "telemetry";
+        return ReadOnly(
+            MakeDescriptor(std::move(key), std::move(displayName), member, false, std::move(options)),
+            member);
     }
     // Runs against the candidate after built-in field validation and assignment,
     // before publishing it. Use for cross-field/domain rules; no world mutation.

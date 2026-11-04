@@ -575,7 +575,7 @@ private:
 
           // Free evidence near sampled rays, not the entire cone.
           // This is evidence, not proof that the whole cell is clear.
-          if (across <= cell * 0.25 && along - radius >= sensor.minimumRange &&
+          if (across <= cell * 0.5 && along - radius >= sensor.minimumRange &&
               along + radius < freeEnd) {
             evidence = -1;
           }

@@ -26,7 +26,8 @@ using MazeEdge = std::pair<MazeKey, MazeKey>;
 struct MazeGrid {
   int width{}, height{};
   double cell{}, x{}, y{};
-  std::vector<std::uint8_t> open, clear, frontier;
+  std::vector<std::uint8_t> open, clear, frontier, covered;
+  std::size_t coveredCount{};
   std::vector<std::int8_t> evidence;
   // Optional conservative swept-circle clearance for in-place route turns.
   std::vector<std::uint8_t> turnClear;
@@ -74,7 +75,7 @@ struct MazeGrid {
       if (end < 0 || !(clear[end] & (1u << (d % 2)))) return -1;
     }
 
-    return Open(j) && !denied.contains({Key(i), Key(j)}) ? j : -1;
+    return Open(j) && (denied.empty() || !denied.contains({Key(i), Key(j)})) ? j : -1;
   }
 };
 

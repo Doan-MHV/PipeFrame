@@ -67,34 +67,37 @@ bool ProjectRuntimeHost::Load(const std::filesystem::path &projectDirectory,
     const std::filesystem::path requestedPath =
         runtimeLibrary.is_absolute() ? runtimeLibrary : projectDirectory / runtimeLibrary;
 
-    if (!library.Load(requestedPath, errorMessage)) {
-
+    const auto failLoad = [&](std::string msg) {
+        log.Write("error", msg);
+        SetError(errorMessage, std::move(msg));
         return false;
+    };
+
+    std::string loadError;
+    if (!library.Load(requestedPath, &loadError)) {
+        return failLoad(std::move(loadError));
     }
 
     runtime = library.GetRuntime();
 
     if (runtime == nullptr) {
-        SetError(errorMessage, "The project runtime library "
-                               "returned no runtime.");
-
         library.Unload();
-        return false;
+        return failLoad("The project runtime library returned no runtime.");
     }
 
     this->projectDirectory=projectDirectory;
     pluginDescriptor=runtime->GetPluginDescriptor();
     if(pluginDescriptor.abiVersion!=ProjectPluginAbiVersion){
-        SetError(errorMessage,"Project plugin ABI is incompatible. Rebuild the project with this PipeFrame SDK.");
-        library.Unload();runtime=nullptr;return false;
+        library.Unload();runtime=nullptr;
+        return failLoad("Project plugin ABI is incompatible. Rebuild the project with this PipeFrame SDK.");
     }
     extensions.Clear();actions.Clear();systems.Clear();RegisterHostServices();lastPluginError.clear();
     PluginRegistrar registrar(pluginDescriptor.id,extensions,actions,systems);
     std::string registrationError;
     if(!runtime->RegisterPlugin(registrar,registrationError)||!runtime->RegisterEnvironmentBrushes(registrar,registrationError)||
        !ValidateRegistration(pluginDescriptor,extensions,actions,systems,&services,&registrationError)){
-        SetError(errorMessage,registrationError.empty()?"Project plugin registration failed.":registrationError);
-        extensions.Clear();actions.Clear();systems.Clear();library.Unload();runtime=nullptr;return false;
+        extensions.Clear();actions.Clear();systems.Clear();library.Unload();runtime=nullptr;
+        return failLoad(registrationError.empty()?"Project plugin registration failed.":std::move(registrationError));
     }
 
     ProjectRuntimeContext context{.projectDirectory = projectDirectory,.services=&services,
@@ -103,21 +106,16 @@ bool ProjectRuntimeHost::Load(const std::filesystem::path &projectDirectory,
     std::string runtimeError;
 
     if (!runtime->Load(context, runtimeError)) {
-
-        SetError(errorMessage, runtimeError.empty() ? "The project runtime "
-                                                      "failed to load."
-                                                    : std::move(runtimeError));
-
         runtime->Unload();extensions.Clear();actions.Clear();systems.Clear();library.Unload();runtime = nullptr;
-
-        return false;
+        return failLoad(runtimeError.empty() ? "The project runtime failed to load." : std::move(runtimeError));
     }
 
     runtimeLoaded = true;
     componentTypes = runtime->GetAllSceneComponentTypes();
     SystemContext systemContext{.services=&services,.events=&events,.render=&renderSubmissions,
         .random=&random,.profiler=&profiler,.jobs=&jobs,.log=&log};
-    if(!systems.Execute(SystemPhase::Load,systemContext,errorMessage)){Unload();return false;}
+    std::string phaseError;
+    if(!systems.Execute(SystemPhase::Load,systemContext,&phaseError)){Unload();return failLoad(std::move(phaseError));}
     return true;
 }
 
@@ -509,7 +507,6 @@ std::vector<ProjectRuntimeSceneEdit> ProjectRuntimeHost::ConsumeSceneEdits() {
 }
 
 void ProjectRuntimeHost::SetError(std::string *errorMessage, std::string message) {
-
     if (errorMessage != nullptr) {
         *errorMessage = std::move(message);
     }

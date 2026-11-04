@@ -81,10 +81,24 @@ struct ProjectUIHost::Impl {
                 if (!p.drawer)
                     native.PlaceMetric(entry.nativeIndex, bounds, entry.shown);
                 else {
-                    const float distances[] = {position.x, viewport.x - position.x - size.x, position.y,
-                                               viewport.y - position.y - size.y};
+                    const int anchorVal = static_cast<int>(placement.anchor);
+                    const float leftDist = (anchorVal % 3 == 2) ? viewport.x : position.x;
+                    const float rightDist = (anchorVal % 3 == 0) ? viewport.x : (viewport.x - position.x - size.x);
+                    const float topDist = (anchorVal / 3 == 2) ? viewport.y : position.y;
+                    const float bottomDist = (anchorVal / 3 == 0) ? viewport.y : (viewport.y - position.y - size.y);
+                    const float distances[] = {leftDist, rightDist, topDist, bottomDist};
                     auto edge = static_cast<DrawerEdge>(std::min_element(std::begin(distances), std::end(distances)) -
                                                         std::begin(distances));
+                    if (placement.unit == PanelPlacement::Unit::Percent) {
+                        if (placement.point.x <= 0.0f && placement.point.y > 0.0f && placement.point.y < 100.0f)
+                            edge = DrawerEdge::Left;
+                        else if (placement.point.x >= 100.0f && placement.point.y > 0.0f && placement.point.y < 100.0f)
+                            edge = DrawerEdge::Right;
+                        else if (placement.point.y <= 0.0f && placement.point.x > 0.0f && placement.point.x < 100.0f)
+                            edge = DrawerEdge::Top;
+                        else if (placement.point.y >= 100.0f && placement.point.x > 0.0f && placement.point.x < 100.0f)
+                            edge = DrawerEdge::Bottom;
+                    }
                     native.PlaceDrawer(entry.nativeIndex, bounds, p.drawerEdge.value_or(edge), extent);
                     positionedDrawers.push_back(entry.nativeIndex);
                 }
@@ -187,15 +201,17 @@ void ProjectUIHost::Render(RenderContext& context) {
     const auto now = std::chrono::steady_clock::now();
     const auto delta = std::clamp(std::chrono::duration<float>(now - impl->lastFrame).count(), 0.f, .1f);
     impl->lastFrame = now;
-    bool dirty = false;
+    auto& native = backend::sfml::DashboardAccess::Host(*impl->dashboard);
     for (auto& entry : impl->entries) {
         entry.panel->OnUpdate(delta);
         if (entry.revision != entry.panel->ViewRevision()) {
             entry.revision = entry.panel->ViewRevision();
-            dirty = true;
+            if (entry.placement.drawer)
+                native.RefreshDrawerView(entry.nativeIndex);
+            else
+                native.RefreshMetricView(entry.nativeIndex);
         }
     }
-    if (dirty) impl->dashboard->RefreshViews();
     impl->FlushDialog();
     impl->Layout(context);
     context.BeginScreen();

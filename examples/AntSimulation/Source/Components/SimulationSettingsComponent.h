@@ -18,64 +18,18 @@ struct SimulationSettingsComponent : pipeframe::Component<SimulationSettingsComp
 
   static auto BuildSchema() {
     using namespace pipeframe;
-    using K = PropertyKind;
     return Define(SimulationSettingsTypeId, "Simulation Settings")
       .Required()
-      .Editable({.key = UpdateWorkerCountKey,
-                  .displayName = "Update Workers",
-                  .kind = K::Integer,
-                  .defaultValue = std::int64_t{1},
-                  .unit = "",
-                  .minimum = 1,
-                  .maximum = 64,
-                  .step = 1},
-        &SimulationSettingsComponent::workers)
-      .Editable(
-        {.key = ShowGridKey, .displayName = "Show Grid", .kind = K::Boolean, .defaultValue = true},
-        &SimulationSettingsComponent::showGrid)
-      .Editable({.key = ShowMarkersKey,
-                  .displayName = "Show Markers",
-                  .kind = K::Boolean,
-                  .defaultValue = true},
-        &SimulationSettingsComponent::showMarkers)
-      .Editable({.key = ShowShadowsKey,
-                  .displayName = "Show Shadows",
-                  .kind = K::Boolean,
-                  .defaultValue = true},
-        &SimulationSettingsComponent::showShadows)
-      .Editable({.key = ShowTargetsKey,
-                  .displayName = "Show Targets",
-                  .kind = K::Boolean,
-                  .defaultValue = false},
-        &SimulationSettingsComponent::showTargets)
-      .Editable({.key = ShowPhysicsDebugKey,
-                  .displayName = "Physics Debug",
-                  .kind = K::Boolean,
-                  .defaultValue = false},
-        &SimulationSettingsComponent::showPhysics)
-      .Editable(
-        {.key = ShowAntsKey, .displayName = "Draw Ants", .kind = K::Boolean, .defaultValue = true},
-        &SimulationSettingsComponent::showAnts)
-      .Editable({.key = DynamicAntColorsKey,
-                  .displayName = "Dynamic Colors",
-                  .kind = K::Boolean,
-                  .defaultValue = false},
-        &SimulationSettingsComponent::dynamicColors)
-      .Editable({.key = MarkerIntensityKey,
-                  .displayName = "Marker Intensity",
-                  .kind = K::Integer,
-                  .defaultValue = std::int64_t{10},
-                  .unit = "",
-                  .minimum = 0,
-                  .maximum = 100,
-                  .step = 1},
-        &SimulationSettingsComponent::markerIntensity)
-      .Editable({.key = MapAssetKey,
-                  .displayName = "Environment Map",
-                  .kind = K::AssetReference,
-                  .defaultValue = AssetReference{},
-                  .editorHint = "asset:Tilemap"},
-        &SimulationSettingsComponent::mapAsset);
+      .Editable(UpdateWorkerCountKey, "Update Workers", &SimulationSettingsComponent::workers, {.minimum = 1, .maximum = 64, .step = 1})
+      .Editable(ShowGridKey, "Show Grid", &SimulationSettingsComponent::showGrid)
+      .Editable(ShowMarkersKey, "Show Markers", &SimulationSettingsComponent::showMarkers)
+      .Editable(ShowShadowsKey, "Show Shadows", &SimulationSettingsComponent::showShadows)
+      .Editable(ShowTargetsKey, "Show Targets", &SimulationSettingsComponent::showTargets)
+      .Editable(ShowPhysicsDebugKey, "Physics Debug", &SimulationSettingsComponent::showPhysics)
+      .Editable(ShowAntsKey, "Draw Ants", &SimulationSettingsComponent::showAnts)
+      .Editable(DynamicAntColorsKey, "Dynamic Colors", &SimulationSettingsComponent::dynamicColors)
+      .Editable(MarkerIntensityKey, "Marker Intensity", &SimulationSettingsComponent::markerIntensity, {.minimum = 0, .maximum = 100, .step = 1})
+      .Editable(MapAssetKey, "Environment Map", &SimulationSettingsComponent::mapAsset, {.editorHint = "asset:Tilemap"});
   }
 };
 }  // namespace ant_simulation

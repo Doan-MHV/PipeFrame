@@ -10,23 +10,6 @@ public:
     SetSimulationWorld(world.simulation);
     const auto project = CreateProjectDefinition();
     RegisterProject(project, world);
-
-    const auto resolver = [this](pipeframe::SceneObjectId id) {
-      return ResolveSceneObject(id);
-    };
-
-    world.simulation.ultrasonic.SetObjectResolver(resolver);
-    world.simulation.lidar.SetObjectResolver(resolver);
-    world.simulation.infrared.SetObjectResolver(resolver);
-    world.simulation.drive.SetObjectResolver(resolver);
-    world.simulation.navigation.SetObjectResolver(resolver);
-    world.simulation.mapping.SetObjectResolver(resolver);
-    world.simulation.solver.SetObjectResolver(resolver);
-  }
-
-  void FixedUpdate(float delta) override {
-    world.destinationTool.CaptureFrames(GetRuntimeScene());
-    SceneProjectRuntime::FixedUpdate(delta);
   }
 
   // Native tools use the same runtime and systems as the editor.
@@ -53,31 +36,9 @@ public:
 
   bool HasWorldPointerCapture() const override { return world.destinationTool.HasCapture(); }
 
-  void UpdateAuthoringScene() override {
-    world.ResetSensorState();
-    world.simulation.hardware.Apply();
-    world.simulation.ultrasonic.AlignMounts();
-    world.simulation.lidar.AlignMounts();
-    world.simulation.infrared.AlignMounts();
-  }
-
-  void Reset() override {
-    world.ResetSensorState();
-    SceneProjectRuntime::Reset();
-  }
-
   void Unload() override {
     world.ResetSensorState();
     SceneProjectRuntime::Unload();
-  }
-
-  void CollectWorldDebug(
-    pipeframe::WorldDebugDraw& draw, pipeframe::WorldDebugOptions options) override {
-    SceneProjectRuntime::CollectWorldDebug(draw, options);
-
-    if (options.physics) {
-      world.physics.CollectDebug(draw);
-    }
   }
 
   void Render(RenderContext& context) override {

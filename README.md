@@ -1,35 +1,47 @@
 # PipeFrame
 
-PipeFrame is a C++20 engine and desktop editor for 2D simulations. It provides
-scenes, entities, component schemas, fixed-step systems, rendering, collision
-helpers, and project UI. SFML supplies the native backend.
+PipeFrame is a modular **C++20** simulation engine and desktop editor (**Simulation Workbench**) for deterministic 2D multi-agent and robotics simulations. It provides entity/component scenes (`ECS`), schema-driven Inspector controls, 60 Hz fixed-step simulation phases, spatial collision helpers, tilemap authoring, project UI drawers, deterministic replay capture/playback, and live **Build & Reload** for project runtime plugins. SFML supplies the native rendering and windowing backend.
 
-The Workbench supports scene editing, component inspection, tilemap painting,
-undo/redo, play/pause/step controls, debug overlays, and **Build & Reload** for
-project runtime libraries.
+![PipeFrame Simulation Workbench running AntSimulation](docs/media/pipeframe-editor.gif)
 
-## Included simulations
+---
 
-| Project | Features |
+## Included Simulations
+
+| Project | Overview & Key Capabilities |
 | --- | --- |
-| **AntSimulation** | Colony foraging, pheromone trails, food collection, ant collisions, custom rendering, live environment brushes, and colony/ant inspection. |
-| **RoverLab** | Ultrasonic and LiDAR exploration, discovered maps, destination routing, infrared Microbot maze solving, benchmark comparisons, and CSV export. |
+| **[RoverLab](examples/RoverLab)** | Autonomous 2D robotics perception, mapping, and motion planning simulation featuring rotating **LiDAR**, **ultrasonic sonar**, **infrared** wall sensors, wheel **odometry** with pose interpolation, log-odds **occupancy grid mapping**, configuration-space obstacle inflation, swept-footprint safety validation, utility-based **frontier exploration**, turn-cost **A\*** / **Dijkstra** / **BFS** / **DFS** / **Flood-Fill** / **Right-Hand** planners, Micromouse maze solving, headless **JSONL/CSV benchmarking**, and **CTest** regression suites. |
+| **[AntSimulation](examples/AntSimulation)** | Interactive multi-agent colony foraging simulation modeling emergent **pheromone trails**, food collection, spatial circle/wall collision resolution, zoom-dependent batched geometry rendering (`LOD`), live environment food/terrain brushes, and per-agent telemetry inspection. |
 
-RoverLab includes **Ultrasonic**, **LiDAR**, **Microbot**, **MicrobotMedium**, and
-**MicrobotHard** scenes. The room scenes explore before navigating to destinations
-selected in the scene. Microbot discovers the yellow goal, returns to its start,
-and can solve using the learned maze.
+### RoverLab — Autonomous Mapping, Frontier Exploration & Motion Planning
 
-These projects use simulated sensing and motion. They are examples for studying
-simulation and navigation, not hardware-validated robot controllers or a full
-SLAM implementation.
+![RoverLab Ultrasonic and LiDAR exploration in the Simulation Workbench](docs/media/roverlab-simulation.gif)
+
+RoverLab ships five scenes (**Ultrasonic**, **LiDAR**, **Microbot**, **MicrobotMedium**, and **MicrobotHard**):
+- **Room Exploration & Goal Navigation (`Ultrasonic`, `LiDAR`):** The rover explores unknown multi-room geometry using delayed/noisy sensor observations, builds an expanding log-odds occupancy grid in real time (`DISCOVERED MINIMAP`), and routes to user-selected scene destinations using time-cost **A\*** with swept turning-clearance checks.
+- **Micromouse Maze Solving (`Microbot`, `MicrobotMedium`, `MicrobotHard`):** A compact maze robot equipped with four short-range infrared wall sensors classifies cell boundaries, discovers the unknown goal marker via flood-fill, returns to the start pose, and executes a separate fastest-time **A\*** solve over the learned cell graph.
+
+| Ultrasonic Sonar Exploration | 360° Rotating LiDAR Exploration | Microbot Micromouse Maze |
+| --- | --- | --- |
+| ![RoverLab Ultrasonic](docs/media/roverlab-ultrasonic.png) | ![RoverLab LiDAR](docs/media/roverlab-lidar.png) | ![RoverLab Microbot](docs/media/roverlab-microbot.png) |
+
+> **Scope note:** These projects use deterministic geometric sensing and motion models designed for studying autonomous navigation, mapping, and simulation architecture—not hardware-calibrated robot controllers or full loop-closure SLAM.
+
+---
+
+### AntSimulation — Multi-Agent Colony Foraging & Pheromone Fields
+
+![Ants exploring and forming pheromone trails](docs/media/ant-simulation.gif)
+
+| Authored Playground & Tilemap | Batched Mesh & Debug Geometry |
+| --- | --- |
+| ![Ant Playground](docs/media/ant-playground.png) | ![Ant Mesh](docs/media/ant-mesh.png) |
+
+---
 
 ## Build
 
-Development and testing currently target macOS. Install a C++20 compiler,
-CMake 3.25 or newer, Ninja, and [vcpkg](https://github.com/microsoft/vcpkg).
-Set `VCPKG_ROOT` to your vcpkg checkout. The repository's `vcpkg.json` declares
-SFML and nativefiledialog-extended.
+Development and testing target macOS. Install a **C++20** compiler, **CMake 3.25+**, **Ninja**, and [vcpkg](https://github.com/microsoft/vcpkg). Set `VCPKG_ROOT` to your vcpkg checkout (`vcpkg.json` declares `sfml` and `nativefiledialog-extended`).
 
 From the repository root:
 
@@ -37,83 +49,85 @@ From the repository root:
 cmake --preset release \
   -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
   -DPIPEFRAME_ANT_REWORK_ONLY=ON
-cmake --build --preset release --target SimulationWorkbench RoverLabRuntime
+cmake --build --preset release --target SimulationWorkbench RoverLabRuntime AntSimulationRuntime
 ```
 
-The `PIPEFRAME_ANT_REWORK_ONLY` option excludes the older SailBoat example; it
-still includes the Workbench, AntSimulation, and RoverLab targets. On macOS,
-CMake selects dynamic vcpkg libraries so the editor and its runtime plugins share
-the native backend.
+The `PIPEFRAME_ANT_REWORK_ONLY` option excludes the older SailBoat prototype while building the Workbench, **AntSimulation**, and **RoverLab** targets. On macOS, CMake configures dynamic vcpkg libraries so the editor and hot-reloaded runtime plugins share the native backend cleanly.
 
-## Run a project
+---
 
-Open AntSimulation:
+## Run a Project
 
-```sh
-./cmake-build-release/apps/SimulationWorkbench/SimulationWorkbench \
-  --project examples/AntSimulation/project.pipeframe
-```
-
-Or open RoverLab:
+Open **RoverLab** in the Simulation Workbench:
 
 ```sh
 ./cmake-build-release/apps/SimulationWorkbench/SimulationWorkbench \
   --project examples/RoverLab/project.pipeframe
 ```
 
-You can also launch the Workbench without arguments and use **Open** to select a
-`project.pipeframe` file. Use **Build & Reload** after changing project code,
-choose a scene with **Scenes**, then press **Play**. **Pause**, **Step**, and
-**Reset** control the simulation; Reset restores the authored starting state.
+Open **AntSimulation** in the Simulation Workbench:
 
-In AntSimulation, open **FOOD / TOOLS** for live painting and **SELECTED ANT** to
-inspect or follow an ant. In RoverLab, use **ROVER MISSION** for exploration and
-navigation, **DISCOVERED MAP** for pan/zoom/follow, and **BENCHMARK RESULTS** to
-load benchmark journals and export comparisons.
-
-## Source layout
-
-```text
-engine/                         Shared engine and native backend
-apps/SimulationWorkbench/       Desktop editor and project host
-examples/AntSimulation/         Ant project, assets, scenes, and tests
-examples/RoverLab/              Rover project, assets, scenes, and tests
-benchmarks/AntBenchmark/        Ant benchmark executable
+```sh
+./cmake-build-release/apps/SimulationWorkbench/SimulationWorkbench \
+  --project examples/AntSimulation/project.pipeframe
 ```
 
-Within a simulation project:
+You can also launch `SimulationWorkbench` without arguments and click **Open** to select any `project.pipeframe` file:
+- Use **Build & Reload** after modifying project C++ code, select a scene from **SCENES**, and press **Play**.
+- **Pause**, **Step**, **Reset**, and speed multipliers (**1X / 2X / 4X / MAX**) control fixed-step execution; **Reset** restores the authored starting scene state.
+- Toggle **PHYSICS** or **MESH** in the viewport toolbar to inspect sensor rays, collision bodies, swept safety envelopes, and triangle geometry.
+- In **RoverLab**, open **ROVER MISSION** for autonomous exploration and destination routing, **DISCOVERED MAP** for pan/zoom/follow occupancy inspection, and **BENCHMARK RESULTS** to compare batch runs and export filtered CSVs.
+- In **AntSimulation**, open **FOOD / TOOLS** for live food painting and **SELECTED ANT** to follow and inspect individual ants.
+
+### Headless RoverLab Benchmark Runner
+
+Run repeatable offline batch experiments across scenes, planners, seeds, and sensor noise profiles without opening an editor window:
+
+```sh
+cmake --build --preset release --target RoverLabBenchmark RoverLabRuntime
+./cmake-build-release/examples/RoverLab/RoverLabBenchmark \
+  --plan examples/RoverLab/Benchmarks/baseline.pfbench \
+  --output /tmp/roverlab-baseline-01
+```
+
+---
+
+## Source Layout
+
+```text
+engine/                         Shared C++20 ECS engine, UI framework, and SFML backend
+apps/SimulationWorkbench/       Desktop editor, viewport tools, inspector, and runtime host
+examples/RoverLab/              Autonomous rover mapping, planning, benchmark runner, and tests
+examples/AntSimulation/         Multi-agent ant colony simulation, custom brushes, and tests
+benchmarks/AntBenchmark/        Headless ant simulation benchmark executable
+docs/                           Architecture plans, UI docs, and portfolio media
+```
+
+Within each simulation project:
 
 ```text
 Source/
-  Components/          Data and Inspector schemas
-  Entities/            Entity composition
-  Editor/              Project panels, brushes, and interaction tools
+  Components/          ECS data structures and Inspector schemas (Component<T>)
+  Entities/            Entity composition and prefabs
+  Editor/              Project dashboard drawers (ViewPanel), brushes, and tools
   World/
-    Simulation/        Simulation state and systems
-    Physics/           Movement and collision handling
-    Rendering/         Geometry, resources, and render layers
-  Integration/         Type registration, plugin entry points, and lifecycle
+    Simulation/        Fixed-step simulation state, sensors, mapping, and planners
+    Physics/           Kinematics, odometry, and collision handling
+    Rendering/         Batched geometry, resources, and debug overlays
+  Integration/         Plugin entry points, type registration, and runtime lifecycle
 ```
 
-Ant's `AntWorld` and RoverLab's `ProjectWorld` coordinate their world modules.
-Components expose schemas through `Component<T>`; systems register with
-`AddSystem`, and project panels use `ViewPanel` with `ProjectDefinition::UI`.
-Integration adapters connect those modules to the Workbench. Ant retains a
-specialized runtime for its colony lifecycle and rendering; RoverLab uses the
-shared scene runtime.
+---
 
-## Selected regression checks
+## Automated Regression Suite
 
-Build the test executables before running them:
+Build and run the **CTest** verification suites from the repository root:
 
 ```sh
 cmake --build --preset release --target \
-  AntDashboardTests RoverRuntimeTests RoverMapPanelTests RoverResultsTests
-ctest --test-dir cmake-build-release --output-on-failure \
-  -R '^(AntDashboardAcceptance|RoverRuntimeRegression|RoverMapPanelRegression|RoverResultsRegression)$'
+  WorkbenchUITests AntDashboardTests RoverRuntimeTests RoverMapPanelTests \
+  RoverSolverTests RoverSolverSceneTests RoverMissionTests RoverResultsTests
+ctest --test-dir cmake-build-release --output-on-failure
 ```
 
-These checks cover Ant's panels and input handling, Rover runtime behavior,
-minimap controls, and result/CSV handling. Additional engine, editor, simulation,
-and benchmark tests are declared in the CMake files. Native UI and rendering
-tests require a graphical desktop session.
+The test suite (105+ CTest targets across the repository) validates ECS lifecycle, `.pfscene` serialization, deterministic replay, responsive UI layout, AntSimulation foraging/rendering, and RoverLab sensor models, occupancy mapping, motion planners, safety envelopes, Micromouse solving, and CSV benchmark reporting.

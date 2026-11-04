@@ -705,8 +705,8 @@ void AntSimulationRuntime::FitCamera(RenderContext &context) {
 
     context.SetCameraCenter({worldSize.x * 0.5f, worldSize.y * 0.5f});
 
-    context.SetCameraSize({cameraSize.x, cameraSize.y});
-    context.SetCameraZoom(1.0f);
+    context.SetCameraSize({pixelWidth, pixelHeight});
+    context.SetCameraZoom(std::max(cameraSize.x / pixelWidth, cameraSize.y / pixelHeight));
 
     cameraInitialized = true;
 }

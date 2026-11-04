@@ -50,42 +50,76 @@ inline MazeGrid BuildMazeGrid(const RoverMappingSystem::Map& map,
   g.stoppingCells = int(std::ceil(stopDistance / g.cell));
 
   const int n = g.Count();
-  g.open.resize(n);
+  g.open.assign(n, 0);
   g.clear.assign(n, 3);
   g.turnClear.assign(n, 1);
-  g.frontier.resize(n);
-  g.visits.resize(n);
+  g.frontier.assign(n, 0);
+  g.visits.assign(n, 0);
 
   const double c = std::cos(map.pose.heading), s = std::sin(map.pose.heading);
+  const double poseReach =
+    std::max({g.cell * 1.5, .20, std::hypot(bodyHalfLength, bodyHalfWidth)}) + g.cell;
+  const int minPoseCol = std::max(0, int(std::floor((map.pose.x - poseReach - g.x) / g.cell)));
+  const int maxPoseCol =
+    std::min(g.width - 1, int(std::floor((map.pose.x + poseReach - g.x) / g.cell)));
+  const int minPoseRow = std::max(0, int(std::floor((map.pose.y - poseReach - g.y) / g.cell)));
+  const int maxPoseRow =
+    std::min(g.height - 1, int(std::floor((map.pose.y + poseReach - g.y) / g.cell)));
+  for (int row = minPoseRow; row <= maxPoseRow; ++row)
+    for (int col = minPoseCol; col <= maxPoseCol; ++col) {
+      const int i = row * g.width + col;
+      const auto p = g.Point(i);
+      const double dx = p.x - map.pose.x, dy = p.y - map.pose.y;
 
-  for (int i = 0; i < n; ++i) {
-    const auto p = g.Point(i);
-    const double dx = p.x - map.pose.x, dy = p.y - map.pose.y;
+      // Arrival search is about the rover centre passing a floor location.
+      // Sensor visibility and the wider chassis footprint do not prove arrival.
+      if (std::hypot(dx, dy) <= g.cell * 1.5) memory.searched.insert(g.Key(i));
 
-    // Arrival search is about the rover centre passing a floor location.
-    // Sensor visibility and the wider chassis footprint do not prove arrival.
-    if (std::hypot(dx, dy) <= g.cell * 1.5) memory.searched.insert(g.Key(i));
-
-    // Only the actual occupied chassis footprint seeds unknown cells at startup.
-    // Positive obstacle evidence is never overwritten, and this does not change the map.
-    if (map.cells[i] <= 0 && std::abs(c * dx + s * dy) <= bodyHalfLength &&
-        std::abs(-s * dx + c * dy) <= bodyHalfWidth)
-      memory.covered.insert(g.Key(i));
-
-    // Unknown is not free. Permit only a short, live-sensor-guarded local probe
-    // to bridge raster gaps near narrow sonar cones. It will be driven at crawl speed.
-    g.open[i] = map.cells[i] < 0 ||
-                (map.cells[i] == 0 &&
-                  (memory.covered.contains(g.Key(i)) || (allowProbe && std::hypot(dx, dy) <= .20)));
-
-    if (map.cells[i] < 0) {
-      const MazeKey region{int(std::floor(p.x / 2)), int(std::floor(p.y / 2))};
-      if (!memory.searchRegions.contains(region))
-        memory.searchRegions.emplace(region, memory.nextSearchRegion++);
+      // Only the actual occupied chassis footprint seeds unknown cells at startup.
+      // Positive obstacle evidence is never overwritten, and this does not change the map.
+      if (map.cells[i] <= 0 && std::abs(c * dx + s * dy) <= bodyHalfLength &&
+          std::abs(-s * dx + c * dy) <= bodyHalfWidth)
+        memory.covered.insert(g.Key(i));
     }
 
-    const auto v = memory.visits.find(g.Key(i));
-    g.visits[i] = v == memory.visits.end() ? 0 : v->second;
+  g.covered.assign(n, 0);
+  g.coveredCount = memory.covered.size();
+  for (const auto& k : memory.covered) {
+    const int i = g.At({k.first * g.cell / 2, k.second * g.cell / 2});
+    if (i >= 0 && g.Key(i) == k) g.covered[i] = 1;
+  }
+  for (const auto& [k, count] : memory.visits) {
+    const int i = g.At({k.first * g.cell / 2, k.second * g.cell / 2});
+    if (i >= 0 && g.Key(i) == k) g.visits[i] = count;
+  }
+
+  MazeKey lastRegion{std::numeric_limits<int>::min(), std::numeric_limits<int>::min()};
+  for (int row = 0; row < g.height; ++row) {
+    const int regionY = int(std::floor((g.y + (row + .5) * g.cell) / 2));
+    for (int col = 0; col < g.width; ++col) {
+      const int i = row * g.width + col;
+      if (map.cells[i] < 0) {
+        g.open[i] = 1;
+        const MazeKey region{int(std::floor((g.x + (col + .5) * g.cell) / 2)), regionY};
+        if (region != lastRegion) {
+          lastRegion = region;
+          if (!memory.searchRegions.contains(region))
+            memory.searchRegions.emplace(region, memory.nextSearchRegion++);
+        }
+      } else if (map.cells[i] == 0 && g.covered[i]) {
+        g.open[i] = 1;
+      }
+    }
+  }
+
+  if (allowProbe) {
+    for (int row = minPoseRow; row <= maxPoseRow; ++row)
+      for (int col = minPoseCol; col <= maxPoseCol; ++col) {
+        const int i = row * g.width + col;
+        if (map.cells[i] != 0 || g.open[i]) continue;
+        const auto p = g.Point(i);
+        if (std::hypot(p.x - map.pose.x, p.y - map.pose.y) <= .20) g.open[i] = 1;
+      }
   }
 
   // Axis-aligned route segments use the full rectangle, not a circumscribed
@@ -94,18 +128,43 @@ inline MazeGrid BuildMazeGrid(const RoverMappingSystem::Map& map,
   const double width = halfWidth + clearance + g.cell * .5;
   const double turnRadius = std::hypot(halfLength, halfWidth) + clearance + g.cell;
   const int r = int(std::ceil(turnRadius / g.cell));
+  struct InflateOffset {
+    int dx;
+    int dy;
+    std::uint8_t clearMask;
+    std::uint8_t turnMask;
+  };
+  std::vector<InflateOffset> inflateKernel;
+  inflateKernel.reserve((2 * r + 1) * (2 * r + 1));
+  for (int dy = -r; dy <= r; ++dy)
+    for (int dx = -r; dx <= r; ++dx) {
+      const double ax = std::abs(dx) * g.cell, ay = std::abs(dy) * g.cell;
+      std::uint8_t clearMask = 3;
+      if (ax <= length && ay <= width) clearMask &= ~1u;
+      if (ax <= width && ay <= length) clearMask &= ~2u;
+      const std::uint8_t turnMask = std::hypot(ax, ay) <= turnRadius ? 0 : 1;
+      if (clearMask != 3 || turnMask == 0)
+        inflateKernel.push_back({dx, dy, clearMask, turnMask});
+    }
+
+  const auto inflates = [&](int idx) {
+    return map.cells[idx] > 0 || (strictKnown && map.cells[idx] == 0 && !g.covered[idx]);
+  };
   for (int i = 0; i < n; ++i)
-    if (map.cells[i] > 0 ||
-        (strictKnown && map.cells[i] == 0 && !memory.covered.contains(g.Key(i)))) {
-      for (int dy = -r; dy <= r; ++dy)
-        for (int dx = -r; dx <= r; ++dx) {
-          const int x = i % g.width + dx, y = i / g.width + dy;
-          if (x < 0 || y < 0 || x >= g.width || y >= g.height) continue;
-          const double ax = std::abs(dx) * g.cell, ay = std::abs(dy) * g.cell;
-          if (std::hypot(ax, ay) <= turnRadius) g.turnClear[y * g.width + x] = 0;
-          if (ax <= length && ay <= width) g.clear[y * g.width + x] &= ~1u;
-          if (ax <= width && ay <= length) g.clear[y * g.width + x] &= ~2u;
-        }
+    if (inflates(i)) {
+      g.clear[i] = 0;
+      g.turnClear[i] = 0;
+      const int col = i % g.width, row = i / g.width;
+      if (col > 0 && col + 1 < g.width && row > 0 && row + 1 < g.height && inflates(i - 1) &&
+          inflates(i + 1) && inflates(i - g.width) && inflates(i + g.width))
+        continue;
+      for (const auto& offset : inflateKernel) {
+        const int x = col + offset.dx, y = row + offset.dy;
+        if (x < 0 || y < 0 || x >= g.width || y >= g.height) continue;
+        const int target = y * g.width + x;
+        g.clear[target] &= offset.clearMask;
+        g.turnClear[target] &= offset.turnMask;
+      }
     }
 
   if (strictKnown) {
@@ -137,29 +196,52 @@ inline MazeGrid BuildMazeGrid(const RoverMappingSystem::Map& map,
   // Select a reachable observation position near an unknown boundary.
   // Requiring the inflated robot centre to touch unknown directly can erase
   // every frontier in a corridor, even though it can be observed from nearby.
-  const int look = int(std::ceil(.35 / g.cell));
+  const double lookRadius = std::max(.35, stopDistance + halfLength + clearance + g.cell);
+  const int look = int(std::ceil(lookRadius / g.cell));
+  const int sumStride = g.width + 1;
+  std::vector<int> unknownSum(std::size_t(sumStride) * (g.height + 1), 0);
+  for (int row = 0; row < g.height; ++row) {
+    int rowAcc = 0;
+    for (int col = 0; col < g.width; ++col) {
+      const int idx = row * g.width + col;
+      rowAcc += (map.cells[idx] == 0 && !g.covered[idx]) ? 1 : 0;
+      unknownSum[(row + 1) * sumStride + (col + 1)] =
+        unknownSum[row * sumStride + (col + 1)] + rowAcc;
+    }
+  }
+
+  std::vector<std::pair<int, int>> lookOffsets;
+  lookOffsets.reserve((2 * look + 1) * (2 * look + 1));
+  for (int dy = -look; dy <= look; ++dy)
+    for (int dx = -look; dx <= look; ++dx)
+      if (std::hypot(dx, dy) * g.cell <= lookRadius) lookOffsets.emplace_back(dx, dy);
 
   for (int i = 0; i < n; ++i) {
     g.open[i] = g.open[i] && g.clear[i];
     if (!g.open[i]) continue;
+    const int colI = i % g.width, rowI = i / g.width;
+    const int x0 = std::max(0, colI - look), x1 = std::min(g.width, colI + look + 1);
+    const int y0 = std::max(0, rowI - look), y1 = std::min(g.height, rowI + look + 1);
+    if (unknownSum[y1 * sumStride + x1] - unknownSum[y0 * sumStride + x1] -
+          unknownSum[y1 * sumStride + x0] + unknownSum[y0 * sumStride + x0] ==
+        0)
+      continue;
     const auto from = g.Point(i);
-    for (int dy = -look; dy <= look; ++dy)
-      for (int dx = -look; dx <= look; ++dx) {
-        if (std::hypot(dx, dy) * g.cell > .35) continue;
-        const int col = i % g.width + dx, row = i / g.width + dy;
-        if (col < 0 || row < 0 || col >= g.width || row >= g.height) continue;
-        const int j = row * g.width + col;
-        if (map.cells[j] != 0 || memory.covered.contains(g.Key(j))) continue;
-        const auto to = g.Point(j);
-        const int steps = std::max(1, 2 * std::max(std::abs(dx), std::abs(dy)));
-        bool visible = true;
-        for (int k = 1; k <= steps && visible; ++k) {
-          const double t = double(k) / steps;
-          const int index = g.At({std::lerp(from.x, to.x, t), std::lerp(from.y, to.y, t)});
-          visible = index >= 0 && map.cells[index] <= 0;
-        }
-        if (visible && g.frontier[i] < 255) ++g.frontier[i];
+    for (const auto& [dx, dy] : lookOffsets) {
+      const int col = colI + dx, row = rowI + dy;
+      if (col < 0 || row < 0 || col >= g.width || row >= g.height) continue;
+      const int j = row * g.width + col;
+      if (map.cells[j] != 0 || g.covered[j]) continue;
+      const auto to = g.Point(j);
+      const int steps = std::max(1, 2 * std::max(std::abs(dx), std::abs(dy)));
+      bool visible = true;
+      for (int k = 1; k <= steps && visible; ++k) {
+        const double t = double(k) / steps;
+        const int index = g.At({std::lerp(from.x, to.x, t), std::lerp(from.y, to.y, t)});
+        visible = index >= 0 && map.cells[index] <= 0;
       }
+      if (visible && g.frontier[i] < 255) ++g.frontier[i];
+    }
   }
 
   return g;

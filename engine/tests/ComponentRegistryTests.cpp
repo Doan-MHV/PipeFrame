@@ -137,6 +137,61 @@ int main() {
         Check(!editRange({{"internalCache",std::int64_t{1}}}) && registry.Inspect(range).front().properties.size()==3,
               "Unlisted runtime data is neither exposed nor editable");
         Check(range.GetComponent<ValidatedRangeComponent>()->internalCache==42,"Validated edits preserve hidden runtime data");
+
+        struct ConciseComponent : Component<ConciseComponent> {
+            float speed{1.5f};
+            std::int64_t count{4};
+            bool active{true};
+            std::string mode{"Auto"};
+            Vector2f offset{2.f, -3.f};
+            Color tint{10, 20, 30, 255};
+            AssetReference asset{"map-1"};
+            SceneObjectReference target{9};
+            double telemetryValue{42.0};
+            static auto BuildSchema() {
+                return Define("test.concise", "Concise")
+                    .Editable("speed", "Speed", &ConciseComponent::speed, {.unit = "m/s", .minimum = 0, .maximum = 10})
+                    .Editable("count", "Count", &ConciseComponent::count, {.minimum = 1})
+                    .Editable("active", "Active", &ConciseComponent::active)
+                    .Editable("mode", "Mode", &ConciseComponent::mode, {.enumOptions = {"Auto", "Manual"}})
+                    .Editable("offset", "Offset", &ConciseComponent::offset)
+                    .Editable("tint", "Tint", &ConciseComponent::tint)
+                    .Editable("asset", "Asset", &ConciseComponent::asset)
+                    .Editable("target", "Target", &ConciseComponent::target)
+                    .ReadOnly("telemetryValue", "Telemetry", &ConciseComponent::telemetryValue);
+            }
+        };
+        const auto conciseSchema = ConciseComponent::Schema();
+        const auto& props = conciseSchema.Describe().properties;
+        Check(props.size() == 9, "Concise schema registers all 9 fields");
+        Check(props[0].kind == PropertyKind::Number && std::abs(std::get<double>(props[0].defaultValue) - 1.5) < 1e-6 && props[0].unit == "m/s",
+              "Concise float field deduces Number kind and defaultValue");
+        Check(props[1].kind == PropertyKind::Integer && std::get<std::int64_t>(props[1].defaultValue) == 4,
+              "Concise int64 field deduces Integer kind and defaultValue");
+        Check(props[2].kind == PropertyKind::Boolean && std::get<bool>(props[2].defaultValue) == true,
+              "Concise bool field deduces Boolean kind and defaultValue");
+        Check(props[3].kind == PropertyKind::Enum && std::get<std::string>(props[3].defaultValue) == "Auto",
+              "Concise enumOptions field deduces Enum kind and defaultValue");
+        Check(props[4].kind == PropertyKind::Vector2 && std::get<Vector2f>(props[4].defaultValue) == Vector2f{2.f, -3.f},
+              "Concise Vector2f field deduces Vector2 kind and defaultValue");
+        Check(props[5].kind == PropertyKind::Color && std::get<Color>(props[5].defaultValue) == Color{10, 20, 30, 255},
+              "Concise Color field deduces Color kind and defaultValue");
+        Check(props[6].kind == PropertyKind::AssetReference && std::get<AssetReference>(props[6].defaultValue).assetId == "map-1",
+              "Concise AssetReference field deduces AssetReference kind and defaultValue");
+        Check(props[7].kind == PropertyKind::ObjectReference && std::get<SceneObjectReference>(props[7].defaultValue).objectId == 9,
+              "Concise SceneObjectReference field deduces ObjectReference kind and defaultValue");
+        Check(!props[8].editable && props[8].editorHint == "telemetry" && std::get<double>(props[8].defaultValue) == 42.0,
+              "Concise ReadOnly field defaults editorHint to telemetry");
+
+        BehaviourScene resolverScene;
+        auto resolvedObj = resolverScene.CreateObject();
+        resolverScene.SetObjectResolver([&](SceneObjectId id) {
+            return id == 77 ? resolvedObj : SceneObject{};
+        });
+        Check(resolverScene.FindObject(77) == resolvedObj && !resolverScene.FindObject(99).IsValid() &&
+              resolverScene.FindObject(SceneObjectReference{77}) == resolvedObj,
+              "BehaviourScene::FindObject resolves SceneObjectId and SceneObjectReference");
+
         std::cout << "Typed component registry acceptance passed.\n";
     } catch(const std::exception &error) { std::cerr << error.what() << '\n'; return 1; }
 }

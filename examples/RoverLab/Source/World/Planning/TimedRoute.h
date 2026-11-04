@@ -35,6 +35,8 @@ inline bool KnownStraightClear(const MazeGrid& g,
   const int top = int(std::floor((p.y - extentY - g.y) / g.cell));
   const int bottom = int(std::floor((p.y + extentY - g.y) / g.cell));
   if (left < 0 || top < 0 || right >= g.width || bottom >= g.height) return false;
+  const bool useCachedCovered =
+    g.covered.size() == std::size_t(g.Count()) && g.coveredCount == covered.size();
   for (int y = top; y <= bottom; ++y)
     for (int x = left; x <= right; ++x) {
       const int i = y * g.width + x;
@@ -45,7 +47,8 @@ inline bool KnownStraightClear(const MazeGrid& g,
         continue;
       const bool localProbe =
         allowLocalUnknown && std::hypot(centre.x - from.x, centre.y - from.y) <= .20;
-      if (g.evidence[i] > 0 || (g.evidence[i] == 0 && !covered.contains(g.Key(i)) && !localProbe))
+      const bool isCovered = useCachedCovered ? g.covered[i] != 0 : covered.contains(g.Key(i));
+      if (g.evidence[i] > 0 || (g.evidence[i] == 0 && !isCovered && !localProbe))
         return false;
     }
   return true;
@@ -176,8 +179,8 @@ inline TimedRoute FastestKnownRoute(const MazeGrid& g,
       const int next = g.Next(cell, d);
       if (next < 0) continue;
       for (int facingNext : {d, (d + 2) % 4}) {
-        const int node = motion.Next(state, d, facingNext);
-        if (node < 0) continue;
+        if (facingNext != facing && !motion.CanTurn(cell)) continue;
+        const int node = next * 4 + facingNext;
         const double candidate =
           cost[state] + g.cell / speed + turnSeconds((facingNext - facing) * pi / 2);
         if (candidate + 1e-9 >= cost[node]) continue;

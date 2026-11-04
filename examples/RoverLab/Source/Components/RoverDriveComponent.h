@@ -20,60 +20,14 @@ struct RoverDriveComponent : pipeframe::Component<RoverDriveComponent> {
         return Define("project.RoverDriveComponent", "Rover Drive")
             .RetiredField("frontSensor")
             .RetiredField("sensor")
-            .Editable({.key = "speed",
-                          .displayName = "Maximum Speed",
-                          .kind = PropertyKind::Number,
-                          .defaultValue = 0.16,
-                          .unit = "metres / second",
-                          .minimum = 0},
-                &RoverDriveComponent::speed)
-            .Editable({.key = "stopDistance",
-                          .displayName = "Stop Distance",
-                          .kind = PropertyKind::Number,
-                          .defaultValue = 0.35,
-                          .unit = "metres",
-                          .minimum = 0},
-                &RoverDriveComponent::stopDistance)
-            .Editable({.key = "readingTimeout",
-                          .displayName = "Reading Timeout",
-                          .kind = PropertyKind::Number,
-                          .defaultValue = 0.3,
-                          .unit = "seconds",
-                          .minimum = 0.001},
-                &RoverDriveComponent::readingTimeout)
-            .Editable({.key = "commandTimeout",
-                          .displayName = "Command Timeout",
-                          .kind = PropertyKind::Number,
-                          .defaultValue = 0.25,
-                          .unit = "seconds",
-                          .minimum = 0.001},
-                &RoverDriveComponent::commandTimeout)
-            .Editable({.key = "trackWidth",
-                          .displayName = "Track Width",
-                          .kind = PropertyKind::Number,
-                          .defaultValue = 0.18,
-                          .unit = "metres",
-                          .minimum = 0.001},
-                &RoverDriveComponent::trackWidth)
-            .Editable({.key = "maximumWheelSpeed",
-                          .displayName = "Maximum Wheel Speed",
-                          .kind = PropertyKind::Number,
-                          .defaultValue = 0.30,
-                          .unit = "metres / second",
-                          .minimum = 0},
-                &RoverDriveComponent::maximumWheelSpeed)
-            .Editable({.key = "maximumTurnRate",
-                          .displayName = "Maximum Turn Rate",
-                          .kind = PropertyKind::Number,
-                          .defaultValue = 2.0,
-                          .unit = "radians / second",
-                          .minimum = 0},
-                &RoverDriveComponent::maximumTurnRate)
-            .Editable({.key = "enabled",
-                          .displayName = "Enabled",
-                          .kind = PropertyKind::Boolean,
-                          .defaultValue = true},
-                &RoverDriveComponent::enabled)
+            .Editable("speed", "Maximum Speed", &RoverDriveComponent::speed, {.unit = "metres / second", .minimum = 0})
+            .Editable("stopDistance", "Stop Distance", &RoverDriveComponent::stopDistance, {.unit = "metres", .minimum = 0})
+            .Editable("readingTimeout", "Reading Timeout", &RoverDriveComponent::readingTimeout, {.unit = "seconds", .minimum = 0.001})
+            .Editable("commandTimeout", "Command Timeout", &RoverDriveComponent::commandTimeout, {.unit = "seconds", .minimum = 0.001})
+            .Editable("trackWidth", "Track Width", &RoverDriveComponent::trackWidth, {.unit = "metres", .minimum = 0.001})
+            .Editable("maximumWheelSpeed", "Maximum Wheel Speed", &RoverDriveComponent::maximumWheelSpeed, {.unit = "metres / second", .minimum = 0})
+            .Editable("maximumTurnRate", "Maximum Turn Rate", &RoverDriveComponent::maximumTurnRate, {.unit = "radians / second", .minimum = 0})
+            .Editable("enabled", "Enabled", &RoverDriveComponent::enabled)
             .Validate(
                 "Drive settings must be finite; speed limits and stop distance "
                 "must be nonnegative; track width and timeouts must be positive",

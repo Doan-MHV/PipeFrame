@@ -5,8 +5,8 @@ void HierarchyPanel::SetOnAdd(ActionCallback cb) { onAdd=std::move(cb); RefreshV
 void HierarchyPanel::SetOnDelete(ActionCallback cb) { onDelete=std::move(cb); RefreshView(); }
 void HierarchyPanel::SetOnSelectionChanged(SelectionCallback cb) { onSelectionChanged=std::move(cb); }
 void HierarchyPanel::SetItems(const std::vector<Item> &value) { items=value; RefreshView(); }
-void HierarchyPanel::SetSelectedObject(std::optional<ObjectId> id) { selectedObjectId=id; RefreshView(); }
-void HierarchyPanel::SetAuthoringEnabled(bool enabled) { authoringEnabled=enabled; RefreshView(); }
+void HierarchyPanel::SetSelectedObject(std::optional<ObjectId> id) { if (selectedObjectId == id) return; selectedObjectId=id; RefreshView(); }
+void HierarchyPanel::SetAuthoringEnabled(bool enabled) { if (authoringEnabled == enabled) return; authoringEnabled=enabled; RefreshView(); }
 View HierarchyPanel::BuildView() {
     std::vector<View> rows;
     for (const auto &item : items) rows.push_back(views::Button(std::to_string(item.id),item.name,

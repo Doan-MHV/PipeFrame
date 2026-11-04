@@ -43,6 +43,9 @@ class RoverSolverSystem final : public pipeframe::FixedUpdateSystem<void> {
     unsigned idleSurveys{};
     bool departure{};
     std::unordered_set<std::uint64_t> observed;
+    std::vector<std::uint8_t> observedGrid;
+    int observedWidth{}, observedHeight{};
+    double observedOriginX{}, observedOriginY{};
     std::size_t baselineObserved{};
     bool observationBaselineReady{};
     double nextIdleSurvey{};
@@ -512,6 +515,7 @@ public:
         return;
       }
 
+      if (state.mode == Mode::Settle && oldest >= state.settleTime) state.gridAge = 1;
       state.gridAge += delta;
       if (state.gridAge >= .5) {
         const double length = collider->size.x / 2, width = collider->size.y / 2;
@@ -542,9 +546,18 @@ public:
           std::fill(state.grid.visits.begin(), state.grid.visits.end(), 0);
 
         if (mission.timed && mission.phase == MissionPhase::Explore) {
+          if (state.observedWidth != map->width || state.observedHeight != map->height ||
+              state.observedOriginX != map->originX || state.observedOriginY != map->originY) {
+            state.observedWidth = map->width;
+            state.observedHeight = map->height;
+            state.observedOriginX = map->originX;
+            state.observedOriginY = map->originY;
+            state.observedGrid.assign(state.grid.Count(), 0);
+          }
           const auto before = state.observed.size();
           for (int i = 0; i < state.grid.Count(); ++i) {
-            if (map->cells[i] == 0) continue;
+            if (map->cells[i] == 0 || state.observedGrid[i]) continue;
+            state.observedGrid[i] = 1;
             const auto key = state.grid.Key(i);
             const auto stable =
               (std::uint64_t(std::uint32_t(key.first)) << 32) | std::uint32_t(key.second);

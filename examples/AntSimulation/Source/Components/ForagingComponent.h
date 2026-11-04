@@ -35,17 +35,10 @@ struct ForagingComponent : pipeframe::Component<ForagingComponent> {
   // Inspector exposure is declared here; unlisted members stay runtime-only.
   static auto BuildSchema() {
     using namespace pipeframe;
-    using K = PropertyKind;
     return Define("ant.foraging", "Foraging")
       .Required()
-      .ReadOnly(
-        {.key = "target", .displayName = "Target", .kind = K::Vector2, .defaultValue = Vector2f{}},
-        &ForagingComponent::target)
-      .ReadOnly({.key = "distanceToTarget",
-                  .displayName = "Target Distance",
-                  .kind = K::Number,
-                  .defaultValue = 0.0},
-        &ForagingComponent::distanceToTarget);
+      .ReadOnly("target", "Target", &ForagingComponent::target)
+      .ReadOnly("distanceToTarget", "Target Distance", &ForagingComponent::distanceToTarget);
   }
 
   ForagingState state{ForagingState::ToFood};

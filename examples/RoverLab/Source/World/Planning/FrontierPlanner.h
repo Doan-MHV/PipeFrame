@@ -36,18 +36,21 @@ struct ExplorationChoice {
 // Rays stop at known obstacles. Sonar requires a body survey for this 360-degree
 // estimate, which is included in the observation cost by the caller.
 inline double ExpectedNewArea(const MazeGrid& g, int index, double range) {
-  std::set<int> unknown;
+  std::vector<int> unknown;
+  unknown.reserve(512);
   const auto origin = g.Point(index);
   const int steps = std::max(1, int(std::ceil(std::min(range, 5.0) / g.cell)));
   for (int ray = 0; ray < 72; ++ray) {
     const double angle = ray * 2 * std::numbers::pi / 72;
+    const double dx = std::cos(angle) * g.cell, dy = std::sin(angle) * g.cell;
     for (int step = 1; step <= steps; ++step) {
-      const int cell = g.At(
-        {origin.x + std::cos(angle) * step * g.cell, origin.y + std::sin(angle) * step * g.cell});
+      const int cell = g.At({origin.x + dx * step, origin.y + dy * step});
       if (cell < 0 || g.evidence[cell] > 0) break;
-      if (g.evidence[cell] == 0) unknown.insert(cell);
+      if (g.evidence[cell] == 0) unknown.push_back(cell);
     }
   }
+  std::sort(unknown.begin(), unknown.end());
+  unknown.erase(std::unique(unknown.begin(), unknown.end()), unknown.end());
   return unknown.size() * g.cell * g.cell;
 }
 

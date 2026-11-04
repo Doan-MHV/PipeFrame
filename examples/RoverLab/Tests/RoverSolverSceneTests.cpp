@@ -132,12 +132,15 @@ int main() {
 
     runtime.Start();
     double travelled = 0;
+    bool exitedStartWithin30s = false;
     std::set<std::pair<int, int>> visited;
     auto last = start;
 
     for (int i = 0; i < 18000; ++i) {
       runtime.FixedUpdate(1.f / 60);
       const auto current = rover.GetComponent<Transform2DComponent>()->position;
+      if (i < 1800 && std::hypot(current.x - start.x, current.y - start.y) > .7f)
+        exitedStartWithin30s = true;
       visited.insert({int(std::floor(current.x / .1)), int(std::floor(current.y / .1))});
       travelled += std::hypot(current.x - last.x, current.y - last.y);
       last = current;
@@ -148,6 +151,8 @@ int main() {
               << visited.size() << " status "
               << runtime.world.simulation.solver.Status(rover.GetEntity()) << " safety "
               << runtime.world.simulation.drive.StopReason(rover.GetEntity()) << "\n";
+    Check(exitedStartWithin30s,
+      "Saved scene rover must exit the starting corridor within 30 seconds without spinning in place");
     Check(travelled > 5 && visited.size() > 50,
       "RL7 must visit new ground, not only oscillate, in 300 seconds");
     Check(map && map->accepted > 100, "Both sensor technologies populate the discovered map");

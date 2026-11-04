@@ -37,6 +37,7 @@ class SceneProjectRuntime : public ProjectRuntime, public EnvironmentQueries {
 public:
     explicit SceneProjectRuntime(std::string name) : name(std::move(name)) {
         scene.Services().Provide<EnvironmentQueries>(*this);
+        scene.SetObjectResolver([this](SceneObjectId id) { return ResolveSceneObject(id); });
         RegisterCommonComponents(registry);
         RegisterComponent<IdentityComponent>();
         RegisterComponent<PlaygroundComponent>();
@@ -69,6 +70,20 @@ public:
         definition.BindFactories(entities, world);
         definition.InstallExtensions(*this);
         definition.InitializeWorld(world);
+        if constexpr (requires { world.SynchronizeScene(); })
+            onWorldSynchronize = [&world] { world.SynchronizeScene(); };
+        if constexpr (requires { world.UpdateAuthoringScene(); })
+            onWorldUpdateAuthoring = [&world] { world.UpdateAuthoringScene(); };
+        if constexpr (requires(float dt) { world.BeforeFixedUpdate(dt); })
+            onWorldBeforeFixedUpdate = [&world](float dt) { world.BeforeFixedUpdate(dt); };
+        if constexpr (requires(float dt) { world.AfterFixedUpdate(dt); })
+            onWorldAfterFixedUpdate = [&world](float dt) { world.AfterFixedUpdate(dt); };
+        if constexpr (requires { world.Reset(); })
+            onWorldReset = [&world] { world.Reset(); };
+        if constexpr (requires(RenderContext& ctx) { world.Render(ctx); })
+            onWorldRender = [&world](RenderContext& ctx) { world.Render(ctx); };
+        if constexpr (requires(WorldDebugDraw& d, WorldDebugOptions o) { world.CollectWorldDebug(d, o); })
+            onWorldCollectDebug = [&world](WorldDebugDraw& d, WorldDebugOptions o) { world.CollectWorldDebug(d, o); };
         rebuildProjectUI = [this, definition, &world] { definition.InstallUI(world, UI()); };
         rebuildProjectUI();
         types = entities.Describe();
@@ -191,6 +206,10 @@ public:
                 ApplyData(objects.at(id), data);
         }
         authored = std::move(next);
+        if (onWorldSynchronize) onWorldSynchronize();
+    }
+    void UpdateAuthoringScene() override {
+        if (onWorldUpdateAuthoring) onWorldUpdateAuthoring();
     }
     bool ApplyComponentEdits(std::span<const ProjectRuntimeComponentEdit> edits,
                              ProjectRuntimeAuthoringState) override {
@@ -317,6 +336,7 @@ public:
     void FixedUpdate(float delta) override {
         if (!playing || !std::isfinite(delta) || delta <= 0) return;
         PruneDestroyedObjects();
+        if (onWorldBeforeFixedUpdate) onWorldBeforeFixedUpdate(delta);
         std::map<SceneObjectId, Transform2DComponent> previous;
         for (const auto& [id, object] : objects)
             if (const auto* pose = object.GetComponent<Transform2DComponent>()) previous[id] = *pose;
@@ -328,6 +348,7 @@ public:
             simulationWorld->UpdateAfterPhysics(delta);
             simulationWorld->UpdateCleanup(delta);
         }
+        if (onWorldAfterFixedUpdate) onWorldAfterFixedUpdate(delta);
         PruneDestroyedObjects();
     }
 
@@ -637,6 +658,7 @@ public:
         sprites.Render(context.GetCanvas());
         for (const auto& layer : customLayers)
             layer->Render(context.GetCanvas());
+        if (onWorldRender) onWorldRender(context);
         UpdateVisibility(context);
     }
     void CollectWorldDebug(WorldDebugDraw& draw, WorldDebugOptions options) override {
@@ -687,9 +709,11 @@ public:
                                       PlaygroundToWorld(points[(edge + 1) % 4], pose));
                     }
             });
+        if (onWorldCollectDebug) onWorldCollectDebug(draw, options);
     }
     void Stop() override { playing = false; }
     void Reset() override {
+        if (onWorldReset) onWorldReset();
         auto saved = authored;
         ClearNotifications();
         scene.Clear();
@@ -929,6 +953,13 @@ private:
     mutable TilemapAssetModule tilemaps;  // Lazy asset cache is logically const for hit testing.
     VisualAssetModule visuals;
     std::function<void()> rebuildProjectUI;
+    std::function<void()> onWorldSynchronize;
+    std::function<void()> onWorldUpdateAuthoring;
+    std::function<void(float)> onWorldBeforeFixedUpdate;
+    std::function<void(float)> onWorldAfterFixedUpdate;
+    std::function<void()> onWorldReset;
+    std::function<void(RenderContext&)> onWorldRender;
+    std::function<void(WorldDebugDraw&, WorldDebugOptions)> onWorldCollectDebug;
     SpriteRenderLayer sprites{visuals};
     std::vector<std::unique_ptr<RenderLayer>> customLayers;
     std::vector<Vertex2D> transformedVertices;

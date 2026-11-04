@@ -1,0 +1,17 @@
+PIPEFRAME_ASSET_DATABASE 2 9
+ASSET "asset-00000001" 2 0 "Assets/Audio/bubble_2.wav" ".pipeframe/cache/asset-00000001/compiled.pfasset" ".pipeframe/cache/asset-00000001/thumbnail.pfpreview" ".pipeframe/cache/asset-00000001/preview.pfpreview" "pipeframe.audio" 3 1 10486935189837395318 "" 0 0 0
+ENDASSET
+ASSET "asset-00000002" 1 0 "Assets/Textures/check.png" ".pipeframe/cache/asset-00000002/compiled.pfasset" ".pipeframe/cache/asset-00000002/thumbnail.png" ".pipeframe/cache/asset-00000002/preview.png" "pipeframe.texture" 4 1 6269755464941470310 "" 0 0 0
+ENDASSET
+ASSET "asset-00000003" 1 0 "Assets/Textures/dotted.png" ".pipeframe/cache/asset-00000003/compiled.pfasset" ".pipeframe/cache/asset-00000003/thumbnail.png" ".pipeframe/cache/asset-00000003/preview.png" "pipeframe.texture" 4 1 4968073201218131852 "" 0 0 0
+ENDASSET
+ASSET "asset-00000004" 1 0 "Assets/Textures/lab_tile_sea.png" ".pipeframe/cache/asset-00000004/compiled.pfasset" ".pipeframe/cache/asset-00000004/thumbnail.png" ".pipeframe/cache/asset-00000004/preview.png" "pipeframe.texture" 4 1 10181579092238103340 "" 0 0 0
+ENDASSET
+ASSET "asset-00000005" 1 0 "Assets/Textures/lab_tile_sea_pipeframe.png" ".pipeframe/cache/asset-00000005/compiled.pfasset" ".pipeframe/cache/asset-00000005/thumbnail.png" ".pipeframe/cache/asset-00000005/preview.png" "pipeframe.texture" 4 1 17466054437147680979 "" 0 0 0
+ENDASSET
+ASSET "asset-00000006" 1 0 "Assets/Textures/seascape_1.png" ".pipeframe/cache/asset-00000006/compiled.pfasset" ".pipeframe/cache/asset-00000006/thumbnail.png" ".pipeframe/cache/asset-00000006/preview.png" "pipeframe.texture" 4 1 7691674830614181716 "" 0 0 0
+ENDASSET
+ASSET "asset-00000007" 1 0 "Assets/Textures/seascape_1_depth.png" ".pipeframe/cache/asset-00000007/compiled.pfasset" ".pipeframe/cache/asset-00000007/thumbnail.png" ".pipeframe/cache/asset-00000007/preview.png" "pipeframe.texture" 4 1 6456174578066002646 "" 0 0 0
+ENDASSET
+ASSET "asset-00000008" 1 0 "Assets/Textures/water_tile_pipeframe.png" ".pipeframe/cache/asset-00000008/compiled.pfasset" ".pipeframe/cache/asset-00000008/thumbnail.png" ".pipeframe/cache/asset-00000008/preview.png" "pipeframe.texture" 4 1 11579580079240614019 "" 0 0 0
+ENDASSET

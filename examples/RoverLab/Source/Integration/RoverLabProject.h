@@ -53,7 +53,7 @@ inline auto CreateProjectDefinition() {
     .size = {340, 320},
     .placement = pipeframe::ui::PanelPlacement::AtPercent(100, 20)
       .Anchor(pipeframe::ui::PanelAnchor::TopRight)
-      .Offset(-16, 0),
+      .Offset(-16, 28),
     .drawer = true,
   });
 
@@ -62,7 +62,7 @@ inline auto CreateProjectDefinition() {
     .size = {380, 460},
     .placement = pipeframe::ui::PanelPlacement::AtPercent(0, 20)
       .Anchor(pipeframe::ui::PanelAnchor::TopLeft)
-      .Offset(16, 0),
+      .Offset(28, 0),
     .drawer = true,
   });
 
@@ -80,16 +80,16 @@ inline auto CreateProjectDefinition() {
     .size = {380, 420},
     .placement = pipeframe::ui::PanelPlacement::AtPercent(0, 70)
       .Anchor(pipeframe::ui::PanelAnchor::BottomLeft)
-      .Offset(16, 0),
+      .Offset(28, 0),
     .drawer = true,
   });
 
   project.UI<RoverResultsPanel>({
     .title = "BENCHMARK RESULTS",
     .size = {620, 680},
-    .placement = pipeframe::ui::PanelPlacement::AtPercent(50, 0)
-      .Anchor(pipeframe::ui::PanelAnchor::TopCenter)
-      .Offset(0, 16),
+    .placement = pipeframe::ui::PanelPlacement::AtPercent(100, 90)
+      .Anchor(pipeframe::ui::PanelAnchor::BottomRight)
+      .Offset(-16, -16),
     .drawer = true,
   });
 

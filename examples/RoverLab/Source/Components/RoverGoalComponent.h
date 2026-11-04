@@ -23,24 +23,9 @@ struct RoverGoalComponent : pipeframe::Component<RoverGoalComponent> {
 
     return Define("project.RoverGoalComponent", "Goal Marker")
       .OnlyOn("project.RoverGoalEntity")
-      .Editable({.key = "tag",
-                  .displayName = "Goal Tag",
-                  .kind = PropertyKind::String,
-                  .defaultValue = std::string{"Finish"}},
-        &RoverGoalComponent::tag)
-      .Editable({.key = "radius",
-                  .displayName = "Arrival Radius",
-                  .kind = PropertyKind::Number,
-                  .defaultValue = .20,
-                  .unit = "metres",
-                  .minimum = .05,
-                  .maximum = 1},
-        &RoverGoalComponent::radius)
-      .Editable({.key = "enabled",
-                  .displayName = "Enabled",
-                  .kind = PropertyKind::Boolean,
-                  .defaultValue = true},
-        &RoverGoalComponent::enabled)
+      .Editable("tag", "Goal Tag", &RoverGoalComponent::tag)
+      .Editable("radius", "Arrival Radius", &RoverGoalComponent::radius, {.unit = "metres", .minimum = .05, .maximum = 1})
+      .Editable("enabled", "Enabled", &RoverGoalComponent::enabled)
       .Validate("Use a goal tag and an arrival radius from 0.05 to 1 metre",
         [](const auto& value) { return value.Valid(); });
   }

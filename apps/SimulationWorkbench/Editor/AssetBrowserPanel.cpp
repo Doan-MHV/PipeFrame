@@ -335,7 +335,7 @@ View AssetBrowserPanel::BuildView() {
     if(!previewInfo.empty())preview.push_back(views::Text("preview-info",previewInfo).FitHeight());
     auto list=views::Scroll("list",views::Column("rows",std::move(rows)));
     // Keep asset rows usable when toolbars or previews reduce available height.
-    list.Height(140);
+    list.Height(100);
     if(query.type==assets::AssetType::Tilemap && paintEditor && paintEditor->Document() && !browseMapAssets){
         const auto *record=database->Find(paintEditor->AssetId());
         auto header=views::Column("map-header",{
@@ -363,7 +363,7 @@ View AssetBrowserPanel::BuildView() {
     auto content=views::Column("assets",{
         views::Text("title","ASSET BROWSER"),
         views::TextField("search","Search assets",query.text,[this](const std::string &text){SetSearchText(text);}),
-        views::Wrap("categories",std::move(tabs),90),
+        views::Wrap("categories",std::move(tabs),76),
         std::move(list),
         views::Wrap("actions",{
             views::Button("import","IMPORT",[this]{if(onImport)onImport();}),

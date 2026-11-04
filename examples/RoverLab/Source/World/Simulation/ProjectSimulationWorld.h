@@ -42,6 +42,17 @@ public:
     AddSystem(infrared, UpdatePhase::AfterPhysics);
     AddSystem(mapping, UpdatePhase::AfterPhysics);
     AddSystem(goals, UpdatePhase::AfterPhysics);
+
+    const auto resolver = [&scene](pipeframe::SceneObjectId id) {
+      return scene.FindObject(id);
+    };
+    ultrasonic.SetObjectResolver(resolver);
+    lidar.SetObjectResolver(resolver);
+    infrared.SetObjectResolver(resolver);
+    navigation.SetObjectResolver(resolver);
+    drive.SetObjectResolver(resolver);
+    mapping.SetObjectResolver(resolver);
+    solver.SetObjectResolver(resolver);
   }
 
   pipeframe::EventChannels events;

@@ -18,48 +18,11 @@ struct RoverSafetyComponent : pipeframe::Component<RoverSafetyComponent> {
     static auto BuildSchema() {
         using namespace pipeframe;
 
-        return Define(
-            "project.RoverSafetyComponent",
-            "Rover Safety"
-        )
-            .Editable(
-                {
-                    .key = "halfLength",
-                    .displayName = "Half Length",
-                    .kind = PropertyKind::Number,
-                    .defaultValue = 0.16,
-                    .unit = "metres",
-                    .minimum = 0.001
-                },
-                &RoverSafetyComponent::halfLength
-            )
-            .Editable(
-                {
-                    .key = "halfWidth",
-                    .displayName = "Half Width",
-                    .kind = PropertyKind::Number,
-                    .defaultValue = 0.09,
-                    .unit = "metres",
-                    .minimum = 0.001
-                },
-                &RoverSafetyComponent::halfWidth
-            )
-            .Editable(
-                {
-                    .key = "clearance",
-                    .displayName = "Safety Clearance",
-                    .kind = PropertyKind::Number,
-                    .defaultValue = 0.03,
-                    .unit = "metres",
-                    .minimum = 0
-                },
-                &RoverSafetyComponent::clearance
-            )
-            .Validate(
-                "Dimensions must be positive and clearance nonnegative",
-                [](const auto& safety) {
-                    return safety.ValidSettings();
-                }
-            );
+        return Define("project.RoverSafetyComponent", "Rover Safety")
+            .Editable("halfLength", "Half Length", &RoverSafetyComponent::halfLength, {.unit = "metres", .minimum = 0.001})
+            .Editable("halfWidth", "Half Width", &RoverSafetyComponent::halfWidth, {.unit = "metres", .minimum = 0.001})
+            .Editable("clearance", "Safety Clearance", &RoverSafetyComponent::clearance, {.unit = "metres", .minimum = 0})
+            .Validate("Dimensions must be positive and clearance nonnegative",
+                      [](const auto& safety) { return safety.ValidSettings(); });
     }
 };

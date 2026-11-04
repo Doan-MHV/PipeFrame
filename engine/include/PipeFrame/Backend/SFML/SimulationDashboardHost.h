@@ -98,6 +98,12 @@ public:
         for (auto* view : metricViews)
             view->RefreshView();
     }
+    void RefreshDrawerView(std::size_t index) {
+        if (index < viewPanels.size()) viewPanels[index].first->RefreshView();
+    }
+    void RefreshMetricView(std::size_t index) {
+        if (index < metricViews.size()) metricViews[index]->RefreshView();
+    }
     Widget& RenderView(Widget& parent, const pipeframe::ui::View& view);
 
     Column& AddPage(const std::string& title) {
@@ -256,7 +262,7 @@ public:
         independent.SetOpen(initiallyOpen, false);
         content.SetVisible(initiallyOpen);
         independentDrawers.push_back(
-            {&independent, &scroll, &content, &handleLabel, extent, span, handleLength, anchor});
+            {&independent, &scroll, &content, &handleLabel, extent, span, handleLength, anchor, false, &popupHeader});
         return content;
     }
 
@@ -382,7 +388,20 @@ public:
         d.SetClosedOffset(offset);
         entry.handleLabel->SetRotation(edge==DrawerEdge::Left ? 90.f : edge==DrawerEdge::Right ? -90.f : 0.f);
         entry.scroll->Arrange({{},bounds.size});
-        for(auto& [view,i]:viewPanels) if(i==index) view->SetSize({std::max(0.f,bounds.size.x-20),std::max(0.f,bounds.size.y-64)});
+        for(auto& [view,i]:viewPanels) if(i==index) {
+            const auto hasKey = [](const auto& self, const Widget& w, std::string_view key) -> bool {
+                if (w.GetKey() == key) return true;
+                for (std::size_t c = 0; c < w.GetChildCount(); ++c)
+                    if (self(self, *w.GetChild(c), key)) return true;
+                return false;
+            };
+            const bool ownHeader = hasKey(hasKey, *view, "map-header");
+            if(entry.popupHeader) {
+                entry.popupHeader->SetVisible(!ownHeader);
+                entry.popupHeader->SetSize({0.0f, ownHeader ? 0.0f : 34.0f});
+            }
+            view->SetSize({std::max(0.f,bounds.size.x-20),std::max(0.f,bounds.size.y-(ownHeader ? 20.f : 64.f))});
+        }
         const auto desired=entry.content->Measure({{bounds.size.x,0},{bounds.size.x,std::numeric_limits<float>::infinity()}});
         entry.content->SetSize({bounds.size.x,desired.y});
         entry.handleLabel->Arrange({{},d.GetHandle().GetSize()});
@@ -494,6 +513,7 @@ private:
         float handleLength;
         DrawerAnchor anchor;
         bool positioned{};
+        Row* popupHeader{};
     };
     static float AnchorPosition(float available, float occupied, DrawerAnchor anchor) {
         if (anchor == DrawerAnchor::Start) return 8.0f;

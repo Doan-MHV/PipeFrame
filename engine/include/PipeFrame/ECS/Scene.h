@@ -5,6 +5,7 @@
 #include <PipeFrame/ECS/World.h>
 #include <PipeFrame/Entities/EntityArchetype.h>
 #include <PipeFrame/Foundation/MathTypes.h>
+#include <PipeFrame/Project/ProjectTypes.h>
 
 #include <deque>
 #include <exception>
@@ -49,6 +50,8 @@ public:
     }
     ecs::Entity GetEntity() const { return entity; }
     SceneObject GetObject() const;
+    SceneObject FindObject(SceneObjectId id) const;
+    SceneObject FindObject(SceneObjectReference reference) const;
     template <class T>
     T* GetService() const;
     template <class T>
@@ -98,6 +101,11 @@ public:
     SceneObject CreateObject();
     SceneObject Instantiate(const EntityArchetype& recipe);
     SceneObject GetObject(ecs::Entity entity);
+    void SetObjectResolver(std::function<SceneObject(SceneObjectId)> resolver) {
+        objectResolver = std::move(resolver);
+    }
+    SceneObject FindObject(SceneObjectId id) const;
+    SceneObject FindObject(SceneObjectReference reference) const;
     ~BehaviourScene() {
         try {
             Clear();
@@ -362,6 +370,7 @@ private:
         if (failure) std::rethrow_exception(failure);
     }
     std::unordered_map<std::string, std::function<std::unique_ptr<Behaviour>()>> factories;
+    std::function<SceneObject(SceneObjectId)> objectResolver;
     ServiceRegistry services;  // Borrowed scene-local services outlive attached behaviours.
     ecs::World world;
     std::vector<std::unique_ptr<Entry>> entries;
@@ -479,6 +488,19 @@ private:
 inline SceneObject Behaviour::GetObject() const {
     if (!owner) throw std::logic_error("Behaviour is not attached to a scene");
     return owner->GetObject(entity);
+}
+inline SceneObject BehaviourScene::FindObject(SceneObjectId id) const {
+    return objectResolver && id != 0 ? objectResolver(id) : SceneObject{};
+}
+inline SceneObject BehaviourScene::FindObject(SceneObjectReference reference) const {
+    return FindObject(reference.objectId);
+}
+inline SceneObject Behaviour::FindObject(SceneObjectId id) const {
+    if (!owner) throw std::logic_error("Behaviour is not attached to a scene");
+    return owner->FindObject(id);
+}
+inline SceneObject Behaviour::FindObject(SceneObjectReference reference) const {
+    return FindObject(reference.objectId);
 }
 inline SceneObject BehaviourScene::Instantiate(const EntityArchetype& recipe) {
     if (clearing) throw std::logic_error("Cannot instantiate during scene clear");

@@ -10,27 +10,10 @@ struct FoodSourceComponent : pipeframe::Component<FoodSourceComponent> {
 
   static auto BuildSchema() {
     using namespace pipeframe;
-    using K = PropertyKind;
     return Define(FoodSourceTypeId, "Food Source Settings")
       .Required()
-      .Editable({.key = FoodAmountKey,
-                  .displayName = "Food Per Cell",
-                  .kind = K::Integer,
-                  .defaultValue = std::int64_t{7},
-                  .unit = "",
-                  .minimum = 0,
-                  .maximum = 1'000'000,
-                  .step = 1},
-        &FoodSourceComponent::amount)
-      .Editable({.key = FoodRadiusKey,
-                  .displayName = "Radius",
-                  .kind = K::Number,
-                  .defaultValue = 8.0,
-                  .unit = "m",
-                  .minimum = 0.25,
-                  .maximum = 256.0,
-                  .step = 0.25},
-        &FoodSourceComponent::radius);
+      .Editable(FoodAmountKey, "Food Per Cell", &FoodSourceComponent::amount, {.minimum = 0, .maximum = 1'000'000, .step = 1})
+      .Editable(FoodRadiusKey, "Radius", &FoodSourceComponent::radius, {.unit = "m", .minimum = 0.25, .maximum = 256.0, .step = 0.25});
   }
 };
 }  // namespace ant_simulation

@@ -92,6 +92,7 @@ protected:
         !camera.following)
                         .Height(300);
       viewport.onViewportResized = [this, entity](pipeframe::Vector2f size) {
+        if (cameras[entity].viewportSize == size) return;
         cameras[entity].viewportSize = size;
         RefreshView();
       };

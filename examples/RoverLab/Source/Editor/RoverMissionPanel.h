@@ -243,8 +243,6 @@ protected:
           .FitHeight());
     }
 
-    children.push_back(views::Button("hide", "HIDE", [this] { Hide(); }));
-
     return views::Scroll("mission-scroll",
       views::Column("mission", std::move(children)).Padding(12).Spacing(12).FitHeight())
       .FillHeight();

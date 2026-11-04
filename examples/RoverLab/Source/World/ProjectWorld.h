@@ -10,8 +10,32 @@ namespace RoverLab {
 class ProjectWorld final : public pipeframe::World {
 public:
   explicit ProjectWorld(pipeframe::BehaviourScene& scene)
-    : simulation(scene), rendering(std::make_shared<ProjectRenderingWorld>(simulation.events)) {
+    : scene(scene),
+      simulation(scene),
+      rendering(std::make_shared<ProjectRenderingWorld>(simulation.events)) {
     SetRenderingWorld(rendering);
+  }
+
+  void UpdateAuthoringScene() {
+    ResetSensorState();
+    simulation.hardware.Apply();
+    simulation.ultrasonic.AlignMounts();
+    simulation.lidar.AlignMounts();
+    simulation.infrared.AlignMounts();
+  }
+
+  void BeforeFixedUpdate(float) {
+    destinationTool.CaptureFrames(scene);
+  }
+
+  void Reset() {
+    ResetSensorState();
+  }
+
+  void CollectWorldDebug(pipeframe::WorldDebugDraw& draw, pipeframe::WorldDebugOptions options) {
+    if (options.physics) {
+      physics.CollectDebug(draw);
+    }
   }
 
   void ResetSensorState() {
@@ -29,6 +53,7 @@ public:
     rendering->ResetSensorReadings();
   }
 
+  pipeframe::BehaviourScene& scene;
   RoverDestinationTool destinationTool;
   ProjectSimulationWorld simulation;
   ProjectPhysicsWorld physics;

@@ -10,29 +10,9 @@ struct SignalBeaconComponent : pipeframe::Component<SignalBeaconComponent> {
     using namespace pipeframe;
     return Define(SignalBeaconTypeId, "Signal Beacon")
       .Required()
-      .Editable({.key = "radius",
-                  .displayName = "Radius",
-                  .kind = PropertyKind::Number,
-                  .defaultValue = 5.0,
-                  .unit = "m",
-                  .minimum = 0.5,
-                  .maximum = 32,
-                  .step = 0.5},
-        &SignalBeaconComponent::radius)
-      .Editable({.key = "rotationSpeed",
-                  .displayName = "Rotation Speed",
-                  .kind = PropertyKind::Number,
-                  .defaultValue = 90.0,
-                  .unit = "degrees/s",
-                  .minimum = -360,
-                  .maximum = 360,
-                  .step = 5},
-        &SignalBeaconComponent::rotationSpeed)
-      .Editable({.key = "color",
-                  .displayName = "Color",
-                  .kind = PropertyKind::Color,
-                  .defaultValue = Color{40, 210, 240, 255}},
-        &SignalBeaconComponent::color);
+      .Editable("radius", "Radius", &SignalBeaconComponent::radius, {.unit = "m", .minimum = 0.5, .maximum = 32, .step = 0.5})
+      .Editable("rotationSpeed", "Rotation Speed", &SignalBeaconComponent::rotationSpeed, {.unit = "degrees/s", .minimum = -360, .maximum = 360, .step = 5})
+      .Editable("color", "Color", &SignalBeaconComponent::color);
   }
 };
 }  // namespace ant_simulation

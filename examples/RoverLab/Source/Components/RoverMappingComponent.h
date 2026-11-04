@@ -22,46 +22,10 @@ struct RoverMappingComponent : pipeframe::Component<RoverMappingComponent> {
     using namespace pipeframe;
 
     return Define("project.RoverMappingComponent", "Rover Mapping")
-      .Editable(
-        {
-          .key = "enabled",
-          .displayName = "Enabled",
-          .kind = PropertyKind::Boolean,
-          .defaultValue = true,
-        },
-        &RoverMappingComponent::enabled)
-      .Editable(
-        {
-          .key = "cellSize",
-          .displayName = "Cell Size",
-          .kind = PropertyKind::Number,
-          .defaultValue = 0.10,
-          .unit = "metres",
-          .minimum = 0.02,
-          .maximum = 1.0,
-        },
-        &RoverMappingComponent::cellSize)
-      .Editable(
-        {
-          .key = "sideCells",
-          .displayName = "Initial Cells Per Side",
-          .kind = PropertyKind::Integer,
-          .defaultValue = std::int64_t{160},
-          .minimum = 16,
-          .maximum = 256,
-        },
-        &RoverMappingComponent::sideCells)
-      .Editable(
-        {
-          .key = "rangeMargin",
-          .displayName = "Extra Range Uncertainty",
-          .kind = PropertyKind::Number,
-          .defaultValue = 0.02,
-          .unit = "metres",
-          .minimum = 0,
-          .maximum = 1,
-        },
-        &RoverMappingComponent::rangeMargin)
+      .Editable("enabled", "Enabled", &RoverMappingComponent::enabled)
+      .Editable("cellSize", "Cell Size", &RoverMappingComponent::cellSize, {.unit = "metres", .minimum = 0.02, .maximum = 1.0})
+      .Editable("sideCells", "Initial Cells Per Side", &RoverMappingComponent::sideCells, {.minimum = 16, .maximum = 256})
+      .Editable("rangeMargin", "Extra Range Uncertainty", &RoverMappingComponent::rangeMargin, {.unit = "metres", .minimum = 0, .maximum = 1})
       .Validate("Invalid mapping dimensions or uncertainty",
         [](const auto& value) { return value.Valid(); });
   }
