@@ -14,12 +14,12 @@
 #include <unordered_map>
 #include <utility>
 
-#include "Components/RoverDriveComponent.h"
-#include "Components/RoverNavigationComponent.h"
-#include "Events/RoverMotionCommandEvent.h"
-#include "Events/RoverOdometryEvent.h"
-#include "Events/RoverSafetyEvent.h"
-#include "Events/SensorReadingEvent.h"
+#include "../../Components/RoverDriveComponent.h"
+#include "../../Components/RoverNavigationComponent.h"
+#include "../../Events/RoverMotionCommandEvent.h"
+#include "../../Events/RoverOdometryEvent.h"
+#include "../../Events/RoverSafetyEvent.h"
+#include "../../Events/SensorReadingEvent.h"
 #include "RoverRangeObservations.h"
 
 namespace RoverLab {

@@ -16,9 +16,9 @@
 #include <utility>
 #include <vector>
 
-#include "Components/UltrasonicScheduleComponent.h"
-#include "Components/UltrasonicSensorComponent.h"
-#include "Events/SensorReadingEvent.h"
+#include "../../Components/UltrasonicScheduleComponent.h"
+#include "../../Components/UltrasonicSensorComponent.h"
+#include "../../Events/SensorReadingEvent.h"
 
 namespace RoverLab {
 

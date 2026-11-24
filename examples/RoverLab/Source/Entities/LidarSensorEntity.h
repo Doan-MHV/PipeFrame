@@ -2,7 +2,7 @@
 #include <PipeFrame/Components/Transform2DComponent.h>
 #include <PipeFrame/Entities/EntityArchetype.h>
 
-#include "Components/LidarSensorComponent.h"
+#include "../Components/LidarSensorComponent.h"
 class LidarSensorEntity final : public pipeframe::EntityArchetype {
 protected:
   void Build(pipeframe::ecs::World& world, pipeframe::ecs::Entity entity) const override {

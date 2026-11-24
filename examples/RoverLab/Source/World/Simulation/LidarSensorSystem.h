@@ -11,7 +11,7 @@
 #include <numbers>
 #include <unordered_map>
 
-#include "Events/LidarScanEvent.h"
+#include "../../Events/LidarScanEvent.h"
 
 namespace RoverLab {
 // Geometric 2D rotating LiDAR. A fixed-step batch samples only the current pose;

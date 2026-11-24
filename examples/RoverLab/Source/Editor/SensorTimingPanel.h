@@ -8,8 +8,8 @@
 #include <sstream>
 #include <string>
 
-#include "Components/UltrasonicSensorComponent.h"
-#include "World/ProjectWorld.h"
+#include "../Components/UltrasonicSensorComponent.h"
+#include "../World/ProjectWorld.h"
 
 namespace RoverLab {
 

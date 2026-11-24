@@ -10,9 +10,9 @@
 #include <optional>
 #include <unordered_map>
 
-#include "Components/RoverDriveComponent.h"
-#include "Events/LidarScanEvent.h"
-#include "Events/RoverOdometryEvent.h"
+#include "../../Components/RoverDriveComponent.h"
+#include "../../Events/LidarScanEvent.h"
+#include "../../Events/RoverOdometryEvent.h"
 #include "RangeMount.h"
 
 namespace RoverLab {

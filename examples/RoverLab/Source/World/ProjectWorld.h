@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Editor/RoverDestinationTool.h"
-#include "World/Physics/ProjectPhysicsWorld.h"
-#include "World/Rendering/ProjectRenderingWorld.h"
-#include "World/Simulation/ProjectSimulationWorld.h"
+#include "../Editor/RoverDestinationTool.h"
+#include "Physics/ProjectPhysicsWorld.h"
+#include "Rendering/ProjectRenderingWorld.h"
+#include "Simulation/ProjectSimulationWorld.h"
 
 namespace RoverLab {
 

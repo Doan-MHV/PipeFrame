@@ -9,9 +9,9 @@
 #include <sstream>
 #include <string>
 
-#include "Components/RoverDriveComponent.h"
-#include "Events/RoverSafetyEvent.h"
-#include "World/ProjectWorld.h"
+#include "../Components/RoverDriveComponent.h"
+#include "../Events/RoverSafetyEvent.h"
+#include "../World/ProjectWorld.h"
 
 namespace RoverLab {
 

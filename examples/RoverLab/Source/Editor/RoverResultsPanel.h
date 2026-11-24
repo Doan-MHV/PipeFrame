@@ -3,7 +3,7 @@
 #include <PipeFrame/UI/ProjectUIHost.h>
 #include <PipeFrame/UI/ViewPanel.h>
 
-#include "Reporting/BenchmarkReport.h"
+#include "../Reporting/BenchmarkReport.h"
 
 namespace RoverLab {
 class ProjectWorld;

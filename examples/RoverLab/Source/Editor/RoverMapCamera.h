@@ -2,7 +2,7 @@
 
 #include <PipeFrame/UI/Viewport2D.h>
 
-#include "World/Simulation/RoverMappingSystem.h"
+#include "../World/Simulation/RoverMappingSystem.h"
 
 namespace RoverLab {
 // Per-rover presentation state, independent of the mapping/simulation state.

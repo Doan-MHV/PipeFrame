@@ -23,9 +23,18 @@ struct RoverMappingComponent : pipeframe::Component<RoverMappingComponent> {
 
     return Define("project.RoverMappingComponent", "Rover Mapping")
       .Editable("enabled", "Enabled", &RoverMappingComponent::enabled)
-      .Editable("cellSize", "Cell Size", &RoverMappingComponent::cellSize, {.unit = "metres", .minimum = 0.02, .maximum = 1.0})
-      .Editable("sideCells", "Initial Cells Per Side", &RoverMappingComponent::sideCells, {.minimum = 16, .maximum = 256})
-      .Editable("rangeMargin", "Extra Range Uncertainty", &RoverMappingComponent::rangeMargin, {.unit = "metres", .minimum = 0, .maximum = 1})
+      .Editable("cellSize",
+        "Cell Size",
+        &RoverMappingComponent::cellSize,
+        {.unit = "metres", .minimum = 0.02, .maximum = 1.0})
+      .Editable("sideCells",
+        "Initial Cells Per Side",
+        &RoverMappingComponent::sideCells,
+        {.minimum = 16, .maximum = 256})
+      .Editable("rangeMargin",
+        "Extra Range Uncertainty",
+        &RoverMappingComponent::rangeMargin,
+        {.unit = "metres", .minimum = 0, .maximum = 1})
       .Validate("Invalid mapping dimensions or uncertainty",
         [](const auto& value) { return value.Valid(); });
   }

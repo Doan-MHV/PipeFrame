@@ -3,7 +3,7 @@
 #include <PipeFrame/Components/Transform2DComponent.h>
 #include <PipeFrame/Entities/EntityArchetype.h>
 
-#include "Components/RoverGoalComponent.h"
+#include "../Components/RoverGoalComponent.h"
 
 class RoverGoalEntity final : public pipeframe::EntityArchetype {
 protected:

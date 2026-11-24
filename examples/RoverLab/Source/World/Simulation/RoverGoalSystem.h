@@ -6,9 +6,9 @@
 
 #include <cmath>
 
-#include "Components/RoverDriveComponent.h"
-#include "Components/RoverGoalComponent.h"
-#include "Events/RoverGoalEvent.h"
+#include "../../Components/RoverDriveComponent.h"
+#include "../../Components/RoverGoalComponent.h"
+#include "../../Events/RoverGoalEvent.h"
 
 namespace RoverLab {
 

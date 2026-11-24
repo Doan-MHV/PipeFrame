@@ -5,7 +5,7 @@
 #include <PipeFrame/Render/GeometryDraw.h>
 #include <PipeFrame/Render/RenderSystem.h>
 
-#include "Components/RoverGoalComponent.h"
+#include "../../Components/RoverGoalComponent.h"
 
 namespace RoverLab {
 

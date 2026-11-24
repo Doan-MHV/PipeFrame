@@ -1,4 +1,0 @@
-PIPEFRAME_PHYSICS_2D 1
-enabled true
-gravity 0 0
-integrator "sailboat-polar-domain"

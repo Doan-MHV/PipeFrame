@@ -4,8 +4,8 @@
 
 #include <vector>
 
-#include "Components/LidarSensorComponent.h"
-#include "Events/SensorReadingEvent.h"
+#include "../Components/LidarSensorComponent.h"
+#include "SensorReadingEvent.h"
 
 namespace RoverLab {
 struct LidarBeam {

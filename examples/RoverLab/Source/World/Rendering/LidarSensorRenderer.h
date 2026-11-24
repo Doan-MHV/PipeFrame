@@ -6,7 +6,7 @@
 
 #include <unordered_map>
 
-#include "Events/LidarScanEvent.h"
+#include "../../Events/LidarScanEvent.h"
 
 namespace RoverLab {
 class LidarSensorRenderer final : public pipeframe::RenderSystem {

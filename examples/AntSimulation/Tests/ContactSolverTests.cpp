@@ -240,6 +240,58 @@ int main() {
                 "Contact pass must publish every final solved body position to the ECS before returning.");
     }
 
+    // Regression: a neighbor pushing an ant against a wall must not trap it in
+    // SweepCircleGrid initial-penetration lock on subsequent ticks.
+    AntView crowdPusher =
+        antStore.Create(
+            1,
+            AntRole::Follower,
+            {14.1f, 15.5f},
+            0.0f,
+            0.0f,
+            configuration);
+    (void)crowdPusher;
+    physicsWorld.Synchronize();
+    contactSolver.Solve(physicsWorld);
+
+    Require(
+        antStore.Find(wallAntId)->GetPosition().x <= 14.5f,
+        "Ant-vs-ant contact must not push a neighbor inside the wall radius margin.");
+
+    Require(
+        physicsWorld.SetVelocity(wallAntId, {0.0f, configuration.antSpeed}),
+        "Wall-adjacent ant should accept tangential velocity.");
+    physicsWorld.Step(1.0f / 60.0f);
+    contactSolver.Solve(physicsWorld);
+
+    Require(
+        antStore.Find(wallAntId)->GetPosition().y > 15.505f,
+        "Wall-adjacent ant should slide freely along the wall instead of freezing.");
+
+    // Regression: diagonal corner grazing over many 60 Hz steps must slide past
+    // the corner rather than locking from float ULP rounding.
+    AntView cornerAnt =
+        antStore.Create(
+            1,
+            AntRole::Follower,
+            {14.2f, 14.2f},
+            0.0f,
+            0.0f,
+            configuration);
+    const AntId cornerAntId = cornerAnt.GetId();
+    physicsWorld.Synchronize();
+    for (int step = 0; step < 60; ++step) {
+        Require(
+            physicsWorld.SetVelocity(cornerAntId, {configuration.antSpeed, configuration.antSpeed * 0.8f}),
+            "Corner ant velocity should be assigned.");
+        physicsWorld.Step(1.0f / 60.0f);
+        contactSolver.Solve(physicsWorld);
+    }
+    const pipeframe::Vector2f cornerAfter = antStore.Find(cornerAntId)->GetPosition();
+    Require(
+        cornerAfter.x > 14.8f || cornerAfter.y > 14.8f,
+        "Corner-grazing ant must slide around the wall corner without getting stuck.");
+
     std::cout
         << "All contact solver tests passed.\n";
 

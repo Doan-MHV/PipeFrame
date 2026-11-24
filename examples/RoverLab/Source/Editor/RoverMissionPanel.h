@@ -7,7 +7,7 @@
 #include <sstream>
 #include <vector>
 
-#include "World/ProjectWorld.h"
+#include "../World/ProjectWorld.h"
 
 namespace RoverLab {
 

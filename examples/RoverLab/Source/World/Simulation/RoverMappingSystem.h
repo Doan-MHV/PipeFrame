@@ -16,11 +16,11 @@
 #include <utility>
 #include <vector>
 
-#include "Components/RoverMappingComponent.h"
-#include "Components/UltrasonicScheduleComponent.h"
-#include "Events/LidarScanEvent.h"
-#include "Events/RoverOdometryEvent.h"
-#include "Events/SensorReadingEvent.h"
+#include "../../Components/RoverMappingComponent.h"
+#include "../../Components/UltrasonicScheduleComponent.h"
+#include "../../Events/LidarScanEvent.h"
+#include "../../Events/RoverOdometryEvent.h"
+#include "../../Events/SensorReadingEvent.h"
 #include "RangeMount.h"
 
 namespace RoverLab {

@@ -28,10 +28,22 @@ struct RoverNavigationComponent : pipeframe::Component<RoverNavigationComponent>
       .RetiredField("openingDistance")
       .OnlyOn("project.RoverEntity")
       .OwnerReference("rover", &RoverNavigationComponent::rover)
-      .Editable("speed", "Cruise Speed", &RoverNavigationComponent::speed, {.unit = "metres / second", .minimum = 0.001})
-      .Editable("turnDistance", "Front Turn Distance", &RoverNavigationComponent::turnDistance, {.unit = "metres", .minimum = 0.001})
-      .Editable("passageDistance", "Minimum Passage Reading", &RoverNavigationComponent::passageDistance, {.unit = "metres", .minimum = 0.001})
-      .Editable("turnRate", "Turn Rate", &RoverNavigationComponent::turnRate, {.unit = "radians / second", .minimum = 0.001})
+      .Editable("speed",
+        "Cruise Speed",
+        &RoverNavigationComponent::speed,
+        {.unit = "metres / second", .minimum = 0.001})
+      .Editable("turnDistance",
+        "Front Turn Distance",
+        &RoverNavigationComponent::turnDistance,
+        {.unit = "metres", .minimum = 0.001})
+      .Editable("passageDistance",
+        "Minimum Passage Reading",
+        &RoverNavigationComponent::passageDistance,
+        {.unit = "metres", .minimum = 0.001})
+      .Editable("turnRate",
+        "Turn Rate",
+        &RoverNavigationComponent::turnRate,
+        {.unit = "radians / second", .minimum = 0.001})
       .Editable("enabled", "Enabled", &RoverNavigationComponent::enabled)
       .Validate(
         "Use finite positive settings; "

@@ -5,7 +5,7 @@
 
 #include "MazeSolver.h"
 #include "TimedRoute.h"
-#include "World/Simulation/RoverMappingSystem.h"
+#include "../Simulation/RoverMappingSystem.h"
 
 namespace RoverLab {
 struct FrontierAttempt {

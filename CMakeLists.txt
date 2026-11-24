@@ -32,8 +32,20 @@ if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Darwin"
     )
 endif ()
 
+if (NOT DEFINED CMAKE_TOOLCHAIN_FILE AND DEFINED ENV{VCPKG_ROOT}
+        AND EXISTS "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+    set(
+            CMAKE_TOOLCHAIN_FILE
+            "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            CACHE FILEPATH
+            "PipeFrame vcpkg toolchain"
+    )
+endif ()
+
 project(PipeFrame LANGUAGES CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+
 
 include(CTest)
 
@@ -47,6 +59,9 @@ option(
 )
 
 option(PIPEFRAME_ANT_REWORK_ONLY "Exclude SailBoat from engine/Ant rework builds and tests" OFF)
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples/SailBoatSimulation/CMakeLists.txt")
+    set(PIPEFRAME_ANT_REWORK_ONLY ON CACHE BOOL "Exclude SailBoat from engine/Ant rework builds and tests" FORCE)
+endif()
 if(PIPEFRAME_ANT_REWORK_ONLY)
     add_compile_definitions(PIPEFRAME_ANT_REWORK_ONLY)
 endif()
@@ -67,7 +82,8 @@ if (PIPEFRAME_BUILD_EXAMPLES)
     # Include editor-created projects in the IDE model without maintaining a
     # per-project list. Keep their runtime builds opt-in (Build & Reload).
     file(GLOB PIPEFRAME_LOCAL_PROJECTS CONFIGURE_DEPENDS
-            "${CMAKE_CURRENT_SOURCE_DIR}/examples/*/project.pipeframe")
+            "${CMAKE_CURRENT_SOURCE_DIR}/examples/*/project.pipeframe"
+            "${CMAKE_CURRENT_SOURCE_DIR}/projects/*/project.pipeframe")
     get_property(PIPEFRAME_CONFIGURED_DIRECTORIES DIRECTORY PROPERTY SUBDIRECTORIES)
     foreach(PIPEFRAME_PROJECT_MANIFEST IN LISTS PIPEFRAME_LOCAL_PROJECTS)
         get_filename_component(PIPEFRAME_PROJECT_DIRECTORY "${PIPEFRAME_PROJECT_MANIFEST}" DIRECTORY)

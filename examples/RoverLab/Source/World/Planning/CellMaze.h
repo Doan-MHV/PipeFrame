@@ -1,5 +1,5 @@
 #pragma once
-#include "Components/MicromouseMazeComponent.h"
+#include "../../Components/MicromouseMazeComponent.h"
 #include "MazeSolver.h"
 
 namespace RoverLab {

@@ -17,12 +17,12 @@
 #include <unordered_map>
 #include <utility>
 
-#include "Components/MicromouseHardwareComponent.h"
-#include "Components/RoverDriveComponent.h"
-#include "Components/RoverSafetyComponent.h"
-#include "Events/RoverMotionCommandEvent.h"
-#include "Events/RoverSafetyEvent.h"
-#include "Events/SensorReadingEvent.h"
+#include "../../Components/MicromouseHardwareComponent.h"
+#include "../../Components/RoverDriveComponent.h"
+#include "../../Components/RoverSafetyComponent.h"
+#include "../../Events/RoverMotionCommandEvent.h"
+#include "../../Events/RoverSafetyEvent.h"
+#include "../../Events/SensorReadingEvent.h"
 #include "RoverRangeObservations.h"
 
 namespace RoverLab {

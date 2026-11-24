@@ -10,9 +10,9 @@
 #include <numbers>
 #include <unordered_map>
 
-#include "Components/RoverDriveComponent.h"
-#include "Events/RoverOdometryEvent.h"
-#include "Events/RoverSafetyEvent.h"
+#include "../../Components/RoverDriveComponent.h"
+#include "../../Events/RoverOdometryEvent.h"
+#include "../../Events/RoverSafetyEvent.h"
 
 namespace RoverLab {
 

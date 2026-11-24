@@ -3,8 +3,8 @@
 
 #include <optional>
 
-#include "Components/InfraredSensorComponent.h"
-#include "Components/UltrasonicSensorComponent.h"
+#include "../../Components/InfraredSensorComponent.h"
+#include "../../Components/UltrasonicSensorComponent.h"
 namespace RoverLab {
 struct RangeMount {
   pipeframe::SceneObjectReference parent;

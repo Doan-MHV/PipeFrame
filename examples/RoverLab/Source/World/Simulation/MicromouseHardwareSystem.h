@@ -5,8 +5,8 @@
 #include <PipeFrame/ECS/Scene.h>
 #include <PipeFrame/Simulation/System.h>
 
-#include "Components/MicromouseHardwareComponent.h"
-#include "Components/RoverSafetyComponent.h"
+#include "../../Components/MicromouseHardwareComponent.h"
+#include "../../Components/RoverSafetyComponent.h"
 
 namespace RoverLab {
 

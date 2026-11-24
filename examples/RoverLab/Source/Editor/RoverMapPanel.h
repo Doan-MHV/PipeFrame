@@ -10,8 +10,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Editor/RoverMapCamera.h"
-#include "World/ProjectWorld.h"
+#include "RoverMapCamera.h"
+#include "../World/ProjectWorld.h"
 
 namespace RoverLab {
 

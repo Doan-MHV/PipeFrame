@@ -5,16 +5,16 @@
 #include <optional>
 #include <unordered_set>
 
-#include "Components/RoverNavigationComponent.h"
-#include "Components/RoverSolverComponent.h"
-#include "Events/RoverGoalEvent.h"
+#include "../../Components/RoverNavigationComponent.h"
+#include "../../Components/RoverSolverComponent.h"
+#include "../../Events/RoverGoalEvent.h"
 #include "RoverDriveSystem.h"
 #include "RoverRangeObservations.h"
-#include "World/Planning/CellMaze.h"
-#include "World/Planning/FrontierPlanner.h"
-#include "World/Planning/MeasuredRoute.h"
-#include "World/Planning/RoverMission.h"
-#include "World/Planning/TimedRoute.h"
+#include "../Planning/CellMaze.h"
+#include "../Planning/FrontierPlanner.h"
+#include "../Planning/MeasuredRoute.h"
+#include "../Planning/RoverMission.h"
+#include "../Planning/TimedRoute.h"
 
 namespace RoverLab {
 class RoverSolverSystem final : public pipeframe::FixedUpdateSystem<void> {

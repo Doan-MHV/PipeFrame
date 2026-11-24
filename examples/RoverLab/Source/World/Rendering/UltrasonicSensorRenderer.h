@@ -9,9 +9,9 @@
 #include <numbers>
 #include <unordered_map>
 
-#include "Components/InfraredSensorComponent.h"
-#include "Components/UltrasonicSensorComponent.h"
-#include "Events/SensorReadingEvent.h"
+#include "../../Components/InfraredSensorComponent.h"
+#include "../../Components/UltrasonicSensorComponent.h"
+#include "../../Events/SensorReadingEvent.h"
 
 namespace RoverLab {
 template <class SensorComponent = UltrasonicSensorComponent>

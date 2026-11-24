@@ -3,7 +3,7 @@
 #include <PipeFrame/Components/Transform2DComponent.h>
 #include <PipeFrame/Components/KinematicBody2DComponent.h>
 #include <PipeFrame/Environment/EnvironmentQueries.h>
-#include "Components/ProbeSettings.h"
+#include "../Components/ProbeSettings.h"
 #include <cmath>
 class ProbeBehaviour final : public pipeframe::Behaviour {
     void FixedUpdate(float) override {

@@ -1,6 +1,10 @@
 # PipeFrame
 
-PipeFrame is a modular **C++20** simulation engine and desktop editor (**Simulation Workbench**) for deterministic 2D multi-agent and robotics simulations. It provides entity/component scenes (`ECS`), schema-driven Inspector controls, 60 Hz fixed-step simulation phases, spatial collision helpers, tilemap authoring, project UI drawers, deterministic replay capture/playback, and live **Build & Reload** for project runtime plugins. SFML supplies the native rendering and windowing backend.
+**[📘 Developer Guide & How to Use/Run PipeFrame (GitHub Wiki)](https://github.com/Doan-MHV/PipeFrame/wiki)** · **[Build](#build)** · **[Run a Project](#run-a-project)** · **[Source Layout](#source-layout)** · **[Test Suite](#automated-regression-suite)**
+
+> **Developer & User Guide:** Visit the **[PipeFrame GitHub Wiki](https://github.com/Doan-MHV/PipeFrame/wiki)** for the complete **Developer Guide**, environment setup, architecture overview, ECS component/system authoring workflow, and step-by-step instructions on how to use and run PipeFrame.
+
+PipeFrame is a modular **C++20** simulation engine and desktop editor (**Simulation Workbench**) for deterministic 2D multi-agent and robotics simulations. It provides entity/component scenes (`ECS`), data-driven Inspector controls, 60 Hz fixed-step simulation phases, spatial collision helpers, tilemap authoring, project UI drawers, deterministic replay capture/playback, and live **Build & Reload** for project runtime plugins. SFML supplies the native rendering and windowing backend.
 
 ![PipeFrame Simulation Workbench running AntSimulation](docs/media/pipeframe-editor.gif)
 
@@ -46,13 +50,11 @@ Development and testing target macOS. Install a **C++20** compiler, **CMake 3.25
 From the repository root:
 
 ```sh
-cmake --preset release \
-  -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
-  -DPIPEFRAME_ANT_REWORK_ONLY=ON
+cmake --preset release -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
 cmake --build --preset release --target SimulationWorkbench RoverLabRuntime AntSimulationRuntime
 ```
 
-The `PIPEFRAME_ANT_REWORK_ONLY` option excludes the older SailBoat prototype while building the Workbench, **AntSimulation**, and **RoverLab** targets. On macOS, CMake configures dynamic vcpkg libraries so the editor and hot-reloaded runtime plugins share the native backend cleanly.
+On macOS, CMake automatically configures dynamic vcpkg libraries (`arm64-osx-dynamic` / `x64-osx-dynamic`) so the desktop editor and hot-reloaded runtime plugins share the native SFML backend cleanly. For full prerequisite setup and custom project authoring instructions, see the **[PipeFrame GitHub Wiki](https://github.com/Doan-MHV/PipeFrame/wiki)**.
 
 ---
 
